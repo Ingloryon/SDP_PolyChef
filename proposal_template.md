@@ -8,16 +8,16 @@ The purpose of this app is to share recipes with everybody on the campus. A user
 
 ## Requirements:
 ### Split app model: 
-TODO: which cloud-based service(s) will your app use ? For what purpose(s) ?
+All the recipes will be stored on the cloud with all their comments and will be accessible by all users.
 
 ### Sensor usage:
-TODO: what sensor(s) will your app use ? For what purpose(s) ?
+The user could scan a recipe in a cookbook to add it in the database. A user could also take pictures of the dish once it is cooked to show the result.
 
 ### User support:
-TODO: what will a user be able to do ? Are there advantages to being logged in ? Will the content be personalized for each user ? How ?
+The users could "like" the recipes of other chefs. Those "likes" could give points to the chef, that would give him "stars" or new looks for his "avatar". Users could also "follow" other users to be notify each time this user posts something.
 
 ### Local cache:
-TODO: what content will be cached locally ?
+A user could "pin" his favorites recipes. Those recipes will then be stored in the local cache. Also, all the latest recipes the user looked at could be stored locally.  
 
 ### Offline mode:
-TODO: which basic functionalities will your offline mode support ?
+First, there will be a homepage showing some basic recipes for users who were never connected before. A user that was previously connected could also see the recipes that he "pinned".
