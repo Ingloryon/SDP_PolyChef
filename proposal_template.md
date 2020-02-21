@@ -1,4 +1,4 @@
-# SDP Proposal - Team \12
+# SDP Proposal - Team 12
 
 ## Team / App name:
 PolyChef
