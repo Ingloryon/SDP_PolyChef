@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">PolyChef</string>
-    <string name="not_implemented">Not Implemented Yet</string>
+    <string name="enter_name">Enter your name !</string>
 </resources>

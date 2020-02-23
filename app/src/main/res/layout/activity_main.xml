@@ -12,14 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
         android:ems="10"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
-        android:text="@string/not_implemented"
         app:layout_constraintBottom_toTopOf="@+id/mainGoButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        android:importantForAutofill="no"
         tools:ignore="LabelFor" />
 
     <Button
@@ -27,7 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
-        android:text="@string/not_implemented"
+        android:onClick="sendEnteredText"
+        android:text="@string/enter_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
