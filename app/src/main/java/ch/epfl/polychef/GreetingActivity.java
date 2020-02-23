@@ -1,10 +1,9 @@
 package ch.epfl.polychef;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GreetingActivity extends AppCompatActivity {
 
