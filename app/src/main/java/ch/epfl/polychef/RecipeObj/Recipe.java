@@ -15,8 +15,9 @@ public final class Recipe {
     }
 
     private String name;
+    private String recipeInstructions;
     private HashMap<String, Double> ingredients;
-    private int estimatedTimeRequired;  // in minutes ! // TODO: separate it into preparation + cooking time ?
+    private int estimatedTimeRequired; // TODO: separate it into preparation + cooking time ?
     private int personNumber;
     private final Rating rating;
     private Difficulty recipeDifficulty;
@@ -31,6 +32,7 @@ public final class Recipe {
     /**
      * Creates a new Recipe
      * @param name the title of the recipe
+     * @param recipeInstructions the title of the recipe
      * @param ingredients a list of the ingredients the recipe needs and their corresponding quantities
      * @param personNumber the number of persons corresponding to the quantities indicated in the ingredients amounts
      * @param estimatedTimeRequired the approximate time needed to complete the recipe, in minutes
@@ -38,13 +40,16 @@ public final class Recipe {
      * @param miniaturePath path to access the miniature image, provide empty string
      * @param picturesPaths path to access the pictures of the recipe
      */
-    public Recipe(String name, HashMap<String,Double> ingredients, int personNumber, int estimatedTimeRequired, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
-        Preconditions.checkArgument(name != null &&  miniaturePath != null && picturesPaths != null && ingredients != null && recipeDifficulty != null, "A recipe takes non null arguments !");
+    public Recipe(String name, String recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedTimeRequired, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
+
+        Preconditions.checkArgument(name != null && recipeInstructions != null && miniaturePath != null && picturesPaths != null && ingredients != null && recipeDifficulty != null, "A recipe takes non null arguments !");
         Preconditions.checkArgument(!ingredients.isEmpty(), "There should be at least one ingredient in the recipe !");
         Preconditions.checkArgument(estimatedTimeRequired>0, "The estimated time must be strictly positive");
         Preconditions.checkArgument(personNumber > 0, "The number of persons must be strictly positive");
+        // TODO: Authorize empty names and descriptions "" ?
 
         this.name = name;
+        this.recipeInstructions = recipeInstructions;
         this.picturesPaths = new ArrayList<>();
         this.miniaturePath = miniaturePath;
         this.ingredients = new HashMap<>();
@@ -55,17 +60,16 @@ public final class Recipe {
         this.hasMiniature = miniaturePath.equals("");
         this.hasPictures = picturesPaths.size()!=0;
 
-        this.ingredients.putAll(ingredients);  // Verify makes a deep copy, else use a for loop --> tests
-        if(hasPictures) this.picturesPaths.addAll(picturesPaths); // Verify makes a deep copy, else use a for loop --> tests
+        this.ingredients.putAll(ingredients);  //TODO: Verify makes a deep copy, else use a for loop --> tests
+        if(hasPictures) this.picturesPaths.addAll(picturesPaths); //TODO: Verify makes a deep copy, else use a for loop --> tests
         /*{
             for (int i = 0 ; i < picturesPaths.size() ; ++i){
                 this.picturesPaths.add(picturesPaths.get(i));
             }
         }*/
-
     }
 
-    // TODO: create another method to modify the number of persons but not the quantities -> wrong estimation
+    // TODO: create another method to modify the number of persons but not the quantities -> if wrong estimation
     // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
 
 
