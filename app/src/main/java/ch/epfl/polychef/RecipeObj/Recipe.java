@@ -17,8 +17,8 @@ public final class Recipe {
     private String name;
     private String recipeInstructions;
     private HashMap<String, Double> ingredients;
-    private int estimatedTimeRequired; // TODO: separate it into preparation + cooking time ?
     private int personNumber;
+    private int estimatedTimeRequired; // TODO: separate it into preparation + cooking time ?
     private final Rating rating;
     private Difficulty recipeDifficulty;
 
@@ -32,13 +32,13 @@ public final class Recipe {
     /**
      * Creates a new Recipe
      * @param name the title of the recipe
-     * @param recipeInstructions the title of the recipe
+     * @param recipeInstructions the instructions to follow the recipe
      * @param ingredients a list of the ingredients the recipe needs and their corresponding quantities
-     * @param personNumber the number of persons corresponding to the quantities indicated in the ingredients amounts
+     * @param personNumber the number of persons corresponding to the quantities indicated
      * @param estimatedTimeRequired the approximate time needed to complete the recipe, in minutes
      * @param recipeDifficulty the difficulty of the recipe
-     * @param miniaturePath path to access the miniature image, provide empty string
-     * @param picturesPaths path to access the pictures of the recipe
+     * @param miniaturePath path to access the miniature image, provide empty string for default miniature
+     * @param picturesPaths path to access the pictures of the recipe, provide empty list for default picture
      */
     public Recipe(String name, String recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedTimeRequired, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
 
@@ -57,7 +57,7 @@ public final class Recipe {
         this.rating = new Rating();
         this.recipeDifficulty = recipeDifficulty;
 
-        this.hasMiniature = miniaturePath.equals("");
+        this.hasMiniature = !miniaturePath.equals("");
         this.hasPictures = picturesPaths.size()!=0;
 
         this.ingredients.putAll(ingredients);  //TODO: Verify makes a deep copy, else use a for loop --> tests
