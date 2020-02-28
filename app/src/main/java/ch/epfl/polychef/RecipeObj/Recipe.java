@@ -1,4 +1,4 @@
-package ch.epfl.polychef.Objects;
+package ch.epfl.polychef.RecipeObj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public final class Recipe {
     private HashMap<String, Double> ingredients;
     private int estimatedTimeRequired;  // in minutes ! // TODO: separate it into preparation + cooking time ?
     private int personNumber;
-    //private final Rating rating; // TODO: Implement Rating class
+    private final Rating rating;
     private Difficulty recipeDifficulty;
 
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
@@ -49,7 +49,7 @@ public final class Recipe {
         this.miniaturePath = miniaturePath;
         this.ingredients = new HashMap<>();
         this.personNumber = personNumber;
-        //this.rating = new Rating(); // TODO: Implement Rating class
+        this.rating = new Rating();
         this.recipeDifficulty = recipeDifficulty;
 
         this.hasMiniature = miniaturePath.equals("");

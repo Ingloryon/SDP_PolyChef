@@ -1,4 +1,4 @@
-package ch.epfl.polychef.Objects;
+package ch.epfl.polychef.RecipeObj;
 
 public final class ReceipeBuilder {
 
