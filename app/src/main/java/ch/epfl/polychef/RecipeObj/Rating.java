@@ -17,6 +17,11 @@ public final class Rating {
         allRatings = new HashMap<>();
     }
 
+    /**
+     * Adds a rating from a user
+     * @param userID the ID of the user, a positive integer
+     * @param rate the rate given by the user, between 0 and 5
+     */
     public void addRate(int userID, double rate){
         Preconditions.checkArgument(0 <= rate && rate <= 5, "A rate's value should be between 0 and 5");
         Preconditions.checkArgument(userID >= 0, "UserID should be positive");
@@ -27,6 +32,10 @@ public final class Rating {
         ratingSum += rate;
     }
 
+    /**
+     * Returns the average rating
+     * @return the average rating
+     */
     public double ratingAverage(){
         return allRatings.size()==0 ? 0 : ratingSum / allRatings.size();
     }
