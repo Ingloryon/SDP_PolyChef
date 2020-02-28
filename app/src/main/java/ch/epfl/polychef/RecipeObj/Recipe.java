@@ -1,11 +1,10 @@
 package ch.epfl.polychef.RecipeObj;
 
+import ch.epfl.polychef.Preconditions;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import ch.epfl.polychef.Preconditions;
-
 
 public final class Recipe {
 
@@ -15,7 +14,7 @@ public final class Recipe {
 
     private String name;
     private String recipeInstructions;
-    private HashMap<String, Double> ingredients;
+    private Map<String, Double> ingredients;
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
@@ -26,7 +25,7 @@ public final class Recipe {
     private boolean hasMiniature;
     private boolean hasPictures;
     private String miniaturePath;
-    private ArrayList<String> picturesPaths;
+    private List<String> picturesPaths;
 
     /**
      * Creates a new Recipe
