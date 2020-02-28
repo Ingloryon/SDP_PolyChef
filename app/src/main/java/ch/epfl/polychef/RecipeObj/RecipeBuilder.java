@@ -10,7 +10,8 @@ public final class RecipeBuilder {
     private String recipeInstructions = "";
     private HashMap<String, Double> ingredients = new HashMap<>();
     private int personNumber;
-    private int estimatedTimeRequired;
+    private int estimatedPreparationTime;
+    private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
 
     private String miniaturePath = "";
@@ -21,10 +22,15 @@ public final class RecipeBuilder {
      * @return a Recipe with the characteristics given to the builder
      */
     public Recipe build(){
-        // TODO: faire les verifs en fonction du constructeur de Recipe (privé / publique) et conditions minimales d'une recette
+        Preconditions.checkArgument(!name.equals(""), "The name must be set");
+        Preconditions.checkArgument(!recipeInstructions.equals(""), "The recipe instructions must be set");
+        Preconditions.checkArgument(ingredients.size()>0, "The recipe should have at least one ingredient");
+        Preconditions.checkArgument(personNumber > 0, "The number of persons must be set");
+        Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated preparation time must be set");
+        Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
+        Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
 
-
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedTimeRequired, recipeDifficulty, miniaturePath, picturesPaths);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesPaths);
     }
 
     /**
@@ -76,14 +82,26 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets the estimated time required to complete the recipe
-     * @param estimatedTimeRequired  estimated time required to complete the recipe, must be strictly positive
+     * Sets the estimated time required to prepare the recipe
+     * @param estimatedPreparationTime  estimated time required to prepare the recipe, must be strictly positive
      * @return the modified builder
      */
-    public RecipeBuilder setEstimatedTimeRequired(int estimatedTimeRequired){
-        Preconditions.checkArgument(estimatedTimeRequired > 0, "The estimated time required must be strictly positive");
+    public RecipeBuilder setEstimatedPreparationTime(int estimatedPreparationTime){
+        Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated time required must be strictly positive");
 
-        this.estimatedTimeRequired = estimatedTimeRequired;
+        this.estimatedPreparationTime = estimatedPreparationTime;
+        return this;
+    }
+
+    /**
+     * Sets the estimated time required to cook the recipe
+     * @param estimatedCookingTime  estimated time required to cook the recipe, must be strictly positive
+     * @return the modified builder
+     */
+    public RecipeBuilder setEstimatedCookingTime(int estimatedCookingTime){
+        Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated time required must be strictly positive");
+
+        this.estimatedCookingTime = estimatedCookingTime;
         return this;
     }
 
@@ -97,7 +115,6 @@ public final class RecipeBuilder {
         this.recipeDifficulty = recipeDifficulty;
         return this;
     }
-
 
     /**
      * Sets the path where to find the miniature

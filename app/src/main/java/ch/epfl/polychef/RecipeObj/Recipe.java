@@ -9,7 +9,6 @@ import ch.epfl.polychef.Preconditions;
 
 public final class Recipe {
 
-    // TODO: leave it in the class or refactor it elsewhere ?
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD
     }
@@ -18,9 +17,10 @@ public final class Recipe {
     private String recipeInstructions;
     private HashMap<String, Double> ingredients;
     private int personNumber;
-    private int estimatedTimeRequired; // TODO: separate it into preparation + cooking time ?
-    private final Rating rating;
+    private int estimatedPreparationTime;
+    private int estimatedCookingTime;
     private Difficulty recipeDifficulty;
+    private final Rating rating;
 
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
     private boolean hasMiniature;
@@ -28,53 +28,39 @@ public final class Recipe {
     private String miniaturePath;
     private ArrayList<String> picturesPaths;
 
-
     /**
      * Creates a new Recipe
-     * @param name the title of the recipe
-     * @param recipeInstructions the instructions to follow the recipe
+     * @param name the title of the recipe, must be non empty
+     * @param recipeInstructions the instructions to follow the recipe, must be non empty
      * @param ingredients a list of the ingredients the recipe needs and their corresponding quantities
-     * @param personNumber the number of persons corresponding to the quantities indicated
-     * @param estimatedTimeRequired the approximate time needed to complete the recipe, in minutes
+     * @param personNumber the number of persons corresponding to the quantities indicated, must be strictly positive
+     * @param estimatedPreparationTime the approximate time needed to prepare the recipe, in minutes (strictly positive)
+     * @param estimatedCookingTime the approximate time needed to cook the recipe, in minutes (strictly positive)
      * @param recipeDifficulty the difficulty of the recipe
      * @param miniaturePath path to access the miniature image, provide empty string for default miniature
      * @param picturesPaths path to access the pictures of the recipe, provide empty list for default picture
      */
-    public Recipe(String name, String recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedTimeRequired, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
-
-        Preconditions.checkArgument(name != null && recipeInstructions != null && miniaturePath != null && picturesPaths != null && ingredients != null && recipeDifficulty != null, "A recipe takes non null arguments !");
-        Preconditions.checkArgument(!ingredients.isEmpty(), "There should be at least one ingredient in the recipe !");
-        Preconditions.checkArgument(estimatedTimeRequired>0, "The estimated time must be strictly positive");
-        Preconditions.checkArgument(personNumber > 0, "The number of persons must be strictly positive");
-        // TODO: Authorize empty names and descriptions "" ?
-
-        this.name = name;
-        this.recipeInstructions = recipeInstructions;
-        this.picturesPaths = new ArrayList<>();
-        this.miniaturePath = miniaturePath;
-        this.ingredients = new HashMap<>();
-        this.personNumber = personNumber;
-        this.rating = new Rating();
-        this.recipeDifficulty = recipeDifficulty;
+    protected Recipe(String name, String recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
 
         this.hasMiniature = !miniaturePath.equals("");
         this.hasPictures = picturesPaths.size()!=0;
 
-        this.ingredients.putAll(ingredients);  //TODO: Verify makes a deep copy, else use a for loop --> tests
-        if(hasPictures) this.picturesPaths.addAll(picturesPaths); //TODO: Verify makes a deep copy, else use a for loop --> tests
-        /*{
-            for (int i = 0 ; i < picturesPaths.size() ; ++i){
-                this.picturesPaths.add(picturesPaths.get(i));
-            }
-        }*/
+        this.name = name;
+        this.recipeInstructions = recipeInstructions;
+        this.ingredients = new HashMap<>();
+        this.ingredients.putAll(ingredients);  //No need for deep copy (comes from the builder where map/list aren't accessible)
+        this.personNumber = personNumber;
+        this.estimatedPreparationTime = estimatedPreparationTime;
+        this.estimatedCookingTime = estimatedCookingTime;
+        this.recipeDifficulty = recipeDifficulty;
+        this.rating = new Rating();
+        this.miniaturePath = miniaturePath;
+        this.picturesPaths = new ArrayList<>();
+        if(hasPictures) this.picturesPaths.addAll(picturesPaths);
     }
 
-    // TODO: create another method to modify the number of persons but not the quantities -> if wrong estimation
-    // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
-
-
     /**
-     * Changes the number of persons the recipe is for and updates the quantities accordingly
+     * Changes the number of persons the recipe is meant for and updates the quantities accordingly
      * @param newPersonNumber: strictly positive integer
      */
     public void changePersonNumber(int newPersonNumber){
@@ -85,11 +71,19 @@ public final class Recipe {
         for (Map.Entry<String, Double> e : ingredients.entrySet()) {
             e.setValue(e.getValue()*ratio);
         }
-        //ingredients.replaceAll((k, v) -> v * ratio);  -> Cleaner but wrong java version ?
+        //TOREMOVE: ingredients.replaceAll((k, v) -> v * ratio);  -> Cleaner but wrong java version ?
     }
 
+    /**
+     * Returns the total estimated time
+     * @return total estimated time in minutes
+     */
+    public int estimatedTotalTime(){
+        return estimatedCookingTime + estimatedPreparationTime;
+    }
 
+    // TODO: Add getters and setters for needed attributes
     // TODO : Redefine methods toString, equals, hash
-
-
+    // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
+    // TODO: general remark: how do we handle overflows (for total preparation time for example)
 }
