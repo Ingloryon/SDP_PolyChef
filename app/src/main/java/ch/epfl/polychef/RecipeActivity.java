@@ -21,9 +21,9 @@ public class RecipeActivity extends AppCompatActivity {
             .setEstimatedPreparationTime(40)
             .addIngredient("Raw chicken", 500)
             .addIngredient("Parsley", 3)
-            .addInstruction("Don't cook this it's dangerous !", 0)
-            .addInstruction("Cut the chicken into small pieces", 1)
-            .addInstruction("Add salt and pepper", 2)
+            .addInstruction("Don't cook this it's dangerous !")
+            .addInstruction("Cut the chicken into small pieces")
+            .addInstruction("Add salt and pepper")
             .build();
 
 
