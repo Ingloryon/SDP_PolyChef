@@ -23,11 +23,11 @@ public final class RecipeBuilder {
      * @return a Recipe with the characteristics given to the builder
      */
     public Recipe build(){
-        Preconditions.checkArgument(!name.equals(""), "The name must be set");
+        Preconditions.checkArgument(!name.isEmpty(), "The name must be set");
         Preconditions.checkArgument(!recipeInstructions.isEmpty(), "There must be at least one instruction");
-        for(String instr : recipeInstructions){
-            Preconditions.checkArgument(!instr.equals(""), "An instruction can't be nothing");
-        }
+        /*for(String instr : recipeInstructions){
+            Preconditions.checkArgument(!instr.isEmpty(), "An instruction can't be nothing");  //TODO: delete ? useless since cannot add "" in method?
+        }*/
         Preconditions.checkArgument(ingredients.size()>0, "The recipe should have at least one ingredient");
         Preconditions.checkArgument(personNumber > 0, "The number of persons must be set and can't be zero");
         Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated preparation time must be set");
@@ -43,7 +43,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder setName(String name){
-        Preconditions.checkArgument(name != null && !name.equals(""), "The name must be non empty");
+        Preconditions.checkArgument(name != null && !name.isEmpty(), "The name must be non empty");
         this.name = name;
         return this;
     }
@@ -51,15 +51,15 @@ public final class RecipeBuilder {
     /**
      * Sets a instruction to follow in the recipe
      * @param recipeInstruction the specific instruction in the recipe, must be non empty
-     * @param stepNumber
      * @return the modified builder
      */
-    public RecipeBuilder addInstruction(String recipeInstruction, int stepNumber){
+    public RecipeBuilder addInstruction(String recipeInstruction){
         Preconditions.checkArgument(!recipeInstruction.isEmpty(), "The instruction must be non empty");
-        Preconditions.checkArgument(stepNumber >= 0, "The step index can't be below zero");
-        this.recipeInstructions.add(stepNumber, recipeInstruction);
+        this.recipeInstructions.add(recipeInstruction);
         return this;
     }
+
+    // TODO: Add methods to allow modification of instructions -> insert, modify existing
 
     /**
      * Adds an ingredient of the recipe and its corresponding quantity
@@ -68,7 +68,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder addIngredient(String ingredientName, double quantity){
-        Preconditions.checkArgument(ingredientName != null && !ingredientName.equals(""), "The ingredient name must be non empty");
+        Preconditions.checkArgument(ingredientName != null && !ingredientName.isEmpty(), "The ingredient name must be non empty");
         Preconditions.checkArgument(quantity > 0, "The ingredient quantity must be strictly positive");
 
         ingredients.put(ingredientName, quantity);
@@ -128,7 +128,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder setMiniaturePath(String miniaturePath){
-        Preconditions.checkArgument(miniaturePath != null && !miniaturePath.equals(""), "The miniature path must be non empty"); //TODO: sanitization ?
+        Preconditions.checkArgument(miniaturePath != null && !miniaturePath.isEmpty(), "The miniature path must be non empty"); //TODO: sanitization ?
         this.miniaturePath = miniaturePath;
         return this;
     }
@@ -139,7 +139,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder addPicturePath(String picturePaths) {
-        Preconditions.checkArgument(picturePaths != null && !picturePaths.equals(""), "The picture path must be non empty");
+        Preconditions.checkArgument(picturePaths != null && !picturePaths.isEmpty(), "The picture path must be non empty");
         this.picturesPaths.add(picturePaths);
         return this;
     }

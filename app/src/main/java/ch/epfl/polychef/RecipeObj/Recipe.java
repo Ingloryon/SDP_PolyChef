@@ -5,12 +5,10 @@ import androidx.annotation.Nullable;
 
 import ch.epfl.polychef.Preconditions;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public final class Recipe {
 
@@ -47,7 +45,7 @@ public final class Recipe {
      */
     protected Recipe(String name, List<String> recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
 
-        this.hasMiniature = !miniaturePath.equals("");
+        this.hasMiniature = !miniaturePath.isEmpty();
         this.hasPictures = picturesPaths.size()!=0;
 
         this.name = name;
@@ -86,11 +84,6 @@ public final class Recipe {
     public int estimatedTotalTime(){
         return estimatedCookingTime + estimatedPreparationTime;
     }
-
-    // TODO: Add getters and setters for needed attributes
-    // TODO : Redefine methods toString, equals, hash
-    // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
-    // TODO: general remark: how do we handle overflows (for total preparation time for example)
 
     /**
      * Returns a copy of the recipe instructions
@@ -151,4 +144,10 @@ public final class Recipe {
     public Rating getRating() {
         return rating;
     }
+
+
+    // TODO: Add getters and setters for needed attributes
+    // TODO : Redefine methods toString, equals, hash
+    // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
+    // TODO: general remark: should we handle overflows (for total preparation time for example)
 }
