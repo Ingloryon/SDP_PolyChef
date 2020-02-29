@@ -2,12 +2,13 @@ package ch.epfl.polychef.RecipeObj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import ch.epfl.polychef.Preconditions;
 
 public final class RecipeBuilder {
     private String name = "";
-    private String recipeInstructions = "";
+    private List<String> recipeInstructions = new ArrayList<>();
     private HashMap<String, Double> ingredients = new HashMap<>();
     private int personNumber;
     private int estimatedPreparationTime;
@@ -23,9 +24,12 @@ public final class RecipeBuilder {
      */
     public Recipe build(){
         Preconditions.checkArgument(!name.equals(""), "The name must be set");
-        Preconditions.checkArgument(!recipeInstructions.equals(""), "The recipe instructions must be set");
+        Preconditions.checkArgument(!recipeInstructions.isEmpty(), "There must be at least one instruction");
+        for(String instr : recipeInstructions){
+            Preconditions.checkArgument(!instr.equals(""), "An instruction can't be nothing");
+        }
         Preconditions.checkArgument(ingredients.size()>0, "The recipe should have at least one ingredient");
-        Preconditions.checkArgument(personNumber > 0, "The number of persons must be set");
+        Preconditions.checkArgument(personNumber > 0, "The number of persons must be set and can't be zero");
         Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated preparation time must be set");
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
@@ -45,13 +49,15 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets the instructions to follow the recipe
-     * @param recipeInstructions the instructions to follow the recipe, must be non empty
+     * Sets a instruction to follow in the recipe
+     * @param recipeInstruction the specific instruction in the recipe, must be non empty
+     * @param stepNumber
      * @return the modified builder
      */
-    public RecipeBuilder setRecipeInstructions(String recipeInstructions){
-        Preconditions.checkArgument(recipeInstructions != null && !recipeInstructions.equals(""), "The instructions must be non empty");
-        this.recipeInstructions = recipeInstructions;
+    public RecipeBuilder addInstruction(String recipeInstruction, int stepNumber){
+        Preconditions.checkArgument(!recipeInstruction.isEmpty(), "The instruction must be non empty");
+        Preconditions.checkArgument(stepNumber >= 0, "The step index can't be below zero");
+        this.recipeInstructions.add(stepNumber, recipeInstruction);
         return this;
     }
 

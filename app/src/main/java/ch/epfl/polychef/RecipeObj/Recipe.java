@@ -1,10 +1,16 @@
 package ch.epfl.polychef.RecipeObj;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import ch.epfl.polychef.Preconditions;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class Recipe {
 
@@ -13,7 +19,7 @@ public final class Recipe {
     }
 
     private String name;
-    private String recipeInstructions;
+    private List<String> recipeInstructions;
     private Map<String, Double> ingredients;
     private int personNumber;
     private int estimatedPreparationTime;
@@ -39,7 +45,7 @@ public final class Recipe {
      * @param miniaturePath path to access the miniature image, provide empty string for default miniature
      * @param picturesPaths path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, String recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
+    protected Recipe(String name, List<String> recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
 
         this.hasMiniature = !miniaturePath.equals("");
         this.hasPictures = picturesPaths.size()!=0;
@@ -85,4 +91,64 @@ public final class Recipe {
     // TODO : Redefine methods toString, equals, hash
     // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
     // TODO: general remark: how do we handle overflows (for total preparation time for example)
+
+    /**
+     * Returns a copy of the recipe instructions
+     * @return list of instructions for the recipe
+     */
+    public List<String> getRecipeInstructions() {
+        return Collections.unmodifiableList(recipeInstructions);
+    }
+
+    /**
+     * Returns the name of the recipe
+     * @return the name of the recipe
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the ingredients map
+     * @return the ingredients and their amounts
+     */
+    public Map<String, Double> getIngredients() {
+        return Collections.unmodifiableMap(ingredients);
+    }
+
+    /**
+     * Returns the current number of person for the recipe
+     * @return the current number of person for the recipe
+     */
+    public int getPersonNumber() {
+        return personNumber;
+    }
+    /**
+     * Returns the estimated preparation time of the recipe
+     * @return the estimated preparation time of the recipe
+     */
+    public int getEstimatedPreparationTime() {
+        return estimatedPreparationTime;
+    }
+    /**
+     * Returns the estimated cooking time of the recipe
+     * @return the estimated cooking time of the recipe
+     */
+    public int getEstimatedCookingTime() {
+        return estimatedCookingTime;
+    }
+    /**
+     * Returns the recipe difficulty of the recipe
+     * @return the recipe difficulty of the recipe
+     */
+    public Difficulty getRecipeDifficulty() {
+        return recipeDifficulty;
+    }
+    /**
+     * Returns the rating of the recipe
+     * @return the rating of the recipe
+     */
+    public Rating getRating() {
+        return rating;
+    }
 }
