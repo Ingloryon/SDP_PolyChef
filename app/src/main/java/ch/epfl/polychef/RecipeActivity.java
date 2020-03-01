@@ -41,5 +41,13 @@ public class RecipeActivity extends AppCompatActivity {
         defaultRecipe.getRating().addRate(4, 5);
         ratingBar.setRating((float) defaultRecipe.getRating().ratingAverage());
         // Prep time
+        TextView prepTime = findViewById(R.id.prepTime);
+        prepTime.setText("Prep time : "+defaultRecipe.getEstimatedPreparationTime()+" mins");
+        // Cook time
+        TextView cookTime = findViewById(R.id.cookTime);
+        cookTime.setText("Cook time : "+defaultRecipe.getEstimatedCookingTime()+" mins");
+        // Difficulty
+        TextView difficulty = findViewById(R.id.difficulty);
+        difficulty.setText("Difficulty : " + defaultRecipe.getRecipeDifficulty().toString());
     }
 }
