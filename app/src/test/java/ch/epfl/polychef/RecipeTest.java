@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
-import ch.epfl.polychef.RecipeObj.Rating;
 import ch.epfl.polychef.RecipeObj.Recipe;
 import ch.epfl.polychef.RecipeObj.RecipeBuilder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /*
 import static org.junit.Assert.*;
@@ -95,6 +96,7 @@ public class RecipeTest {
         instruc.add("Start by the beginning");
         HashMap<String, Double> ingre =  new HashMap<String, Double>();
         ingre.put("Carrots", 300d);
+        recipe.getRating();
 
         assertEquals(recipe.getName(),  "Chicken fried");
         assertEquals(recipe.getRecipeInstructions(),  Collections.unmodifiableList(instruc));
@@ -113,7 +115,33 @@ public class RecipeTest {
 
         assertEquals(recipe2.getMiniaturePath(), "/src/miniature.jpeg");
         assertEquals(recipe2.getPicturesPaths(), Arrays.asList("/src/cake.png"));
+    }
 
+    @Test
+    public void argumentsReturnedAreUnmodifiable(){
+
+    }
+
+    @Test
+    public void changingPersonNumberScalesIngredients(){
+        RecipeBuilder rb = new RecipeBuilder();
+        rb.setName("Chicken fried");
+        rb.addInstruction("Start by the beginning");
+        rb.addIngredient("Carrots", 300d);
+        rb.addIngredient("Chicken wings", 75);
+        rb.setPersonNumber(4);
+        rb.setEstimatedPreparationTime(45);
+        rb.setEstimatedCookingTime(50);
+        rb.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
+        Recipe recipe = rb.build();
+
+        //assertThrows(IllegalArgumentException.class, () -> recipe.scalePersonAndIngredientsQuantities(0));
+
+        recipe.scalePersonAndIngredientsQuantities(2);
+        Map<String, Double> ingre = recipe.getIngredients();
+
+        assertTrue(ingre.get("Carrots") == 150d);
+        assertTrue(ingre.get("Chicken wings") == (75d / 2d));
     }
 
     //TODO: check method addIngredient is unmodifiable outside

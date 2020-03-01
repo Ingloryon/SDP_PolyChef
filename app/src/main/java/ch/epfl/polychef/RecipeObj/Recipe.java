@@ -64,14 +64,15 @@ public final class Recipe {
     }
 
     /**
-     * Changes the number of persons the recipe is meant for and updates the quantities accordingly
+     * Changes the number of persons the recipe is meant for and updates the ingredients quantities accordingly
      * @param newPersonNumber: strictly positive integer
      */
-    public void changePersonNumber(int newPersonNumber){
+    public void scalePersonAndIngredientsQuantities(int newPersonNumber){
         Preconditions.checkArgument(personNumber > 0, "The number of persons must be strictly positive");
+
+        double ratio = (double)newPersonNumber / (double)personNumber;
         personNumber=newPersonNumber;
 
-        double ratio = newPersonNumber / personNumber;
         for (Map.Entry<String, Double> e : ingredients.entrySet()) {
             e.setValue(e.getValue()*ratio);
         }
@@ -169,5 +170,5 @@ public final class Recipe {
     // TODO: Add getters and setters for needed attributes
     // TODO : Redefine methods toString, equals, hash
     // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
-    // TODO: general remark: should we handle overflows (for total preparation time for example)
+    // TODO: general remark: should we handle overflows (for total preparation time or scale quantities for example)
 }
