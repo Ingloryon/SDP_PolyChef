@@ -11,7 +11,7 @@ import java.util.Map;
 public final class Recipe {
 
     public enum Difficulty {
-        VERY_EASY, EASY, INTERMEDIATE, HARD
+        VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
 
     private String name;
@@ -164,6 +164,25 @@ public final class Recipe {
      */
     public List<String> getPicturesPaths() {
         return hasPictures ? Collections.unmodifiableList(picturesPaths) : DEFAULT_PICTURE_PATH;
+    }
+
+    /**
+     * Return the string description of the difficulty for use in display
+     * @return string value of the recipe difficulty
+     */
+    public String diffToString(){
+        switch(recipeDifficulty){
+            case EASY:
+                return "Easy";
+            case INTERMEDIATE:
+                return "Intermediate";
+            case HARD:
+                return "Hard";
+            case VERY_HARD:
+                return "Very hard";
+            default:
+                return "Very easy";
+        }
     }
 
 
