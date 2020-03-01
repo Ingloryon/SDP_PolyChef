@@ -8,21 +8,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class EntryPage extends AppCompatActivity {
+public class HomePage extends AppCompatActivity {
 
     private Toolbar toolbar;
     private Button logButton;
 
-    public static final String LOG_IN = "Log in";
+    public static final String LOG_OUT = "Log out";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry_page);
+        setContentView(R.layout.activity_home_page);
 
         // Attaching the layout to the toolbar object
         toolbar = findViewById(R.id.toolbar);
-        // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
         logButton = findViewById(R.id.logButton);
@@ -32,17 +31,17 @@ public class EntryPage extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        logButton.setText(LOG_IN);
+        logButton.setText(LOG_OUT);
         logButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                login(v);
+                logout(v);
             }
         });
     }
 
     /** Called when the user taps the log button */
-    public void login(View view) {
-        Intent intent = new Intent(this, LoginPage.class);
+    public void logout(View view) {
+        Intent intent = new Intent(this, EntryPage.class);
         startActivity(intent);
     }
 }

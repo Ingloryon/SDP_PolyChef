@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">PolyChef</string>
     <string name="enter_name">Enter your name !</string>
+    <string name="tequila">Tequila</string>
+    <string name="google">Google</string>
+    <string name="log_in">Log In</string>
+    <string name="log_out">Log Out</string>
 </resources>
