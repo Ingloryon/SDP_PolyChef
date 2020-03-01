@@ -2,6 +2,7 @@ package ch.epfl.polychef.RecipeObj;
 
 import ch.epfl.polychef.Preconditions;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,9 @@ public final class Recipe {
     private boolean hasPictures;
     private String miniaturePath;
     private List<String> picturesPaths;
+    private static final String DEFAULT_MINIATURE_PATH = "/src/default_miniature.png";
+    private static final List<String> DEFAULT_PICTURE_PATH = Arrays.asList("/src/default_picture.png");
+    //List.of("/src/default_picture.png"); --> need JDK 9
 
     /**
      * Creates a new Recipe
@@ -142,6 +146,23 @@ public final class Recipe {
      */
     public Rating getRating() {
         return rating;
+    }
+
+    /**
+     * Returns the rating of the recipe
+     * @return the rating of the recipe
+     */
+    public String getMiniaturePath() {
+        return hasMiniature ? miniaturePath : DEFAULT_MINIATURE_PATH;
+
+    }
+
+    /**
+     * Returns the rating of the recipe
+     * @return the rating of the recipe
+     */
+    public List<String> getPicturesPaths() {
+        return hasPictures ? Collections.unmodifiableList(picturesPaths) : DEFAULT_PICTURE_PATH;
     }
 
 

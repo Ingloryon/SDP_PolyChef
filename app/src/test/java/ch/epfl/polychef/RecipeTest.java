@@ -3,9 +3,11 @@ package ch.epfl.polychef;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
+import ch.epfl.polychef.RecipeObj.Rating;
 import ch.epfl.polychef.RecipeObj.Recipe;
 import ch.epfl.polychef.RecipeObj.RecipeBuilder;
 
@@ -87,8 +89,6 @@ public class RecipeTest {
         rb.setEstimatedPreparationTime(45);
         rb.setEstimatedCookingTime(50);
         rb.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
-        rb.addPicturePath("/src/cake.png");
-        rb.setMiniaturePath("/src/miniature.jpeg");
         Recipe recipe = rb.build();
 
         ArrayList<String> instruc = new ArrayList<String>();
@@ -103,8 +103,17 @@ public class RecipeTest {
         assertEquals(recipe.getEstimatedPreparationTime(),  45);
         assertEquals(recipe.getEstimatedCookingTime(),  50);
         assertEquals(recipe.getRecipeDifficulty(),  Recipe.Difficulty.VERY_EASY);
-        assertEquals(recipe.getName(),  "Chicken fried");
         assertEquals(recipe.getEstimatedTotalTime(),  95);
+        assertEquals(recipe.getMiniaturePath(), "/src/default_miniature.png");
+        assertEquals(recipe.getPicturesPaths(), Arrays.asList("/src/default_picture.png"));
+
+        rb.addPicturePath("/src/cake.png");
+        rb.setMiniaturePath("/src/miniature.jpeg");
+        Recipe recipe2 = rb.build();
+
+        assertEquals(recipe2.getMiniaturePath(), "/src/miniature.jpeg");
+        assertEquals(recipe2.getPicturesPaths(), Arrays.asList("/src/cake.png"));
+
     }
 
     //TODO: check method addIngredient is unmodifiable outside
