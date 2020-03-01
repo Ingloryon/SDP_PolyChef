@@ -124,23 +124,27 @@ public final class RecipeBuilder {
 
     /**
      * Sets the path where to find the miniature
-     * @param miniaturePath path to find the miniature
+     * @param miniaturePath path to find the miniature, must be non-empty and lead to a .png or .jpeg image
      * @return the modified builder
      */
     public RecipeBuilder setMiniaturePath(String miniaturePath){
-        Preconditions.checkArgument(miniaturePath != null && !miniaturePath.isEmpty(), "The miniature path must be non empty"); //TODO: sanitization ?
+        Preconditions.checkArgument(miniaturePath != null && !miniaturePath.isEmpty(), "The miniature path must be non empty");
+        Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
         this.miniaturePath = miniaturePath;
         return this;
     }
 
     /**
      * Adds the path of an image of the meal
-     * @param picturePaths path of an image
+     * @param picturePaths path of an image, must be non-empty and lead to a .png or .jpeg image
      * @return the modified builder
      */
     public RecipeBuilder addPicturePath(String picturePaths) {
         Preconditions.checkArgument(picturePaths != null && !picturePaths.isEmpty(), "The picture path must be non empty");
+        Preconditions.checkArgument(picturePaths.endsWith(".png") || picturePaths.endsWith(".jpeg"));
         this.picturesPaths.add(picturePaths);
         return this;
     }
+
+    //TODO: sanitization of paths inputs ?
 }

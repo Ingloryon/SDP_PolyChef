@@ -1,8 +1,5 @@
 package ch.epfl.polychef.RecipeObj;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import ch.epfl.polychef.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,16 +78,8 @@ public final class Recipe {
      * Returns the total estimated time
      * @return total estimated time in minutes
      */
-    public int estimatedTotalTime(){
+    public int getEstimatedTotalTime(){
         return estimatedCookingTime + estimatedPreparationTime;
-    }
-
-    /**
-     * Returns a copy of the recipe instructions
-     * @return list of instructions for the recipe
-     */
-    public List<String> getRecipeInstructions() {
-        return Collections.unmodifiableList(recipeInstructions);
     }
 
     /**
@@ -110,12 +99,19 @@ public final class Recipe {
     }
 
     /**
+     * Returns a copy of the recipe instructions
+     * @return list of instructions for the recipe
+     */
+    public List<String> getRecipeInstructions() { return Collections.unmodifiableList(recipeInstructions); }
+
+    /**
      * Returns the current number of person for the recipe
      * @return the current number of person for the recipe
      */
     public int getPersonNumber() {
         return personNumber;
     }
+
     /**
      * Returns the estimated preparation time of the recipe
      * @return the estimated preparation time of the recipe
@@ -123,6 +119,7 @@ public final class Recipe {
     public int getEstimatedPreparationTime() {
         return estimatedPreparationTime;
     }
+
     /**
      * Returns the estimated cooking time of the recipe
      * @return the estimated cooking time of the recipe
@@ -130,6 +127,7 @@ public final class Recipe {
     public int getEstimatedCookingTime() {
         return estimatedCookingTime;
     }
+
     /**
      * Returns the recipe difficulty of the recipe
      * @return the recipe difficulty of the recipe
@@ -137,6 +135,7 @@ public final class Recipe {
     public Difficulty getRecipeDifficulty() {
         return recipeDifficulty;
     }
+
     /**
      * Returns the rating of the recipe
      * @return the rating of the recipe
