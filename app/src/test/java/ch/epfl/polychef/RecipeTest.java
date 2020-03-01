@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.polychef.RecipeObj.Recipe;
@@ -119,7 +120,27 @@ public class RecipeTest {
 
     @Test
     public void argumentsReturnedAreUnmodifiable(){
+        RecipeBuilder rb = new RecipeBuilder();
+        rb.setName("Chicken fried");
+        rb.addInstruction("Start by the beginning");
+        rb.addIngredient("Carrots", 300d);
+        rb.setPersonNumber(4);
+        rb.setEstimatedPreparationTime(45);
+        rb.setEstimatedCookingTime(50);
+        rb.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
+        Recipe recipe = rb.build();
 
+        Map<String, Double> ingre = recipe.getIngredients();
+        List<String> instr = recipe.getRecipeInstructions();
+
+        /*
+        assertThrows(UnsupportedOperationException.class, () -> ingre.put("Steaks", 1000d));
+        assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png");
+        assertThrows(UnsupportedOperationException.class, () -> instr.set(0, "/src/evilChanger.png"));
+        for (Map.Entry<String, Double> e : ingre.entrySet()) {
+            assertThrows(UnsupportedOperationException.class, () -> e.setValue(e.getValue()*10));
+        }
+        */
     }
 
     @Test

@@ -166,26 +166,6 @@ public final class Recipe {
         return hasPictures ? Collections.unmodifiableList(picturesPaths) : DEFAULT_PICTURE_PATH;
     }
 
-    /**
-     * Return the string description of the difficulty for use in display
-     * @return string value of the recipe difficulty
-     */
-    public String diffToString(){
-        switch(recipeDifficulty){
-            case EASY:
-                return "Easy";
-            case INTERMEDIATE:
-                return "Intermediate";
-            case HARD:
-                return "Hard";
-            case VERY_HARD:
-                return "Very hard";
-            default:
-                return "Very easy";
-        }
-    }
-
-
     // TODO: Add getters and setters for needed attributes
     // TODO : Redefine methods toString, equals, hash
     // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
