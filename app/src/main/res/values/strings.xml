@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">PolyChef</string>
     <string name="enter_name">Enter your name !</string>
+    <string name="Instructions">Instructions</string>
+    <string name="Ingredients">Ingredients</string>
+    <string name="recipeImage">This is the image of the recipe displayed</string>
 </resources>
