@@ -18,7 +18,7 @@ public final class Rating {
     }
 
     /**
-     * Adds a rating from a user
+     * Adds a rating from a user, if he already rated it changes his personal rating
      * @param userID the ID of the user, a positive integer
      * @param rate the rate given by the user, between 0 and 5
      */
@@ -26,11 +26,18 @@ public final class Rating {
         Preconditions.checkArgument(0 <= rate && rate <= 5, "A rate's value should be between 0 and 5");
         Preconditions.checkArgument(userID >= 0, "UserID should be positive");
 
-        //TODO: Who can access this method ? How to avoid multiple ratings per user (check requesting user not in the map ?)
-
-        allRatings.put(userID, rate);
-        ratingSum += rate;
+        if(allRatings.containsKey(userID)) {
+            double oldRate = allRatings.get(userID);
+            allRatings.put(userID, rate);  //allRatings.replace(userID, rate);  //TODO: Need java version 26... Would be much cleaner
+            ratingSum = ratingSum - oldRate + rate;
+        }
+        else {
+            allRatings.put(userID, rate);
+            ratingSum += rate;
+        }
     }
+
+    //TODO: One line of coverage missing, do not get why
 
     /**
      * Returns the average rating

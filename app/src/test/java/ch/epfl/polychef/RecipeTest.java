@@ -164,6 +164,4 @@ public class RecipeTest {
         assertTrue(ingre.get("Carrots") == 150d);
         assertTrue(ingre.get("Chicken wings") == (75d / 2d));
     }
-
-    //TODO: check method addIngredient is unmodifiable outside
 }
