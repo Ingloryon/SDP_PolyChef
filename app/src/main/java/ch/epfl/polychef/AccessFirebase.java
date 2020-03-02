@@ -18,23 +18,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AccessFirebase {
-    private void addDataToFirebase(Map<String, Object> collection, String path, final String TAG){
+    static public void addDataToFirebase(Map<String, Object> collection, String path, final String TAG){
         // Access a Cloud Firestore instance from your Activity
         FirebaseFirestore db = FirebaseFirestore.getInstance();
          // Add a new document with a generated ID
-        db.collection(path).add(collection).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection(path).add(collection)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error adding document", e);
+            public void onFailure(@NonNull Exception exception) {
+                Log.w(TAG, "Error adding document", exception);
             }
         });
     }
-    private void readDataFromFirebase(String path, final String TAG){
+
+    static public void readDataFromFirebase(String path, final String TAG){
         // Access a Cloud Firestore instance from your Activity
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(path)
