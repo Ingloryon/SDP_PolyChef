@@ -17,16 +17,17 @@ public class RecipeActivity extends AppCompatActivity {
     // Need to have a intent that have the recipe to display
     // For now I will hardcode one for example purpose
     public Recipe defaultRecipe = new RecipeBuilder()
-            .setName("Chicken tartar")
+            .setName("Beef tartar")
             .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE)
             .setEstimatedCookingTime(30)
             .setPersonNumber(4)
             .setEstimatedPreparationTime(40)
-            .addIngredient("Raw chicken", 500)
+            .addIngredient("Raw beef", 500)
             .addIngredient("Parsley", 3)
-            .addInstruction("Don't cook this it's dangerous !")
-            .addInstruction("Cut the chicken into small pieces")
-            .addInstruction("Add salt and pepper")
+            .addInstruction("Cut the parsley very fine")
+            .addInstruction("Cut the beef into small pieces")
+            .addInstruction("Add salt and pepper to taste")
+            .addInstruction("Serve it in a dome shape")
             .build();
 
 
