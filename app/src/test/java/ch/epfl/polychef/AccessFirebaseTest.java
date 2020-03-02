@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class AccessFirebaseTest {
+    /**
     @Test
     public void testWriteData() {
         Map<String,Object> collection= new HashMap<>();
@@ -23,5 +24,5 @@ public class AccessFirebaseTest {
     public void testReadData(){
         AccessFirebase.readDataFromFirebase("users","TAG");
     }
-
+    */
 }

@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AccessFirebase {
-    static public void addDataToFirebase(Map<String, Object> collection, String path, final String TAG){
+    static public void addDataToFirebase(Map<String, Object> collection,
+                                         String path, final String Tag){
         // Access a Cloud Firestore instance from your Activity
         FirebaseFirestore db = FirebaseFirestore.getInstance();
          // Add a new document with a generated ID
@@ -26,17 +27,17 @@ public class AccessFirebase {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                Log.d(Tag, "DocumentSnapshot added with ID: " + documentReference.getId());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.w(TAG, "Error adding document", exception);
+                Log.w(Tag, "Error adding document", exception);
             }
         });
     }
 
-    static public void readDataFromFirebase(String path, final String TAG){
+    static public void readDataFromFirebase(String path, final String Tag){
         // Access a Cloud Firestore instance from your Activity
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(path)
@@ -46,10 +47,10 @@ public class AccessFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Log.d(Tag, document.getId() + " => " + document.getData());
                             }
                         } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w(Tag, "Error getting documents.", task.getException());
                         }
                     }
                 });
