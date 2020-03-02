@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "570464789042",
+    "firebase_url": "https://polychef-1ca75.firebaseio.com",
+    "project_id": "polychef-1ca75",
+    "storage_bucket": "polychef-1ca75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570464789042:android:644bd828e1af0aeaa4d22b",
+        "android_client_info": {
+          "package_name": "ch.epfl.polychef"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570464789042-1hbrht5daeehf7j59a8rraj0dvu9fhqs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHdODPhyHN1UMX2RjQViH8jEm6pPRk2mA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570464789042-1hbrht5daeehf7j59a8rraj0dvu9fhqs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
