@@ -40,7 +40,7 @@ public class EntryPage extends AppCompatActivity {
         });
     }
 
-    /** Called when the user taps the log button */
+    /** Called when the user taps the log button. */
     public void login(View view) {
         Intent intent = new Intent(this, LoginPage.class);
         startActivity(intent);

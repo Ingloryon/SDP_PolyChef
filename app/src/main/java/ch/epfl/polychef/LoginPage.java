@@ -12,10 +12,6 @@ public class LoginPage extends AppCompatActivity {
     Button tequilaButton;
     Button googleButton;
 
-    public static final String tequila = "Tequila";
-    public static final String google = "Google";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,13 +21,13 @@ public class LoginPage extends AppCompatActivity {
         googleButton = findViewById(R.id.googleButton);
     }
 
-    /** Called when the user taps the log button */
+    /** Called when the user taps the log button. */
     public void tequilaLogin(View view) {
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }
 
-    /** Called when the user taps the log button */
+    /** Called when the user taps the log button. */
     public void googleLogin(View view) {
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);

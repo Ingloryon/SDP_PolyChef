@@ -1,12 +1,23 @@
 package ch.epfl.polychef;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+
+import com.google.android.material.navigation.NavigationView;
+
+import static androidx.navigation.fragment.NavHostFragment.findNavController;
+
 
 public class HomePage extends AppCompatActivity {
 
@@ -39,9 +50,13 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
-    /** Called when the user taps the log button */
+    /**
+     * Called when the user taps the log button.
+     */
     public void logout(View view) {
         Intent intent = new Intent(this, EntryPage.class);
         startActivity(intent);
     }
+
+
 }
