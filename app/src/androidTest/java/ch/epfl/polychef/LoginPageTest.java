@@ -1,8 +1,8 @@
 package ch.epfl.polychef;
 
 import static androidx.test.espresso.Espresso.onView;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import static androidx.test.espresso.action.ViewActions.click;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

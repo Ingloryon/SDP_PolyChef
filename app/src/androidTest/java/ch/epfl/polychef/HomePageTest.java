@@ -1,20 +1,20 @@
 package ch.epfl.polychef;
 
-import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.NavigationViewActions;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import androidx.test.espresso.contrib.DrawerActions;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
