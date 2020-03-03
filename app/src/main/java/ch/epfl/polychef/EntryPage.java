@@ -34,8 +34,8 @@ public class EntryPage extends AppCompatActivity {
 
         logButton.setText(LOG_IN);
         logButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                login(v);
+            public void onClick(View view) {
+                login(view);
             }
         });
     }
