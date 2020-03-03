@@ -21,10 +21,14 @@ import static androidx.navigation.fragment.NavHostFragment.findNavController;
 
 public class HomePage extends AppCompatActivity {
 
+    public static final String LOG_OUT = "Log out";
     private Toolbar toolbar;
     private Button logButton;
-
-    public static final String LOG_OUT = "Log out";
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private NavHostFragment hostFragment;
+    private NavController navController;
+    private MenuItem currentItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,50 @@ public class HomePage extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         logButton = findViewById(R.id.logButton);
+        drawer = findViewById(R.id.drawer);
+
+        hostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = findNavController(hostFragment);
+
+
+        navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem selectedItem) {
+                        invalidateOptionsMenu();
+
+                        if (currentItem != null) {
+                            currentItem.setChecked(false);
+                        }
+
+                        selectedItem.setChecked(true);
+                        currentItem = selectedItem;
+
+                        int itemId = selectedItem.getItemId();
+                        navController.navigate(getFragmentId(itemId));
+
+                        drawer.closeDrawer(GravityCompat.START, true);
+
+                        return false;
+                    }
+                }
+        );
+
+    }
+
+    private int getFragmentId(int itemId) {
+        if (itemId == R.id.nav_home) {
+            return R.id.homeFragment;
+        } else if (itemId == R.id.nav_fav) {
+            return R.id.favouritesFragment;
+        } else if (itemId == R.id.nav_subscribers) {
+            return R.id.subscribersFragment;
+        } else if (itemId == R.id.nav_subscriptions) {
+            return R.id.subscriptionsFragment;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
