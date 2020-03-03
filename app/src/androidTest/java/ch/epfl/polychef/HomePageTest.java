@@ -38,30 +38,22 @@ public class HomePageTest {
 
     @Test
     public void onClickHomeGoesToHome() {
-        onView(withId(R.id.drawer)).perform(DrawerActions.open());
-        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
-        onView(withId(R.id.homeFragment)).check(matches(isDisplayed()));
+        testNavButton(R.id.nav_home, R.id.homeFragment);
     }
 
     @Test
     public void onClickFavGoesToFav() {
-        onView(withId(R.id.drawer)).perform(DrawerActions.open());
-        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_fav));
-        onView(withId(R.id.favouritesFragment)).check(matches(isDisplayed()));
+        testNavButton(R.id.nav_fav, R.id.favouritesFragment);
     }
 
     @Test
     public void onClickSubscribersGoesToSubscribers() {
-        onView(withId(R.id.drawer)).perform(DrawerActions.open());
-        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_subscribers));
-        onView(withId(R.id.subscribersFragment)).check(matches(isDisplayed()));
+        testNavButton(R.id.nav_subscribers, R.id.subscribersFragment);
     }
 
     @Test
     public void onClickSubscriptionsGoesToSubscriptions() {
-        onView(withId(R.id.drawer)).perform(DrawerActions.open());
-        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_subscriptions));
-        onView(withId(R.id.subscriptionsFragment)).check(matches(isDisplayed()));
+        testNavButton(R.id.nav_subscriptions, R.id.subscriptionsFragment);
     }
 
     @Test
@@ -70,5 +62,11 @@ public class HomePageTest {
         onView(withId(R.id.drawer)).check(matches(isOpen()));
         onView(withId(R.id.drawer)).perform(DrawerActions.close());
         onView(withId(R.id.drawer)).check(matches(isClosed()));
+    }
+
+    private void testNavButton(int id_button, int id_fragment) {
+        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(id_button));
+        onView(withId(id_fragment)).check(matches(isDisplayed()));
     }
 }
