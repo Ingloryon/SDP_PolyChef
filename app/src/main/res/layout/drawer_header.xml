@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_header_height"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/drawer_header_background"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -16,21 +17,21 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="todo"
         android:paddingTop="8dp"
+        tools:ignore="ContentDescription"
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
-        android:text="TODO:USERNAME"
+        android:text="@string/Username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TODO:USER_EMAIL" />
+        android:text="@string/Email" />
 
 </LinearLayout>

@@ -41,9 +41,30 @@ public class HomePage extends AppCompatActivity {
         drawer = findViewById(R.id.drawer);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        NavHostFragment hostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment);
+
+        NavHostFragment hostFragment = (NavHostFragment)
+                fragmentManager.findFragmentById(R.id.nav_host_fragment);
+
         navController = NavHostFragment.findNavController(hostFragment);
 
+        setupNavigation();
+    }
+
+    private int getFragmentId(int itemId) {
+        if (itemId == R.id.nav_home) {
+            return R.id.homeFragment;
+        } else if (itemId == R.id.nav_fav) {
+            return R.id.favouritesFragment;
+        } else if (itemId == R.id.nav_subscribers) {
+            return R.id.subscribersFragment;
+        } else if (itemId == R.id.nav_subscriptions) {
+            return R.id.subscriptionsFragment;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void setupNavigation(){
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -68,21 +89,6 @@ public class HomePage extends AppCompatActivity {
                     }
                 }
         );
-
-    }
-
-    private int getFragmentId(int itemId) {
-        if (itemId == R.id.nav_home) {
-            return R.id.homeFragment;
-        } else if (itemId == R.id.nav_fav) {
-            return R.id.favouritesFragment;
-        } else if (itemId == R.id.nav_subscribers) {
-            return R.id.subscribersFragment;
-        } else if (itemId == R.id.nav_subscriptions) {
-            return R.id.subscriptionsFragment;
-        } else {
-            throw new IllegalArgumentException();
-        }
     }
 
     @Override
