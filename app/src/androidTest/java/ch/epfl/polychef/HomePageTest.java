@@ -66,7 +66,7 @@ public class HomePageTest {
 
     private void testNavButton(int idButton, int idFragment) {
         onView(withId(R.id.drawer)).perform(DrawerActions.open());
-        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(id_button));
-        onView(withId(id_fragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(idButton));
+        onView(withId(idFragment)).check(matches(isDisplayed()));
     }
 }
