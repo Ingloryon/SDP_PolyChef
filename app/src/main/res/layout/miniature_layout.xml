@@ -42,8 +42,7 @@
                     android:contentDescription="@string/Instructions"
                     android:scaleType="centerCrop"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recipeNameMiniature"
-                    app:srcCompat="@drawable/koreansteaktartare" />
+                    app:layout_constraintTop_toBottomOf="@+id/recipeNameMiniature" />
 
                 <RatingBar
                     android:id="@+id/miniatureRatingBar"
