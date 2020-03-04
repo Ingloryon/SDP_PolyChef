@@ -1,5 +1,7 @@
 package ch.epfl.polychef.RecipeObj;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +27,6 @@ public final class RecipeBuilder {
     public Recipe build(){
         Preconditions.checkArgument(!name.isEmpty(), "The name must be set");
         Preconditions.checkArgument(!recipeInstructions.isEmpty(), "There must be at least one instruction");
-        /*for(String instr : recipeInstructions){
-            Preconditions.checkArgument(!instr.isEmpty(), "An instruction can't be nothing");  //TODO: delete ? useless since cannot add "" in method?
-        }*/
         Preconditions.checkArgument(ingredients.size()>0, "The recipe should have at least one ingredient");
         Preconditions.checkArgument(personNumber > 0, "The number of persons must be set and can't be zero");
         Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated preparation time must be set");
@@ -42,8 +41,8 @@ public final class RecipeBuilder {
      * @param name name of the recipe, must be non empty
      * @return the modified builder
      */
-    public RecipeBuilder setName(String name){
-        Preconditions.checkArgument(name != null && !name.isEmpty(), "The name must be non empty");
+    public RecipeBuilder setName(@NonNull String name){
+        Preconditions.checkArgument(!name.isEmpty(), "The name must be non empty");
         this.name = name;
         return this;
     }
@@ -53,7 +52,7 @@ public final class RecipeBuilder {
      * @param recipeInstruction the specific instruction in the recipe, must be non empty
      * @return the modified builder
      */
-    public RecipeBuilder addInstruction(String recipeInstruction){
+    public RecipeBuilder addInstruction(@NonNull String recipeInstruction){
         Preconditions.checkArgument(!recipeInstruction.isEmpty(), "The instruction must be non empty");
         this.recipeInstructions.add(recipeInstruction);
         return this;
@@ -67,8 +66,8 @@ public final class RecipeBuilder {
      * @param quantity the corresponding quantity of the ingredient, must be strictly positive
      * @return the modified builder
      */
-    public RecipeBuilder addIngredient(String ingredientName, double quantity){
-        Preconditions.checkArgument(ingredientName != null && !ingredientName.isEmpty(), "The ingredient name must be non empty");
+    public RecipeBuilder addIngredient(@NonNull String ingredientName, double quantity){
+        Preconditions.checkArgument(!ingredientName.isEmpty(), "The ingredient name must be non empty");
         Preconditions.checkArgument(quantity > 0, "The ingredient quantity must be strictly positive");
 
         ingredients.put(ingredientName, quantity);
@@ -116,8 +115,7 @@ public final class RecipeBuilder {
      * @param recipeDifficulty  the difficulty level, must be non null
      * @return the modified builder
      */
-    public RecipeBuilder setRecipeDifficulty(Recipe.Difficulty recipeDifficulty){
-        Preconditions.checkArgument(recipeDifficulty != null, "The difficulty must be non null");
+    public RecipeBuilder setRecipeDifficulty(@NonNull Recipe.Difficulty recipeDifficulty){
         this.recipeDifficulty = recipeDifficulty;
         return this;
     }
@@ -127,8 +125,8 @@ public final class RecipeBuilder {
      * @param miniaturePath path to find the miniature, must be non-empty and lead to a .png or .jpeg image
      * @return the modified builder
      */
-    public RecipeBuilder setMiniaturePath(String miniaturePath){
-        Preconditions.checkArgument(miniaturePath != null && !miniaturePath.isEmpty(), "The miniature path must be non empty");
+    public RecipeBuilder setMiniaturePath(@NonNull String miniaturePath){
+        Preconditions.checkArgument(!miniaturePath.isEmpty(), "The miniature path must be non empty");
         Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
         this.miniaturePath = miniaturePath;
         return this;
@@ -139,8 +137,8 @@ public final class RecipeBuilder {
      * @param picturePaths path of an image, must be non-empty and lead to a .png or .jpeg image
      * @return the modified builder
      */
-    public RecipeBuilder addPicturePath(String picturePaths) {
-        Preconditions.checkArgument(picturePaths != null && !picturePaths.isEmpty(), "The picture path must be non empty");
+    public RecipeBuilder addPicturePath(@NonNull String picturePaths) {
+        Preconditions.checkArgument(!picturePaths.isEmpty(), "The picture path must be non empty");
         Preconditions.checkArgument(picturePaths.endsWith(".png") || picturePaths.endsWith(".jpeg"));
         this.picturesPaths.add(picturePaths);
         return this;
