@@ -8,11 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-
 public class GreetingActivity extends AppCompatActivity {
 
     @Override
