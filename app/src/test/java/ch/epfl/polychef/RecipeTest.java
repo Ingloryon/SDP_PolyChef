@@ -14,13 +14,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
 
 
 public class RecipeTest {
