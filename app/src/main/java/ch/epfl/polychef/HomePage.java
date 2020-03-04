@@ -49,21 +49,22 @@ public class HomePage extends AppCompatActivity {
 
         setupNavigation();
     }
-
+    
     private int getFragmentId(int itemId) {
-        if (itemId == R.id.nav_home) {
-            return R.id.homeFragment;
-        } else if (itemId == R.id.nav_fav) {
-            return R.id.favouritesFragment;
-        } else if (itemId == R.id.nav_subscribers) {
-            return R.id.subscribersFragment;
-        } else if (itemId == R.id.nav_subscriptions) {
-            return R.id.subscriptionsFragment;
-        } else {
-            throw new IllegalArgumentException();
+        switch(itemID){
+            case R.id.nav_home:
+                return R.id.homeFragment;
+            case R.id.nav_fav:
+                return R.id.favouritesFragment;
+            case R.id.nav_subscribers:
+                return R.id.subscribersFragment;
+            case R.id.nav_subscriptions:
+                return R.id.subscriptionsFragment;
+            default:
+                throw new IllegalArgumentException();
         }
     }
-
+    
     private void setupNavigation(){
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(
