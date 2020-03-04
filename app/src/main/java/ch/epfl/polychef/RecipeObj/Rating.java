@@ -37,8 +37,6 @@ public final class Rating {
         }
     }
 
-    //TODO: One line of coverage missing, do not get why
-
     /**
      * Returns the average rating
      * @return the average rating

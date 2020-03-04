@@ -166,8 +166,8 @@ public final class Recipe {
         return hasPictures ? Collections.unmodifiableList(picturesPaths) : DEFAULT_PICTURE_PATH;
     }
 
-    // TODO: Add getters and setters for needed attributes
+    // TODO: Add setters for needed attributes
     // TODO : Redefine methods toString, equals, hash
     // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
-    // TODO: general remark: should we handle overflows (for total preparation time or scale quantities for example)
+    // TODO: general remark: should we handle overflows ? (for total preparation time or scale quantities for example)
 }
