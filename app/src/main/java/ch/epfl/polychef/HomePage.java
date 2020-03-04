@@ -51,7 +51,7 @@ public class HomePage extends AppCompatActivity {
     }
     
     private int getFragmentId(int itemId) {
-        switch(itemID){
+        switch(itemId){
             case R.id.nav_home:
                 return R.id.homeFragment;
             case R.id.nav_fav:
