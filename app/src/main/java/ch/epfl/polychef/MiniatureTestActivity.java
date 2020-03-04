@@ -13,6 +13,10 @@ import ch.epfl.polychef.recipe.RecipeMiniatureAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is an activity to test the display of a recyclerview containing the recipe miniatures
+ * This will be deleted later when there is no more need for an example
+ */
 public class MiniatureTestActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -24,7 +28,9 @@ public class MiniatureTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_miniaturetest);
         testRecipeList = new ArrayList<>();
+        // set the recyclerView object to be the one inside an activity using its id
         recyclerView = findViewById(R.id.cardList);
+        // bind a layoutmanager to it (might not need one maybe try without ?)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Recipe recipeTarTar = new RecipeBuilder()
@@ -68,10 +74,20 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .addInstruction("Add salt and pepper")
                 .build();
 
+        recipeTarTar.getRating().addRate(3, 2);
+        recipeTarTar.getRating().addRate(4, 5);
+
+        recipeCurry.getRating().addRate(10, 2);
+        recipeCurry.getRating().addRate(8, 4);
+
+        recipeNoodles.getRating().addRate(10, 4);
+        recipeNoodles.getRating().addRate(8, 5);
+
         testRecipeList.add(recipeTarTar);
         testRecipeList.add(recipeNoodles);
         testRecipeList.add(recipeCurry);
 
+        // ones we have the recipe list we can create the adapter that contains the list and set the recyclerview to have this list
         miniatureAdapter = new RecipeMiniatureAdapter(this, testRecipeList);
         recyclerView.setAdapter(miniatureAdapter);
     }
