@@ -1,16 +1,16 @@
 package ch.epfl.polychef.RecipeObj;
 
+import ch.epfl.polychef.Preconditions;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import ch.epfl.polychef.Preconditions;
 
 public final class Rating {
     private double ratingSum;
     private Map<Integer, Double> allRatings;
 
     /**
-     * Constructs a new empty rating
+     * Constructs a new empty rating.
      */
     public Rating(){
         ratingSum = 0;
@@ -18,7 +18,7 @@ public final class Rating {
     }
 
     /**
-     * Adds a rating from a user, if he already rated it changes his personal rating
+     * Adds a rating from a user, if he already rated it changes his personal rating.
      * @param userID the ID of the user, a positive integer
      * @param rate the rate given by the user, between 0 and 5
      */
@@ -38,7 +38,7 @@ public final class Rating {
     }
 
     /**
-     * Returns the average rating
+     * Returns the average rating.
      * @return the average rating
      */
     public double ratingAverage(){

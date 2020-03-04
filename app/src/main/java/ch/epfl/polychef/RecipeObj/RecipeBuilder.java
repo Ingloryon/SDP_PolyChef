@@ -2,11 +2,11 @@ package ch.epfl.polychef.RecipeObj;
 
 import androidx.annotation.NonNull;
 
+import ch.epfl.polychef.Preconditions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import ch.epfl.polychef.Preconditions;
 
 public final class RecipeBuilder {
     private String name = "";
@@ -21,7 +21,7 @@ public final class RecipeBuilder {
     private ArrayList<String> picturesPaths = new ArrayList<>();
 
     /**
-     * Builds a Recipe
+     * Builds a Recipe.
      * @return a Recipe with the characteristics given to the builder
      */
     public Recipe build(){
@@ -37,7 +37,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Set the name of the recipe
+     * Set the name of the recipe.
      * @param name name of the recipe, must be non empty
      * @return the modified builder
      */
@@ -48,7 +48,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets a instruction to follow in the recipe
+     * Sets a instruction to follow in the recipe.
      * @param recipeInstruction the specific instruction in the recipe, must be non empty
      * @return the modified builder
      */
@@ -61,7 +61,7 @@ public final class RecipeBuilder {
     // TODO: Add methods to allow modification of instructions -> insert, modify existing
 
     /**
-     * Adds an ingredient of the recipe and its corresponding quantity
+     * Adds an ingredient of the recipe and its corresponding quantity.
      * @param ingredientName the name of the ingredient, must be non empty
      * @param quantity the corresponding quantity of the ingredient, must be strictly positive
      * @return the modified builder
@@ -75,7 +75,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets the number of persons the recipe is for
+     * Sets the number of persons the recipe is for.
      * @param personNumber the number of persons, must be strictly positive
      * @return the modified builder
      */
@@ -87,7 +87,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets the estimated time required to prepare the recipe
+     * Sets the estimated time required to prepare the recipe.
      * @param estimatedPreparationTime  estimated time required to prepare the recipe, must be strictly positive
      * @return the modified builder
      */
@@ -99,7 +99,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets the estimated time required to cook the recipe
+     * Sets the estimated time required to cook the recipe.
      * @param estimatedCookingTime  estimated time required to cook the recipe, must be strictly positive
      * @return the modified builder
      */
@@ -111,7 +111,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets the recipe's difficulty level
+     * Sets the recipe's difficulty level.
      * @param recipeDifficulty  the difficulty level, must be non null
      * @return the modified builder
      */
@@ -121,7 +121,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Sets the path where to find the miniature
+     * Sets the path where to find the miniature.
      * @param miniaturePath path to find the miniature, must be non-empty and lead to a .png or .jpeg image
      * @return the modified builder
      */
@@ -133,7 +133,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Adds the path of an image of the meal
+     * Adds the path of an image of the meal.
      * @param picturePaths path of an image, must be non-empty and lead to a .png or .jpeg image
      * @return the modified builder
      */

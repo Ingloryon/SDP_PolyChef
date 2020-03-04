@@ -60,12 +60,14 @@ public final class Recipe {
         this.rating = new Rating();
         this.miniaturePath = miniaturePath;
         this.picturesPaths = new ArrayList<>();
-        if(hasPictures) this.picturesPaths.addAll(picturesPaths);
+        if(hasPictures) {
+            this.picturesPaths.addAll(picturesPaths);
+        }
     }
 
     /**
      * Changes the number of persons the recipe is meant for and updates the ingredients quantities accordingly.
-     * @param newPersonNumber: strictly positive integer
+     * @param newPersonNumber strictly positive integer
      */
     public void scalePersonAndIngredientsQuantities(int newPersonNumber){
         Preconditions.checkArgument(personNumber > 0, "The number of persons must be strictly positive");
@@ -107,7 +109,9 @@ public final class Recipe {
      * Returns a copy of the recipe instructions.
      * @return list of instructions for the recipe
      */
-    public List<String> getRecipeInstructions() { return Collections.unmodifiableList(recipeInstructions); }
+    public List<String> getRecipeInstructions() {
+        return Collections.unmodifiableList(recipeInstructions);
+    }
 
     /**
      * Returns the current number of person for the recipe.
