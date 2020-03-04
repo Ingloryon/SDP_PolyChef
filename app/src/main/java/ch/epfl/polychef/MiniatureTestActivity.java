@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeBuilder;
+import ch.epfl.polychef.recipe.RecipeMiniatureAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import ch.epfl.polychef.RecipeObj.Recipe;
-import ch.epfl.polychef.RecipeObj.RecipeBuilder;
-import ch.epfl.polychef.RecipeObj.RecipeMiniatureAdapter;
 
 public class MiniatureTestActivity extends AppCompatActivity {
 

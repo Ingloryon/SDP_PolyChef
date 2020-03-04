@@ -1,4 +1,4 @@
-package ch.epfl.polychef.RecipeObj;
+package ch.epfl.polychef.recipe;
 
 import ch.epfl.polychef.Preconditions;
 

@@ -1,4 +1,4 @@
-package ch.epfl.polychef.RecipeObj;
+package ch.epfl.polychef.recipe;
 
 import androidx.annotation.NonNull;
 

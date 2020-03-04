@@ -2,7 +2,7 @@ package ch.epfl.polychef;
 
 import org.junit.Test;
 
-import ch.epfl.polychef.RecipeObj.Rating;
+import ch.epfl.polychef.recipe.Rating;
 import static org.junit.Assert.assertTrue;
 
 public class RatingTest {

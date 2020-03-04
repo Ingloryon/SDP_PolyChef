@@ -1,4 +1,4 @@
-package ch.epfl.polychef.RecipeObj;
+package ch.epfl.polychef.recipe;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,24 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
 import ch.epfl.polychef.R;
+
+import java.util.List;
 
 public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder>{
 
-    private Context mCtx;
+    private Context mainContext;
     private List<Recipe> recipeList;
 
-    public RecipeMiniatureAdapter(Context mCtx, List<Recipe> recipeList) {
-        this.mCtx = mCtx;
+    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList) {
+        this.mainContext = mainContext;
         this.recipeList = recipeList;
     }
 
     @NonNull
     @Override
     public MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mCtx);
+        LayoutInflater inflater = LayoutInflater.from(mainContext);
         View view = inflater.inflate(R.layout.miniature_layout, null);
         return new MiniatureViewHolder(view);
     }

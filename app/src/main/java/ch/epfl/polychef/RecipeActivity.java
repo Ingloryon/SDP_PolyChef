@@ -6,11 +6,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeBuilder;
+
 import java.util.List;
 import java.util.Map;
-
-import ch.epfl.polychef.RecipeObj.Recipe;
-import ch.epfl.polychef.RecipeObj.RecipeBuilder;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -44,7 +44,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     /**
-     * Display the recipe name in the correct field in the activity
+     * Display the recipe name in the correct field in the activity.
      */
     private void displayRecipeName(){
         TextView recipeName = findViewById(R.id.recipeName);
@@ -52,7 +52,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     /**
-     * Display the rating of the recipe in the correct field in the activity
+     * Display the rating of the recipe in the correct field in the activity.
      */
     private void displayRating(){
         final RatingBar ratingBar = findViewById(R.id.ratingBar);
@@ -63,7 +63,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     /**
-     * Display both the preparation time and the cooking time in the correct field in the activity
+     * Display both the preparation time and the cooking time in the correct field in the activity.
      */
     private void displayPrepAndCookTime(){
         TextView prepTime = findViewById(R.id.prepTime);
@@ -73,7 +73,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     /**
-     * Display the difficulty in the correct field in the activity
+     * Display the difficulty in the correct field in the activity.
      */
     private void displayDifficulty(){
         TextView difficulty = findViewById(R.id.difficulty);
@@ -83,7 +83,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     /**
-     * Display all the ingredients from the list in a big string
+     * Display all the ingredients from the list in a big string.
      */
     private void displayIngredients(){
         StringBuilder strBuilder = new StringBuilder();
@@ -103,7 +103,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     /**
-     * Display all the instructions from the list in a big string
+     * Display all the instructions from the list in a big string.
      */
     private void displayInstructions(){
         StringBuilder strBuilder = new StringBuilder();
