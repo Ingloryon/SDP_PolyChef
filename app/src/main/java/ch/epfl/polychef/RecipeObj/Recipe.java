@@ -33,7 +33,7 @@ public final class Recipe {
     //List.of("/src/default_picture.png"); --> need JDK 9
 
     /**
-     * Creates a new Recipe
+     * Creates a new Recipe.
      * @param name the title of the recipe, must be non empty
      * @param recipeInstructions the instructions to follow the recipe, must be non empty
      * @param ingredients a list of the ingredients the recipe needs and their corresponding quantities
@@ -64,7 +64,7 @@ public final class Recipe {
     }
 
     /**
-     * Changes the number of persons the recipe is meant for and updates the ingredients quantities accordingly
+     * Changes the number of persons the recipe is meant for and updates the ingredients quantities accordingly.
      * @param newPersonNumber: strictly positive integer
      */
     public void scalePersonAndIngredientsQuantities(int newPersonNumber){
@@ -76,11 +76,11 @@ public final class Recipe {
         for (Map.Entry<String, Double> e : ingredients.entrySet()) {
             e.setValue(e.getValue()*ratio);
         }
-        //TOREMOVE: ingredients.replaceAll((k, v) -> v * ratio);  -> Cleaner but wrong java version ?
+        //TO_REMOVE: ingredients.replaceAll((k, v) -> v * ratio);  -> Cleaner but wrong java version ?
     }
 
     /**
-     * Returns the total estimated time
+     * Returns the total estimated time.
      * @return total estimated time in minutes
      */
     public int getEstimatedTotalTime(){
@@ -88,7 +88,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the name of the recipe
+     * Returns the name of the recipe.
      * @return the name of the recipe
      */
     public String getName() {
@@ -96,7 +96,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the ingredients map
+     * Returns the ingredients map.
      * @return the ingredients and their amounts
      */
     public Map<String, Double> getIngredients() {
@@ -104,13 +104,13 @@ public final class Recipe {
     }
 
     /**
-     * Returns a copy of the recipe instructions
+     * Returns a copy of the recipe instructions.
      * @return list of instructions for the recipe
      */
     public List<String> getRecipeInstructions() { return Collections.unmodifiableList(recipeInstructions); }
 
     /**
-     * Returns the current number of person for the recipe
+     * Returns the current number of person for the recipe.
      * @return the current number of person for the recipe
      */
     public int getPersonNumber() {
@@ -118,7 +118,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the estimated preparation time of the recipe
+     * Returns the estimated preparation time of the recipe.
      * @return the estimated preparation time of the recipe
      */
     public int getEstimatedPreparationTime() {
@@ -126,7 +126,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the estimated cooking time of the recipe
+     * Returns the estimated cooking time of the recipe.
      * @return the estimated cooking time of the recipe
      */
     public int getEstimatedCookingTime() {
@@ -134,7 +134,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the recipe difficulty of the recipe
+     * Returns the recipe difficulty of the recipe.
      * @return the recipe difficulty of the recipe
      */
     public Difficulty getRecipeDifficulty() {
@@ -142,7 +142,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the rating of the recipe
+     * Returns the rating of the recipe.
      * @return the rating of the recipe
      */
     public Rating getRating() {
@@ -150,7 +150,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the rating of the recipe
+     * Returns the rating of the recipe.
      * @return the rating of the recipe
      */
     public String getMiniaturePath() {
@@ -159,7 +159,7 @@ public final class Recipe {
     }
 
     /**
-     * Returns the rating of the recipe
+     * Returns the rating of the recipe.
      * @return the rating of the recipe
      */
     public List<String> getPicturesPaths() {
