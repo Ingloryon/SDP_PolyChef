@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.polychef.R;
 
 import java.util.List;
-
+/**
+ * This class is a adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView  in the activity where the miniatures are shown
+ */
 public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder>{
 
     private Context mainContext;
