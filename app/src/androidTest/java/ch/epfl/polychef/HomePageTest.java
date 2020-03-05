@@ -1,26 +1,35 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
-import android.util.Log;
 
 import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+
+import androidx.annotation.NonNull;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.contrib.DrawerActions;
+
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
+
 import androidx.test.espresso.contrib.NavigationViewActions;
+
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -34,11 +43,21 @@ public class HomePageTest {
     @Rule
     public IntentsTestRule<HomePage> intentsTestRule = new IntentsTestRule<>(HomePage.class, true, false);
 
+    private boolean isInProgress = true;
+
     @Before
-    public void setAnonymousUser() {
-        FirebaseAuth.getInstance().signInAnonymously();
-        // Wait for anonymous user to be connected
-        while(FirebaseAuth.getInstance().getCurrentUser() == null);
+    public void createFakeConnectedUser() {
+        final IdlingResource waitUser = new WaitForUser();
+        IdlingRegistry.getInstance().register(waitUser);
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest").addOnCompleteListener(
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull final Task<AuthResult> task) {
+                        final AuthResult result = task.getResult();
+                        isInProgress = false;
+                    }
+                });
+        onIdle();
         intentsTestRule.launchActivity(new Intent());
     }
 
@@ -85,5 +104,30 @@ public class HomePageTest {
         onView(withId(R.id.drawer)).perform(DrawerActions.open());
         onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(idButton));
         onView(withId(idFragment)).check(matches(isDisplayed()));
+    }
+
+    private class WaitForUser implements IdlingResource {
+
+        private IdlingResource.ResourceCallback resourceCallback = null;
+        private boolean currIdle = true;
+
+        @Override
+        public String getName() {
+            return WaitForUser.class.toString();
+        }
+
+        @Override
+        public boolean isIdleNow() {
+            if(currIdle != isInProgress) {
+                currIdle = isInProgress;
+                resourceCallback.onTransitionToIdle();
+            }
+            return !isInProgress;
+        }
+
+        @Override
+        public void registerIdleTransitionCallback(ResourceCallback callback) {
+            this.resourceCallback = callback;
+        }
     }
 }
