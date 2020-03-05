@@ -1,9 +1,10 @@
 package ch.epfl.polychef;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -17,11 +18,11 @@ public class LoginPageTest {
 
     @Test
     public void canClickOnTequilaButton() {
-        onView(withId(R.id.tequilaButton)).perform(click());
+        onView(withId(R.id.tequilaButton)).check(matches(isEnabled()));
     }
 
     @Test
     public void canClickOnGoogleButton() {
-        onView(withId(R.id.googleButton)).perform(click());
+        onView(withId(R.id.googleButton)).check(matches(isEnabled()));
     }
 }
