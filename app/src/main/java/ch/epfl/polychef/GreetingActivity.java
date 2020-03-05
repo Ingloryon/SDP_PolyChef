@@ -2,10 +2,10 @@ package ch.epfl.polychef;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 
 public class GreetingActivity extends AppCompatActivity {
 
@@ -21,6 +21,5 @@ public class GreetingActivity extends AppCompatActivity {
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.greetingMessage);
         textView.setText("Hello "+message+"!");
-        
     }
 }
