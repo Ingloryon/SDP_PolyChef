@@ -53,8 +53,8 @@ public class HomePageTest {
     public void createFakeConnectedUser() {
         final IdlingResource waitUser = new WaitForUser();
         IdlingRegistry.getInstance().register(waitUser);
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest").
-                addOnCompleteListener(
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest")
+                .addOnCompleteListener(
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull final Task<AuthResult> task) {
