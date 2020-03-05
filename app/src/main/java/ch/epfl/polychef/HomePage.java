@@ -17,7 +17,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class HomePage extends AppCompatActivity {
+import ch.epfl.polychef.users.ConnectedActivity;
+
+public class HomePage extends ConnectedActivity {
 
     private Button logButton;
     private DrawerLayout drawer;
@@ -39,6 +41,12 @@ public class HomePage extends AppCompatActivity {
 
         logButton = findViewById(R.id.logButton);
         drawer = findViewById(R.id.drawer);
+
+        logButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                signOut();
+            }
+        });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
