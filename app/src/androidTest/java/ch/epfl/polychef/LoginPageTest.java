@@ -26,20 +26,10 @@ public class LoginPageTest {
     @Test
     public void canClickOnTequilaButton() {
         onView(withId(R.id.tequilaButton)).check(matches(isEnabled()));
-        Espresso.pressBack();
-        Espresso.pressBack();
     }
 
     @Test
     public void canClickOnGoogleButton() {
         onView(withId(R.id.googleButton)).check(matches(isEnabled()));
-    }
-
-    @Test
-    public void signInIntentIsDisplayed(){
-        onView(withId(R.id.googleButton)).perform(click());
-
-        intended(hasComponent(AuthUI.class.getName()));
-        //HomePage.class.getName()
     }
 }
