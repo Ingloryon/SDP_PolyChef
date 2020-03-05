@@ -126,7 +126,7 @@ public class RecipeTest {
 
 
         assertThrows(UnsupportedOperationException.class, () -> ingre.put("Steaks", 1000d));
-        assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png");
+        assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png"));
         assertThrows(UnsupportedOperationException.class, () -> instr.set(0, "/src/evilChanger.png"));
         for (Map.Entry<String, Double> e : ingre.entrySet()) {
             assertThrows(UnsupportedOperationException.class, () -> e.setValue(e.getValue()*10));
