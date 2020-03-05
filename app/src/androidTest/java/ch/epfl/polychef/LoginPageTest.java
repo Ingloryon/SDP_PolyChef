@@ -24,4 +24,9 @@ public class LoginPageTest {
     public void canClickOnGoogleButton() {
         onView(withId(R.id.googleButton)).perform(click());
     }
+
+    @Test
+    public void test(){
+
+    }
 }

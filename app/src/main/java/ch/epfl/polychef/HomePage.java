@@ -18,8 +18,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import ch.epfl.polychef.users.ConnectedActivity;
+import ch.epfl.polychef.users.FakeConnectedActivity;
 
-public class HomePage extends ConnectedActivity {
+public class HomePage extends FakeConnectedActivity {
 
     private Button logButton;
     private DrawerLayout drawer;

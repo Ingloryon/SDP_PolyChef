@@ -31,17 +31,6 @@ public class LoginPage extends AppCompatActivity {
         tequilaButton = findViewById(R.id.tequilaButton);
         googleButton = findViewById(R.id.googleButton);
 
-        tequilaButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                createSignInIntent(view);
-            }
-        });
-
-        googleButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                createSignInIntent(view);
-            }
-        });
     }
     public void createSignInIntent(View view) {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -79,13 +68,11 @@ public class LoginPage extends AppCompatActivity {
 
     /** Called when the user taps the log button. */
     public void tequilaLogin(View view) {
-        Intent intent = new Intent(this, HomePage.class);
-        startActivity(intent);
+        createSignInIntent(view);
     }
 
     /** Called when the user taps the log button. */
     public void googleLogin(View view) {
-        Intent intent = new Intent(this, HomePage.class);
-        startActivity(intent);
+        createSignInIntent(view);
     }
 }

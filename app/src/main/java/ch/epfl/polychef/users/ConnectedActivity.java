@@ -22,7 +22,7 @@ public abstract class ConnectedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = getUser();
         if(user == null) {
             startActivity(new Intent(this, EntryPage.class));
         }
