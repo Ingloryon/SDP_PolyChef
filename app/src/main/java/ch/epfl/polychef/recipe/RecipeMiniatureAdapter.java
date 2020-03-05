@@ -29,6 +29,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
      * Creates a new adapter of recipes to miniatures.
      * @param mainContext the context where the adapter will operate i.e the activity where the recyclerView is
      * @param recipeList the list of all the recipes that will be displayed inside the recyclerView
+     * @param recyclerView this is the recyclerview where the recipes will be displayed
      */
     public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView) {
         this.mainContext = mainContext;
@@ -37,7 +38,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
-     * This method create a new MiniatureViewHolder which contains the view which contains the information of the layout of one miniature
+     * This method create a new MiniatureViewHolder which contains the view which contains the information of the layout of one miniature and make that view listen to user clicks on him
      * @param parent not used here but needed since it's an overridden method
      * @param viewType not used here but needed since it's an overridden method
      * @return the new MiniatureViewHolder containing the view
@@ -61,7 +62,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         Recipe recipe = recipeList.get(position);
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
-        // TODO change to the selected image by the user
+        // TODO change to the selected image by the cooker who posted the recipe
         holder.image.setImageResource(recipe.getPicturesPaths().get(0));
     }
 
@@ -90,6 +91,10 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
             image = itemView.findViewById(R.id.miniatureRecipeImage);
         }
     }
+
+    /**
+     * This class is the listener that when we click on a miniature it send us to a new activity with the full recipe displayed
+     */
     class MiniatureOnClickListener implements View.OnClickListener {
 
         RecyclerView recyclerView;
