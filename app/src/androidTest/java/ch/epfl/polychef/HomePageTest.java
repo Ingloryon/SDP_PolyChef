@@ -2,14 +2,17 @@ package ch.epfl.polychef;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
+
 import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
+
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
+
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 
-import androidx.annotation.NonNull;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.contrib.DrawerActions;
 
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -41,7 +44,8 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
     @Rule
-    public IntentsTestRule<HomePage> intentsTestRule = new IntentsTestRule<>(HomePage.class, true, false);
+    public IntentsTestRule<HomePage> intentsTestRule = new IntentsTestRule<>(HomePage.class,
+            true, false);
 
     private boolean isInProgress = true;
 
@@ -49,11 +53,11 @@ public class HomePageTest {
     public void createFakeConnectedUser() {
         final IdlingResource waitUser = new WaitForUser();
         IdlingRegistry.getInstance().register(waitUser);
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest").addOnCompleteListener(
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest").
+                addOnCompleteListener(
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull final Task<AuthResult> task) {
-                        final AuthResult result = task.getResult();
                         isInProgress = false;
                     }
                 });
@@ -118,7 +122,7 @@ public class HomePageTest {
 
         @Override
         public boolean isIdleNow() {
-            if(currIdle != isInProgress) {
+            if (currIdle != isInProgress) {
                 currIdle = isInProgress;
                 resourceCallback.onTransitionToIdle();
             }

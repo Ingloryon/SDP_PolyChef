@@ -32,6 +32,7 @@ public class LoginPage extends AppCompatActivity {
         googleButton = findViewById(R.id.googleButton);
 
     }
+
     public void createSignInIntent(View view) {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -49,7 +50,7 @@ public class LoginPage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
+//            IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in

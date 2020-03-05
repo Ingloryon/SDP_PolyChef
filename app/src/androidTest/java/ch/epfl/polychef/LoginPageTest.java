@@ -1,22 +1,16 @@
 package ch.epfl.polychef;
 
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
-
-import static androidx.test.InstrumentationRegistry.getTargetContext;
+import androidx.test.espresso.Espresso;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.firebase.ui.auth.AuthUI;

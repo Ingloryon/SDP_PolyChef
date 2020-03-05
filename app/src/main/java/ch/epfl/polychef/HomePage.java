@@ -1,13 +1,11 @@
 package ch.epfl.polychef;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,10 +13,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.navigation.NavigationView;
-
-import ch.epfl.polychef.users.ConnectedActivity;
 import ch.epfl.polychef.users.FakeConnectedActivity;
+
+import com.google.android.material.navigation.NavigationView;
 
 public class HomePage extends FakeConnectedActivity {
 
