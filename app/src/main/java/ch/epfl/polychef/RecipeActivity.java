@@ -1,6 +1,8 @@
 package ch.epfl.polychef;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -14,28 +16,17 @@ import java.util.Map;
 
 public class RecipeActivity extends AppCompatActivity {
 
-    // Need to have a intent that have the recipe to display
-    // For now I will hardcode one for example purpose
-    public Recipe defaultRecipe = new RecipeBuilder()
-            .setName("Beef tartar")
-            .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE)
-            .setEstimatedCookingTime(30)
-            .setPersonNumber(4)
-            .setEstimatedPreparationTime(40)
-            .addIngredient("Raw beef", 500)
-            .addIngredient("Parsley", 3)
-            .addInstruction("Cut the parsley very fine")
-            .addInstruction("Cut the beef into small pieces")
-            .addInstruction("Add salt and pepper to taste")
-            .addInstruction("Serve it in a dome shape")
-            .build();
+    private Recipe currentRecipe;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullrecipe);
+        Intent intent = getIntent();
+        currentRecipe = (Recipe) intent.getSerializableExtra("Recipe");
         displayRecipeName();
+        displayImage();
         displayRating();
         displayPrepAndCookTime();
         displayDifficulty();
@@ -43,12 +34,17 @@ public class RecipeActivity extends AppCompatActivity {
         displayIngredients();
     }
 
+    private void displayImage() {
+        ImageView recipeImage = findViewById(R.id.recipeImage);
+        recipeImage.setImageResource(currentRecipe.getPicturesPaths().get(0));
+    }
+
     /**
      * Display the recipe name in the correct field in the activity.
      */
     private void displayRecipeName(){
         TextView recipeName = findViewById(R.id.recipeName);
-        recipeName.setText(defaultRecipe.getName());
+        recipeName.setText(currentRecipe.getName());
     }
 
     /**
@@ -57,9 +53,9 @@ public class RecipeActivity extends AppCompatActivity {
     private void displayRating(){
         final RatingBar ratingBar = findViewById(R.id.ratingBar);
         // TODO remove me when rating is implemented in the application
-        defaultRecipe.getRating().addRate(3, 2);
-        defaultRecipe.getRating().addRate(4, 5);
-        ratingBar.setRating((float) defaultRecipe.getRating().ratingAverage());
+        //currentRecipe.getRating().addRate(3, 2);
+        //currentRecipe.getRating().addRate(4, 5);
+        ratingBar.setRating((float) currentRecipe.getRating().ratingAverage());
     }
 
     /**
@@ -67,9 +63,9 @@ public class RecipeActivity extends AppCompatActivity {
      */
     private void displayPrepAndCookTime(){
         TextView prepTime = findViewById(R.id.prepTime);
-        prepTime.setText("Prep time : "+defaultRecipe.getEstimatedPreparationTime()+" mins");
+        prepTime.setText("Prep time : "+currentRecipe.getEstimatedPreparationTime()+" mins");
         TextView cookTime = findViewById(R.id.cookTime);
-        cookTime.setText("Cook time : "+defaultRecipe.getEstimatedCookingTime()+" mins");
+        cookTime.setText("Cook time : "+currentRecipe.getEstimatedCookingTime()+" mins");
     }
 
     /**
@@ -77,7 +73,7 @@ public class RecipeActivity extends AppCompatActivity {
      */
     private void displayDifficulty(){
         TextView difficulty = findViewById(R.id.difficulty);
-        String diff = defaultRecipe.getRecipeDifficulty().toString();
+        String diff = currentRecipe.getRecipeDifficulty().toString();
         String finalDiffStr = diff.substring(0, 1).toUpperCase().concat(diff.substring(1, diff.length()).toLowerCase().replaceAll("_", " "));
         difficulty.setText("Difficulty : " + finalDiffStr);
     }
@@ -88,7 +84,7 @@ public class RecipeActivity extends AppCompatActivity {
     private void displayIngredients(){
         StringBuilder strBuilder = new StringBuilder();
         String newLine = "\n";
-        Map<String, Double> allIngredients = defaultRecipe.getIngredients();
+        Map<String, Double> allIngredients = currentRecipe.getIngredients();
         for(Map.Entry<String, Double> ingredient : allIngredients.entrySet()){
             strBuilder.append("● ");
             strBuilder.append(ingredient.getValue() + " grams of ");
@@ -108,7 +104,7 @@ public class RecipeActivity extends AppCompatActivity {
     private void displayInstructions(){
         StringBuilder strBuilder = new StringBuilder();
         String newLine = "\n";
-        List<String> allInstructions = defaultRecipe.getRecipeInstructions();
+        List<String> allInstructions = currentRecipe.getRecipeInstructions();
         for(int i = 0; i < allInstructions.size(); i++){
             strBuilder.append(i + 1);
             strBuilder.append(". ");

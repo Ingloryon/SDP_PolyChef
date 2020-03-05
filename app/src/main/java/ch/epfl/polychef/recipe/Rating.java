@@ -2,10 +2,11 @@ package ch.epfl.polychef.recipe;
 
 import ch.epfl.polychef.Preconditions;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class Rating {
+public final class Rating implements Serializable {
     private double ratingSum;
     private Map<Integer, Double> allRatings;
 

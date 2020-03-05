@@ -3,6 +3,7 @@ package ch.epfl.polychef.recipe;
 import ch.epfl.polychef.Preconditions;
 import ch.epfl.polychef.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class Recipe {
+public final class Recipe implements Serializable {
 
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD

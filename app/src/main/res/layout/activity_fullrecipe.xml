@@ -106,7 +106,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
                     <ImageView
-                        android:id="@+id/imageView"
+                        android:id="@+id/recipeImage"
                         android:layout_width="600dp"
                         android:layout_height="230dp"
                         android:layout_marginStart="8dp"
@@ -118,8 +118,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/ingredients"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/difficulty"
-                        app:srcCompat="@drawable/koreansteaktartare" />
+                        app:layout_constraintTop_toBottomOf="@+id/difficulty" />
 
                     <TextView
                         android:id="@+id/ingredients"
@@ -133,7 +132,7 @@
                         android:textSize="30sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                        app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
 
                     <TextView
                         android:id="@+id/ingredientsList"

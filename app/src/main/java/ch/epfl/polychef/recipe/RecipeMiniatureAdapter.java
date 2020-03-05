@@ -1,6 +1,7 @@
 package ch.epfl.polychef.recipe;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ch.epfl.polychef.MiniatureTestActivity;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.RecipeActivity;
 
 import java.util.List;
 /**
@@ -21,14 +24,16 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
     private Context mainContext;
     private List<Recipe> recipeList;
+    private RecyclerView recyclerview;
     /**
      * Creates a new adapter of recipes to miniatures.
      * @param mainContext the context where the adapter will operate i.e the activity where the recyclerView is
      * @param recipeList the list of all the recipes that will be displayed inside the recyclerView
      */
-    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList) {
+    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView) {
         this.mainContext = mainContext;
         this.recipeList = recipeList;
+        this.recyclerview = recyclerView;
     }
 
     /**
@@ -42,6 +47,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     public MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mainContext);
         View view = inflater.inflate(R.layout.miniature_layout, null);
+        view.setOnClickListener(new MiniatureOnClickListener(recyclerview));
         return new MiniatureViewHolder(view);
     }
 
@@ -82,6 +88,23 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
             recipeTitle = itemView.findViewById(R.id.recipeNameMiniature);
             ratingBar = itemView.findViewById(R.id.miniatureRatingBar);
             image = itemView.findViewById(R.id.miniatureRecipeImage);
+        }
+    }
+    class MiniatureOnClickListener implements View.OnClickListener {
+
+        RecyclerView recyclerView;
+
+        public MiniatureOnClickListener(RecyclerView recyclerView){
+            this.recyclerView = recyclerView;
+        }
+
+        @Override
+        public void onClick(View view) {
+            int recipePosition = recyclerView.getChildLayoutPosition(view);
+            Recipe clickedRecipe = recipeList.get(recipePosition);
+            Intent intent = new Intent(mainContext, RecipeActivity.class);
+            intent.putExtra("Recipe", clickedRecipe);
+            mainContext.startActivity(intent);
         }
     }
 

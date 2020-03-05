@@ -91,7 +91,7 @@ public class MiniatureTestActivity extends AppCompatActivity {
         testRecipeList.add(recipeCurry);
 
         // ones we have the recipe list we can create the adapter that contains the list and set the recyclerview to have this list
-        miniatureAdapter = new RecipeMiniatureAdapter(this, testRecipeList);
+        miniatureAdapter = new RecipeMiniatureAdapter(this, testRecipeList, recyclerView);
         recyclerView.setAdapter(miniatureAdapter);
     }
 }
