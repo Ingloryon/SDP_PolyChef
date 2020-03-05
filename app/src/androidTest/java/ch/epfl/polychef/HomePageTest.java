@@ -1,5 +1,9 @@
 package ch.epfl.polychef;
 
+import android.content.Intent;
+import android.util.Log;
+
+import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -16,6 +20,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +32,15 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
     @Rule
-    public IntentsTestRule<HomePage> intentsTestRule = new IntentsTestRule<>(HomePage.class);
+    public IntentsTestRule<HomePage> intentsTestRule = new IntentsTestRule<>(HomePage.class, true, false);
+
+    @Before
+    public void setAnonymousUser() {
+        FirebaseAuth.getInstance().signInAnonymously();
+        // Wait for anonymous user to be connected
+        while(FirebaseAuth.getInstance().getCurrentUser() == null);
+        intentsTestRule.launchActivity(new Intent());
+    }
 
     @Test
     public void buttonTextIsLogout() {
