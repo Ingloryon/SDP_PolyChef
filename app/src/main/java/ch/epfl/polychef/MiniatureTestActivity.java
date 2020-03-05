@@ -45,6 +45,7 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .addInstruction("Cut the beef into small pieces")
                 .addInstruction("Add salt and pepper to taste")
                 .addInstruction("Serve it in a dome shape")
+                .addPicturePath(R.drawable.koreansteaktartare)
                 .build();
 
         Recipe recipeCurry = new RecipeBuilder()
@@ -59,6 +60,7 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .addInstruction("Stir the chicken in an average pan for 10 minutes")
                 .addInstruction("Add lots of curry")
                 .addInstruction("Serve with fresh parsley")
+                .addPicturePath(R.drawable.thairedcurry)
                 .build();
 
         Recipe recipeNoodles = new RecipeBuilder()
@@ -72,6 +74,7 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .addInstruction("Had noodles to hot water for 5 minutes")
                 .addInstruction("In a wok add the mushrooms with oil and stir frequently")
                 .addInstruction("Add salt and pepper")
+                .addPicturePath(R.drawable.noodlesmushrooms)
                 .build();
 
         recipeTarTar.getRating().addRate(3, 2);

@@ -55,7 +55,8 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         Recipe recipe = recipeList.get(position);
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
-        holder.image.setImageResource(R.drawable.koreansteaktartare);
+        // TODO change to the selected image by the user
+        holder.image.setImageResource(recipe.getPicturesPaths().get(0));
     }
 
     /**

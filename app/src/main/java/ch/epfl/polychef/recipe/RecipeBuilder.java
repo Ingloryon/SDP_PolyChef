@@ -18,7 +18,7 @@ public final class RecipeBuilder {
     private Recipe.Difficulty recipeDifficulty;
 
     private String miniaturePath = "";
-    private ArrayList<String> picturesPaths = new ArrayList<>();
+    private ArrayList<Integer> picturesPaths = new ArrayList<>();
 
     /**
      * Builds a Recipe.
@@ -134,13 +134,14 @@ public final class RecipeBuilder {
 
     /**
      * Adds the path of an image of the meal.
-     * @param picturePaths path of an image, must be non-empty and lead to a .png or .jpeg image
+     * @param picturePath path of an image, must be non-empty and lead to a .png or .jpeg image
      * @return the modified builder
      */
-    public RecipeBuilder addPicturePath(@NonNull String picturePaths) {
-        Preconditions.checkArgument(!picturePaths.isEmpty(), "The picture path must be non empty");
-        Preconditions.checkArgument(picturePaths.endsWith(".png") || picturePaths.endsWith(".jpeg"));
-        this.picturesPaths.add(picturePaths);
+    public RecipeBuilder addPicturePath(@NonNull Integer picturePath) {
+        // TODO check if this conditions are needed if we want to have paths that are indeed strings
+        //Preconditions.checkArgument(!picturePath.isEmpty(), "The picture path must be non empty");
+        //Preconditions.checkArgument(picturePath.endsWith(".png") || picturePath.endsWith(".jpeg"));
+        this.picturesPaths.add(picturePath);
         return this;
     }
 

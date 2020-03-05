@@ -1,6 +1,8 @@
 package ch.epfl.polychef.recipe;
 
 import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,12 +26,13 @@ public final class Recipe {
     private final Rating rating;
 
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
-    private boolean hasMiniature;
     private boolean hasPictures;
+    // TODO should we have this ?
+    private boolean hasMiniature;
     private String miniaturePath;
-    private List<String> picturesPaths;
+    private List<Integer> picturesPaths;
     private static final String DEFAULT_MINIATURE_PATH = "/src/default_miniature.png";
-    private static final List<String> DEFAULT_PICTURE_PATH = Arrays.asList("/src/default_picture.png");
+    private static final List<Integer> DEFAULT_PICTURE_PATH = Arrays.asList(R.drawable.koreansteaktartare);
     //List.of("/src/default_picture.png"); --> need JDK 9
 
     /**
@@ -44,7 +47,7 @@ public final class Recipe {
      * @param miniaturePath path to access the miniature image, provide empty string for default miniature
      * @param picturesPaths path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, List<String> recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<String> picturesPaths){
+    protected Recipe(String name, List<String> recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<Integer> picturesPaths){
 
         this.hasMiniature = !miniaturePath.isEmpty();
         this.hasPictures = picturesPaths.size()!=0;
@@ -154,19 +157,18 @@ public final class Recipe {
     }
 
     /**
-     * Returns the rating of the recipe.
+     * Returns the miniature path of the recipe.
      * @return the rating of the recipe
      */
     public String getMiniaturePath() {
         return hasMiniature ? miniaturePath : DEFAULT_MINIATURE_PATH;
-
     }
 
     /**
-     * Returns the rating of the recipe.
+     * Returns the pictures paths of the recipe.
      * @return the rating of the recipe
      */
-    public List<String> getPicturesPaths() {
+    public List<Integer> getPicturesPaths() {
         return hasPictures ? Collections.unmodifiableList(picturesPaths) : DEFAULT_PICTURE_PATH;
     }
 
