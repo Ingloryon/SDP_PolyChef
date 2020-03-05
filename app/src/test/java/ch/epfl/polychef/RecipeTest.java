@@ -145,7 +145,7 @@ public class RecipeTest {
         Recipe recipe = rb.build();
 
         //assertThrows(IllegalArgumentException.class, () -> recipe.scalePersonAndIngredientsQuantities(0));
-        //recipe.scalePersonAndIngredientsQuantities(0);
+        //recipe.scalePersonAndIngredientsQuantities(0); TODO: Understand why this test fails
 
         recipe.scalePersonAndIngredientsQuantities(2);
         Map<String, Double> ingre = recipe.getIngredients();
