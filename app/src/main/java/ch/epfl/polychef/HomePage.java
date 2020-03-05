@@ -42,6 +42,7 @@ public class HomePage extends ConnectedActivity {
         logButton = findViewById(R.id.logButton);
         drawer = findViewById(R.id.drawer);
 
+        logButton.setText(LOG_OUT);
         logButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 signOut();
@@ -99,26 +100,4 @@ public class HomePage extends ConnectedActivity {
                 }
         );
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        logButton.setText(LOG_OUT);
-        logButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                logout(view);
-            }
-        });
-    }
-
-    /**
-     * Called when the user taps the log button.
-     */
-    public void logout(View view) {
-        Intent intent = new Intent(this, EntryPage.class);
-        startActivity(intent);
-    }
-
-
 }
