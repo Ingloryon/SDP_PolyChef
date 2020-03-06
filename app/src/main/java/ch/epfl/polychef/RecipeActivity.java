@@ -52,9 +52,6 @@ public class RecipeActivity extends AppCompatActivity {
      */
     private void displayRating(){
         final RatingBar ratingBar = findViewById(R.id.ratingBar);
-        // TODO remove me when rating is implemented in the application
-        //currentRecipe.getRating().addRate(3, 2);
-        //currentRecipe.getRating().addRate(4, 5);
         ratingBar.setRating((float) currentRecipe.getRating().ratingAverage());
     }
 
