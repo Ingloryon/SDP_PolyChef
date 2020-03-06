@@ -31,7 +31,7 @@ android {
         targetCompatibility = 1.8
     }
 
-   /* packagingOptions {
+    packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
@@ -41,9 +41,7 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
-        pickFirst 'lib/armeabi-v7a/libassmidi.so'
-        pickFirst 'lib/x86/libassmidi.so'
-    }*/
+    }
 }
 
 dependencies {
@@ -74,7 +72,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     androidTestImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
-    
+
 }
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
