@@ -1,5 +1,5 @@
 package ch.epfl.polychef;
-/*
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -18,11 +18,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;*/
+import org.junit.runner.RunWith;
 
-//@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4.class)
 public class HomePageTest {
- /*   @Rule
+    @Rule
     public IntentsTestRule<HomePage> intentsTestRule = new IntentsTestRule<>(HomePage.class);
 
     @Test
@@ -68,5 +68,5 @@ public class HomePageTest {
         onView(withId(R.id.drawer)).perform(DrawerActions.open());
         onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(idButton));
         onView(withId(idFragment)).check(matches(isDisplayed()));
-    }*/
+    }
 }

@@ -1,5 +1,5 @@
 package ch.epfl.polychef;
-/*
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -12,13 +12,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;*/
+import org.junit.runner.RunWith;
 
 
 
-//@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4.class)
 public class EntryPageTest {
-/*    @Rule
+    @Rule
     public IntentsTestRule<EntryPage> intentsTestRule = new IntentsTestRule<>(EntryPage.class);
 
     @Test
@@ -30,5 +30,5 @@ public class EntryPageTest {
     public void onClickLoginGoToLoginPage() {
         onView(withId(R.id.logButton)).perform(click());
         intended(hasComponent(LoginPage.class.getName()));
-    }*/
+    }
 }
