@@ -14,7 +14,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-//import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class RecipeTest {
@@ -23,7 +23,7 @@ public class RecipeTest {
     @Test
     public void recipeBuilderAndSettersRejectInvalidInputs() {
         RecipeBuilder rb = new RecipeBuilder();
-/*
+
         // rejects empty names
         assertThrows(IllegalArgumentException.class, () -> rb.build());
         // setter rejects empty names
@@ -65,7 +65,7 @@ public class RecipeTest {
         assertThrows(IllegalArgumentException.class, () -> rb.setMiniaturePath("Does not end by png"));
         assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(-1));
 
-        rb.build();*/
+        rb.build();
     }
 
 
@@ -121,13 +121,13 @@ public class RecipeTest {
         Map<String, Double> ingre = recipe.getIngredients();
         List<String> instr = recipe.getRecipeInstructions();
 
-/*
+
         assertThrows(UnsupportedOperationException.class, () -> ingre.put("Steaks", 1000d));
         assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png"));
         assertThrows(UnsupportedOperationException.class, () -> instr.set(0, "/src/evilChanger.png"));
         for (Map.Entry<String, Double> e : ingre.entrySet()) {
             assertThrows(UnsupportedOperationException.class, () -> e.setValue(e.getValue()*10));
-        }*/
+        }
 
     }
 

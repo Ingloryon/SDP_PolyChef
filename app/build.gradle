@@ -18,6 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // This is supposed to solve Travis' problems when duplicate META-INF occur (but in the fact, it did not solve the problem)
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -29,7 +30,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
     }
-    
+
     buildTypes {
         debug {
             testCoverageEnabled true
@@ -67,10 +68,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
 
+    // Adding these libraries will break the build causing duplicates META-INF or READ_ME.
     //testImplementation 'org.hamcrest:hamcrest-library:2.1'
     //androidTestImplementation 'org.hamcrest:hamcrest-library:2.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     //androidTestImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 

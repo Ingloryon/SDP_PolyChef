@@ -4,16 +4,16 @@ import org.junit.Test;
 
 import ch.epfl.polychef.recipe.Rating;
 import static org.junit.Assert.assertTrue;
-//import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RatingTest {
 
     @Test
-    public void addRateRejectsInvalidInputs(){/*
+    public void addRateRejectsInvalidInputs(){
         Rating r = new Rating();
         assertThrows(IllegalArgumentException.class, () -> r.addRate(0,8));
         assertThrows(IllegalArgumentException.class, () -> r.addRate(0,-5));
-        assertThrows(IllegalArgumentException.class, () -> r.addRate(-8,3.2));*/
+        assertThrows(IllegalArgumentException.class, () -> r.addRate(-8,3.2));
     }
 
     @Test
