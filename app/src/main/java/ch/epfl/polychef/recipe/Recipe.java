@@ -165,7 +165,7 @@ public final class Recipe implements Serializable {
     }
 
     /**
-     * Returns the list of the pictures' numbers
+     * Returns the list of the pictures' numbers.
      * @return List of picture numbers
      */
     public List<Integer> getPicturesNumbers() {
