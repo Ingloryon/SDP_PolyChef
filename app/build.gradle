@@ -33,6 +33,12 @@ android {
             storeFile file('debug.keystore')
             storePassword 'PolyChefApp'
         }
+        release {
+            keyAlias 'debugKeyAlias'
+            keyPassword 'PolyChefApp'
+            storeFile file('debug.keystore')
+            storePassword 'PolyChefApp'
+        }
     }
 }
 
