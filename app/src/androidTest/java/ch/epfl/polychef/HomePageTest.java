@@ -70,11 +70,6 @@ public class HomePageTest {
     }
 
     @Test
-    public void buttonTextIsLogout() {
-        onView(withId(R.id.logButton)).check(matches(withText("Log out")));
-    }
-
-    @Test
     public void onClickLogoutGoToEntryPage() {
         onView(withId(R.id.logButton)).perform(click());
         intended(hasComponent(EntryPage.class.getName()));
