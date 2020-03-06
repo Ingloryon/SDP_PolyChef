@@ -20,12 +20,10 @@ android {
     buildTypes {
         debug {
             testCoverageEnabled true
-            signingConfig signingConfigs.debug
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
         }
     }
     signingConfigs {
@@ -34,6 +32,14 @@ android {
             keyPassword 'PolyChefApp'
             storeFile file('debug.keystore')
             storePassword 'PolyChefApp'
+        }
+        if (System.getenv("TRAVIS")) {
+            release {
+                storeFile rootProject.file('debug.keystore')
+                storePassword System.getenv("PolyChefApp")
+                keyAlias System.getenv("debugKeyAlias")
+                keyPassword System.getenv("PolyChefApp")
+            }
         }
     }
 }
