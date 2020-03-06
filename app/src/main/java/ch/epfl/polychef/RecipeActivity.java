@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class RecipeActivity extends AppCompatActivity {
 
     private void displayImage() {
         ImageView recipeImage = findViewById(R.id.recipeImage);
-        recipeImage.setImageResource(currentRecipe.getPicturesPaths().get(0));
+        recipeImage.setImageResource(currentRecipe.getPicturesNumbers().get(0));
     }
 
     /**

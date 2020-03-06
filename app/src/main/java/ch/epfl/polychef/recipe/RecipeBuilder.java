@@ -18,7 +18,7 @@ public final class RecipeBuilder {
     private Recipe.Difficulty recipeDifficulty;
 
     private String miniaturePath = "";
-    private ArrayList<Integer> picturesPaths = new ArrayList<>();
+    private ArrayList<Integer> picturesNumbers = new ArrayList<>();
 
     /**
      * Builds a Recipe.
@@ -33,7 +33,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesPaths);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesNumbers);
     }
 
     /**
@@ -134,16 +134,14 @@ public final class RecipeBuilder {
 
     /**
      * Adds the path of an image of the meal.
-     * @param picturePath path of an image, must be non-empty and lead to a .png or .jpeg image
+     * @param pictureNb Integer number of an image, must be positive
      * @return the modified builder
      */
-    public RecipeBuilder addPicturePath(@NonNull Integer picturePath) {
-        // TODO check if this conditions are needed if we want to have paths that are indeed strings
+    public RecipeBuilder addPicturePath(@NonNull Integer pictureNb) {
+        Preconditions.checkArgument(pictureNb > 0, "The number of the picture must be positive");
         //Preconditions.checkArgument(!picturePath.isEmpty(), "The picture path must be non empty");
         //Preconditions.checkArgument(picturePath.endsWith(".png") || picturePath.endsWith(".jpeg"));
-        this.picturesPaths.add(picturePath);
+        this.picturesNumbers.add(pictureNb);
         return this;
     }
-
-    //TODO: sanitization of paths inputs ?
 }

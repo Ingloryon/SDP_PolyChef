@@ -31,10 +31,9 @@ public final class Recipe implements Serializable {
     // TODO should we have this ?
     private boolean hasMiniature;
     private String miniaturePath;
-    private List<Integer> picturesPaths;
+    private List<Integer> picturesNumbers;
     private static final String DEFAULT_MINIATURE_PATH = "/src/default_miniature.png";
     private static final List<Integer> DEFAULT_PICTURE_PATH = Arrays.asList(R.drawable.koreansteaktartare);
-    //List.of("/src/default_picture.png"); --> need JDK 9
 
     /**
      * Creates a new Recipe.
@@ -46,12 +45,12 @@ public final class Recipe implements Serializable {
      * @param estimatedCookingTime the approximate time needed to cook the recipe, in minutes (strictly positive)
      * @param recipeDifficulty the difficulty of the recipe
      * @param miniaturePath path to access the miniature image, provide empty string for default miniature
-     * @param picturesPaths path to access the pictures of the recipe, provide empty list for default picture
+     * @param picturesNumbers path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, List<String> recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<Integer> picturesPaths){
+    protected Recipe(String name, List<String> recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<Integer> picturesNumbers){
 
         this.hasMiniature = !miniaturePath.isEmpty();
-        this.hasPictures = picturesPaths.size()!=0;
+        this.hasPictures = picturesNumbers.size()!=0;
 
         this.name = name;
         this.recipeInstructions = recipeInstructions;
@@ -63,9 +62,9 @@ public final class Recipe implements Serializable {
         this.recipeDifficulty = recipeDifficulty;
         this.rating = new Rating();
         this.miniaturePath = miniaturePath;
-        this.picturesPaths = new ArrayList<>();
+        this.picturesNumbers = new ArrayList<>();
         if(hasPictures) {
-            this.picturesPaths.addAll(picturesPaths);
+            this.picturesNumbers.addAll(picturesNumbers);
         }
     }
 
@@ -166,11 +165,11 @@ public final class Recipe implements Serializable {
     }
 
     /**
-     * Returns the pictures paths of the recipe.
-     * @return the rating of the recipe
+     * Returns the list of the pictures' numbers
+     * @return List of picture numbers
      */
-    public List<Integer> getPicturesPaths() {
-        return hasPictures ? Collections.unmodifiableList(picturesPaths) : DEFAULT_PICTURE_PATH;
+    public List<Integer> getPicturesNumbers() {
+        return hasPictures ? Collections.unmodifiableList(picturesNumbers) : DEFAULT_PICTURE_PATH;
     }
 
     // TODO: Add setters for needed attributes

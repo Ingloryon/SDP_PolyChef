@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import ch.epfl.polychef.MiniatureTestActivity;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.RecipeActivity;
 
@@ -63,7 +62,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
         // TODO change to the selected image by the cooker who posted the recipe
-        holder.image.setImageResource(recipe.getPicturesPaths().get(0));
+        holder.image.setImageResource(recipe.getPicturesNumbers().get(0));
     }
 
     /**
