@@ -51,7 +51,8 @@ public class HomePageTest {
 
     @Before
     public void createFakeConnectedUser() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null || FirebaseAuth.getInstance().getCurrentUser().getEmail() != "test@test.com") {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null ||
+                FirebaseAuth.getInstance().getCurrentUser().getEmail() != "test@test.com") {
             final IdlingResource waitUser = new WaitForUser();
             IdlingRegistry.getInstance().register(waitUser);
             FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest")
