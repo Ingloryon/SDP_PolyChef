@@ -26,6 +26,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    signingConfigs {
+        debug {
+            keyAlias 'debugKeyAlias'
+            keyPassword 'PolyChefApp'
+            storeFile file('debug.keystore')
+            storePassword 'PolyChefApp'
+        }
+    }
 }
 
 dependencies {
