@@ -52,30 +52,28 @@ public class LoginPage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
-//            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                if (user!=null) {
-                    startActivity(new Intent(this, HomePage.class));
-                }else{
-                    Toast.makeText(this, R.string.ErrorOccurred, Toast.LENGTH_LONG).show();
-                }
+        if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                startActivity(new Intent(this, HomePage.class));
             } else {
-                Toast.makeText(this, R.string.ErrorOccurred, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
             }
+        } else {
+            Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
         }
     }
 
-    /** Called when the user taps the log button. */
+    /**
+     * Called when the user taps the log button.
+     */
     public void tequilaLogin(View view) {
         createSignInIntent(view);
     }
 
-    /** Called when the user taps the log button. */
+    /**
+     * Called when the user taps the log button.
+     */
     public void googleLogin(View view) {
         createSignInIntent(view);
     }
