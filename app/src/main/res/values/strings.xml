@@ -4,4 +4,16 @@
     <string name="Instructions">Instructions</string>
     <string name="Ingredients">Ingredients</string>
     <string name="recipeImage">This is the image of the recipe displayed</string>
+    <string name="tequila">Tequila</string>
+    <string name="google">Google</string>
+    <string name="log_in">Log In</string>
+    <string name="log_out">Log Out</string>
+
+    <string name="Username">Username</string>
+    <string name="Email">Email</string>
+
+    <string name="Home">Home</string>
+    <string name="Favourites">Favourites</string>
+    <string name="Subscriptions">Subscriptions</string>
+    <string name="Subscribers">Subscribers</string>
 </resources>
