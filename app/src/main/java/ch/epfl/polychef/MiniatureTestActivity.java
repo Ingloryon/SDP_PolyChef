@@ -6,15 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeMiniatureAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * This is an activity to test the display of a recyclerview containing the recipe miniatures
+ * This is an activity to test the display of a recyclerview containing the recipe miniatures.
  * This will be deleted later when there is no more need for an example
  */
 public class MiniatureTestActivity extends AppCompatActivity {
@@ -90,7 +90,8 @@ public class MiniatureTestActivity extends AppCompatActivity {
         testRecipeList.add(recipeNoodles);
         testRecipeList.add(recipeCurry);
 
-        // ones we have the recipe list we can create the adapter that contains the list and set the recyclerview to have this list
+        // once we have recipe list we can create the adapter
+        // (contains the list and set the recyclerview to have it)
         miniatureAdapter = new RecipeMiniatureAdapter(this, testRecipeList, recyclerView);
         recyclerView.setAdapter(miniatureAdapter);
     }

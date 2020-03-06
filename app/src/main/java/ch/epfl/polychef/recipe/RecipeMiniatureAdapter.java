@@ -12,22 +12,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.RecipeActivity;
 
-import java.util.List;
 /**
- * This class is an adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView that is in the activity where the miniatures are shown
+ * This class is an adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView that is in the activity where the miniatures are shown.
  */
-public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder>{
+public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> {
 
     private Context mainContext;
     private List<Recipe> recipeList;
     private RecyclerView recyclerview;
+
     /**
      * Creates a new adapter of recipes to miniatures.
-     * @param mainContext the context where the adapter will operate i.e the activity where the recyclerView is
-     * @param recipeList the list of all the recipes that will be displayed inside the recyclerView
+     *
+     * @param mainContext  the context where the adapter will operate i.e the activity where the recyclerView is
+     * @param recipeList   the list of all the recipes that will be displayed inside the recyclerView
      * @param recyclerView this is the recyclerview where the recipes will be displayed
      */
     public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView) {
@@ -37,8 +40,9 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
-     * This method create a new MiniatureViewHolder which contains the view which contains the information of the layout of one miniature and make that view listen to user clicks on him
-     * @param parent not used here but needed since it's an overridden method
+     * This method create a new MiniatureViewHolder which contains the view which contains the information of the layout of one miniature and make that view listen to user clicks on him.
+     *
+     * @param parent   not used here but needed since it's an overridden method
      * @param viewType not used here but needed since it's an overridden method
      * @return the new MiniatureViewHolder containing the view
      */
@@ -52,8 +56,9 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
-     * Fill the view with the field of one recipe in the recipe list
-     * @param holder the MiniatureViewHolder that we need to bind the recipe with
+     * Fill the view with the field of one recipe in the recipe list.
+     *
+     * @param holder   the MiniatureViewHolder that we need to bind the recipe with
      * @param position the position in the miniature list, this is the position where the miniature will be displayed relatively to the other ones inside the recyclerView
      */
     @Override
@@ -66,7 +71,8 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
-     * Return the size of the list of the recipes
+     * Return the size of the list of the recipes.
+     *
      * @return the size of the list of the recipes
      */
     @Override
@@ -75,9 +81,9 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
-     * This is the MiniatureViewHolder that contains the fields of one miniature to be filled when binned to one recipe in the list
+     * This is the MiniatureViewHolder that contains the fields of one miniature to be filled when binned to one recipe in the list.
      */
-    class MiniatureViewHolder extends RecyclerView.ViewHolder{
+    class MiniatureViewHolder extends RecyclerView.ViewHolder {
 
         TextView recipeTitle;
         ImageView image;
@@ -92,13 +98,13 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
-     * This class is the listener that when we click on a miniature it send us to a new activity with the full recipe displayed
+     * This class is the listener that when we click on a miniature it send us to a new activity with the full recipe displayed.
      */
     class MiniatureOnClickListener implements View.OnClickListener {
 
         RecyclerView recyclerView;
 
-        public MiniatureOnClickListener(RecyclerView recyclerView){
+        public MiniatureOnClickListener(RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
         }
 
