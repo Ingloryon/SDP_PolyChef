@@ -2,7 +2,6 @@ package ch.epfl.polychef.recipe;
 
 import ch.epfl.polychef.Preconditions;
 import ch.epfl.polychef.R;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;

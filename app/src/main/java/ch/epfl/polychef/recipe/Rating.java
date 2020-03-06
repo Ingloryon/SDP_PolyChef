@@ -1,7 +1,6 @@
 package ch.epfl.polychef.recipe;
 
 import ch.epfl.polychef.Preconditions;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;

@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import ch.epfl.polychef.recipe.Recipe;
-
 import java.util.List;
 import java.util.Map;
 
