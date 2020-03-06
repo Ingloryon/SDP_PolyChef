@@ -13,13 +13,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import ch.epfl.polychef.users.FakeConnectedActivity;
+import ch.epfl.polychef.users.ConnectedActivity;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class HomePage extends FakeConnectedActivity {
+public class HomePage extends ConnectedActivity {
 
-    private Button logButton;
     private DrawerLayout drawer;
 
     private NavController navController;
@@ -37,7 +36,7 @@ public class HomePage extends FakeConnectedActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        logButton = findViewById(R.id.logButton);
+        Button logButton = findViewById(R.id.logButton);
         drawer = findViewById(R.id.drawer);
 
         logButton.setText(LOG_OUT);

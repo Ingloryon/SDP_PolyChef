@@ -51,17 +51,21 @@ public class HomePageTest {
 
     @Before
     public void createFakeConnectedUser() {
-        final IdlingResource waitUser = new WaitForUser();
-        IdlingRegistry.getInstance().register(waitUser);
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest")
-                .addOnCompleteListener(
-                new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull final Task<AuthResult> task) {
-                        isInProgress = false;
-                    }
-                });
-        onIdle();
+        if (FirebaseAuth.getInstance().getCurrentUser() == null || FirebaseAuth.getInstance().getCurrentUser().getEmail() != "test@test.com") {
+            final IdlingResource waitUser = new WaitForUser();
+            IdlingRegistry.getInstance().register(waitUser);
+            FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest")
+                    .addOnCompleteListener(
+                            new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull final Task<AuthResult> task) {
+                                    isInProgress = false;
+                                }
+                            });
+            onIdle();
+        } else {
+            isInProgress = false;
+        }
         intentsTestRule.launchActivity(new Intent());
     }
 
