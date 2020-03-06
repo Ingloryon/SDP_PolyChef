@@ -63,7 +63,7 @@ public class RecipeTest {
         assertThrows(IllegalArgumentException.class, () -> rb.setMiniaturePath(""));
         assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(0));
         assertThrows(IllegalArgumentException.class, () -> rb.setMiniaturePath("Does not end by png"));
-        assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(12));
+        assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(-1));
 
         rb.build();
     }
@@ -96,14 +96,14 @@ public class RecipeTest {
         assertEquals(recipe.getRecipeDifficulty(),  Recipe.Difficulty.VERY_EASY);
         assertEquals(recipe.getEstimatedTotalTime(),  95);
         assertEquals(recipe.getMiniaturePath(), "/src/default_miniature.png");
-        assertEquals(recipe.getPicturesNumbers(), Arrays.asList("/src/default_picture.png"));
+        assertEquals(recipe.getPicturesNumbers(), Arrays.asList(R.drawable.koreansteaktartare));
 
-        rb.addPicturePath(R.drawable.koreansteaktartare);
+        rb.addPicturePath(15);
         rb.setMiniaturePath("/src/miniature.jpeg");
         Recipe recipe2 = rb.build();
 
         assertEquals(recipe2.getMiniaturePath(), "/src/miniature.jpeg");
-        assertEquals(recipe2.getPicturesNumbers(), Arrays.asList("/src/cake.png"));
+        assertEquals(recipe2.getPicturesNumbers(), Arrays.asList(15));
     }
 
     @Test
