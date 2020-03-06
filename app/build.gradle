@@ -33,22 +33,6 @@ android {
             storeFile file('debug.keystore')
             storePassword 'PolyChefApp'
         }
-<<<<<<< HEAD
-        release {
-            keyAlias 'debugKeyAlias'
-            keyPassword 'PolyChefApp'
-            storeFile file('debug.keystore')
-            storePassword 'PolyChefApp'
-=======
-        if (System.getenv("TRAVIS")) {
-            release {
-                storeFile rootProject.file('debug.keystore')
-                storePassword System.getenv("PolyChefApp")
-                keyAlias System.getenv("debugKeyAlias")
-                keyPassword System.getenv("PolyChefApp")
-            }
->>>>>>> 2a7e21ac6e138b3ff77f55d5ad9a3d2c8c3a0f44
-        }
     }
 }
 
