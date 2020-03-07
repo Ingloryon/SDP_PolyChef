@@ -2,77 +2,56 @@ package ch.epfl.polychef;
 
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
-
-import static androidx.test.espresso.Espresso.onIdle;
-import static androidx.test.espresso.Espresso.onView;
-
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
-
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-
+import static androidx.test.espresso.Espresso.onView;
 import androidx.test.espresso.contrib.DrawerActions;
-
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
-
 import androidx.test.espresso.contrib.NavigationViewActions;
-
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.intercepting.SingleActivityFactory;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.utils.MockUser;
+
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
-    @Rule
-    public IntentsTestRule<HomePage> intentsTestRule = new IntentsTestRule<>(HomePage.class,
-            true, false);
+    SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(HomePage.class) {
+        @Override
+        protected HomePage create(Intent intent) {
+            HomePage activity = new fakeHomePage();
+            return activity;
+        }
+    };
 
-    private boolean isInProgress = true;
+    @Rule
+    public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false, true);
 
     @Before
-    public void createFakeConnectedUser() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null ||
-                FirebaseAuth.getInstance().getCurrentUser().getEmail() != "test@test.com") {
-            final IdlingResource waitUser = new WaitForUser();
-            IdlingRegistry.getInstance().register(waitUser);
-            FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "testtest")
-                    .addOnCompleteListener(
-                            new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull final Task<AuthResult> task) {
-                                    isInProgress = false;
-                                }
-                            });
-            onIdle();
-        } else {
-            isInProgress = false;
-        }
+    public void createMockUser() {
         intentsTestRule.launchActivity(new Intent());
     }
 
+//    @Test
+//    public void onClickLogoutGoToEntryPage() {
+//        onView(withId(R.id.logButton)).perform(click());
+//        intended(hasComponent(EntryPage.class.getName()));
+//    }
+
     @Test
-    public void onClickLogoutGoToEntryPage() {
-        onView(withId(R.id.logButton)).perform(click());
-        intended(hasComponent(EntryPage.class.getName()));
+    public void buttonTextIsLogout() {
+        onView(withId(R.id.logButton)).check(matches(withText("Log out")));
     }
 
     @Test
@@ -109,28 +88,10 @@ public class HomePageTest {
         onView(withId(idFragment)).check(matches(isDisplayed()));
     }
 
-    private class WaitForUser implements IdlingResource {
-
-        private IdlingResource.ResourceCallback resourceCallback = null;
-        private boolean currIdle = true;
-
+    public class fakeHomePage extends HomePage {
         @Override
-        public String getName() {
-            return WaitForUser.class.toString();
-        }
-
-        @Override
-        public boolean isIdleNow() {
-            if (currIdle != isInProgress) {
-                currIdle = isInProgress;
-                resourceCallback.onTransitionToIdle();
-            }
-            return !isInProgress;
-        }
-
-        @Override
-        public void registerIdleTransitionCallback(ResourceCallback callback) {
-            this.resourceCallback = callback;
+        public FirebaseUser getUser() {
+            return MockUser.getMockUser();
         }
     }
 }
