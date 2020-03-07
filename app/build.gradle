@@ -18,19 +18,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    // This is supposed to solve Travis' problems when duplicate META-INF occur (but in the fact, it did not solve the problem)
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-        exclude("META-INF/*.kotlin_module")
-    }
-
     buildTypes {
         debug {
             testCoverageEnabled true
@@ -40,6 +27,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE-notice.md'
+        //pickFirst 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
@@ -57,7 +59,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    testImplementation 'junit:junit:4.12'
+    //testImplementation 'junit:junit:4.12'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -68,7 +70,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    androidTestImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
 
     // Adding these libraries will break the build causing duplicates META-INF or READ_ME.
     //testImplementation 'org.hamcrest:hamcrest-library:2.1'

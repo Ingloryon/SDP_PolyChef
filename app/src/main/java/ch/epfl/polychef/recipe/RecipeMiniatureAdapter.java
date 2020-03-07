@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.RecipeActivity;
-
 import java.util.List;
 
 /**
