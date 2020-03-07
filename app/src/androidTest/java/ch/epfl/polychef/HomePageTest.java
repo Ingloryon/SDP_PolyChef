@@ -22,15 +22,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import ch.epfl.polychef.utils.MockUser;
+import org.mockito.Mockito;
 
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
-    SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(HomePage.class) {
+
+    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(HomePage.class) {
         @Override
         protected HomePage create(Intent intent) {
-            HomePage activity = new fakeHomePage();
+            HomePage activity = new FakeHomePage();
             return activity;
         }
     };
@@ -88,10 +88,10 @@ public class HomePageTest {
         onView(withId(idFragment)).check(matches(isDisplayed()));
     }
 
-    public class fakeHomePage extends HomePage {
+    public class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
-            return MockUser.getMockUser();
+            return Mockito.mock(FirebaseUser.class);
         }
     }
 }
