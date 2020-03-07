@@ -1,7 +1,6 @@
 package ch.epfl.polychef;
 
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,9 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class RecipeTest {
-
 
     @Test
     public void recipeBuilderAndSettersRejectInvalidInputs() {
@@ -84,6 +81,8 @@ public class RecipeTest {
         instruc.add("Start by the beginning");
         HashMap<String, Double> ingre =  new HashMap<String, Double>();
         ingre.put("Carrots", 300d);
+        Recipe.Difficulty.values();
+        Recipe.Difficulty.valueOf("VERY_HARD");
         recipe.getRating();
 
         assertEquals(recipe.getName(),  "Chicken fried");
