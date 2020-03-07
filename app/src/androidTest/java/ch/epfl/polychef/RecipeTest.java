@@ -77,6 +77,7 @@ public class RecipeTest {
         rb.setEstimatedPreparationTime(45);
         rb.setEstimatedCookingTime(50);
         rb.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
+        rb.setRecipeDifficulty(Recipe.Difficulty.VERY_HARD);
         Recipe recipe = rb.build();
 
         ArrayList<String> instruc = new ArrayList<String>();
@@ -91,16 +92,17 @@ public class RecipeTest {
         assertEquals(recipe.getPersonNumber(),  4);
         assertEquals(recipe.getEstimatedPreparationTime(),  45);
         assertEquals(recipe.getEstimatedCookingTime(),  50);
-        assertEquals(recipe.getRecipeDifficulty(),  Recipe.Difficulty.VERY_EASY);
+        assertEquals(recipe.getRecipeDifficulty(),  Recipe.Difficulty.VERY_HARD);
         assertEquals(recipe.getEstimatedTotalTime(),  95);
         assertEquals(recipe.getMiniaturePath(), "/src/default_miniature.png");
         assertEquals(recipe.getPicturesNumbers(), Arrays.asList(R.drawable.koreansteaktartare));
 
         rb.addPicturePath(15);
         rb.setMiniaturePath("/src/miniature.jpeg");
+        rb.setMiniaturePath("/src/miniature.png");
         Recipe recipe2 = rb.build();
 
-        assertEquals(recipe2.getMiniaturePath(), "/src/miniature.jpeg");
+        assertEquals(recipe2.getMiniaturePath(), "/src/miniature.png");
         assertEquals(recipe2.getPicturesNumbers(), Arrays.asList(15));
     }
 
@@ -142,8 +144,7 @@ public class RecipeTest {
         rb.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
         Recipe recipe = rb.build();
 
-        //assertThrows(IllegalArgumentException.class, () -> recipe.scalePersonAndIngredientsQuantities(0));
-        //recipe.scalePersonAndIngredientsQuantities(0); TODO: Understand why this test fails
+        assertThrows(IllegalArgumentException.class, () -> recipe.scalePersonAndIngredientsQuantities(0));
 
         recipe.scalePersonAndIngredientsQuantities(2);
         Map<String, Double> ingre = recipe.getIngredients();

@@ -72,7 +72,7 @@ public final class Recipe implements Serializable {
      * @param newPersonNumber strictly positive integer
      */
     public void scalePersonAndIngredientsQuantities(int newPersonNumber){
-        Preconditions.checkArgument(personNumber > 0, "The number of persons must be strictly positive");
+        Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
 
         double ratio = (double)newPersonNumber / (double)personNumber;
         personNumber=newPersonNumber;
