@@ -44,4 +44,9 @@ public final class Rating implements Serializable {
     public double ratingAverage(){
         return allRatings.size()==0 ? 0 : ratingSum / allRatings.size();
     }
+
+    @Override
+    public String toString(){
+        return String.format("%.2f", ratingAverage()) + "/5 stars by " + allRatings.size() + " users.\n";
+    }
 }

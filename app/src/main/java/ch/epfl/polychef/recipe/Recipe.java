@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public final class Recipe implements Serializable {
 
@@ -16,6 +17,7 @@ public final class Recipe implements Serializable {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
 
+    private final UUID rUuid;
     private String name;
     private List<String> recipeInstructions;
     private Map<String, Double> ingredients;
@@ -51,6 +53,7 @@ public final class Recipe implements Serializable {
         this.hasMiniature = !miniaturePath.isEmpty();
         this.hasPictures = picturesNumbers.size()!=0;
 
+        this.rUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
         this.ingredients = new HashMap<>();
@@ -171,8 +174,42 @@ public final class Recipe implements Serializable {
         return hasPictures ? Collections.unmodifiableList(picturesNumbers) : DEFAULT_PICTURE_PATH;
     }
 
-    // TODO: Add setters for needed attributes
-    // TODO : Redefine methods toString, equals, hash
-    // TODO: how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
-    // TODO: general remark: should we handle overflows ? (for total preparation time or scale quantities for example)
+    /**
+     * Returns the String representation of the unique id of the recipe.
+     * @return string of recipe's unique id
+     */
+    public UUID getUuid(){
+        return rUuid;
+    }
+
+    @Override
+    public boolean equals(Object otherRecipe){
+        if ( otherRecipe instanceof Recipe ){
+            return ((Recipe) otherRecipe).getUuid().equals(this.rUuid) ;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append("\nRecipe name: " + name + "\n\nRecipe instructions:");
+        for(int i = 0 ; i < recipeInstructions.size() ; ++i){
+            str.append("\n" + (i+1) + "- " + recipeInstructions.get(i));
+        }
+        str.append("\n\nFor " + personNumber + " persons, the needed ingredients are:");
+        for (Map.Entry<String, Double> e : ingredients.entrySet()) {
+            str.append("\n" + String.format("%.2f", e.getValue()) + " of " + e.getKey());
+        }
+        str.append("\n\nThe recipe is " + recipeDifficulty.toString().toLowerCase().replaceAll("_", " ") + ".\n");
+        str.append("The recipes takes around " + estimatedPreparationTime + "min of preparation and " + estimatedCookingTime + "min of cooking.\n");
+        str.append("The recipe is rated " + rating.toString());
+
+        return str.toString();
+    }
+
+    // TODO: Add setters for needed attributes -> how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
+    // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
+    // TODO: Changer argument ingredients en Map<String: ingreName, Map<Double: quantity, String: unit>> ?
+    // TODO: Or all the UUID setup isn't necessary and just using Object's equals def is enough ?
 }
