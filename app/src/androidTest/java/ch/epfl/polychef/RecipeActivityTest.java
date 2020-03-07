@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class RecipeActivityTest {
-    @Rule
-    public IntentsTestRule<MiniatureTestActivity> intentsTestRule = new IntentsTestRule<>(MiniatureTestActivity.class);
+   // @Rule
+    //public IntentsTestRule<RecipeActivity> intentsTestRule = new IntentsTestRule<>(RecipeActivity.class);
 
 
     @Test
@@ -19,5 +19,5 @@ public class RecipeActivityTest {
     }
 
 
-    
+
 }
