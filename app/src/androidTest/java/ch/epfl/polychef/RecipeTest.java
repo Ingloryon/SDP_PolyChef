@@ -2,7 +2,6 @@ package ch.epfl.polychef;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,7 +12,6 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-//import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RecipeTest {
 
@@ -191,7 +189,7 @@ public class RecipeTest {
         assertTrue(str1.equals(recipe.toString()) || str2.equals(recipe.toString()));
     }
 
-    private RecipeBuilder setStandardRecipe(){
+    public static RecipeBuilder setStandardRecipe(){
         RecipeBuilder rb1 = new RecipeBuilder();
         rb1.setName("Chicken fried");
         rb1.addInstruction("Start by the beginning");
