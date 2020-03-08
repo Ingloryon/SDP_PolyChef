@@ -108,13 +108,7 @@ public class RecipeTest {
 
     @Test
     public void argumentsReturnedAreUnmodifiable() {
-        RecipeBuilder rb = new RecipeBuilder();
-        rb.setName("Chicken fried");
-        rb.addInstruction("Start by the beginning");
-        rb.addIngredient("Carrots", 300d);
-        rb.setPersonNumber(4);
-        rb.setEstimatedPreparationTime(45);
-        rb.setEstimatedCookingTime(50);
+        RecipeBuilder rb = setStandardRecipe();
         rb.setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE);
         Recipe recipe = rb.build();
 
@@ -133,14 +127,7 @@ public class RecipeTest {
 
     @Test
     public void changingPersonNumberScalesIngredients() {
-        RecipeBuilder rb = new RecipeBuilder();
-        rb.setName("Chicken fried");
-        rb.addInstruction("Start by the beginning");
-        rb.addIngredient("Carrots", 300d);
-        rb.addIngredient("Chicken wings", 75);
-        rb.setPersonNumber(4);
-        rb.setEstimatedPreparationTime(45);
-        rb.setEstimatedCookingTime(50);
+        RecipeBuilder rb = setStandardRecipe();
         rb.setRecipeDifficulty(Recipe.Difficulty.EASY);
         Recipe recipe = rb.build();
 
@@ -155,27 +142,8 @@ public class RecipeTest {
 
     @Test
     public void equalsOnlyReturnsTrueWhenUuidIdentical() {
-        RecipeBuilder rb1 = new RecipeBuilder();
-        rb1.setName("Chicken fried");
-        rb1.addInstruction("Start by the beginning");
-        rb1.addIngredient("Carrots", 300d);
-        rb1.addIngredient("Chicken wings", 75);
-        rb1.setPersonNumber(4);
-        rb1.setEstimatedPreparationTime(45);
-        rb1.setEstimatedCookingTime(50);
-        rb1.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
-        Recipe recipe1 = rb1.build();
-
-        RecipeBuilder rb2 = new RecipeBuilder();
-        rb2.setName("Chicken fried");
-        rb2.addInstruction("Start by the beginning");
-        rb2.addIngredient("Carrots", 300d);
-        rb2.addIngredient("Chicken wings", 75);
-        rb2.setPersonNumber(4);
-        rb2.setEstimatedPreparationTime(45);
-        rb2.setEstimatedCookingTime(50);
-        rb2.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
-        Recipe recipe2 = rb2.build();
+        Recipe recipe1 = setStandardRecipe().build();
+        Recipe recipe2 = setStandardRecipe().build();
 
         assertTrue(!recipe1.equals(""));
         assertTrue(!recipe1.equals(recipe2));
@@ -185,18 +153,7 @@ public class RecipeTest {
 
     @Test
     public void toStringDisplaysRecipe() {
-        RecipeBuilder rb1 = new RecipeBuilder();
-        rb1.setName("Chicken fried");
-        rb1.addInstruction("Start by the beginning");
-        rb1.addInstruction("Then keep going");
-        rb1.addInstruction("Now it ends");
-        rb1.addIngredient("Carrots", 300d);
-        rb1.addIngredient("Chicken wings", 75);
-        rb1.setPersonNumber(4);
-        rb1.setEstimatedPreparationTime(45);
-        rb1.setEstimatedCookingTime(50);
-        rb1.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
-        Recipe recipe = rb1.build();
+        Recipe recipe = setStandardRecipe().build();
 
         String str1 = "\n" +
                 "Recipe name: Chicken fried\n" +
@@ -232,5 +189,20 @@ public class RecipeTest {
 
         // The ingredients can be displayed in any order so toString() can be either str1 or str2
         assertTrue(str1.equals(recipe.toString()) || str2.equals(recipe.toString()));
+    }
+
+    private RecipeBuilder setStandardRecipe(){
+        RecipeBuilder rb1 = new RecipeBuilder();
+        rb1.setName("Chicken fried");
+        rb1.addInstruction("Start by the beginning");
+        rb1.addInstruction("Then keep going");
+        rb1.addInstruction("Now it ends");
+        rb1.addIngredient("Carrots", 300d);
+        rb1.addIngredient("Chicken wings", 75);
+        rb1.setPersonNumber(4);
+        rb1.setEstimatedPreparationTime(45);
+        rb1.setEstimatedCookingTime(50);
+        rb1.setRecipeDifficulty(Recipe.Difficulty.VERY_EASY);
+        return rb1;
     }
 }
