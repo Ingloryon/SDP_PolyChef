@@ -37,15 +37,12 @@ public class LoginPage extends AppCompatActivity {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
-        /*startActivityForResult(
+        startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
                         .build(),
-                RC_SIGN_IN);*/
-
-        startActivityForResult(new Intent(this, FakeAuthUI.class),RC_SIGN_IN);
-
+                RC_SIGN_IN);
     }
 
     @Override
@@ -53,7 +50,7 @@ public class LoginPage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseUser user = getUser();
             if (user != null) {
                 startActivity(new Intent(this, HomePage.class));
             } else {
@@ -76,5 +73,9 @@ public class LoginPage extends AppCompatActivity {
      */
     public void googleLogin(View view) {
         createSignInIntent(view);
+    }
+
+    public FirebaseUser getUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
     }
 }

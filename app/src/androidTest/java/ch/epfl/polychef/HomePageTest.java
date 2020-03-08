@@ -2,19 +2,13 @@ package ch.epfl.polychef;
 
 import android.content.Intent;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.Espresso.onView;
-
 import androidx.test.espresso.contrib.DrawerActions;
-
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
-
 import androidx.test.espresso.contrib.NavigationViewActions;
-
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -34,7 +28,8 @@ import org.mockito.Mockito;
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
 
-    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(HomePage.class) {
+    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
+            HomePage.class) {
         @Override
         protected HomePage create(Intent intent) {
             HomePage activity = new FakeHomePage();
@@ -43,22 +38,18 @@ public class HomePageTest {
     };
 
     @Rule
-    public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false, true);
+    public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
+            true);
 
     @Before
-    public void createMockUser() {
+    public void initActivity() {
         intentsTestRule.launchActivity(new Intent());
     }
 
-//    @Test
-//    public void onClickLogoutGoToEntryPage() {
-//        onView(withId(R.id.logButton)).perform(click());
-//        intended(hasComponent(EntryPage.class.getName()));
-//    }
-
     @Test
-    public void buttonTextIsLogout() {
+    public void buttonTextIsLogoutAndCanClick() {
         onView(withId(R.id.logButton)).check(matches(withText("Log out")));
+        onView(withId(R.id.logButton)).perform(click());
     }
 
     @Test
@@ -95,7 +86,7 @@ public class HomePageTest {
         onView(withId(idFragment)).check(matches(isDisplayed()));
     }
 
-    public class FakeHomePage extends HomePage {
+    private class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
             return Mockito.mock(FirebaseUser.class);

@@ -23,7 +23,7 @@ public abstract class ConnectedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseUser user = getUser();
-        if(user == null) {
+        if (user == null) {
             startActivity(new Intent(this, EntryPage.class));
         }
     }
