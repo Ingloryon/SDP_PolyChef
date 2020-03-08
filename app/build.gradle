@@ -39,6 +39,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/LICENSE.md'
         exclude 'META-INF/LICENSE-notice.md'
+        exclude 'META-INF/README.txt'
         //pickFirst 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     }
 
