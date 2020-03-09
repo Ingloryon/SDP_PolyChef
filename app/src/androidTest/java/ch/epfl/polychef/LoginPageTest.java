@@ -49,11 +49,6 @@ public class LoginPageTest {
     }
 
     @Test
-    public void canClickOnTequilaButton() {
-        onView(withId(R.id.tequilaButton)).check(matches(isEnabled()));
-    }
-
-    @Test
     public void canClickOnGoogleButton() {
         onView(withId(R.id.googleButton)).check(matches(isEnabled()));
     }
@@ -61,11 +56,6 @@ public class LoginPageTest {
     @Test
     public void clickOnGoogleButtonRaiseNoError() {
         onView(withId(R.id.googleButton)).perform(click());
-    }
-
-    @Test
-    public void clickOnTequilaButtonRaiseNoError() {
-        onView(withId(R.id.tequilaButton)).perform(click());
     }
 
     private class FakeLogin extends LoginPage {

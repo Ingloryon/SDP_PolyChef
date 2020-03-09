@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,8 +19,7 @@ import java.util.List;
 
 public class LoginPage extends AppCompatActivity {
 
-    Button tequilaButton;
-    Button googleButton;
+    SignInButton googleButton;
 
     private static final int RC_SIGN_IN = 123;
 
@@ -28,9 +28,12 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
 
-        tequilaButton = findViewById(R.id.tequilaButton);
         googleButton = findViewById(R.id.googleButton);
-
+        googleButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                createSignInIntent(googleButton);
+            }
+        });
     }
 
     public void createSignInIntent(View view) {
