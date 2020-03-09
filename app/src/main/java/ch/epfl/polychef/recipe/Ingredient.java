@@ -18,9 +18,16 @@ public class Ingredient {
     public void setQuantity(double quantity){
         this.quantity = quantity;
     }
+    public String getName(){
+        return name;
+    }
 
     @Override
     public String toString(){
-        return quantity + " " + unit.toString().toLowerCase() + " of " + name;
+        if(quantity > 1){
+            return quantity + " " + unit.toString().toLowerCase() + "s of " + name;
+        }else {
+            return quantity + " " + unit.toString().toLowerCase() + " of " + name;
+        }
     }
 }
