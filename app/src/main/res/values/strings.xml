@@ -16,4 +16,5 @@
     <string name="Favourites">Favourites</string>
     <string name="Subscriptions">Subscriptions</string>
     <string name="Subscribers">Subscribers</string>
+    <string name="ErrorOccurred">Error</string>
 </resources>

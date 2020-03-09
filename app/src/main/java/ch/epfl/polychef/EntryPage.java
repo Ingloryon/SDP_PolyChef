@@ -10,7 +10,6 @@ import androidx.appcompat.widget.Toolbar;
 
 public class EntryPage extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private Button logButton;
 
     public static final String LOG_IN = "Log in";
@@ -21,7 +20,7 @@ public class EntryPage extends AppCompatActivity {
         setContentView(R.layout.activity_entry_page);
 
         // Attaching the layout to the toolbar object
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         // Setting toolbar as the ActionBar with setSupportActionBar() call
         setSupportActionBar(toolbar);
 
@@ -33,11 +32,6 @@ public class EntryPage extends AppCompatActivity {
         super.onResume();
 
         logButton.setText(LOG_IN);
-        logButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                login(view);
-            }
-        });
     }
 
     /** Called when the user taps the log button. */
