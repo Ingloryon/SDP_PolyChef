@@ -34,9 +34,9 @@ public class RecipeTest {
 
         // rejects when no ingredients
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("", 300, Recipe.Unit.GRAM));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("Carrots", 0, Recipe.Unit.GRAM));
-        rb.addIngredient("Carrots", 300, Recipe.Unit.GRAM);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("", 300, Ingredient.Unit.GRAM));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("Carrots", 0, Ingredient.Unit.GRAM));
+        rb.addIngredient("Carrots", 300, Ingredient.Unit.GRAM);
 
         // rejects when no persons
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
@@ -71,7 +71,7 @@ public class RecipeTest {
         RecipeBuilder rb = new RecipeBuilder();
         rb.setName("Chicken fried");
         rb.addInstruction("Start by the beginning");
-        rb.addIngredient("Carrots", 300d, Recipe.Unit.GRAM);
+        rb.addIngredient("Carrots", 300d, Ingredient.Unit.GRAM);
         rb.setPersonNumber(4);
         rb.setEstimatedPreparationTime(45);
         rb.setEstimatedCookingTime(50);
@@ -118,7 +118,7 @@ public class RecipeTest {
         List<String> instr = recipe.getRecipeInstructions();
 
 
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.add(new Ingredient("Steaks", 1000d, Recipe.Unit.GRAM)));
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.add(new Ingredient("Steaks", 1000d, Ingredient.Unit.GRAM)));
         //Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.put("Steaks", 1000d));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png"));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.set(0, "/src/evilChanger.png"));
@@ -207,8 +207,8 @@ public class RecipeTest {
         rb1.addInstruction("Start by the beginning");
         rb1.addInstruction("Then keep going");
         rb1.addInstruction("Now it ends");
-        rb1.addIngredient("Carrots", 300d, Recipe.Unit.GRAM);
-        rb1.addIngredient("Chicken wings", 75, Recipe.Unit.GRAM);
+        rb1.addIngredient("Carrots", 300d, Ingredient.Unit.GRAM);
+        rb1.addIngredient("Chicken wings", 75, Ingredient.Unit.GRAM);
         rb1.setPersonNumber(4);
         rb1.setEstimatedPreparationTime(45);
         rb1.setEstimatedCookingTime(50);

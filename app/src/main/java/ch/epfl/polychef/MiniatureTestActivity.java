@@ -4,6 +4,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeMiniatureAdapter;
@@ -36,8 +38,8 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .setEstimatedCookingTime(30)
                 .setPersonNumber(4)
                 .setEstimatedPreparationTime(40)
-                .addIngredient("Raw beef", 500, Recipe.Unit.GRAM)
-                .addIngredient("Parsley", 3, Recipe.Unit.TEASPOON)
+                .addIngredient("Raw beef", 500, Ingredient.Unit.GRAM)
+                .addIngredient("Parsley", 3, Ingredient.Unit.TEASPOON)
                 .addInstruction("Cut the parsley very fine")
                 .addInstruction("Cut the beef into small pieces")
                 .addInstruction("Add salt and pepper to taste")
@@ -51,9 +53,9 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .setEstimatedCookingTime(40)
                 .setPersonNumber(4)
                 .setEstimatedPreparationTime(20)
-                .addIngredient("Raw chicken", 435, Recipe.Unit.GRAM)
-                .addIngredient("Curry", 6, Recipe.Unit.TEASPOON)
-                .addIngredient("Parsley", 3, Recipe.Unit.TEASPOON)
+                .addIngredient("Raw chicken", 435, Ingredient.Unit.GRAM)
+                .addIngredient("Curry", 6, Ingredient.Unit.TEASPOON)
+                .addIngredient("Parsley", 3, Ingredient.Unit.TEASPOON)
                 .addInstruction("Stir the chicken in an average pan for 10 minutes")
                 .addInstruction("Add lots of curry")
                 .addInstruction("Serve with fresh parsley")
@@ -66,8 +68,8 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .setEstimatedCookingTime(10)
                 .setPersonNumber(4)
                 .setEstimatedPreparationTime(50)
-                .addIngredient("Noodles", 500, Recipe.Unit.GRAM)
-                .addIngredient("Mushrooms", 200, Recipe.Unit.GRAM)
+                .addIngredient("Noodles", 500, Ingredient.Unit.GRAM)
+                .addIngredient("Mushrooms", 200, Ingredient.Unit.GRAM)
                 .addInstruction("Had noodles to hot water for 5 minutes")
                 .addInstruction("In a wok add the mushrooms with oil and stir frequently")
                 .addInstruction("Add salt and pepper")

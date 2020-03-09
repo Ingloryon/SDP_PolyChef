@@ -69,7 +69,7 @@ public final class RecipeBuilder {
      * @param quantity       the corresponding quantity of the ingredient, must be strictly positive
      * @return the modified builder
      */
-    public RecipeBuilder addIngredient(@NonNull String ingredientName, double quantity, Recipe.Unit unit) {
+    public RecipeBuilder addIngredient(@NonNull String ingredientName, double quantity, Ingredient.Unit unit) {
         Preconditions.checkArgument(!ingredientName.isEmpty(), "The ingredient name must be non empty");
         Preconditions.checkArgument(quantity > 0, "The ingredient quantity must be strictly positive");
         Preconditions.checkArgument(unit != null, "The unit of the ingredient must not be null");

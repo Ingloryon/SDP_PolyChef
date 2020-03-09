@@ -2,11 +2,15 @@ package ch.epfl.polychef.recipe;
 
 public class Ingredient {
 
+    public enum Unit {
+        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, NONE
+    }
+
     private String name;
     private double quantity;
-    private Recipe.Unit unit;
+    private Unit unit;
 
-    public Ingredient(String name, double quantity, Recipe.Unit unit){
+    public Ingredient(String name, double quantity, Unit unit){
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
@@ -21,13 +25,20 @@ public class Ingredient {
     public String getName(){
         return name;
     }
+    public Unit getUnit(){
+        return unit;
+    }
 
     @Override
     public String toString(){
-        if(quantity > 1){
-            return quantity + " " + unit.toString().toLowerCase() + "s of " + name;
-        }else {
-            return quantity + " " + unit.toString().toLowerCase() + " of " + name;
+        if(unit == Unit.NONE){
+            return name;
+        }else{
+            if(quantity > 1){
+                return quantity + " " + unit.toString().toLowerCase() + "s of " + name;
+            }else {
+                return quantity + " " + unit.toString().toLowerCase() + " of " + name;
+            }
         }
     }
 }

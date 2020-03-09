@@ -16,9 +16,6 @@ public final class Recipe implements Serializable {
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
-    public enum Unit {
-        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM
-    }
 
     private final UUID rUuid;
     private String name;
@@ -94,7 +91,9 @@ public final class Recipe implements Serializable {
         double ratio = (double)newPersonNumber / (double)personNumber;
         personNumber=newPersonNumber;
         for(Ingredient ingredient : ingredients){
-            ingredient.setQuantity(ingredient.getQuantity() * ratio);
+            if(ingredient.getUnit() != Ingredient.Unit.NONE) {
+                ingredient.setQuantity(ingredient.getQuantity() * ratio);
+            }
         }
     }
 
