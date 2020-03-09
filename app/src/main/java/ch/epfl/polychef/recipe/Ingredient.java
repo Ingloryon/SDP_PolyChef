@@ -3,7 +3,7 @@ package ch.epfl.polychef.recipe;
 public class Ingredient {
 
     public enum Unit {
-        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, NONE
+        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, NONE, OUNCE
     }
 
     private String name;
