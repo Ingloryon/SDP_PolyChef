@@ -15,8 +15,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -30,8 +30,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -45,8 +45,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -60,8 +60,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -75,8 +75,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -90,8 +90,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -105,8 +105,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -120,8 +120,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -135,8 +135,8 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
@@ -150,13 +150,25 @@ public class OfflineRecipes {
             .setEstimatedCookingTime(0)
             .setPersonNumber(0)
             .setEstimatedPreparationTime(0)
-            .addIngredient("", 0)
-            .addIngredient("", 0)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
+            .addIngredient("", 0, Recipe.Unit.GRAM)
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
             .addInstruction("")
             .addPicturePath(R.drawable.koreansteaktartare)
             .build();
-    
+
+    static{
+        offlineRecipes.add(recipe1);
+        offlineRecipes.add(recipe2);
+        offlineRecipes.add(recipe3);
+        offlineRecipes.add(recipe4);
+        offlineRecipes.add(recipe5);
+        offlineRecipes.add(recipe6);
+        offlineRecipes.add(recipe7);
+        offlineRecipes.add(recipe8);
+        offlineRecipes.add(recipe9);
+        offlineRecipes.add(recipe10);
+    }
 }

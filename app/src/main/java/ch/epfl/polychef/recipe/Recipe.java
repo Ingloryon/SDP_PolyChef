@@ -16,11 +16,16 @@ public final class Recipe implements Serializable {
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
+    public enum Unit {
+        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM
+    }
 
     private final UUID rUuid;
     private String name;
     private List<String> recipeInstructions;
-    private Map<String, Double> ingredients;
+    // private Map<String, Double> ingredients;
+    private List<Ingredient> ingredients;
+
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
@@ -48,7 +53,7 @@ public final class Recipe implements Serializable {
      * @param miniaturePath path to access the miniature image, provide empty string for default miniature
      * @param picturesNumbers path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, List<String> recipeInstructions, HashMap<String,Double> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<Integer> picturesNumbers){
+    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<Integer> picturesNumbers){
 
         this.hasMiniature = !miniaturePath.isEmpty();
         this.hasPictures = picturesNumbers.size()!=0;
@@ -56,8 +61,9 @@ public final class Recipe implements Serializable {
         this.rUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
-        this.ingredients = new HashMap<>();
-        this.ingredients.putAll(ingredients);  //No need for deep copy (comes from the builder where map/list aren't accessible)
+        //this.ingredients = new HashMap<>();
+        //this.ingredients.putAll(ingredients);  //No need for deep copy (comes from the builder where map/list aren't accessible)
+        this.ingredients = new ArrayList<>(ingredients);
         this.personNumber = personNumber;
         this.estimatedPreparationTime = estimatedPreparationTime;
         this.estimatedCookingTime = estimatedCookingTime;
@@ -75,15 +81,21 @@ public final class Recipe implements Serializable {
      * @param newPersonNumber strictly positive integer
      */
     public void scalePersonAndIngredientsQuantities(int newPersonNumber){
+//        Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
+//
+//        double ratio = (double)newPersonNumber / (double)personNumber;
+//        personNumber=newPersonNumber;
+//
+//        for (Map.Entry<String, Double> e : ingredients.entrySet()) {
+//            e.setValue(e.getValue()*ratio);
+//        }
+//        //TO_REMOVE: ingredients.replaceAll((k, v) -> v * ratio);  -> Cleaner but wrong java version ?
         Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
-
         double ratio = (double)newPersonNumber / (double)personNumber;
         personNumber=newPersonNumber;
-
-        for (Map.Entry<String, Double> e : ingredients.entrySet()) {
-            e.setValue(e.getValue()*ratio);
+        for(Ingredient ingredient : ingredients){
+            ingredient.setQuantity(ingredient.getQuantity() * ratio);
         }
-        //TO_REMOVE: ingredients.replaceAll((k, v) -> v * ratio);  -> Cleaner but wrong java version ?
     }
 
     /**
@@ -106,8 +118,11 @@ public final class Recipe implements Serializable {
      * Returns the ingredients map.
      * @return the ingredients and their amounts
      */
-    public Map<String, Double> getIngredients() {
-        return Collections.unmodifiableMap(ingredients);
+    //public Map<String, Double> getIngredients() {
+    //    return Collections.unmodifiableMap(ingredients);
+    //}
+    public List<Ingredient> getIngredients(){
+        return Collections.unmodifiableList(ingredients);
     }
 
     /**
@@ -198,8 +213,13 @@ public final class Recipe implements Serializable {
             str.append("\n" + (i+1) + "- " + recipeInstructions.get(i));
         }
         str.append("\n\nFor " + personNumber + " persons, the needed ingredients are:");
-        for (Map.Entry<String, Double> e : ingredients.entrySet()) {
-            str.append("\n" + String.format("%.2f", e.getValue()) + " of " + e.getKey());
+
+        //for (Map.Entry<String, Double> e : ingredients.entrySet()) {
+        //    str.append("\n" + String.format("%.2f", e.getValue()) + " of " + e.getKey());
+        //}
+        for (Ingredient ingredient : ingredients){
+            str.append("\n");
+            str.append(ingredient.toString());
         }
         str.append("\n\nThe recipe is " + recipeDifficulty.toString().toLowerCase().replaceAll("_", " ") + ".\n");
         str.append("The recipes takes around " + estimatedPreparationTime + "min of preparation and " + estimatedCookingTime + "min of cooking.\n");

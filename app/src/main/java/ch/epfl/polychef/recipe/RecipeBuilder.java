@@ -9,7 +9,8 @@ import java.util.List;
 public final class RecipeBuilder {
     private String name = "";
     private List<String> recipeInstructions = new ArrayList<>();
-    private HashMap<String, Double> ingredients = new HashMap<>();
+    //private HashMap<String, Double> ingredients = new HashMap<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
@@ -68,11 +69,12 @@ public final class RecipeBuilder {
      * @param quantity       the corresponding quantity of the ingredient, must be strictly positive
      * @return the modified builder
      */
-    public RecipeBuilder addIngredient(@NonNull String ingredientName, double quantity) {
+    public RecipeBuilder addIngredient(@NonNull String ingredientName, double quantity, Recipe.Unit unit) {
         Preconditions.checkArgument(!ingredientName.isEmpty(), "The ingredient name must be non empty");
         Preconditions.checkArgument(quantity > 0, "The ingredient quantity must be strictly positive");
+        Preconditions.checkArgument(unit != null, "The unit of the ingredient must not be null");
 
-        ingredients.put(ingredientName, quantity);
+        ingredients.add(new Ingredient(ingredientName, quantity, unit));
         return this;
     }
 
