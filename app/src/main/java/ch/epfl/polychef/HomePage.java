@@ -36,15 +36,7 @@ public class HomePage extends ConnectedActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button logButton = findViewById(R.id.logButton);
         drawer = findViewById(R.id.drawer);
-
-        logButton.setText(LOG_OUT);
-        logButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                signOut();
-            }
-        });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -55,7 +47,19 @@ public class HomePage extends ConnectedActivity {
 
         setupNavigation();
     }
-    
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Button logButton = findViewById(R.id.logButton);
+        logButton.setText(LOG_OUT);
+        logButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                signOut();
+            }
+        });
+    }
+
     private int getFragmentId(int itemId) {
         switch(itemId){
             case R.id.nav_home:

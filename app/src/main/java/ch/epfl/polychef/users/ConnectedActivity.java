@@ -22,10 +22,13 @@ public abstract class ConnectedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseUser user = getUser();
-        if (user == null) {
-            startActivity(new Intent(this, EntryPage.class));
-        }
+        isConnected();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isConnected();
     }
 
     public FirebaseUser getUser() {
@@ -40,5 +43,12 @@ public abstract class ConnectedActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), EntryPage.class));
                     }
                 });
+    }
+
+    private void isConnected() {
+        FirebaseUser user = getUser();
+        if (user == null) {
+            startActivity(new Intent(this, EntryPage.class));
+        }
     }
 }
