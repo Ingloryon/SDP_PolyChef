@@ -14,9 +14,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * Class for connected Activity that test on creation if the user is logged in
- * It can also log out a user
+/** 
+ * Class for connected Activity that test on creation if the user is logged in.
+ * It can also log out a user.
  */
 public abstract class ConnectedActivity extends AppCompatActivity {
     @Override
