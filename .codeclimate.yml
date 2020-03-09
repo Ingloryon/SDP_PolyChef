@@ -1,0 +1,6 @@
+engines:
+  checkstyle:
+    enabled: true
+    checks:
+      com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck.separateLineBetweenGroups:
+        enabled: false
