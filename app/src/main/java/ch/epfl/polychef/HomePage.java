@@ -1,13 +1,11 @@
 package ch.epfl.polychef;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,11 +13,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import ch.epfl.polychef.users.ConnectedActivity;
+
 import com.google.android.material.navigation.NavigationView;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends ConnectedActivity {
 
-    private Button logButton;
     private DrawerLayout drawer;
 
     private NavController navController;
@@ -37,7 +36,6 @@ public class HomePage extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        logButton = findViewById(R.id.logButton);
         drawer = findViewById(R.id.drawer);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -49,7 +47,19 @@ public class HomePage extends AppCompatActivity {
 
         setupNavigation();
     }
-    
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Button logButton = findViewById(R.id.logButton);
+        logButton.setText(LOG_OUT);
+        logButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                signOut();
+            }
+        });
+    }
+
     private int getFragmentId(int itemId) {
         switch(itemId){
             case R.id.nav_home:
@@ -91,26 +101,4 @@ public class HomePage extends AppCompatActivity {
                 }
         );
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        logButton.setText(LOG_OUT);
-        logButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                logout(view);
-            }
-        });
-    }
-
-    /**
-     * Called when the user taps the log button.
-     */
-    public void logout(View view) {
-        Intent intent = new Intent(this, EntryPage.class);
-        startActivity(intent);
-    }
-
-
 }

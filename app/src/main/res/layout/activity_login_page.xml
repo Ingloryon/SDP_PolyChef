@@ -6,21 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".LoginPage">
 
-    <Button
-        android:id="@+id/tequilaButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="tequilaLogin"
-        android:text="@string/tequila"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.374" />
-
-    <Button
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/googleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,8 +15,7 @@
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tequilaButton"
-        app:layout_constraintVertical_bias="0.116" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
