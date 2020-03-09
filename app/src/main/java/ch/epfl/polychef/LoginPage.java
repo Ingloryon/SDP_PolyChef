@@ -48,14 +48,9 @@ public class LoginPage extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK) {
-            FirebaseUser user = getUser();
-            if (user != null) {
-                startActivity(new Intent(this, HomePage.class));
-            } else {
-                Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
-            }
+        FirebaseUser user = getUser();
+        if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK && user != null) {
+            startActivity(new Intent(this, HomePage.class));
         } else {
             Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
         }
