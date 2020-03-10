@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
-import ch.epfl.polychef.recipe.RecipeMiniatureAdapter;
+import ch.epfl.polychef.adaptersRecyclerView.RecipeMiniatureAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +29,6 @@ public class MiniatureTestActivity extends AppCompatActivity {
         testRecipeList = new ArrayList<>();
         // set the recyclerView object to be the one inside an activity using its id
         recyclerView = findViewById(R.id.cardList);
-        // bind a layoutmanager to it (might not need one maybe try without ?)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Recipe recipeTarTar = new RecipeBuilder()
@@ -44,7 +43,7 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .addInstruction("Cut the beef into small pieces")
                 .addInstruction("Add salt and pepper to taste")
                 .addInstruction("Serve it in a dome shape")
-                .addPicturePath(R.drawable.koreansteaktartare)
+                .addPicturePath(R.drawable.frenchtoast)
                 .build();
 
         Recipe recipeCurry = new RecipeBuilder()
@@ -59,7 +58,7 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .addInstruction("Stir the chicken in an average pan for 10 minutes")
                 .addInstruction("Add lots of curry")
                 .addInstruction("Serve with fresh parsley")
-                .addPicturePath(R.drawable.thairedcurry)
+                .addPicturePath(R.drawable.frenchtoast)
                 .build();
 
         Recipe recipeNoodles = new RecipeBuilder()
@@ -73,7 +72,7 @@ public class MiniatureTestActivity extends AppCompatActivity {
                 .addInstruction("Had noodles to hot water for 5 minutes")
                 .addInstruction("In a wok add the mushrooms with oil and stir frequently")
                 .addInstruction("Add salt and pepper")
-                .addPicturePath(R.drawable.noodlesmushrooms)
+                .addPicturePath(R.drawable.frenchtoast)
                 .build();
 
         recipeTarTar.getRating().addRate(3, 2);

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import java.util.List;
-import java.util.Map;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -79,14 +78,6 @@ public class RecipeActivity extends AppCompatActivity {
     private void displayIngredients(){
         StringBuilder strBuilder = new StringBuilder();
         String newLine = "\n";
-//        Map<String, Double> allIngredients = currentRecipe.getIngredients();
-//        for(Map.Entry<String, Double> ingredient : allIngredients.entrySet()){
-//            strBuilder.append("● ");
-//            strBuilder.append(ingredient.getValue() + " grams of ");
-//            strBuilder.append(ingredient.getKey().toLowerCase());
-//            strBuilder.append(newLine);
-//            strBuilder.append(newLine);
-//        }
         for(Ingredient ingredient: currentRecipe.getIngredients()){
             strBuilder.append("● ");
             strBuilder.append(ingredient.toString());

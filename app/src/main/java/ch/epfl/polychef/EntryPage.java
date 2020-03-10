@@ -7,12 +7,23 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import ch.epfl.polychef.adaptersRecyclerView.RecipeMiniatureAdapter;
+import ch.epfl.polychef.recipe.OfflineRecipes;
 
 public class EntryPage extends AppCompatActivity {
 
     private Button logButton;
 
     public static final String LOG_IN = "Log in";
+
+    private RecyclerView offlineRecyclerView;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +36,13 @@ public class EntryPage extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         logButton = findViewById(R.id.logButton);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        NavHostFragment hostFragment = (NavHostFragment)
+                fragmentManager.findFragmentById(R.id.nav_host_fragment);
+
+        navController = NavHostFragment.findNavController(hostFragment);
     }
 
     @Override

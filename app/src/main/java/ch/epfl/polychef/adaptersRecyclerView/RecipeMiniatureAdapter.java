@@ -1,4 +1,4 @@
-package ch.epfl.polychef.recipe;
+package ch.epfl.polychef.adaptersRecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.RecipeActivity;
+import ch.epfl.polychef.recipe.Recipe;
+
 import java.util.List;
 
 /**

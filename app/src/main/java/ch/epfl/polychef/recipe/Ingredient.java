@@ -1,9 +1,11 @@
 package ch.epfl.polychef.recipe;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
 
     public enum Unit {
-        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, NONE, OUNCE
+        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE
     }
 
     private String name;
@@ -31,8 +33,10 @@ public class Ingredient {
 
     @Override
     public String toString(){
-        if(unit == Unit.NONE){
+        if(unit == Unit.NONE) {
             return name;
+        }else if(unit == Unit.NO_UNIT){
+            return quantity + " " + name;
         }else{
             if(quantity > 1){
                 return quantity + " " + unit.toString().toLowerCase() + "s of " + name;

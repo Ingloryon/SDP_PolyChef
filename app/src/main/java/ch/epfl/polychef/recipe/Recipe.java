@@ -20,7 +20,6 @@ public final class Recipe implements Serializable {
     private final UUID rUuid;
     private String name;
     private List<String> recipeInstructions;
-    // private Map<String, Double> ingredients;
     private List<Ingredient> ingredients;
 
     private int personNumber;
@@ -36,7 +35,7 @@ public final class Recipe implements Serializable {
     private String miniaturePath;
     private List<Integer> picturesNumbers;
     private static final String DEFAULT_MINIATURE_PATH = "/src/default_miniature.png";
-    private static final List<Integer> DEFAULT_PICTURE_PATH = Arrays.asList(R.drawable.koreansteaktartare);
+    private static final List<Integer> DEFAULT_PICTURE_PATH = Arrays.asList(R.drawable.frenchtoast);
 
     /**
      * Creates a new Recipe.
@@ -58,8 +57,6 @@ public final class Recipe implements Serializable {
         this.rUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
-        //this.ingredients = new HashMap<>();
-        //this.ingredients.putAll(ingredients);  //No need for deep copy (comes from the builder where map/list aren't accessible)
         this.ingredients = new ArrayList<>(ingredients);
         this.personNumber = personNumber;
         this.estimatedPreparationTime = estimatedPreparationTime;
@@ -78,15 +75,6 @@ public final class Recipe implements Serializable {
      * @param newPersonNumber strictly positive integer
      */
     public void scalePersonAndIngredientsQuantities(int newPersonNumber){
-//        Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
-//
-//        double ratio = (double)newPersonNumber / (double)personNumber;
-//        personNumber=newPersonNumber;
-//
-//        for (Map.Entry<String, Double> e : ingredients.entrySet()) {
-//            e.setValue(e.getValue()*ratio);
-//        }
-//        //TO_REMOVE: ingredients.replaceAll((k, v) -> v * ratio);  -> Cleaner but wrong java version ?
         Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
         double ratio = (double)newPersonNumber / (double)personNumber;
         personNumber=newPersonNumber;
@@ -117,9 +105,6 @@ public final class Recipe implements Serializable {
      * Returns the ingredients map.
      * @return the ingredients and their amounts
      */
-    //public Map<String, Double> getIngredients() {
-    //    return Collections.unmodifiableMap(ingredients);
-    //}
     public List<Ingredient> getIngredients(){
         return Collections.unmodifiableList(ingredients);
     }
@@ -212,10 +197,6 @@ public final class Recipe implements Serializable {
             str.append("\n" + (i+1) + "- " + recipeInstructions.get(i));
         }
         str.append("\n\nFor " + personNumber + " persons, the needed ingredients are:");
-
-        //for (Map.Entry<String, Double> e : ingredients.entrySet()) {
-        //    str.append("\n" + String.format("%.2f", e.getValue()) + " of " + e.getKey());
-        //}
         for (Ingredient ingredient : ingredients){
             str.append("\n");
             str.append(ingredient.toString());
