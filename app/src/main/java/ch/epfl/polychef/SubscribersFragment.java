@@ -7,16 +7,15 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SubscribersFragment extends Fragment {
 
-    public SubscribersFragment() {
-        // Required empty public constructor
-    }
-
+    /**
+     * Required empty public constructor
+     */
+    public SubscribersFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

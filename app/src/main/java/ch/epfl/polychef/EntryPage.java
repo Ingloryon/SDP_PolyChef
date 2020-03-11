@@ -7,15 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import ch.epfl.polychef.adaptersRecyclerView.RecipeMiniatureAdapter;
-import ch.epfl.polychef.recipe.OfflineRecipes;
 
 public class EntryPage extends AppCompatActivity {
 
