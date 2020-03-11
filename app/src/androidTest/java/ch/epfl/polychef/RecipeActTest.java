@@ -9,6 +9,7 @@ import static junit.framework.TestCase.assertTrue;
 public class RecipeActTest {
     //@Rule
     //public IntentsTestRule<MiniatureTestActivity> intentsTestRule = new IntentsTestRule<>(MiniatureTestActivity.class);
+    //onView(withId(R.id.cardList)).perform(click());
 
     @Test
     public void checkMiniatureTestActivityRunsCorrectly(){
