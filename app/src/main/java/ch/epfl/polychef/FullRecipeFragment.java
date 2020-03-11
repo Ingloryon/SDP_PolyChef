@@ -11,26 +11,22 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.util.List;
-
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 
-public class FullRecipeFragment extends Fragment {
+import java.util.List;
 
+public final class FullRecipeFragment extends Fragment {
     private Recipe currentRecipe;
-
-
-    public FullRecipeFragment() {
-        // Required empty public constructor
-    }
+    private static final String NEW_LINE = "\n";
 
     /**
-     * When the View is created we get the recipe and display everything
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * Required empty public constructor
+     */
+    public FullRecipeFragment() {}
+
+    /**
+     * When the View is created we get the recipe and display its attributes
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +49,9 @@ public class FullRecipeFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Display the recipe main image in the correct field in the activity.
+     */
     private void displayImage(View view) {
         ImageView recipeImage = view.findViewById(R.id.recipeImage);
         recipeImage.setImageResource(currentRecipe.getPicturesNumbers().get(0));
@@ -99,12 +98,11 @@ public class FullRecipeFragment extends Fragment {
      */
     private void displayIngredients(View view){
         StringBuilder strBuilder = new StringBuilder();
-        String newLine = "\n";
         for(Ingredient ingredient: currentRecipe.getIngredients()){
             strBuilder.append("● ");
             strBuilder.append(ingredient.toString());
-            strBuilder.append(newLine);
-            strBuilder.append(newLine);
+            strBuilder.append(NEW_LINE);
+            strBuilder.append(NEW_LINE);
         }
         // Remove the last line return since there is no more ingredients to display
         strBuilder.deleteCharAt(strBuilder.length() - 1);
@@ -117,14 +115,13 @@ public class FullRecipeFragment extends Fragment {
      */
     private void displayInstructions(View view){
         StringBuilder strBuilder = new StringBuilder();
-        String newLine = "\n";
         List<String> allInstructions = currentRecipe.getRecipeInstructions();
         for(int i = 0; i < allInstructions.size(); i++){
             strBuilder.append(i + 1);
             strBuilder.append(". ");
             strBuilder.append(allInstructions.get(i));
-            strBuilder.append(newLine);
-            strBuilder.append(newLine);
+            strBuilder.append(NEW_LINE);
+            strBuilder.append(NEW_LINE);
         }
         // Remove the last line return since there is no more instructions to display
         strBuilder.deleteCharAt(strBuilder.length() - 1);

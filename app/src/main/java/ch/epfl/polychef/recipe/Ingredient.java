@@ -9,7 +9,7 @@ import ch.epfl.polychef.Preconditions;
 /**
  * Class that represent a Recipe's ingredient.
  */
-public class Ingredient implements Serializable {
+public final class Ingredient implements Serializable {
 
     public enum Unit {
         TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE

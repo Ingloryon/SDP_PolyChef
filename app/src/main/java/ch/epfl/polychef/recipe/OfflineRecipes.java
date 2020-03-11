@@ -9,7 +9,7 @@ import ch.epfl.polychef.R;
 /*
  * This is a Singleton class of the offline recipes that can't be modified
  */
-public class OfflineRecipes {
+public final class OfflineRecipes {
 
     private static final OfflineRecipes offlineRecipesInstance = new OfflineRecipes();
 

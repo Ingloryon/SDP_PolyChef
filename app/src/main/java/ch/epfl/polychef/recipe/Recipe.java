@@ -111,9 +111,7 @@ public final class Recipe implements Serializable, Cloneable {
      * Returns a copy of the recipe instructions.
      * @return list of instructions for the recipe
      */
-    public List<String> getRecipeInstructions() {
-        return Collections.unmodifiableList(recipeInstructions);
-    }
+    public List<String> getRecipeInstructions() { return Collections.unmodifiableList(recipeInstructions); }
 
     /**
      * Returns the current number of person for the recipe.
@@ -205,6 +203,7 @@ public final class Recipe implements Serializable, Cloneable {
 
         return str.toString();
     }
+
     /*
      *  Here we override clone to make it usable in other classes
      */
@@ -216,6 +215,5 @@ public final class Recipe implements Serializable, Cloneable {
 
     // TODO: Add setters for needed attributes -> how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
     // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
-    // TODO: Changer argument ingredients en Map<String: ingreName, Map<Double: quantity, String: unit>> ?
     // TODO: Or all the UUID setup isn't necessary and just using Object's equals def is enough ?
 }

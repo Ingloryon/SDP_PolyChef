@@ -13,14 +13,10 @@ import android.view.ViewGroup;
 import ch.epfl.polychef.adaptersRecyclerView.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 
-public class OfflineMiniaturesFragment extends Fragment {
-
+public final class OfflineMiniaturesFragment extends Fragment {
     private RecyclerView offlineRecyclerView;
 
-
-    public OfflineMiniaturesFragment() {
-    }
-
+    public OfflineMiniaturesFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

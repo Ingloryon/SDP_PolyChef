@@ -3,7 +3,6 @@ package ch.epfl.polychef.recipe;
 import androidx.annotation.NonNull;
 import ch.epfl.polychef.Preconditions;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public final class RecipeBuilder {
@@ -59,19 +58,16 @@ public final class RecipeBuilder {
         return this;
     }
 
-    // TODO: Add methods to allow modification of instructions -> insert, modify existing
-
     /**
      * Adds an ingredient of the recipe and its corresponding quantity.
      *
      * @param ingredientName the name of the ingredient, must be non empty
-     * @param quantity       the corresponding quantity of the ingredient, must be strictly positive
+     * @param quantity the corresponding quantity of the ingredient, must be strictly positive
+     * @param unit the corresponding unit of the ingredient's quantity, must be non null
      * @return the modified builder
      */
-    public RecipeBuilder addIngredient(@NonNull String ingredientName, double quantity, Ingredient.Unit unit) {
-        Preconditions.checkArgument(!ingredientName.isEmpty(), "The ingredient name must be non empty");
-        Preconditions.checkArgument(unit != null, "The unit of the ingredient must not be null");
-
+    public RecipeBuilder addIngredient(@NonNull String ingredientName, double quantity, @NonNull Ingredient.Unit unit) {
+        //checks are performed in Ingredient's constructor
         ingredients.add(new Ingredient(ingredientName, quantity, unit));
         return this;
     }

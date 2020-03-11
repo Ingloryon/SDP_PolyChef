@@ -28,7 +28,7 @@ public final class Rating implements Serializable {
 
         if(allRatings.containsKey(userID)) {
             double oldRate = allRatings.get(userID);
-            allRatings.put(userID, rate);  //allRatings.replace(userID, rate);  //TODO: Need java version 26... Would be much cleaner
+            allRatings.put(userID, rate);  //allRatings.replace(userID, rate);  //TODO: Need min Sdk version 26 -> Would be much cleaner
             ratingSum = ratingSum - oldRate + rate;
         }
         else {
