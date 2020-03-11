@@ -1,16 +1,15 @@
 package ch.epfl.polychef.recipe;
 
+import ch.epfl.polychef.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import ch.epfl.polychef.R;
 
 /*
  * This is a Singleton class of the offline recipes that can't be modified
  */
 public final class OfflineRecipes {
-
     private static final OfflineRecipes offlineRecipesInstance = new OfflineRecipes();
 
     private List<Recipe> offlineRecipes;
@@ -20,6 +19,10 @@ public final class OfflineRecipes {
     }
 
     private OfflineRecipes(){
+        if(offlineRecipesInstance != null) {
+            throw new IllegalStateException("Instance is already instantiated");
+        }
+        offlineRecipes = new ArrayList<>();
         offlineRecipes.add(recipe1);
         offlineRecipes.add(recipe2);
         offlineRecipes.add(recipe3);
@@ -36,13 +39,13 @@ public final class OfflineRecipes {
                 e.printStackTrace();
             }
         }
-        // TODO Should we make it unmodifiable or not?
+        // TODO Should we make it unmodifiable or not?  --> yes (#Guillaume)
         return Collections.unmodifiableList(copiedList);
     }
 
     private Recipe recipe1 = new RecipeBuilder()
             .setName("Oven-Baked Salmon")
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
+            .setRecipeDifficulty(Recipe.Difficulty.HARD)
             .setEstimatedCookingTime(15)
             .setPersonNumber(4)
             .setEstimatedPreparationTime(5)
@@ -57,7 +60,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe2 = new RecipeBuilder()
             .setName("Excellent MeatBalls")
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
+            .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE)
             .setEstimatedCookingTime(43)
             .setPersonNumber(4)
             .setEstimatedPreparationTime(40)
@@ -84,7 +87,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe3 = new RecipeBuilder()
             .setName("Shrimp Scampi Tetrazzini")
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
+            .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
             .setEstimatedCookingTime(20)
             .setPersonNumber(6)
             .setEstimatedPreparationTime(30)
@@ -132,7 +135,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe5 = new RecipeBuilder()
             .setName("French toast")
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
+            .setRecipeDifficulty(Recipe.Difficulty.VERY_EASY)
             .setEstimatedCookingTime(10)
             .setPersonNumber(4)
             .setEstimatedPreparationTime(20)
