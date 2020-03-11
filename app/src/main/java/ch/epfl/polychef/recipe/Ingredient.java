@@ -70,16 +70,14 @@ public class Ingredient implements Serializable {
 
     @Override
     public String toString(){
-        if(unit == Unit.NONE) {
-            return name;
-        }else if(unit == Unit.NO_UNIT){
-            return quantity + " " + name;
-        }else{
-            if(quantity > 1){
-                return quantity + " " + unit.toString().toLowerCase() + "s of " + name;
-            }else {
-                return quantity + " " + unit.toString().toLowerCase() + " of " + name;
-            }
+        switch (unit){
+            case NONE:
+                return name;
+            case NO_UNIT:
+                return quantity + " " + name;
+            default:
+                String str = quantity + " " + unit.toString().toLowerCase();
+                return quantity > 1 ? str + "s of " + name : str + " of " + name;
         }
     }
 }
