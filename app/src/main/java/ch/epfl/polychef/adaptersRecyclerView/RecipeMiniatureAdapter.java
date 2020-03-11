@@ -35,6 +35,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
      * @param mainContext  the context where the adapter will operate i.e the activity where the recyclerView is
      * @param recipeList   the list of all the recipes that will be displayed inside the recyclerView
      * @param recyclerView this is the recyclerview where the recipes will be displayed
+     * @param fragmentContainerID the id of the fragment container where the miniature are displayed
      */
     public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID) {
         this.mainContext = mainContext;
@@ -102,7 +103,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
-     * This class is the listener that when we click on a miniature it send us to a new activity with the full recipe displayed.
+     * This class is the listener that when we click on a miniature it swaps to the new fragment with the full recipe displayed.
      */
     class MiniatureOnClickListener implements View.OnClickListener {
 
@@ -119,9 +120,11 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
             AppCompatActivity activity = (AppCompatActivity) mainContext;
             FragmentManager fragMana = activity.getSupportFragmentManager();
 
+            // Get the clicked recipe from the recyclerView
             int recipePosition = recyclerView.getChildLayoutPosition(view);
             Recipe clickedRecipe = recipeList.get(recipePosition);
 
+            //Create new Bundle to store recipe object inside the recipe fragment that will be open after
             Bundle bundle = new Bundle();
             bundle.putSerializable("Recipe", clickedRecipe);
 

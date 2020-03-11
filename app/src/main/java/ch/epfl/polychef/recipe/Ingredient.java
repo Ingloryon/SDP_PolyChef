@@ -12,6 +12,13 @@ public class Ingredient implements Serializable {
     private double quantity;
     private Unit unit;
 
+    /**
+     * This is the ingredient of a recipe described by a name, a quantity and a unit
+     * Unit can also be NONE for some ingredient with no quantity or NO_UNIT for the ones that is a number of such ingredients
+     * @param name
+     * @param quantity
+     * @param unit
+     */
     public Ingredient(String name, double quantity, Unit unit){
         this.name = name;
         this.quantity = quantity;

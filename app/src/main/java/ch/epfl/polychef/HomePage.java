@@ -45,9 +45,11 @@ public class HomePage extends ConnectedActivity {
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
         navController = NavHostFragment.findNavController(hostFragment);
+
+        // Create new Bundle containing the id of the container for the adapter
         Bundle bundle = new Bundle();
         bundle.putInt("fragmentID", R.id.nav_host_fragment);
-
+        // Set this bundle to be an arguments of the startDestination using this trick
         navController.setGraph(R.navigation.nav_graph, bundle);
         setupNavigation();
     }

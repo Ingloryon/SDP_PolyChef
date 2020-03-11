@@ -1,16 +1,46 @@
 package ch.epfl.polychef.recipe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.polychef.R;
 
-
+/*
+ * This is a Singleton class of the offline recipes that can't be modified
+ */
 public class OfflineRecipes {
 
-    public static List<Recipe> offlineRecipes = new ArrayList<>();
+    private static final OfflineRecipes offlineRecipesInstance = new OfflineRecipes();
 
-    public static Recipe recipe1 = new RecipeBuilder()
+    private List<Recipe> offlineRecipes;
+
+    public static OfflineRecipes getInstance(){
+        return offlineRecipesInstance;
+    }
+
+    private OfflineRecipes(){
+        offlineRecipes.add(recipe1);
+        offlineRecipes.add(recipe2);
+        offlineRecipes.add(recipe3);
+        offlineRecipes.add(recipe4);
+        offlineRecipes.add(recipe5);
+    }
+
+    public List<Recipe> getCopy() {
+        List<Recipe> copiedList = new ArrayList<>();
+        for(Recipe recipe : offlineRecipes){
+            try {
+                copiedList.add((Recipe) recipe.clone());
+            }catch(CloneNotSupportedException e){
+                e.printStackTrace();
+            }
+        }
+        // TODO Should we make it unmodifiable or not?
+        return Collections.unmodifiableList(copiedList);
+    }
+
+    private Recipe recipe1 = new RecipeBuilder()
             .setName("Oven-Baked Salmon")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setEstimatedCookingTime(15)
@@ -25,7 +55,7 @@ public class OfflineRecipes {
             .addPicturePath(R.drawable.ovenbakedsalmon)
             .build();
 
-    public static Recipe recipe2 = new RecipeBuilder()
+    private Recipe recipe2 = new RecipeBuilder()
             .setName("Excellent MeatBalls")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setEstimatedCookingTime(43)
@@ -52,7 +82,7 @@ public class OfflineRecipes {
             .addPicturePath(R.drawable.meatballs)
             .build();
 
-    public static Recipe recipe3 = new RecipeBuilder()
+    private Recipe recipe3 = new RecipeBuilder()
             .setName("Shrimp Scampi Tetrazzini")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setEstimatedCookingTime(20)
@@ -82,7 +112,7 @@ public class OfflineRecipes {
             .addPicturePath(R.drawable.shrimps)
             .build();
 
-    public static Recipe recipe4 = new RecipeBuilder()
+    private Recipe recipe4 = new RecipeBuilder()
             .setName("Garlic Roasted Potatoes")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setEstimatedCookingTime(60)
@@ -100,7 +130,7 @@ public class OfflineRecipes {
             .addPicturePath(R.drawable.potatoes)
             .build();
 
-    public static Recipe recipe5 = new RecipeBuilder()
+    private Recipe recipe5 = new RecipeBuilder()
             .setName("French toast")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setEstimatedCookingTime(10)
@@ -119,12 +149,4 @@ public class OfflineRecipes {
             .addInstruction("In a 10-inch or 12-inch skillet, melt butter over medium heat. Whisk together cinnamon mixture, eggs, milk, and vanilla and pour into a shallow container such as a pie plate. Dip bread in egg mixture. Fry slices until golden brown, then flip to cook the other side. Serve with syrup. ")
             .addPicturePath(R.drawable.frenchtoast)
             .build();
-
-    static {
-        offlineRecipes.add(recipe1);
-        offlineRecipes.add(recipe2);
-        offlineRecipes.add(recipe3);
-        offlineRecipes.add(recipe4);
-        offlineRecipes.add(recipe5);
-    }
 }

@@ -95,7 +95,7 @@ public class RecipeTest {
         assertEquals(recipe.getRecipeDifficulty(), Recipe.Difficulty.VERY_HARD);
         assertEquals(recipe.getEstimatedTotalTime(), 95);
         assertEquals(recipe.getMiniaturePath(), "/src/default_miniature.png");
-        assertEquals(recipe.getPicturesNumbers(), Arrays.asList(R.drawable.koreansteaktartare));
+        assertEquals(recipe.getPicturesNumbers(), Arrays.asList(R.drawable.frenchtoast));
 
         rb.addPicturePath(15);
         rb.setMiniaturePath("/src/miniature.jpeg");

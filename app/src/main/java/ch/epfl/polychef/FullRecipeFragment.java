@@ -25,11 +25,19 @@ public class FullRecipeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * When the View is created we get the recipe and display everything
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_full_recipe, container, false);
+        // Get the recipe from the click listener of the miniature recyclerView
         Bundle bundle = this.getArguments();
         if(bundle != null){
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public final class Recipe implements Serializable {
+public final class Recipe implements Serializable, Cloneable {
 
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
@@ -207,6 +207,14 @@ public final class Recipe implements Serializable {
 
         return str.toString();
     }
+    /*
+     *  Here we override clone to make it usable in other classes
+     */
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
+
 
     // TODO: Add setters for needed attributes -> how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
     // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
