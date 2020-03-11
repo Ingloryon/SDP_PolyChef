@@ -1,7 +1,7 @@
 package ch.epfl.polychef.adaptersRecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +9,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import ch.epfl.polychef.FullRecipeFragment;
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.RecipeActivity;
 import ch.epfl.polychef.recipe.Recipe;
 
 import java.util.List;
@@ -24,6 +27,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     private Context mainContext;
     private List<Recipe> recipeList;
     private RecyclerView recyclerview;
+    private int fragmentContainerID;
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -32,10 +36,11 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
      * @param recipeList   the list of all the recipes that will be displayed inside the recyclerView
      * @param recyclerView this is the recyclerview where the recipes will be displayed
      */
-    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView) {
+    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID) {
         this.mainContext = mainContext;
         this.recipeList = recipeList;
         this.recyclerview = recyclerView;
+        this.fragmentContainerID = fragmentContainerID;
     }
 
     /**
@@ -109,11 +114,21 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
         @Override
         public void onClick(View view) {
+
+            //Here we know that the context is an activity
+            AppCompatActivity activity = (AppCompatActivity) mainContext;
+            FragmentManager fragMana = activity.getSupportFragmentManager();
+
             int recipePosition = recyclerView.getChildLayoutPosition(view);
             Recipe clickedRecipe = recipeList.get(recipePosition);
-            Intent intent = new Intent(mainContext, RecipeActivity.class);
-            intent.putExtra("Recipe", clickedRecipe);
-            mainContext.startActivity(intent);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Recipe", clickedRecipe);
+
+            FullRecipeFragment recipeFragment = new FullRecipeFragment();
+            recipeFragment.setArguments(bundle);
+
+            fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
         }
     }
 

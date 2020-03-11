@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".RecipeActivity"/>
         <activity android:name=".LoginPage" />
         <activity android:name=".HomePage" />
         <activity android:name=".EntryPage">
@@ -22,7 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MiniatureTestActivity"/>
     </application>
 
 </manifest>

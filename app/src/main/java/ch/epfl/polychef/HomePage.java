@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -44,7 +45,10 @@ public class HomePage extends ConnectedActivity {
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
         navController = NavHostFragment.findNavController(hostFragment);
+        Bundle bundle = new Bundle();
+        bundle.putInt("fragmentID", R.id.nav_host_fragment);
 
+        navController.setGraph(R.navigation.nav_graph, bundle);
         setupNavigation();
     }
 
@@ -63,7 +67,7 @@ public class HomePage extends ConnectedActivity {
     private int getFragmentId(int itemId) {
         switch(itemId){
             case R.id.nav_home:
-                return R.id.homeFragment;
+                return R.id.miniaturesOfflineFragment;
             case R.id.nav_fav:
                 return R.id.favouritesFragment;
             case R.id.nav_subscribers:

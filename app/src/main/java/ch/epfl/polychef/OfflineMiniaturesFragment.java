@@ -13,23 +13,28 @@ import android.view.ViewGroup;
 import ch.epfl.polychef.adaptersRecyclerView.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 
-public class EntryPageFragment extends Fragment {
+public class OfflineMiniaturesFragment extends Fragment {
 
-    RecyclerView offlineRecyclerView;
+    private RecyclerView offlineRecyclerView;
 
-    public EntryPageFragment() {
-        // Required empty public constructor
+
+    public OfflineMiniaturesFragment() {
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_entry_page, container, false);
-        offlineRecyclerView = view.findViewById(R.id.cardList);
-        offlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        offlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), OfflineRecipes.offlineRecipes, offlineRecyclerView));
+        View view = inflater.inflate(R.layout.fragment_miniatures_offline, container, false);
 
-        // Inflate the layout for this fragment
+        Bundle bundle = getArguments();
+        int fragmentID = bundle.getInt("fragmentID");
+
+        offlineRecyclerView = view.findViewById(R.id.miniaturesOfflineList);
+        offlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        offlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), OfflineRecipes.offlineRecipes, offlineRecyclerView, fragmentID));
+
         return view;
     }
 }

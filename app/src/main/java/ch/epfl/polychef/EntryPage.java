@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,9 +23,6 @@ public class EntryPage extends AppCompatActivity {
 
     public static final String LOG_IN = "Log in";
 
-    private RecyclerView offlineRecyclerView;
-    private NavController navController;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +35,17 @@ public class EntryPage extends AppCompatActivity {
 
         logButton = findViewById(R.id.logButton);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
 
-        NavHostFragment hostFragment = (NavHostFragment)
-                fragmentManager.findFragmentById(R.id.nav_host_fragment);
+        Bundle bundle = new Bundle();
+        bundle.putInt("fragmentID", R.id.nav_entry_fragment);
+        OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();
+        miniFrag.setArguments(bundle);
 
-        navController = NavHostFragment.findNavController(hostFragment);
+        fm.add(R.id.nav_entry_fragment, miniFrag);
+        fm.commit();
+
+
     }
 
     @Override
