@@ -70,16 +70,17 @@ public class RecipeTest {
         RecipeBuilder rb = new RecipeBuilder();
         rb.setName("Chicken fried");
         rb.addInstruction("Start by the beginning");
-        rb.addIngredient("Carrots", 300d, Ingredient.Unit.GRAM);
+        rb.addIngredient("Carrots", 300d, Ingredient.Unit.NONE);
         rb.setPersonNumber(4);
         rb.setEstimatedPreparationTime(45);
         rb.setEstimatedCookingTime(50);
         rb.setRecipeDifficulty(Recipe.Difficulty.VERY_HARD);
 
-        ArrayList<String> instruc = new ArrayList<String>();
+        ArrayList<String> instruc = new ArrayList<>();
         instruc.add("Start by the beginning");
-        HashMap<String, Double> ingre = new HashMap<String, Double>();
-        ingre.put("Carrots", 300d);
+        List<Ingredient> ingre = new ArrayList<>();
+        ingre.add(new Ingredient("Carrots", 300d, Ingredient.Unit.NONE));
+
         Recipe.Difficulty.values();
         Recipe.Difficulty.valueOf("VERY_HARD");
         Recipe recipe = rb.build();
@@ -87,7 +88,7 @@ public class RecipeTest {
 
         assertEquals(recipe.getName(), "Chicken fried");
         assertEquals(recipe.getRecipeInstructions(), Collections.unmodifiableList(instruc));
-        assertEquals(recipe.getIngredients(), Collections.unmodifiableMap(ingre));
+        assertEquals(recipe.getIngredients(), Collections.unmodifiableList(ingre));
         assertEquals(recipe.getPersonNumber(), 4);
         assertEquals(recipe.getEstimatedPreparationTime(), 45);
         assertEquals(recipe.getEstimatedCookingTime(), 50);
@@ -177,13 +178,13 @@ public class RecipeTest {
                 "The recipe is rated 0.00/5 stars by 0 users.\n";
 
         String str1 = startingString +
-                "75.00 of Chicken wings\n" +
-                "300.00 of Carrots\n" +
+                "300.0 grams of Carrots\n" +
+                "75.0 kilograms of Chicken wings\n" +
                 endingString;
 
         String str2 = startingString +
-                "300.00 of Carrots\n" +
-                "75.00 of Chicken wings\n" +
+                "75.0 kilograms of Chicken wings\n" +
+                "300.0 grams of Carrots\n" +
                 endingString;
 
         // The ingredients can be displayed in any order so toString() can be either str1 or str2
@@ -197,7 +198,7 @@ public class RecipeTest {
         rb1.addInstruction("Then keep going");
         rb1.addInstruction("Now it ends");
         rb1.addIngredient("Carrots", 300d, Ingredient.Unit.GRAM);
-        rb1.addIngredient("Chicken wings", 75, Ingredient.Unit.GRAM);
+        rb1.addIngredient("Chicken wings", 75d, Ingredient.Unit.KILOGRAM);
         rb1.setPersonNumber(4);
         rb1.setEstimatedPreparationTime(45);
         rb1.setEstimatedCookingTime(50);
