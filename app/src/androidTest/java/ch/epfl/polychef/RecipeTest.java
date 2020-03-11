@@ -88,7 +88,7 @@ public class RecipeTest {
 
         assertEquals(recipe.getName(), "Chicken fried");
         assertEquals(recipe.getRecipeInstructions(), Collections.unmodifiableList(instruc));
-        assertEquals(recipe.getIngredients(), Collections.unmodifiableList(ingre));
+        assertEquals(recipe.getIngredients().get(0).toString(), Collections.unmodifiableList(ingre).get(0).toString());
         assertEquals(recipe.getPersonNumber(), 4);
         assertEquals(recipe.getEstimatedPreparationTime(), 45);
         assertEquals(recipe.getEstimatedCookingTime(), 50);
