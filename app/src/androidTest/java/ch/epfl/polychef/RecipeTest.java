@@ -75,7 +75,6 @@ public class RecipeTest {
         rb.setEstimatedPreparationTime(45);
         rb.setEstimatedCookingTime(50);
         rb.setRecipeDifficulty(Recipe.Difficulty.VERY_HARD);
-        Recipe recipe = rb.build();
 
         ArrayList<String> instruc = new ArrayList<String>();
         instruc.add("Start by the beginning");
@@ -83,6 +82,7 @@ public class RecipeTest {
         ingre.put("Carrots", 300d);
         Recipe.Difficulty.values();
         Recipe.Difficulty.valueOf("VERY_HARD");
+        Recipe recipe = rb.build();
         recipe.getRating();
 
         assertEquals(recipe.getName(), "Chicken fried");

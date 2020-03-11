@@ -9,25 +9,25 @@ public class RatingTest {
 
     @Test
     public void addRateRejectsInvalidInputs(){
-        Rating r = new Rating();
-        assertThrows(IllegalArgumentException.class, () -> r.addRate(0,8));
-        assertThrows(IllegalArgumentException.class, () -> r.addRate(0,-5));
-        assertThrows(IllegalArgumentException.class, () -> r.addRate(-8,3.2));
+        Rating rating = new Rating();
+        assertThrows(IllegalArgumentException.class, () -> rating.addRate(0,8));
+        assertThrows(IllegalArgumentException.class, () -> rating.addRate(0,-5));
+        assertThrows(IllegalArgumentException.class, () -> rating.addRate(-8,3.2));
     }
 
     @Test
     public void onlyChangeRatingIfUserAlreadyRated(){
-        Rating r = new Rating();
+        Rating rating = new Rating();
 
-        assertTrue(r.ratingAverage() == 0);
-        r.addRate(5, 2.25);
+        assertTrue(rating.ratingAverage() == 0);
+        rating.addRate(5, 2.25);
 
-        assertTrue(r.ratingAverage() == 2.25);
+        assertTrue(rating.ratingAverage() == 2.25);
 
-        r.addRate(2, 4);
-        assertTrue(r.ratingAverage() == (2.25d + 4d) / 2d);
+        rating.addRate(2, 4);
+        assertTrue(rating.ratingAverage() == (2.25d + 4d) / 2d);
 
-        r.addRate(5, 5);
-        assertTrue(r.ratingAverage() == (4d + 5d)/2);
+        rating.addRate(5, 5);
+        assertTrue(rating.ratingAverage() == (4d + 5d)/2);
     }
 }

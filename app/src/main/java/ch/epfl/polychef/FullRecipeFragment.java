@@ -21,12 +21,12 @@ public final class FullRecipeFragment extends Fragment {
     private static final String NEW_LINE = "\n";
 
     /**
-     * Required empty public constructor
+     * Required empty public constructor.
      */
     public FullRecipeFragment() {}
 
     /**
-     * When the View is created we get the recipe and display its attributes
+     * When the View is created we get the recipe and display its attributes.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

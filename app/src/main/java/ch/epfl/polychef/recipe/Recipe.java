@@ -15,7 +15,7 @@ public final class Recipe implements Serializable, Cloneable {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
 
-    private final UUID rUuid;
+    private final UUID recipeUuid;
     private String name;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
@@ -52,7 +52,7 @@ public final class Recipe implements Serializable, Cloneable {
         this.hasMiniature = !miniaturePath.isEmpty();
         this.hasPictures = picturesNumbers.size()!=0;
 
-        this.rUuid = UUID.randomUUID();
+        this.recipeUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
         this.ingredients = new ArrayList<>(ingredients);
@@ -111,7 +111,9 @@ public final class Recipe implements Serializable, Cloneable {
      * Returns a copy of the recipe instructions.
      * @return list of instructions for the recipe
      */
-    public List<String> getRecipeInstructions() { return Collections.unmodifiableList(recipeInstructions); }
+    public List<String> getRecipeInstructions() {
+        return Collections.unmodifiableList(recipeInstructions);
+    }
 
     /**
      * Returns the current number of person for the recipe.
@@ -174,13 +176,13 @@ public final class Recipe implements Serializable, Cloneable {
      * @return string of recipe's unique id
      */
     public UUID getUuid(){
-        return rUuid;
+        return recipeUuid;
     }
 
     @Override
     public boolean equals(Object otherRecipe){
         if ( otherRecipe instanceof Recipe ){
-            return ((Recipe) otherRecipe).getUuid().equals(this.rUuid) ;
+            return ((Recipe) otherRecipe).getUuid().equals(this.recipeUuid) ;
         }
         return false;
     }

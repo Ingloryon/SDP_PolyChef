@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 public class SubscribersFragment extends Fragment {
 
     /**
-     * Required empty public constructor
+     * Required empty public constructor.
      */
     public SubscribersFragment() {}
 

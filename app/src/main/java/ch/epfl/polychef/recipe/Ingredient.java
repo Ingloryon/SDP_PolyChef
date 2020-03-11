@@ -22,9 +22,9 @@ public final class Ingredient implements Serializable {
     /**
      * This is the ingredient of a recipe described by a name, a quantity and a unit.
      * Unit can also be NONE for some ingredient with no quantity or NO_UNIT for the ones that is a number of such ingredients.
-     * @param name: the name of the ingredient
-     * @param quantity: the quantity of ingredient needed
-     * @param unit: the unit the uquantity should be expressed in
+     * @param name the name of the ingredient
+     * @param quantity the quantity of ingredient needed
+     * @param unit the unit the quantity should be expressed in
      */
     public Ingredient(@NonNull String name, double quantity,@NonNull Unit unit){
         Preconditions.checkArgument(quantity > 0, "The quantity should be positive");
@@ -45,7 +45,7 @@ public final class Ingredient implements Serializable {
 
     /**
      * Set the ingredient's corresponding quantity.
-     * @param quantity: the new quantity, must be positive
+     * @param quantity the new quantity, must be positive
      */
     public void setQuantity(double quantity){
         Preconditions.checkArgument(quantity > 0, "The quantity should be positive");

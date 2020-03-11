@@ -34,7 +34,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
      *
      * @param mainContext  the context where the adapter will operate i.e the activity where the recyclerView is
      * @param recipeList   the list of all the recipes that will be displayed inside the recyclerView
-     * @param recyclerView this is the recyclerview where the recipes will be displayed
+     * @param recyclerView this is the recyclerView where the recipes will be displayed
      * @param fragmentContainerID the id of the fragment container where the miniature are displayed
      */
     public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID) {
