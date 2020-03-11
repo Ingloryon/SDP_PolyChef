@@ -7,7 +7,7 @@ import java.io.Serializable;
 import ch.epfl.polychef.Preconditions;
 
 /**
- * Class that represent a Recipe's ingredient
+ * Class that represent a Recipe's ingredient.
  */
 public class Ingredient implements Serializable {
 
@@ -20,8 +20,8 @@ public class Ingredient implements Serializable {
     private Unit unit;
 
     /**
-     * This is the ingredient of a recipe described by a name, a quantity and a unit
-     * Unit can also be NONE for some ingredient with no quantity or NO_UNIT for the ones that is a number of such ingredients
+     * This is the ingredient of a recipe described by a name, a quantity and a unit.
+     * Unit can also be NONE for some ingredient with no quantity or NO_UNIT for the ones that is a number of such ingredients.
      * @param name: the name of the ingredient
      * @param quantity: the quantity of ingredient needed
      * @param unit: the unit the uquantity should be expressed in
@@ -36,7 +36,7 @@ public class Ingredient implements Serializable {
     }
 
     /**
-     * Returns the quantity needed corresponding to the ingredient
+     * Returns the quantity needed corresponding to the ingredient.
      * @return the quantity, a positive double
      */
     public double getQuantity(){
@@ -44,7 +44,7 @@ public class Ingredient implements Serializable {
     }
 
     /**
-     * Set the ingredient's corresponding quantity
+     * Set the ingredient's corresponding quantity.
      * @param quantity: the new quantity, must be positive
      */
     public void setQuantity(double quantity){
@@ -53,7 +53,7 @@ public class Ingredient implements Serializable {
     }
 
     /**
-     * Returns the name of the ingredient
+     * Returns the name of the ingredient.
      * @return the name of the ingredient
      */
     public String getName(){
@@ -61,7 +61,7 @@ public class Ingredient implements Serializable {
     }
 
     /**
-     * Return the unit of the ingredient
+     * Return the unit of the ingredient.
      * @return the unit of the ingredient
      */
     public Unit getUnit(){

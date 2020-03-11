@@ -165,37 +165,27 @@ public class RecipeTest {
     public void toStringDisplaysRecipe() {
         Recipe recipe = setStandardRecipe().build();
 
-        String str1 = "\n" +
-                "Recipe name: Chicken fried\n" +
-                "\n" +
+        String startingString = "\n" + "Recipe name: Chicken fried\n" + "\n" +
                 "Recipe instructions:\n" +
                 "1- Start by the beginning\n" +
                 "2- Then keep going\n" +
                 "3- Now it ends\n" +
                 "\n" +
-                "For 4 persons, the needed ingredients are:\n" +
-                "75.00 of Chicken wings\n" +
-                "300.00 of Carrots\n" +
-                "\n" +
-                "The recipe is very easy.\n" +
+                "For 4 persons, the needed ingredients are:\n";
+
+        String endingString = "\n" + "The recipe is very easy.\n" +
                 "The recipes takes around 45min of preparation and 50min of cooking.\n" +
                 "The recipe is rated 0.00/5 stars by 0 users.\n";
 
-        String str2 = "\n" +
-                "Recipe name: Chicken fried\n" +
-                "\n" +
-                "Recipe instructions:\n" +
-                "1- Start by the beginning\n" +
-                "2- Then keep going\n" +
-                "3- Now it ends\n" +
-                "\n" +
-                "For 4 persons, the needed ingredients are:\n" +
+        String str1 = startingString +
+                "75.00 of Chicken wings\n" +
+                "300.00 of Carrots\n" +
+                endingString;
+
+        String str2 = startingString +
                 "300.00 of Carrots\n" +
                 "75.00 of Chicken wings\n" +
-                "\n" +
-                "The recipe is very easy.\n" +
-                "The recipes takes around 45min of preparation and 50min of cooking.\n" +
-                "The recipe is rated 0.00/5 stars by 0 users.\n";
+                endingString;
 
         // The ingredients can be displayed in any order so toString() can be either str1 or str2
         assertTrue(str1.equals(recipe.toString()) || str2.equals(recipe.toString()));
