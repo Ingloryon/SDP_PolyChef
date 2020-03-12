@@ -97,7 +97,11 @@ public class HomePage extends ConnectedActivity {
                         invalidateOptionsMenu();
 
                         int itemId = selectedItem.getItemId();
-                        navController.navigate(getFragmentId(itemId));
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("fragmentID", R.id.nav_host_fragment);
+
+                        navController.navigate(getFragmentId(itemId), bundle);
 
                         drawer.closeDrawer(GravityCompat.START, true);
 
