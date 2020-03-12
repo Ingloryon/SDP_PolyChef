@@ -44,6 +44,7 @@ public class IngredientTests {
         Ingredient ingredient2 = new Ingredient("Eggs", 6, Ingredient.Unit.NONE);
         Ingredient ingredient3 = new Ingredient("Flour", 300, Ingredient.Unit.GRAM);
         Ingredient ingredient4 = new Ingredient("Lettuce", 1, Ingredient.Unit.GRAM);
+        Ingredient.Unit.valueOf("NONE");
 
         assertEquals(ingredient1.toString(), "0.0 oil");
         assertEquals(ingredient2.toString(), "eggs");
