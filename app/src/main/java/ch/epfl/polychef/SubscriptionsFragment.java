@@ -7,15 +7,15 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SubscriptionsFragment extends Fragment {
 
-    public SubscriptionsFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor.
+     */
+    public SubscriptionsFragment() {}
 
 
     @Override

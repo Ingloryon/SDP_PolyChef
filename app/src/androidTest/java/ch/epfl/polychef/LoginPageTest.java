@@ -1,7 +1,6 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 
 import static androidx.test.espresso.Espresso.onView;

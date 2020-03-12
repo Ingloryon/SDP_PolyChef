@@ -45,6 +45,11 @@ public class HomePage extends ConnectedActivity {
 
         navController = NavHostFragment.findNavController(hostFragment);
 
+        // Create new Bundle containing the id of the container for the adapter
+        Bundle bundle = new Bundle();
+        bundle.putInt("fragmentID", R.id.nav_host_fragment);
+        // Set this bundle to be an arguments of the startDestination using this trick
+        navController.setGraph(R.navigation.nav_graph, bundle);
         setupNavigation();
     }
 
@@ -63,7 +68,7 @@ public class HomePage extends ConnectedActivity {
     private int getFragmentId(int itemId) {
         switch(itemId){
             case R.id.nav_home:
-                return R.id.homeFragment;
+                return R.id.offlineMiniaturesFragment;
             case R.id.nav_fav:
                 return R.id.favouritesFragment;
             case R.id.nav_subscribers:
@@ -92,7 +97,11 @@ public class HomePage extends ConnectedActivity {
                         invalidateOptionsMenu();
 
                         int itemId = selectedItem.getItemId();
-                        navController.navigate(getFragmentId(itemId));
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("fragmentID", R.id.nav_host_fragment);
+
+                        navController.navigate(getFragmentId(itemId), bundle);
 
                         drawer.closeDrawer(GravityCompat.START, true);
 

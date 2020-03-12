@@ -12,7 +12,6 @@ import androidx.test.espresso.contrib.NavigationViewActions;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -52,7 +51,7 @@ public class HomePageTest {
 
     @Test
     public void onClickHomeGoesToHome() {
-        testNavButton(R.id.nav_home, R.id.homeFragment);
+        testNavButton(R.id.nav_home, R.id.offlineMiniaturesFragment);
     }
 
     @Test
