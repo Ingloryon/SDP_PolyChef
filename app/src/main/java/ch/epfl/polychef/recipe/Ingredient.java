@@ -31,7 +31,7 @@ public final class Ingredient implements Serializable {
         Preconditions.checkArgument(quantity >= 0, "The quantity should be positive");
         Preconditions.checkArgument(!name.equals(""), "The ingredient's name must be non empty");
 
-        this.name = name;
+        this.name = name.toLowerCase();
         this.quantity = quantity;
         this.unit = unit;
     }
@@ -65,7 +65,7 @@ public final class Ingredient implements Serializable {
      * Set the name of the ingredient.
      */
     public void setName(String newName){
-        name = newName;
+        name = newName.toLowerCase();
     }
 
     /**

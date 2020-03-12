@@ -19,7 +19,7 @@ public class IngredientTests {
     @Test
     public void gettersReturnCorrectAttributes(){
         Ingredient ingredient = new Ingredient("Carrots", 300, Ingredient.Unit.TABLESPOON);
-        assertEquals(ingredient.getName(), "Carrots");
+        assertEquals(ingredient.getName(), "carrots");
         assertEquals(ingredient.getUnit(), Ingredient.Unit.TABLESPOON);
         assertTrue(ingredient.getQuantity() == 300d);
     }
@@ -27,10 +27,13 @@ public class IngredientTests {
     @Test
     public void settersChangeAttributesAccordingly(){
         Ingredient ingredient = new Ingredient("Steaks", 2, Ingredient.Unit.KILOGRAM);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> ingredient.setQuantity(-5));
+
         ingredient.setQuantity(1);
         ingredient.setName("Steak");
         ingredient.setUnit(Ingredient.Unit.KILOGRAM);
-        assertEquals(ingredient.getName(), "Steak");
+        assertEquals(ingredient.getName(), "steak");
         assertEquals(ingredient.getUnit(), Ingredient.Unit.KILOGRAM);
         assertTrue(ingredient.getQuantity() == 1d);
     }
@@ -40,10 +43,12 @@ public class IngredientTests {
         Ingredient ingredient1 = new Ingredient("Oil", 0, Ingredient.Unit.NO_UNIT);
         Ingredient ingredient2 = new Ingredient("Eggs", 6, Ingredient.Unit.NONE);
         Ingredient ingredient3 = new Ingredient("Flour", 300, Ingredient.Unit.GRAM);
+        Ingredient ingredient4 = new Ingredient("Lettuce", 1, Ingredient.Unit.GRAM);
 
-        assertEquals(ingredient1.toString(), "0.0 Oil");
-        assertEquals(ingredient2.toString(), "Eggs");
-        assertEquals(ingredient3.toString(), "300.0 grams of Flour");
+        assertEquals(ingredient1.toString(), "0.0 oil");
+        assertEquals(ingredient2.toString(), "eggs");
+        assertEquals(ingredient3.toString(), "300.0 grams of flour");
+        assertEquals(ingredient4.toString(), "1.0 gram of lettuce");
     }
 
     @Test
