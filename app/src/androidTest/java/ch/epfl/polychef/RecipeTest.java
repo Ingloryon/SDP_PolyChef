@@ -34,7 +34,7 @@ public class RecipeTest {
         // rejects when no ingredients
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("", 300, Ingredient.Unit.GRAM));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("Carrots", 0, Ingredient.Unit.GRAM));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("Carrots", -1, Ingredient.Unit.GRAM));
         rb.addIngredient("Carrots", 300, Ingredient.Unit.GRAM);
 
         // rejects when no persons
@@ -88,7 +88,7 @@ public class RecipeTest {
 
         assertEquals(recipe.getName(), "Chicken fried");
         assertEquals(recipe.getRecipeInstructions(), Collections.unmodifiableList(instruc));
-        assertEquals(recipe.getIngredients().get(0).toString(), Collections.unmodifiableList(ingre).get(0).toString());
+        assertEquals(recipe.getIngredients().get(0), Collections.unmodifiableList(ingre).get(0));
         assertEquals(recipe.getPersonNumber(), 4);
         assertEquals(recipe.getEstimatedPreparationTime(), 45);
         assertEquals(recipe.getEstimatedCookingTime(), 50);
