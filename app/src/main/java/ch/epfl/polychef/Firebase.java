@@ -38,10 +38,11 @@ public class Firebase {
         DatabaseReference myRef = database.getReference("recipe");
         myRef.child(Integer.toString(id)).setValue(recipe);
     }
-    public static Recipe readRecipeFromFirebase(int Id){
+
+    public static Recipe readRecipeFromFirebase(int currentId){
         final Recipe[] recipe = new Recipe[1];
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(Id));
+        DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(currentId));
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

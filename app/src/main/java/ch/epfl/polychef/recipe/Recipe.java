@@ -10,7 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 public final class Recipe implements Serializable, Cloneable {
-    public Recipe(){recipeUuid=null ; rating=null;}
+
+    public Recipe(){
+        recipeUuid=null;
+        rating=null;
+    }
+
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
