@@ -100,10 +100,11 @@ public final class Recipe implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the ingredients map.
+     * Returns the list of the ingredients.
      * @return the ingredients and their amounts
      */
     public List<Ingredient> getIngredients(){
+        // TODO: Return a deep copy of the Ingredients so they are nor modif
         return Collections.unmodifiableList(ingredients);
     }
 

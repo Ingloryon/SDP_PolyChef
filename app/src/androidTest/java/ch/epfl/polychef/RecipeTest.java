@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.polychef.recipe.Ingredient;
@@ -112,20 +111,16 @@ public class RecipeTest {
         rb.setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE);
         Recipe recipe = rb.build();
 
-        //TODO remove me
-        //Map<String, Double> ingre = recipe.getIngredients();
         List<Ingredient> ingre = recipe.getIngredients();
         List<String> instr = recipe.getRecipeInstructions();
 
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.add(new Ingredient("Steaks", 1000d, Ingredient.Unit.GRAM)));
-        //Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.put("Steaks", 1000d));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png"));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.set(0, "/src/evilChanger.png"));
-        //TODO make this test work for ingredients
-//        for (Map.Entry<String, Double> e : ingre.entrySet()) {
-//            Assertions.assertThrows(UnsupportedOperationException.class, () -> e.setValue(e.getValue() * 10));
-//        }
+
+        //TODO: to implement
+        //Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.get(0).setQuantity(50));
     }
 
     @Test
@@ -137,14 +132,10 @@ public class RecipeTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> recipe.scalePersonAndIngredientsQuantities(0));
 
         recipe.scalePersonAndIngredientsQuantities(2);
-//        Map<String, Double> ingre = recipe.getIngredients();
-//
-//        assertTrue(ingre.get("Carrots") == 150d);
-//        assertTrue(ingre.get("Chicken wings") == (75d / 2d));
         for(Ingredient ingredient: recipe.getIngredients()){
             if(ingredient.getName().equals("Carrots")){
                 assertTrue(ingredient.getQuantity() == 150d);
-            }else if(ingredient.getName().equals("Chicken wings")){
+            } else if(ingredient.getName().equals("Chicken wings")){
                 assertTrue(ingredient.getQuantity() == (75d / 2d));
             }
         }
