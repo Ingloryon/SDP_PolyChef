@@ -28,7 +28,7 @@ public class EntryPage extends AppCompatActivity {
         logButton = findViewById(R.id.logButton);
 
         FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-        // Send the fragmentID of the fragment container to the recyclerView adaptater
+        // Send the fragmentID of the fragment container to the recyclerView adapter
         Bundle bundle = new Bundle();
         bundle.putInt("fragmentID", R.id.nav_entry_fragment);
         OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();

@@ -18,7 +18,7 @@ import java.util.List;
 
 public final class FullRecipeFragment extends Fragment {
     private Recipe currentRecipe;
-    private static final String NEW_LINE = "\n";
+    private static final String NEW_LINE = System.lineSeparator();
 
     /**
      * Required empty public constructor.
