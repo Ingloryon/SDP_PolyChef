@@ -81,4 +81,13 @@ public final class Ingredient implements Serializable {
                 return quantity > 1 ? str + "s of " + name : str + " of " + name;
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Ingredient){
+            Ingredient other=(Ingredient) obj;
+            return other.getName().equals(name) && other.getQuantity()==quantity && other.getUnit()==unit;
+        }
+        return false;
+    }
 }
