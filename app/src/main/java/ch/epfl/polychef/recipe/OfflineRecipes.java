@@ -19,9 +19,6 @@ public final class OfflineRecipes {
     }
 
     private OfflineRecipes(){
-        if(offlineRecipesInstance != null) {
-            throw new IllegalStateException("Instance is already instantiated");
-        }
         offlineRecipes = new ArrayList<>();
         offlineRecipes.add(recipe1);
         offlineRecipes.add(recipe2);
