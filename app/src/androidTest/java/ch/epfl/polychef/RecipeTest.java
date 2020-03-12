@@ -1,7 +1,5 @@
 package ch.epfl.polychef;
 
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,8 +8,11 @@ import java.util.List;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class RecipeTest {
 
