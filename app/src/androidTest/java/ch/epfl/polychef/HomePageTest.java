@@ -48,11 +48,11 @@ public class HomePageTest {
         onView(withId(R.id.logButton)).check(matches(withText("Log out")));
         onView(withId(R.id.logButton)).perform(click());
     }
-/*
+
     @Test
     public void onClickHomeGoesToHome() {
-        testNavButton(R.id.nav_home, R.id.miniaturesOfflineFragment);
-    }*/
+        testNavButton(R.id.nav_home, R.id.offlineMiniaturesFragment);
+    }
 
     @Test
     public void onClickFavGoesToFav() {
