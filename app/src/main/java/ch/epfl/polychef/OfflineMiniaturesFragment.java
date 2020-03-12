@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ch.epfl.polychef.adaptersRecyclerView.RecipeMiniatureAdapter;
+import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 
 public final class OfflineMiniaturesFragment extends Fragment {

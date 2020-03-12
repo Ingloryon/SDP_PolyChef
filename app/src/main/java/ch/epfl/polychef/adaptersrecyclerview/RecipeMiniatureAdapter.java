@@ -1,4 +1,4 @@
-package ch.epfl.polychef.adaptersRecyclerView;
+package ch.epfl.polychef.adaptersrecyclerview;
 
 import android.content.Context;
 import android.os.Bundle;
