@@ -1,7 +1,8 @@
 package ch.epfl.polychef;
 
-import org.junit.Test;
 import ch.epfl.polychef.recipe.Rating;
+
+import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
