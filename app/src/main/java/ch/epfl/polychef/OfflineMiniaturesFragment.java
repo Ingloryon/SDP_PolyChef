@@ -30,7 +30,7 @@ public final class OfflineMiniaturesFragment extends Fragment {
         // Instantiate the recyclerView with the adapter and the layout manager
         offlineRecyclerView = view.findViewById(R.id.miniaturesOfflineList);
         offlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        offlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), OfflineRecipes.getInstance().getCopy(), offlineRecyclerView, fragmentID));
+        offlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), OfflineRecipes.getInstance().getOfflineRecipes(), offlineRecyclerView, fragmentID));
 
         return view;
     }

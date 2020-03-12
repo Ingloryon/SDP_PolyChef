@@ -27,7 +27,7 @@ public final class OfflineRecipes {
         offlineRecipes.add(recipe5);
     }
 
-    public List<Recipe> getCopy() {
+    public List<Recipe> getOfflineRecipes() {
         List<Recipe> copiedList = new ArrayList<>();
         for(Recipe recipe : offlineRecipes){
             try {
