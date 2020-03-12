@@ -41,14 +41,12 @@ public class IngredientTests {
     @Test
     public void toStringReturnsFormattedString(){
         Ingredient ingredient1 = new Ingredient("Oil", 0, Ingredient.Unit.NO_UNIT);
-        Ingredient ingredient2 = new Ingredient("Eggs", 6, Ingredient.Unit.NONE);
-        Ingredient ingredient3 = new Ingredient("Flour", 300, Ingredient.Unit.GRAM);
-        Ingredient ingredient4 = new Ingredient("Lettuce", 1, Ingredient.Unit.GRAM);
-        Ingredient.Unit.valueOf("NONE");
-
         assertEquals(ingredient1.toString(), "0.0 oil");
+        Ingredient ingredient2 = new Ingredient("Eggs", 6, Ingredient.Unit.NONE);
         assertEquals(ingredient2.toString(), "eggs");
+        Ingredient ingredient3 = new Ingredient("Flour", 300, Ingredient.Unit.GRAM);
         assertEquals(ingredient3.toString(), "300.0 grams of flour");
+        Ingredient ingredient4 = new Ingredient("Lettuce", 1, Ingredient.Unit.GRAM);
         assertEquals(ingredient4.toString(), "1.0 gram of lettuce");
     }
 
