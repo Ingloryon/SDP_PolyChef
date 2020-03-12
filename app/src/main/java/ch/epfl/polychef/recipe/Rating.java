@@ -49,4 +49,10 @@ public final class Rating implements Serializable {
     public String toString(){
         return String.format("%.2f", ratingAverage()) + "/5 stars by " + allRatings.size() + " users.\n";
     }
+    public double getRatingSum(){
+        return ratingSum;
+    }
+    public Map<Integer, Double> getAllRatings(){
+        return allRatings;
+    }
 }
