@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.pages.HomePage;
 
 public class LoginPage extends AppCompatActivity {
 
