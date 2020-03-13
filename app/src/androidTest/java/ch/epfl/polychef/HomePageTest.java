@@ -22,6 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import ch.epfl.polychef.pages.HomePage;
+
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
 

@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.users.ConnectedActivity;
 
 import com.google.android.material.navigation.NavigationView;

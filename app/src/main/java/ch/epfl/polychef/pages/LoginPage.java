@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
+
+import ch.epfl.polychef.R;
+import ch.epfl.polychef.pages.HomePage;
 
 public class LoginPage extends AppCompatActivity {
 

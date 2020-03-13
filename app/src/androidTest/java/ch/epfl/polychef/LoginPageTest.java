@@ -19,6 +19,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ch.epfl.polychef.pages.LoginPage;
+
 import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
