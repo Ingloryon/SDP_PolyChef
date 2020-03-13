@@ -1,12 +1,11 @@
 package ch.epfl.polychef.pages;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.users.ConnectedActivity;
 
-public class PostRecipePage extends AppCompatActivity {
+public class PostRecipePage extends ConnectedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
