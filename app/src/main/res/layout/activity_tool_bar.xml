@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
 
-            android:onClick="home"
+            
             tools:layout_editor_absoluteX="291dp"
             tools:layout_editor_absoluteY="4dp"
             tools:text="Placeholder" />
