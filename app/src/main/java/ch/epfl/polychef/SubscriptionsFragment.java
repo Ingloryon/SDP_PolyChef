@@ -53,7 +53,7 @@ public class SubscriptionsFragment extends Fragment {
 
                 builder.setItems(options, (dialog, item) -> {
                     if (options[item].equals("Take Photo")) {
-                        startActivityForResult(imageHandler.getTakePictureIntent(getActivity()), ImageHandler.REQUEST_IMAGE_CAPTURE);
+                        startActivityForResult(imageHandler.getCameraIntent(getActivity()), ImageHandler.REQUEST_IMAGE_CAPTURE);
                     } else if (options[item].equals("Choose from Gallery")) {
                         startActivityForResult(imageHandler.getGalleryIntent(getActivity()), ImageHandler.REQUEST_IMAGE_FROM_GALLERY);
                     } else if (options[item].equals("Cancel")) {

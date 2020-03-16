@@ -35,7 +35,7 @@ public class ImageHandler {
         return Intent.createChooser(intent, "Select Picture");
     }
 
-    public Intent getTakePictureIntent(Context context) {
+    public Intent getCameraIntent(Context context) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             File outputFile = File.createTempFile("IMG_", ".jpg", context.getCacheDir());
