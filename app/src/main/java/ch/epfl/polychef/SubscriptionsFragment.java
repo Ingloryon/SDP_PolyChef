@@ -5,11 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +33,7 @@ public class SubscriptionsFragment extends Fragment implements CallHandler {
 
     private ImageView imageView;
     private ImageHandler imageHandler;
+    private ProgressBar spinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,13 +80,18 @@ public class SubscriptionsFragment extends Fragment implements CallHandler {
                 imageHandler.prepareImageAndUpload(imageView);
             }
         });
+
         final CallHandler c = this;
         getView().findViewById(R.id.downloadButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                spinner.setVisibility(View.VISIBLE);
                 new ImageUploader().getImage("8eaae973-ff3a-418a-b7f4-1e622033bc37.png", c);
             }
         });
+
+        spinner = (ProgressBar)getView().findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
     }
 
     @Override
@@ -98,18 +104,20 @@ public class SubscriptionsFragment extends Fragment implements CallHandler {
         imageView.setVisibility(View.VISIBLE);
         getView().findViewById(R.id.uploadButton).setVisibility(View.VISIBLE);
         getView().findViewById(R.id.chooseImageButton).setVisibility(View.GONE);
-
     }
 
     @Override
     public void onSuccess(byte[] bytes) {
-        Toast.makeText(getActivity(), "Success getting the image from Firebase", Toast.LENGTH_LONG).show();
+        spinner.setVisibility(View.GONE);
+        imageView.setVisibility(View.VISIBLE);
         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         imageView.setImageBitmap(bmp);
+        Toast.makeText(getActivity(), "Success getting the image from Firebase"+bmp.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onFailure() {
+        spinner.setVisibility(View.GONE);
         Toast.makeText(getActivity(), "An error occurred while getting the image from Firebase", Toast.LENGTH_LONG).show();
     }
 }
