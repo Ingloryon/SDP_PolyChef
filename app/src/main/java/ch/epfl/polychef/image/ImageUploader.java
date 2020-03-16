@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.image;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
