@@ -8,6 +8,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.UUID;
+import java.util.function.Function;
+
 import ch.epfl.polychef.recipe.Recipe;
 
 public class Firebase {
@@ -39,17 +42,15 @@ public class Firebase {
         myRef.child(Integer.toString(id)).setValue(recipe);
     }
 
-    public static Recipe readRecipeFromFirebase(int currentId){
-        final Recipe[] recipe = new Recipe[1];
+    public static void readRecipeFromFirebase(UUID Uuid){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(currentId));
-        myRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference idRef = database.getReference("id");
+        //Get the last ID used in the database
+        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Recipe value = dataSnapshot.getValue(Recipe.class);
-                recipe[0] =value;
+                // This method is called once with the initial value
+                id=dataSnapshot.getValue(Integer.class);
             }
 
             @Override
@@ -58,6 +59,55 @@ public class Firebase {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-        return recipe[0];
+        for(int i=1;i<id+1;i++) {
+            DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(i)).child("uuid");
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    UUID value = dataSnapshot.getValue(UUID.class);
+                    if (value.equals(Uuid)) {
+                        myRef.getParent().addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                //call a method that display a recipe
+                                Log.w(TAG, recipe.toString());
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+                                Log.w(TAG, "Failed to read value.", error.toException());
+                            }
+                        });
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        }
+    }
+    public static void readRecipeFromFirebase(int id){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(id));
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Recipe value = dataSnapshot.getValue(Recipe.class);
+                //call a method that display a recipe
+                Log.w(TAG,value.toString());
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
     }
 }

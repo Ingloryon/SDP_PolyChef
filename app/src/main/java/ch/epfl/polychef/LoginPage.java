@@ -2,6 +2,7 @@ package ch.epfl.polychef;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +15,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+
+import ch.epfl.polychef.recipe.OfflineRecipes;
+import ch.epfl.polychef.recipe.Recipe;
 
 public class LoginPage extends AppCompatActivity {
 
