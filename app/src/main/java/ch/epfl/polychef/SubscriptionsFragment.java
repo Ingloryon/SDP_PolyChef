@@ -40,7 +40,7 @@ public class SubscriptionsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         imageView = getView().findViewById(R.id.imageUploaded);
-        imageHandler = new ImageHandler();
+        imageHandler = new ImageHandler(getActivity());
 
         getView().findViewById(R.id.chooseImageButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,9 +53,9 @@ public class SubscriptionsFragment extends Fragment {
 
                 builder.setItems(options, (dialog, item) -> {
                     if (options[item].equals("Take Photo")) {
-                        startActivityForResult(imageHandler.getCameraIntent(getActivity()), ImageHandler.REQUEST_IMAGE_CAPTURE);
+                        startActivityForResult(imageHandler.getCameraIntent(), ImageHandler.REQUEST_IMAGE_CAPTURE);
                     } else if (options[item].equals("Choose from Gallery")) {
-                        startActivityForResult(imageHandler.getGalleryIntent(getActivity()), ImageHandler.REQUEST_IMAGE_FROM_GALLERY);
+                        startActivityForResult(imageHandler.getGalleryIntent(), ImageHandler.REQUEST_IMAGE_FROM_GALLERY);
                     } else if (options[item].equals("Cancel")) {
                         dialog.dismiss();
                     }

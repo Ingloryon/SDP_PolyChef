@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.core.content.FileProvider;
@@ -17,25 +16,39 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import ch.epfl.polychef.R;
-
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * A handler for getting image both through the camera and the gallery and upload them to firebase
+ */
 public class ImageHandler {
 
     public static final int REQUEST_IMAGE_FROM_GALLERY = 1;
-    public static final  int REQUEST_IMAGE_CAPTURE = 2;
+    public static final int REQUEST_IMAGE_CAPTURE = 2;
 
     private Uri fileUri;
+    private final Context context;
 
-    public Intent getGalleryIntent(Context context) {
+    public ImageHandler(Context context) {
+        this.context = context;
+    }
+
+    /**
+     * Get the intent to choose an image from the gallery
+     * @return the gallery intent
+     */
+    public Intent getGalleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         return Intent.createChooser(intent, "Select Picture");
     }
 
-    public Intent getCameraIntent(Context context) {
+    /**
+     * Get the intent to take a picture using the camera
+     * @return the camera intent
+     */
+    public Intent getCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             File outputFile = File.createTempFile("IMG_", ".jpg", context.getCacheDir());
@@ -51,26 +64,52 @@ public class ImageHandler {
         return null;
     }
 
+    /**
+     * Prepare and upload the {@code imageView} to Firebase
+     * @param imageView the image to upload
+     */
     public void prepareImageAndUpload(ImageView imageView) {
         Drawable drawable = imageView.getDrawable();
 
         BitmapDrawable bitmapDrawable = ((BitmapDrawable) drawable);
-        Bitmap bitmap = bitmapDrawable.getBitmap();
+        uploadFromBitMap(bitmapDrawable.getBitmap());
+    }
+
+    /**
+     * Upload the {@code image} to Firebase
+     * @param image the image to upload
+     */
+    public void uploadFromURI(Uri image) {
+        try {
+            uploadFromBitMap(MediaStore.Images.Media.getBitmap(context.getContentResolver(), image));
+        } catch (IOException e) {
+            Log.d("IMAGE-UPLOAD", "Error");
+        }
+    }
+
+    private void uploadFromBitMap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] imageInByte = stream.toByteArray();
 
         ImageUploader uploader = new ImageUploader();
-        if(uploader.upload(imageInByte) == ImageUploader.UPLOAD_FAILED){
+        if (uploader.upload(imageInByte) == ImageUploader.UPLOAD_FAILED) {
             Log.d("IMAGE-UPLOAD", ImageUploader.UPLOAD_FAILED);
         } else {
             Log.d("IMAGE-UPLOAD", "Success");
         }
     }
 
+    /**
+     * Hanlde result, should be called by activity's {@code onActivityResult} method
+     * @param requestCode {@code onActivityResult} method's requestCode
+     * @param resultCode {@code onActivityResult} method's resultCode
+     * @param data {@code onActivityResult} method's data
+     * @return the image's Uri
+     */
     public Uri handleActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-            switch(requestCode) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case REQUEST_IMAGE_CAPTURE:
                     return fileUri;
                 case REQUEST_IMAGE_FROM_GALLERY:
