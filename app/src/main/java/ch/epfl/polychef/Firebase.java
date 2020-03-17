@@ -100,11 +100,17 @@ public class Firebase {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 Recipe value = dataSnapshot.getValue(Recipe.class);
-                ch.onSuccess(value);
+                if(value == null){
+                    ch.onFailure();
+                }else{
+                    ch.onSuccess(value);
+                }
             }
             @Override
             public void onCancelled(DatabaseError error) {
                 ch.onFailure();
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
     }

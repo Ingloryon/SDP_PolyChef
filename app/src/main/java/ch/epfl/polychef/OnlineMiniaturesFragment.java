@@ -25,7 +25,7 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
-    private int currentReadInt = 0;
+    private int currentReadInt = 1;
 
     private boolean isLoading = false;
 
@@ -70,9 +70,6 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
 
     @Override
     public void onSuccess(Recipe recipe) {
-        if(recipe == null){
-            Log.e(, )
-        }
         isLoading = false;
         dynamicRecipeList.add(recipe);
         onlineRecyclerView.getAdapter().notifyDataSetChanged();
