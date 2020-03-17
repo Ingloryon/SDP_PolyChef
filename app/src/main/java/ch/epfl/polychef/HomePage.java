@@ -68,7 +68,7 @@ public class HomePage extends ConnectedActivity {
     private int getFragmentId(int itemId) {
         switch(itemId){
             case R.id.nav_home:
-                return R.id.offlineMiniaturesFragment;
+                return R.id.onlineMiniaturesFragment;
             case R.id.nav_fav:
                 return R.id.favouritesFragment;
             case R.id.nav_subscribers:

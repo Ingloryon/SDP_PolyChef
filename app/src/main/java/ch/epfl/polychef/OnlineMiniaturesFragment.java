@@ -42,7 +42,6 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         onlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, fragmentID));
-        OnlineMiniaturesFragment instance = this;
         onlineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -52,7 +51,7 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
                     if(isLoading){
                         return;
                     }
-                    Firebase.readRecipeFromFirebase(currentReadInt, instance);
+                    Firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
                     currentReadInt++;
                     isLoading = true;
                 }
