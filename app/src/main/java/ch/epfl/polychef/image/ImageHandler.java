@@ -92,9 +92,9 @@ public class ImageHandler {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] imageInByte = stream.toByteArray();
 
-        ImageUploader uploader = new ImageUploader();
-        if (uploader.upload(imageInByte) == ImageUploader.UPLOAD_FAILED) {
-            Log.d("IMAGE-UPLOAD", ImageUploader.UPLOAD_FAILED);
+        ImageStorage uploader = new ImageStorage();
+        if (uploader.upload(imageInByte) == ImageStorage.UPLOAD_FAILED) {
+            Log.d("IMAGE-UPLOAD", ImageStorage.UPLOAD_FAILED);
         } else {
             Log.d("IMAGE-UPLOAD", "Success");
         }

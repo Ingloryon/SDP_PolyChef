@@ -18,7 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import ch.epfl.polychef.image.ImageHandler;
-import ch.epfl.polychef.image.ImageUploader;
+import ch.epfl.polychef.image.ImageStorage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,7 +86,7 @@ public class SubscriptionsFragment extends Fragment implements CallHandler {
             @Override
             public void onClick(View v) {
                 spinner.setVisibility(View.VISIBLE);
-                new ImageUploader().getImage("8eaae973-ff3a-418a-b7f4-1e622033bc37.png", c);
+                new ImageStorage().getImage("8eaae973-ff3a-418a-b7f4-1e622033bc37.png", c);
             }
         });
 

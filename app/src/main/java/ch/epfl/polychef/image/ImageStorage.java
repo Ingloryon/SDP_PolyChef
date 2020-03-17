@@ -13,14 +13,14 @@ import java.util.UUID;
 
 import ch.epfl.polychef.CallHandler;
 
-public class ImageUploader {
+public class ImageStorage {
 
     public final static String UPLOAD_FAILED = "UPLOAD_FAILED";
 
     private FirebaseStorage storage;
     final long TEN_MEGABYTE = 10 * 1024 * 1024;
 
-    public ImageUploader(){
+    public ImageStorage(){
         storage = FirebaseStorage.getInstance();
     }
 
