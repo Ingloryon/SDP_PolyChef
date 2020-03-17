@@ -81,12 +81,11 @@ public class SubscriptionsFragment extends Fragment implements CallHandler {
             }
         });
 
-        final CallHandler c = this;
         getView().findViewById(R.id.downloadButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 spinner.setVisibility(View.VISIBLE);
-                new ImageStorage().getImage("8eaae973-ff3a-418a-b7f4-1e622033bc37.png", c);
+                new ImageStorage().getImage("8eaae973-ff3a-418a-b7f4-1e622033bc37.png", SubscriptionsFragment.this);
             }
         });
 

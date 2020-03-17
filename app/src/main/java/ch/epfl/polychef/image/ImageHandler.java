@@ -1,5 +1,7 @@
 package ch.epfl.polychef.image;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,10 +18,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import static android.app.Activity.RESULT_OK;
+import ch.epfl.polychef.Preconditions;
 
 /**
- * A handler for getting image both through the camera and the gallery and upload them to firebase
+ * A handler for getting image both through the camera and the gallery and upload them to firebase.
  */
 public class ImageHandler {
 
@@ -30,11 +32,13 @@ public class ImageHandler {
     private final Context context;
 
     public ImageHandler(Context context) {
+        Preconditions.checkArgument(context != null, "Context should not be null");
         this.context = context;
     }
 
     /**
      * Get the intent to choose an image from the gallery
+     *
      * @return the gallery intent
      */
     public Intent getGalleryIntent() {
@@ -45,14 +49,17 @@ public class ImageHandler {
     }
 
     /**
-     * Get the intent to take a picture using the camera
+     * Get the intent to take a picture using the camera.
+     *
      * @return the camera intent
      */
     public Intent getCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            File outputFile = File.createTempFile("IMG_", ".jpg", context.getCacheDir());
-            fileUri = FileProvider.getUriForFile(context, "ch.epfl.polychef.provider", outputFile);
+            File outputFile = File.createTempFile("IMG_", ".jpg",
+                    context.getCacheDir());
+            fileUri = FileProvider.getUriForFile(context, "ch.epfl.polychef.provider",
+                    outputFile);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
@@ -65,7 +72,8 @@ public class ImageHandler {
     }
 
     /**
-     * Prepare and upload the {@code imageView} to Firebase
+     * Prepare and upload the {@code imageView} to Firebase.
+     *
      * @param imageView the image to upload
      */
     public void prepareImageAndUpload(ImageView imageView) {
@@ -76,12 +84,14 @@ public class ImageHandler {
     }
 
     /**
-     * Upload the {@code image} to Firebase
+     * Upload the {@code image} to Firebase.
+     *
      * @param image the image to upload
      */
     public void uploadFromURI(Uri image) {
         try {
-            uploadFromBitMap(MediaStore.Images.Media.getBitmap(context.getContentResolver(), image));
+            uploadFromBitMap(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
+                    image));
         } catch (IOException e) {
             Log.d("IMAGE-UPLOAD", "Error");
         }
@@ -93,19 +103,18 @@ public class ImageHandler {
         byte[] imageInByte = stream.toByteArray();
 
         ImageStorage uploader = new ImageStorage();
-        if (uploader.upload(imageInByte) == ImageStorage.UPLOAD_FAILED) {
-            Log.d("IMAGE-UPLOAD", ImageStorage.UPLOAD_FAILED);
-        } else {
-            Log.d("IMAGE-UPLOAD", "Success");
-        }
+        uploader.upload(imageInByte).addOnSuccessListener(taskSnapshot -> Log.d("IMAGE-UPLOAD",
+                "Success")).addOnFailureListener(e -> Log.d("IMAGE-UPLOAD",
+                "Error"));
     }
 
     /**
-     * Hanlde result, should be called by activity's {@code onActivityResult} method
+     * Handle result, should be called by activity's {@code onActivityResult} method.
+     *
      * @param requestCode {@code onActivityResult} method's requestCode
-     * @param resultCode {@code onActivityResult} method's resultCode
-     * @param data {@code onActivityResult} method's data
-     * @return the image's Uri
+     * @param resultCode  {@code onActivityResult} method's resultCode
+     * @param data        {@code onActivityResult} method's data
+     * @return the image's Uri or null if it failed to get it
      */
     public Uri handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
