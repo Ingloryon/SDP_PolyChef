@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +22,9 @@ import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 
 public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
+
     private RecyclerView onlineRecyclerView;
+    private ProgressBar spinner;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
