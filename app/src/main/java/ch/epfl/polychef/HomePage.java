@@ -1,6 +1,7 @@
 package ch.epfl.polychef;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +15,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import ch.epfl.polychef.users.ConnectedActivity;
+import ch.epfl.polychef.users.User;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomePage extends ConnectedActivity {
 
@@ -24,13 +31,18 @@ public class HomePage extends ConnectedActivity {
     private NavController navController;
     private MenuItem currentItem;
 
+    private User user;
 
     public static final String LOG_OUT = "Log out";
+    private static final String TAG = "HomePage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        retrieveUserInfo(userEmail);
 
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -109,5 +121,61 @@ public class HomePage extends ConnectedActivity {
                     }
                 }
         );
+    }
+
+    private void retrieveUserInfo(String email) {
+
+        Log.d(TAG, "Retrieving user info");
+
+        FirebaseDatabase.getInstance()
+                .getReference("users")
+                .orderByChild("email").equalTo(email)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        long childrenCount = dataSnapshot.getChildrenCount();
+
+                        if(childrenCount == 0) {
+                            newUser(email);
+
+                        } else if(childrenCount == 1) {
+                            for(DataSnapshot child: dataSnapshot.getChildren()){
+                                oldUser(child);
+                            }
+
+                        } else {
+                            Log.e(TAG, "Inconsistent result: multiple user with the same email.", new IllegalStateException());
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        //TODO: Find good exception to throw
+                        Log.e(TAG, "Query canceled", new IllegalArgumentException());
+                    }
+                });
+    }
+
+    private void newUser(String email) {
+        String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        user = new User(email, username);
+
+        //TODO: Integrate with the Firebase class
+        //TODO: Add OnSuccess and OnFailure listener
+        FirebaseDatabase.getInstance()
+                .getReference("users")
+                .push()
+                .setValue(user);
+    }
+
+    private void oldUser(DataSnapshot snap){
+        if(snap.exists()){
+            user = snap.getValue(User.class);
+        } else {
+            //TODO: Find good exception to throw
+            Log.e(TAG, "Unable to reconstruct the user from the JSON.", new IllegalStateException());
+        }
     }
 }
