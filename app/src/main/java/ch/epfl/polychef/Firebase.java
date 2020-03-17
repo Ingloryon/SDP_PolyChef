@@ -91,7 +91,7 @@ public class Firebase {
             });
         }
     }
-    public static void readRecipeFromFirebase(int id){
+    public static void readRecipeFromFirebase(int id, FireHandler ch){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -100,13 +100,11 @@ public class Firebase {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 Recipe value = dataSnapshot.getValue(Recipe.class);
-                //call a method that display a recipe
-                Log.w(TAG,value.toString());
+                ch.onSuccess(value);
             }
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                ch.onFailure();
             }
         });
     }
