@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public class ImageStorage {
 
-    private final static long TEN_MEGABYTE = 10 * 1024 * 1024;
+    private static final long TEN_MEGABYTE = 10 * 1024 * 1024;
 
     /**
      * Upload an image to Firebase.
