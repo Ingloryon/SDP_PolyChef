@@ -1,5 +1,7 @@
 package ch.epfl.polychef.users;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,10 @@ public class User {
     }
 
     public User() {
-
+        recipes = new ArrayList<>();
+        favourites = new ArrayList<>();
+        subscribers = new ArrayList<>();
+        subscriptions = new ArrayList<>();
     }
 
     public String getEmail() {
@@ -59,5 +64,16 @@ public class User {
 
     public void addSubscriber(String user) {
         subscribers.add(user);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "User: \n"
+                + "Email=" + email + ",\n"
+                + "username=" + username + ",\n"
+                + "favourites=" + favourites + ",\n"
+                + "subscribers=" + subscribers + ",\n"
+                + "subscriptions=" + subscriptions;
     }
 }

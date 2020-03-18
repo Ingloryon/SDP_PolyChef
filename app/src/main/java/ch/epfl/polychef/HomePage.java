@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -32,9 +33,10 @@ public class HomePage extends ConnectedActivity {
     private MenuItem currentItem;
 
     private User user;
+    private String userKey;
 
     public static final String LOG_OUT = "Log out";
-    private static final String TAG = "HomePage";
+    private static final String TAG = "HomePage-TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,7 @@ public class HomePage extends ConnectedActivity {
         logButton.setText(LOG_OUT);
         logButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
+                updateUserInfo();
                 signOut();
             }
         });
@@ -102,6 +105,10 @@ public class HomePage extends ConnectedActivity {
                         if (currentItem != null) {
                             currentItem.setChecked(false);
                         }
+
+//                        if(selectedItem.getItemId() == R.id.nav_fav){
+//                            testUpdateUser();
+//                        }
 
                         selectedItem.setChecked(true);
                         currentItem = selectedItem;
@@ -138,10 +145,14 @@ public class HomePage extends ConnectedActivity {
 
                         if(childrenCount == 0) {
                             newUser(email);
+                            Log.d(TAG, "New user");
+
 
                         } else if(childrenCount == 1) {
                             for(DataSnapshot child: dataSnapshot.getChildren()){
+                                Log.d(TAG, "Old user");
                                 oldUser(child);
+
                             }
 
                         } else {
@@ -164,18 +175,35 @@ public class HomePage extends ConnectedActivity {
 
         //TODO: Integrate with the Firebase class
         //TODO: Add OnSuccess and OnFailure listener
-        FirebaseDatabase.getInstance()
+        DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference("users")
-                .push()
-                .setValue(user);
+                .push();
+
+        ref.setValue(user);
+
+        userKey = ref.getKey();
+
     }
 
     private void oldUser(DataSnapshot snap){
         if(snap.exists()){
             user = snap.getValue(User.class);
+            userKey = snap.getKey();
+            Log.d(TAG, user.toString());
         } else {
             //TODO: Find good exception to throw
             Log.e(TAG, "Unable to reconstruct the user from the JSON.", new IllegalStateException());
         }
     }
+
+    private void updateUserInfo(){
+        Log.d(TAG, "Updating the user");
+        FirebaseDatabase.getInstance()
+                .getReference("users/" + userKey).setValue(user);
+    }
+
+//    public void testUpdateUser() {
+//        Log.d(TAG, "adding favourite recipe");
+//        user.addFavourite("This is my favourite recipe");
+//    }
 }
