@@ -43,20 +43,20 @@ public class ImageStorageTest {
     public Task<byte []> successTask;
 
     @Mock
-    public Task<byte []> FailTask;
+    public Task<byte []> failTask;
 
     @Before
     public void initMockFirebaseStorage() {
         MockitoAnnotations.initMocks(this);
         successTask = Tasks.forResult(new byte[] {1, 2, 3});
-        FailTask = Tasks.forException(new Exception());
+        failTask = Tasks.forException(new Exception());
         when(firebaseStorage.getReference(any(String.class))).thenReturn(storageReference);
         when(firebaseStorage.getReference()).thenReturn(storageReference);
         when(storageReference.putBytes(any(byte[].class))).thenReturn(mock(UploadTask.class));
         when(storageReference.child("images/work.png")).thenReturn(imageReferenceSuccess);
         when(storageReference.child("images/fail.png")).thenReturn(imageReferenceFail);
         when(imageReferenceSuccess.getBytes(anyLong())).thenReturn(successTask);
-        when(imageReferenceFail.getBytes(anyLong())).thenReturn(FailTask);
+        when(imageReferenceFail.getBytes(anyLong())).thenReturn(failTask);
     }
 
     @Test

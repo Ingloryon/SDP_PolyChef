@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public class ImageStorage {
 
-    final long TEN_MEGABYTE = 10 * 1024 * 1024;
+    private final static long TEN_MEGABYTE = 10 * 1024 * 1024;
 
     /**
      * Upload an image to Firebase.
@@ -39,15 +39,15 @@ public class ImageStorage {
     /**
      * Get an image from Firebase with {@code imageName} name.
      * @param imageName the name of the image
-     * @param c the CallHandler to call on success or failure
+     * @param caller the CallHandler to call on success or failure
      */
-    public void getImage(String imageName, final CallHandler c) {
+    public void getImage(String imageName, final CallHandler caller) {
         Preconditions.checkArgument(imageName != null, "image name to download cannot be null");
-        Preconditions.checkArgument(c != null, "CallHandler cannot be null");
+        Preconditions.checkArgument(caller != null, "CallHandler cannot be null");
         StorageReference storageRef = getStorage().getReference();
         StorageReference imgRef = storageRef.child("images/"+imageName);
-        imgRef.getBytes(TEN_MEGABYTE).addOnSuccessListener(bytes -> c.onSuccess(bytes))
-                .addOnFailureListener(exception -> c.onFailure());
+        imgRef.getBytes(TEN_MEGABYTE).addOnSuccessListener(bytes -> caller.onSuccess(bytes))
+                .addOnFailureListener(exception -> caller.onFailure());
     }
 
     /**

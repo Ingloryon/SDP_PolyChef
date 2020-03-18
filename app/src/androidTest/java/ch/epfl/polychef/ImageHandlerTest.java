@@ -65,7 +65,7 @@ public class ImageHandlerTest {
     @Test
     public void tryToUploadNullReturnNull() {
         assertThrows(IllegalArgumentException.class, () -> realImageHandler.prepareImageAndUpload(null));
-        assertThrows(IllegalArgumentException.class, () -> realImageHandler.uploadFromURI(null));
+        assertThrows(IllegalArgumentException.class, () -> realImageHandler.uploadFromUri(null));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class ImageHandlerTest {
     @Test
     public void canUploadFromUri() {
         Uri fakeUri = Uri.parse("android.resource://ch.epfl.polychef/" + R.drawable.frenchtoast);
-        fakeImageHandler.uploadFromURI(fakeUri);
+        fakeImageHandler.uploadFromUri(fakeUri);
     }
 
     @Test

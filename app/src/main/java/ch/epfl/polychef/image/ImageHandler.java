@@ -37,7 +37,7 @@ public class ImageHandler {
     }
 
     /**
-     * Get the intent to choose an image from the gallery
+     * Get the intent to choose an image from the gallery.
      *
      * @return the gallery intent
      */
@@ -89,7 +89,7 @@ public class ImageHandler {
      *
      * @param image the image to upload
      */
-    public void uploadFromURI(Uri image) {
+    public void uploadFromUri(Uri image) {
         Preconditions.checkArgument(image != null, "image uri should not be null");
         try {
             uploadFromBitMap(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
@@ -119,15 +119,17 @@ public class ImageHandler {
      * @return the image's Uri or null if it failed to get it
      */
     public Uri handleActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_IMAGE_CAPTURE:
-                    return fileUri;
-                case REQUEST_IMAGE_FROM_GALLERY:
-                    return data != null ? data.getData() : null;
-            }
+        if (resultCode != RESULT_OK) {
+            return null;
         }
-        return null;
+        switch (requestCode) {
+            case REQUEST_IMAGE_CAPTURE:
+                return fileUri;
+            case REQUEST_IMAGE_FROM_GALLERY:
+                return data != null ? data.getData() : null;
+            default:
+                return null;
+        }
     }
 
     public ImageStorage getImageStorage() {
