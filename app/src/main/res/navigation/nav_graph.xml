@@ -9,7 +9,40 @@
         android:id="@+id/favouritesFragment"
         android:name="ch.epfl.polychef.fragments.FavouritesFragment"
         android:label="fragment_favourites"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favourites" >
+    <action
+        android:id="@+id/action_favouritesFragment_to_postRecipeFragment"
+        app:destination="@id/postRecipeFragment" />
+    <action
+        android:id="@+id/action_favouritesFragment_to_subscriptionsFragment"
+        app:destination="@id/subscriptionsFragment" />
+    <action
+        android:id="@+id/action_favouritesFragment_to_subscribersFragment"
+        app:destination="@id/subscribersFragment" />
+    <action
+        android:id="@+id/action_favouritesFragment_to_offlineMiniaturesFragment"
+        app:destination="@id/offlineMiniaturesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/postRecipeFragment"
+        android:name="ch.epfl.polychef.fragments.PostRecipeFragment"
+        android:label="fragment_post_recipe"
+        tools:layout="@layout/fragment_post_recipe" >
+        <action
+            android:id="@+id/action_postRecipeFragment_to_favouritesFragment"
+            app:destination="@id/favouritesFragment" />
+        <action
+            android:id="@+id/action_postRecipeFragment_to_subscriptionsFragment"
+            app:destination="@id/subscriptionsFragment" />
+        <action
+            android:id="@+id/action_postRecipeFragment_to_subscribersFragment"
+            app:destination="@id/subscribersFragment" />
+        <action
+            android:id="@+id/action_postRecipeFragment_to_offlineMiniaturesFragment"
+            app:destination="@id/offlineMiniaturesFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/subscribersFragment"
         android:name="ch.epfl.polychef.fragments.SubscribersFragment"
@@ -24,7 +57,11 @@
         <action
             android:id="@+id/action_subscribersFragment_to_offlineMiniaturesFragment"
             app:destination="@id/offlineMiniaturesFragment" />
+        <action
+            android:id="@+id/action_subscribersFragment_to_postRecipeFragment"
+            app:destination="@id/postRecipeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/subscriptionsFragment"
         android:name="ch.epfl.polychef.fragments.SubscriptionsFragment"
@@ -39,7 +76,11 @@
         <action
             android:id="@+id/action_subscriptionsFragment_to_offlineMiniaturesFragment"
             app:destination="@id/offlineMiniaturesFragment" />
+        <action
+            android:id="@+id/action_subscriptionsFragment_to_postRecipeFragment"
+            app:destination="@id/postRecipeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/offlineMiniaturesFragment"
         android:name="ch.epfl.polychef.fragments.OfflineMiniaturesFragment"
@@ -56,7 +97,11 @@
         <action
             android:id="@+id/action_offlineMiniaturesFragment_to_fullRecipeFragment"
             app:destination="@id/fullRecipeFragment" />
+        <action
+            android:id="@+id/action_offlineMiniaturesFragment_to_postRecipeFragment"
+            app:destination="@id/postRecipeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/fullRecipeFragment"
         android:name="ch.epfl.polychef.fragments.FullRecipeFragment"
@@ -70,5 +115,9 @@
         <action
             android:id="@+id/action_fullRecipeFragment_to_favouritesFragment"
             app:destination="@id/favouritesFragment" />
+        <action
+            android:id="@+id/action_fullRecipeFragment_to_postRecipeFragment"
+            app:destination="@id/postRecipeFragment" />
     </fragment>
+
 </navigation>

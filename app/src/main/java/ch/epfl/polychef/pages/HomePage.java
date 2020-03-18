@@ -66,21 +66,6 @@ public class HomePage extends ConnectedActivity {
         });
     }
 
-    private int getFragmentId(int itemId) {
-        switch(itemId){
-            case R.id.nav_home:
-                return R.id.offlineMiniaturesFragment;
-            case R.id.nav_fav:
-                return R.id.favouritesFragment;
-            case R.id.nav_subscribers:
-                return R.id.subscribersFragment;
-            case R.id.nav_subscriptions:
-                return R.id.subscriptionsFragment;
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-    
     private void setupNavigation(){
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(
@@ -110,5 +95,22 @@ public class HomePage extends ConnectedActivity {
                     }
                 }
         );
+    }
+
+    private int getFragmentId(int itemId) {
+        switch(itemId){
+            case R.id.nav_home:
+                return R.id.offlineMiniaturesFragment;
+            case R.id.nav_recipe:
+                return R.id.postRecipeFragment;
+            case R.id.nav_fav:
+                return R.id.favouritesFragment;
+            case R.id.nav_subscribers:
+                return R.id.subscribersFragment;
+            case R.id.nav_subscriptions:
+                return R.id.subscriptionsFragment;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }

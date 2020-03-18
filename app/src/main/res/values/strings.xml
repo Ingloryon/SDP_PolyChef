@@ -13,6 +13,7 @@
     <string name="Email">Email</string>
 
     <string name="Home">Home</string>
+    <string name="CreateRecipe">Create recipe</string>
     <string name="Favourites">Favourites</string>
     <string name="Subscriptions">Subscriptions</string>
     <string name="Subscribers">Subscribers</string>

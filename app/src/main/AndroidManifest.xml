@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".pages.PostRecipePage"></activity>
+        <activity android:name=".fragments.PostRecipeFragment"></activity>
         <activity android:name=".pages.LoginPage" />
         <activity android:name=".pages.HomePage" />
         <activity android:name=".pages.EntryPage">
