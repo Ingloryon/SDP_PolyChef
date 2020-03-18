@@ -43,6 +43,7 @@ public class ImageStorage {
      */
     public void getImage(String imageName, final CallHandler c) {
         Preconditions.checkArgument(imageName != null, "image name to download cannot be null");
+        Preconditions.checkArgument(c != null, "CallHandler cannot be null");
         StorageReference storageRef = getStorage().getReference();
         StorageReference imgRef = storageRef.child("images/"+imageName);
         imgRef.getBytes(TEN_MEGABYTE).addOnSuccessListener(bytes -> c.onSuccess(bytes))

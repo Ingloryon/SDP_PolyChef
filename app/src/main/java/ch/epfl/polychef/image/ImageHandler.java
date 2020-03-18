@@ -77,6 +77,7 @@ public class ImageHandler {
      * @param imageView the image to upload
      */
     public void prepareImageAndUpload(ImageView imageView) {
+        Preconditions.checkArgument(imageView != null, "imageView should not be null");
         Drawable drawable = imageView.getDrawable();
 
         BitmapDrawable bitmapDrawable = ((BitmapDrawable) drawable);
@@ -89,6 +90,7 @@ public class ImageHandler {
      * @param image the image to upload
      */
     public void uploadFromURI(Uri image) {
+        Preconditions.checkArgument(image != null, "image uri should not be null");
         try {
             uploadFromBitMap(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
                     image));
@@ -102,7 +104,7 @@ public class ImageHandler {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] imageInByte = stream.toByteArray();
 
-        ImageStorage uploader = new ImageStorage();
+        ImageStorage uploader = getImageStorage();
         uploader.upload(imageInByte).addOnSuccessListener(taskSnapshot -> Log.d("IMAGE-UPLOAD",
                 "Success")).addOnFailureListener(e -> Log.d("IMAGE-UPLOAD",
                 "Error"));
@@ -122,9 +124,13 @@ public class ImageHandler {
                 case REQUEST_IMAGE_CAPTURE:
                     return fileUri;
                 case REQUEST_IMAGE_FROM_GALLERY:
-                    return data.getData();
+                    return data != null ? data.getData() : null;
             }
         }
         return null;
+    }
+
+    public ImageStorage getImageStorage() {
+        return new ImageStorage();
     }
 }
