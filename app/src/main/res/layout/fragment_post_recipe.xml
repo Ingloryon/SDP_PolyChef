@@ -266,7 +266,7 @@
                     android:id="@+id/pictures"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
                     android:layout_alignParentEnd="true"
                     android:fontFamily="sans-serif-black"
                     android:textSize="12sp"
@@ -274,7 +274,33 @@
                     android:visibility="visible" />
             </RelativeLayout>
 
+            <Space
+                android:id="@+id/verticalSpace2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postRecipeRelativeOutput" />
 
+            <RelativeLayout
+                android:id="@+id/postRecipeRelativeOutput2"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postRecipeRelativeOutput">
+
+                <Button
+                    android:id="@+id/postRecipe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="12sp"
+                    android:text="@string/PostRecipe"
+                    android:visibility="visible" />
+            </RelativeLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

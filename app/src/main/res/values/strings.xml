@@ -25,13 +25,12 @@
     <string name="EnterDifficulty">Difficulty:</string>
     <string name="UploadMiniature">Upload a miniature</string>
     <string name="UploadPictures">Upload meal pictures</string>
-
-
     <string name="EnterIngredientList">format: {name, quantity, UNIT}, {name, ...</string>
     <string name="EnterInstructionsList">format: {step1}, {step2}, ...</string>
     <string name="EnterPersonNb">Number of persons:</string>
     <string name="EnterPrepTime">Preparation time:</string>
     <string name="EnterCookTime">Cooking time:</string>
+    <string name="PostRecipe">Post your Recipe !</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
