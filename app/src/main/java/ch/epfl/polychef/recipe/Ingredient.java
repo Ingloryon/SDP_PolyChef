@@ -36,6 +36,9 @@ public final class Ingredient implements Serializable {
         this.unit = unit;
     }
 
+    public Ingredient(){
+    }
+
     /**
      * Returns the quantity needed corresponding to the ingredient.
      * @return the quantity, a positive double

@@ -68,6 +68,11 @@ public final class Recipe implements Serializable, Cloneable {
         }
     }
 
+    public Recipe(){
+        recipeUuid=null;
+        rating=null;
+    }
+
     /**
      * Changes the number of persons the recipe is meant for and updates the ingredients quantities accordingly.
      * @param newPersonNumber strictly positive integer

@@ -90,7 +90,6 @@ public class PostRecipeFragment extends Fragment {
         EditText nameInput = getView().findViewById(R.id.nameInput);
         // TODO: Add sanitization -> check length, ect...
         name = nameInput.getText().toString();
-        Log.w(TAG,"name recupareted");
 
         EditText ingredientsInput = getView().findViewById(R.id.ingredientsList);
         String ingre = ingredientsInput.getText().toString();
@@ -137,16 +136,14 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private boolean recuperateInstructions(String instructions){
-        final String SEPARATOR = "} ";
+        final String SEPARATOR = Pattern.quote("}{");
+        recipeInstructions = new ArrayList<>();
         instructions = instructions.substring(1);
         String mots[] = instructions.split(SEPARATOR);
-        for(int i=0;i<mots.length;i++){
-            if(mots[i].charAt(0)!='{'){
-                recipeInstructions.clear();
-                return false;
-            }
-            recipeInstructions.add(mots[i].substring(1));
+        for(int i=0;i<mots.length-1;i++){
+            recipeInstructions.add(mots[i]);
         }
+        recipeInstructions.add(mots[mots.length-1].substring(0,mots[mots.length-1].length()-1));
         return true;
     }
 

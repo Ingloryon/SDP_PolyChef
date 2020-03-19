@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 
 public abstract class Firebase {
@@ -25,7 +26,7 @@ public abstract class Firebase {
 
         DatabaseReference idRef = firebaseInstance.getReference("id");
         //Get the last ID used in the database
-        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        idRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value
