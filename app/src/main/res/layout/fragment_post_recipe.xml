@@ -62,7 +62,8 @@
                 android:textSize="10sp"
                 android:fontFamily="sans-serif-black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipeName"/>
+                app:layout_constraintTop_toBottomOf="@+id/recipeName"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/ingredients"
@@ -283,13 +284,13 @@
 
             <RelativeLayout
                 android:id="@+id/postRecipeRelativeOutput2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/postRecipeRelativeOutput">
+                app:layout_constraintTop_toBottomOf="@+id/verticalSpace2">
 
                 <Button
                     android:id="@+id/postRecipe"
