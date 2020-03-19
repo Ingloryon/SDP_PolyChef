@@ -62,20 +62,6 @@ public class LoginPage extends AppCompatActivity {
         }
     }
 
-    /**
-     * Called when the user taps the log button.
-     */
-    public void tequilaLogin(View view) {
-        createSignInIntent(view);
-    }
-
-    /**
-     * Called when the user taps the log button.
-     */
-    public void googleLogin(View view) {
-        createSignInIntent(view);
-    }
-
     public FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
