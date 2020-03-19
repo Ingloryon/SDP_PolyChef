@@ -43,7 +43,6 @@ public class PostRecipeFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post_recipe, container, false);
-
     }
 
     private void getEnteredInputs(){
@@ -132,6 +131,4 @@ public class PostRecipeFragment extends Fragment {
         }
         Firebase.addRecipeToFirebase(recipeBuilder.build());
     }
-
-
 }

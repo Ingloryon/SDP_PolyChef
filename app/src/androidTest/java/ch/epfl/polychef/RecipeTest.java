@@ -37,6 +37,10 @@ public class RecipeTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addIngredient("Carrots", -1, Ingredient.Unit.GRAM));
         rb.addIngredient("Carrots", 300, Ingredient.Unit.GRAM);
 
+        Assertions.assertThrows(NullPointerException.class, () -> rb.addIngredient(null));
+        Ingredient ingredient=new Ingredient("Carrots", 300, Ingredient.Unit.GRAM);
+        rb.addIngredient(ingredient);
+
         // rejects when no persons
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setPersonNumber(0));
