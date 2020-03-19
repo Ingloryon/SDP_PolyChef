@@ -43,7 +43,7 @@ public class HomePage extends ConnectedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String userEmail = getUser().getEmail();
         retrieveUserInfo(userEmail);
 
         // Attaching the layout to the toolbar object
@@ -106,10 +106,6 @@ public class HomePage extends ConnectedActivity {
                             currentItem.setChecked(false);
                         }
 
-//                        if(selectedItem.getItemId() == R.id.nav_fav){
-//                            testUpdateUser();
-//                        }
-
                         selectedItem.setChecked(true);
                         currentItem = selectedItem;
 
@@ -134,7 +130,7 @@ public class HomePage extends ConnectedActivity {
 
         Log.d(TAG, "Retrieving user info");
 
-        FirebaseDatabase.getInstance()
+        getDatabase()
                 .getReference("users")
                 .orderByChild("email").equalTo(email)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -175,7 +171,7 @@ public class HomePage extends ConnectedActivity {
 
         //TODO: Integrate with the Firebase class
         //TODO: Add OnSuccess and OnFailure listener
-        DatabaseReference ref = FirebaseDatabase.getInstance()
+        DatabaseReference ref = getDatabase()
                 .getReference("users")
                 .push();
 
@@ -198,12 +194,11 @@ public class HomePage extends ConnectedActivity {
 
     private void updateUserInfo(){
         Log.d(TAG, "Updating the user");
-        FirebaseDatabase.getInstance()
+        getDatabase()
                 .getReference("users/" + userKey).setValue(user);
     }
-
-//    public void testUpdateUser() {
-//        Log.d(TAG, "adding favourite recipe");
-//        user.addFavourite("This is my favourite recipe");
-//    }
+    
+    public FirebaseDatabase getDatabase() {
+        return FirebaseDatabase.getInstance();
+    }
 }
