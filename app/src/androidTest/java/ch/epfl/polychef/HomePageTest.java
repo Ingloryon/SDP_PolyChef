@@ -4,7 +4,10 @@ import android.content.Intent;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.contrib.DrawerActions;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
@@ -12,6 +15,8 @@ import androidx.test.espresso.contrib.NavigationViewActions;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -87,11 +92,11 @@ public class HomePageTest {
     }
     @Test
     private void testScrollDownLoadNewRecipe(){
-
     }
     @Test
     private void testScrollDownLoadNoRecipeIfDatabaseEmpty(){
-
+        onView(withId(R.id.onlineMiniaturesFragment)).check(matches(isDisplayed()));
+        //onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.scrollToPosition());
     }
     @Test
     private void testScrollDownLoadSomeRecipeIfThresholdNotReach(){

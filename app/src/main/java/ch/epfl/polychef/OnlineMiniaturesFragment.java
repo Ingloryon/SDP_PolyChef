@@ -70,8 +70,11 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // For now when we enter the page we load the offline recipes first
-        dynamicRecipeList.addAll(OfflineRecipes.getInstance().getOfflineRecipes());
-        onlineRecyclerView.getAdapter().notifyDataSetChanged();
+        // add a certain number of recipes at this end of the actual list
+        for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
+            Firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
+            currentReadInt++;
+        }
 
     }
 

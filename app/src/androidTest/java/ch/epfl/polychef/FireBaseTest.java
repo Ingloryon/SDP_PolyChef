@@ -38,7 +38,7 @@ public class FireBaseTest {
     public static class FakeFireBase extends Firebase {
         static {
             firebaseInstance = mock(FirebaseDatabase.class);
-            DatabaseReference fakeDatabaseReference=mock(DatabaseReference.class);
+            DatabaseReference fakeDatabaseReference = mock(DatabaseReference.class);
             when(fakeDatabaseReference.child(anyString())).thenReturn(fakeDatabaseReference);
             when(firebaseInstance.getReference(anyString())).thenReturn(fakeDatabaseReference);
         }
