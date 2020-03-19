@@ -98,7 +98,116 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ingredients"/>
 
-            
+            <TextView
+                android:id="@+id/instructions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="textStart"
+                android:text="@string/EnterInstructions"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ingredientsList" />
+
+            <EditText
+                android:id="@+id/instructionsList"
+                style="@style/Widget.AppCompat.AutoCompleteTextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:ems="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="textStart"
+                android:hint="@string/EnterInstructionsList"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-black"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="20"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/instructions"/>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/instructionsList">
+
+                <TextView
+                    android:id="@+id/personNb"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/EnterPersonNb"
+                    android:layout_weight="3"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-black" />
+
+                <EditText
+                    android:id="@+id/personNbInput"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-black" />
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:id="@+id/prepTime"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/EnterPrepTime"
+                    android:layout_weight="3"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-black" />
+
+                <EditText
+                    android:id="@+id/prepTimeInput"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-black" />
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:id="@+id/cookTime"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/EnterCookTime"
+                    android:layout_weight="2"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-black" />
+
+                <EditText
+                    android:id="@+id/cookTimeInput"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-black" />
+
+            </LinearLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

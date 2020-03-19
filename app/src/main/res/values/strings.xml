@@ -21,10 +21,14 @@
     <string name="CreateRecipe">Create recipe</string>
     <string name="EnterName">Recipe title:</string>
     <string name="EnterIngredients">Ingredients:</string>
+    <string name="EnterInstructions">Instructions:</string>
 
     <string name="EnterIngredientList">format: {name, quantity, UNIT}, {name, ...</string>
+    <string name="EnterInstructionsList">format: {step1}, {step2}, ...</string>
+    <string name="EnterPersonNb">Number of persons:</string>
     <string name="EnterPrepTime">Preparation time:</string>
     <string name="EnterCookTime">Cooking time:</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
