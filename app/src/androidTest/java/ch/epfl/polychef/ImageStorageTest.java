@@ -99,7 +99,7 @@ public class ImageStorageTest {
         }
     }
 
-    private class FakeCallHandler implements CallHandler {
+    private class FakeCallHandler implements CallHandler<byte []> {
 
         private final byte[] expected;
         private final boolean shouldBeSuccessful;
