@@ -4,6 +4,7 @@ import ch.epfl.polychef.recipe.Rating;
 
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
@@ -54,4 +55,36 @@ public class RatingTest {
         String result=String.format(Locale.ENGLISH,"%.2f", ((double)accumulator)/nb) + "/5 stars by " + nb + " users.\n";
         assertEquals(rating.toString(),result);
     }
+
+    @Test
+    public void testGetRatingSum(){
+        Rating rating = new Rating();
+
+        Random rnd=new Random();
+        int nb=16;
+        int accumulator=0;
+        for(int i=0;i<nb;++i){
+            int r=rnd.nextInt(6);
+            accumulator+=r;
+            rating.addRate(i,r);
+        }
+
+        assertEquals(rating.getRatingSum(),(double) accumulator);
+    }
+    @Test
+    public void testGetAllRatings(){
+        Rating rating = new Rating();
+
+        Random rnd=new Random();
+        int nb=16;
+        HashMap<Integer,Double> userToRating=new HashMap<>();
+        for(int i=0;i<nb;++i){
+            int r=rnd.nextInt(6);
+            rating.addRate(i,r);
+            userToRating.put(i,(double) r);
+        }
+
+        assertEquals(rating.getAllRatings(),userToRating);
+    }
+
 }
