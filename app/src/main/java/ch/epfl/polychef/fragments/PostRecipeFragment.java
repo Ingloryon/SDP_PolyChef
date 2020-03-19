@@ -1,8 +1,6 @@
 package ch.epfl.polychef.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,6 @@ import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.firebase.Firebase;
-import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
@@ -42,6 +39,8 @@ public class PostRecipeFragment extends Fragment {
     private Button postButton;
 
     private Map<String, Boolean> wrongInputs;
+
+    private Spinner difficultyInput;
 
     /**
      * Required empty public constructor.
@@ -68,7 +67,7 @@ public class PostRecipeFragment extends Fragment {
                 setPostButton(view);
             }
         });
-        Spinner difficultyInput = (Spinner) getView().findViewById(R.id.difficultyInput);
+        difficultyInput = (Spinner) getView().findViewById(R.id.difficultyInput);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.difficulty_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -127,8 +126,7 @@ public class PostRecipeFragment extends Fragment {
             estimatedCookingTime = Integer.parseInt(cook);
         }
 
-        //TODO: parse Difficulty
-        recipeDifficulty= Recipe.Difficulty.INTERMEDIATE;
+        recipeDifficulty= Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
     }
 
     private boolean checkInputIsNumber(String input){
