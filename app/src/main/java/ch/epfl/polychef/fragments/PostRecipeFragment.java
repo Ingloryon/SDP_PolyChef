@@ -8,9 +8,12 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Ingredient;
@@ -43,6 +46,7 @@ public class PostRecipeFragment extends Fragment {
 
     private void getEnteredInputs(){
         EditText nameInput = getView().findViewById(R.id.nameInput);
+
         name = nameInput.getText().toString();
 
         // TODO: inputs ingredients, instructions, difficulty
@@ -51,11 +55,8 @@ public class PostRecipeFragment extends Fragment {
         String persNb = personNb.getText().toString();
 
         if (checkInputIsNumber(persNb)){
-
-        } else {
             personNumber = Integer.parseInt(personNb.getText().toString());
         }
-
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         estimatedPreparationTime = Integer.parseInt(prepTimeInput.getText().toString());
@@ -67,6 +68,40 @@ public class PostRecipeFragment extends Fragment {
 
     private boolean checkInputIsNumber(String input){
         return android.text.TextUtils.isDigitsOnly(input);
+    }
+
+    private boolean matchRegexIngredients(String toMatch) {
+        List<String> allMatches = new ArrayList<>();
+        ingredients = new ArrayList<>();
+        Matcher m = Pattern.compile("\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}")
+                .matcher(toMatch);
+        while(m.find()) {
+            allMatches.add(m.group());
+        }
+        for(String s: allMatches) {
+            String[] list = s.split(",");
+            if(list.length != 3) {
+                ingredients.clear();
+                allMatches.clear();
+                return false;
+            }
+            String name = list[0].trim().substring(1).trim();
+            double quantity = Double.parseDouble(list[1].trim()); // TODO: check this method does not throw errors
+            Ingredient.Unit unit = null;
+            String unitString = list[2].trim().substring(0, list[2].trim().length() - 1).trim();
+            for (Ingredient.Unit u : Ingredient.Unit.values()) {
+                if(u.toString().toLowerCase().equals(unitString.toLowerCase())) {
+                    unit = u;
+                }
+            }
+            if(unit == null) {
+                ingredients.clear();
+                allMatches.clear();
+                return false;
+            }
+            ingredients.add(new Ingredient(name, quantity, unit));
+        }
+        return true;
     }
 
     private void initializeWronginputsMap(){
