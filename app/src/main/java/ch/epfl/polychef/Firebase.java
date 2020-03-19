@@ -13,14 +13,14 @@ import java.util.function.Function;
 
 import ch.epfl.polychef.recipe.Recipe;
 
-public class Firebase {
+public abstract class Firebase {
     private static final String TAG="Firebase";
     private static int id;
+    //Get an instance of the firebase
+    public static FirebaseDatabase firebaseInstance=FirebaseDatabase.getInstance();
 
     public static void addRecipeToFirebase(Recipe recipe){
-        //Get an instance of the firebase
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference idRef = database.getReference("id");
+        DatabaseReference idRef = firebaseInstance.getReference("id");
         //Get the last ID used in the database
         idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -36,15 +36,14 @@ public class Firebase {
             }
         });
         //Change the value of the ID in the database
-        idRef.setValue(id+1);
         id+=1;
-        DatabaseReference myRef = database.getReference("recipe");
+        idRef.setValue(id);
+        DatabaseReference myRef = firebaseInstance.getReference("recipe");
         myRef.child(Integer.toString(id)).setValue(recipe);
     }
 
-    public static void readRecipeFromFirebase(UUID Uuid){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference idRef = database.getReference("id");
+    /*public static void readRecipeFromFirebase(UUID Uuid){
+        DatabaseReference idRef = firebaseInstance.getReference("id");
         //Get the last ID used in the database
         idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -60,7 +59,7 @@ public class Firebase {
             }
         });
         for(int i=1;i<id+1;i++) {
-            DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(i)).child("uuid");
+            DatabaseReference myRef = firebaseInstance.getReference("recipe").child(Integer.toString(i)).child("uuid");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -90,10 +89,10 @@ public class Firebase {
                 }
             });
         }
-    }
+    }*/
+
     public static void readRecipeFromFirebase(int id, FireHandler ch){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("recipe").child(Integer.toString(id));
+        DatabaseReference myRef = firebaseInstance.getReference("recipe").child(Integer.toString(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
