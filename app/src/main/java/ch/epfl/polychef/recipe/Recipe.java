@@ -60,6 +60,7 @@ public final class Recipe implements Serializable, Cloneable {
         this.recipeUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
+        //TODO save deepCopy of ingredients;
         this.ingredients = new ArrayList<>(ingredients);
         this.personNumber = personNumber;
         this.estimatedPreparationTime = estimatedPreparationTime;
