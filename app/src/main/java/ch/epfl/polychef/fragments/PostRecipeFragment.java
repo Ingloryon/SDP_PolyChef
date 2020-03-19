@@ -1,10 +1,13 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -21,11 +24,13 @@ import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.firebase.Firebase;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 
 public class PostRecipeFragment extends Fragment {
+    private final String TAG = "PostRecipeFragment";
     private String name;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
@@ -33,6 +38,8 @@ public class PostRecipeFragment extends Fragment {
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
+
+    private Button postButton;
 
     private Map<String, Boolean> wrongInputs;
 
@@ -46,6 +53,7 @@ public class PostRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         initializeWrongInputsMap();
 
+        postButton=getView().findViewById(R.id.postRecipe);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post_recipe, container, false);
     }
@@ -76,20 +84,23 @@ public class PostRecipeFragment extends Fragment {
         EditText nameInput = getView().findViewById(R.id.nameInput);
         // TODO: Add sanitization -> check length, ect...
         name = nameInput.getText().toString();
-
+        Log.w(TAG,"name recupareted");
 
         EditText ingredientsInput = getView().findViewById(R.id.ingredientsList);
         String ingre = ingredientsInput.getText().toString();
-
         if ( matchRegexIngredients(ingre) ){
             wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
         }
 
-        // TODO: parse instructions
+        EditText instructionsInput = getView().findViewById(R.id.instructionsList);
+        String instructions = instructionsInput.getText().toString();
+        if (recuperateInstructions(instructions)){
+            wrongInputs.put("Instructions", true);
+        }
+
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
-
         if (checkInputIsNumber(persNb)){
             wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
@@ -112,11 +123,25 @@ public class PostRecipeFragment extends Fragment {
         }
 
         //TODO: parse Difficulty
-
+        recipeDifficulty= Recipe.Difficulty.INTERMEDIATE;
     }
 
     private boolean checkInputIsNumber(String input){
         return android.text.TextUtils.isDigitsOnly(input);
+    }
+
+    private boolean recuperateInstructions(String instructions){
+        final String SEPARATOR = "} ";
+        instructions = instructions.substring(1);
+        String mots[] = instructions.split(SEPARATOR);
+        for(int i=0;i<mots.length;i++){
+            if(mots[i].charAt(0)!='{'){
+                recipeInstructions.clear();
+                return false;
+            }
+            recipeInstructions.add(mots[i].substring(1));
+        }
+        return true;
     }
 
     private boolean matchRegexIngredients(String toMatch) {
@@ -171,5 +196,9 @@ public class PostRecipeFragment extends Fragment {
             recipeBuilder.addIngredient(ingredients.get(i));
         }
         Firebase.addRecipeToFirebase(recipeBuilder.build());
+    }
+    public void setPostButton(View view) {
+        getEnteredInputs();
+        buildRecipeAndPostToFirebase();
     }
 }
