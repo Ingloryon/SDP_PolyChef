@@ -34,6 +34,7 @@ public class HomePageTest {
         }
     };
 
+
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             true);
@@ -42,6 +43,8 @@ public class HomePageTest {
     public void initActivity() {
         intentsTestRule.launchActivity(new Intent());
     }
+
+    private FireBaseTest.FakeFireBase fakeFireBase = new FireBaseTest.FakeFireBase();
 
     @Test
     public void buttonTextIsLogoutAndCanClick() {
@@ -76,11 +79,27 @@ public class HomePageTest {
         onView(withId(R.id.drawer)).perform(DrawerActions.close());
         onView(withId(R.id.drawer)).check(matches(isClosed()));
     }
-
+    @Test
     private void testNavButton(int idButton, int idFragment) {
         onView(withId(R.id.drawer)).perform(DrawerActions.open());
         onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(idButton));
         onView(withId(idFragment)).check(matches(isDisplayed()));
+    }
+    @Test
+    private void testScrollDownLoadNewRecipe(){
+
+    }
+    @Test
+    private void testScrollDownLoadNoRecipeIfDatabaseEmpty(){
+
+    }
+    @Test
+    private void testScrollDownLoadSomeRecipeIfThresholdNotReach(){
+
+    }
+    @Test
+    private void testScrollDownLoadMultipleTimesRecipes(){
+
     }
 
     private class FakeHomePage extends HomePage {

@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 public class FireBaseTest {
 
-    public static FakeFireBase fakeFireBase=new FakeFireBase();
+    private FakeFireBase fakeFireBase=new FakeFireBase();
 
     @Test
     public void testThatAddingARecipeDoesNotThrowError(){
@@ -35,7 +35,7 @@ public class FireBaseTest {
         fakeFireBase.readRecipeFromFirebase(0,null);
     }
 
-    private static class FakeFireBase extends Firebase {
+    public static class FakeFireBase extends Firebase {
         static {
             firebaseInstance = mock(FirebaseDatabase.class);
             DatabaseReference fakeDatabaseReference=mock(DatabaseReference.class);
