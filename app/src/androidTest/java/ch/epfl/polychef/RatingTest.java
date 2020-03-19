@@ -3,7 +3,12 @@ package ch.epfl.polychef;
 import ch.epfl.polychef.recipe.Rating;
 
 import org.junit.Test;
+
+import java.util.Locale;
+import java.util.Random;
+
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RatingTest {
@@ -30,5 +35,23 @@ public class RatingTest {
 
         rating.addRate(5, 5);
         assertTrue(rating.ratingAverage() == (4d + 5d)/2);
+    }
+
+
+    @Test
+    public void testRatingToStringMethod(){
+        Rating rating = new Rating();
+
+        Random rnd=new Random();
+        int nb=16;
+        int accumulator=0;
+        for(int i=0;i<nb;++i){
+            int r=rnd.nextInt(6);
+            accumulator+=r;
+            rating.addRate(i,r);
+        }
+
+        String result=String.format(Locale.ENGLISH,"%.2f", ((double)accumulator)/nb) + "/5 stars by " + nb + " users.\n";
+        assertEquals(rating.toString(),result);
     }
 }
