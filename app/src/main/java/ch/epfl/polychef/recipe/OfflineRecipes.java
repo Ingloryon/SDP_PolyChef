@@ -1,5 +1,6 @@
 package ch.epfl.polychef.recipe;
 
+import ch.epfl.polychef.Firebase;
 import ch.epfl.polychef.R;
 
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ public final class OfflineRecipes {
     public static OfflineRecipes getInstance(){
         return offlineRecipesInstance;
     }
+
+    // TODO REMOVE ME FAST
 
     private OfflineRecipes(){
         offlineRecipes = new ArrayList<>();
@@ -36,7 +39,6 @@ public final class OfflineRecipes {
                 e.printStackTrace();
             }
         }
-        // TODO Should we make it unmodifiable or not?  --> yes (#Guillaume)
         return Collections.unmodifiableList(copiedList);
     }
 

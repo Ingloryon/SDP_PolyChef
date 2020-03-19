@@ -28,6 +28,8 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
 
     private int currentReadInt = 1;
 
+    private int nbOfRecipesLoadedAtATime = 5;
+
     private boolean isLoading = false;
 
     public OnlineMiniaturesFragment(){}
@@ -42,6 +44,7 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         onlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, fragmentID));
+        // Add a scroll listener when we reach the end of the list we load new recipes from database
         onlineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -51,8 +54,11 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
                     if(isLoading){
                         return;
                     }
-                    Firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
-                    currentReadInt++;
+                    // add a certain number of recipes at this end of the actual list
+                    for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
+                        Firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
+                        currentReadInt++;
+                    }
                     isLoading = true;
                 }
             }
@@ -63,7 +69,7 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        // For now when we enter the page we load the offline recipes first
         dynamicRecipeList.addAll(OfflineRecipes.getInstance().getOfflineRecipes());
         onlineRecyclerView.getAdapter().notifyDataSetChanged();
 
@@ -71,6 +77,7 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
 
     @Override
     public void onSuccess(Recipe recipe) {
+        // The data has been acquired from database we can now update the recyclerView
         isLoading = false;
         dynamicRecipeList.add(recipe);
         onlineRecyclerView.getAdapter().notifyDataSetChanged();
