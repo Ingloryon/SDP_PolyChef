@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import ch.epfl.polychef.recipe.Recipe;
 
+import static ch.epfl.polychef.Firebase.addRecipeToFirebase;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -17,12 +18,21 @@ import static org.mockito.Mockito.when;
 
 public class FireBaseTest {
 
-    FakeFireBase fakeFireBase=new FakeFireBase();
+    public static FakeFireBase fakeFireBase=new FakeFireBase();
 
     @Test
-    public void testThatAddingARecipeWorks(){
-        fakeFireBase.addRecipeToFirebase(null);
+    public void testThatAddingARecipeDoesNotThrowError(){
+        addRecipeToFirebase(new Recipe());
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testThatAddingANullRecipeThrowsError(){
+        fakeFireBase.addRecipeToFirebase(null);
+    }
+
+    @Test
+    public void testThatReadRecipeFromFirebaseDoesNotThrowError(){
+        fakeFireBase.readRecipeFromFirebase(0,null);
     }
 
     private static class FakeFireBase extends Firebase {
