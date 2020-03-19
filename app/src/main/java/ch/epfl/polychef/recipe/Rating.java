@@ -3,6 +3,7 @@ package ch.epfl.polychef.recipe;
 import ch.epfl.polychef.Preconditions;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public final class Rating implements Serializable {
@@ -42,12 +43,12 @@ public final class Rating implements Serializable {
      * @return the average rating
      */
     public double ratingAverage(){
-        return allRatings.size()==0 ? 0 : ratingSum / allRatings.size();
+        return allRatings.size()==0 ? 0.0 : ((double)ratingSum) / allRatings.size();
     }
 
     @Override
     public String toString(){
-        return String.format("%.2f", ratingAverage()) + "/5 stars by " + allRatings.size() + " users.\n";
+        return String.format(Locale.ENGLISH,"%.2f", ratingAverage()) + "/5 stars by " + allRatings.size() + " users.\n";
     }
 
     public int getRatingSum(){
