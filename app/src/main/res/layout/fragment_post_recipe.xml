@@ -229,20 +229,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/verticalSpace" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/difficultyInput"
-                style="@style/Widget.AppCompat.AutoCompleteTextView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="?android:attr/spinnerDropDownItemStyle"
+                android:spinnerMode="dialog"
+                android:prompt="@string/difficulty_prompt"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:textAlignment="textStart"
-                android:textSize="10sp"
                 android:fontFamily="sans-serif-black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipeDifficulty"/>
+                app:layout_constraintTop_toBottomOf="@+id/recipeDifficulty" />
 
             <RelativeLayout
                 android:id="@+id/postRecipeRelativeOutput"
