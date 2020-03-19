@@ -23,7 +23,7 @@ import ch.epfl.polychef.image.ImageStorage;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SubscriptionsFragment extends Fragment implements CallHandler {
+public class SubscriptionsFragment extends Fragment implements CallHandler<byte []> {
 
     /**
      * Required empty public constructor.
