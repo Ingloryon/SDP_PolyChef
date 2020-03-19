@@ -20,6 +20,8 @@ public abstract class Firebase {
     public static FirebaseDatabase firebaseInstance=FirebaseDatabase.getInstance();
 
     public static void addRecipeToFirebase(Recipe recipe){
+        Preconditions.checkArgument(recipe!=null);
+
         DatabaseReference idRef = firebaseInstance.getReference("id");
         //Get the last ID used in the database
         idRef.addListenerForSingleValueEvent(new ValueEventListener() {
