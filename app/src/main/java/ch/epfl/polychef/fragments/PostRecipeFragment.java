@@ -53,7 +53,6 @@ public class PostRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         initializeWrongInputsMap();
 
-        postButton=getView().findViewById(R.id.postRecipe);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post_recipe, container, false);
     }
@@ -62,6 +61,13 @@ public class PostRecipeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        postButton=getView().findViewById(R.id.postRecipe);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPostButton(view);
+            }
+        });
         Spinner difficultyInput = (Spinner) getView().findViewById(R.id.difficultyInput);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.difficulty_array, android.R.layout.simple_spinner_item);
@@ -197,6 +203,7 @@ public class PostRecipeFragment extends Fragment {
         }
         Firebase.addRecipeToFirebase(recipeBuilder.build());
     }
+
     public void setPostButton(View view) {
         getEnteredInputs();
         buildRecipeAndPostToFirebase();
