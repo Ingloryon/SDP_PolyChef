@@ -32,7 +32,9 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
 
     private Firebase firebase;
 
-    public OnlineMiniaturesFragment(){}
+    public OnlineMiniaturesFragment(){
+        
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
