@@ -24,6 +24,8 @@ public class HomePage extends ConnectedActivity {
     private NavController navController;
     private MenuItem currentItem;
 
+    private OnlineMiniaturesFragment onlineMiniaturesFragment;
+
 
     public static final String LOG_OUT = "Log out";
 
