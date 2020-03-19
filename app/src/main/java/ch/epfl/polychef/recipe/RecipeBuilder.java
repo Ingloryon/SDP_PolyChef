@@ -73,6 +73,17 @@ public final class RecipeBuilder {
     }
 
     /**
+     * Add an ingredient from an exiting one
+     * @param ingredient an Ingredient
+     * @return the recipe builder
+     */
+    public RecipeBuilder addIngredient(@NonNull Ingredient ingredient) {
+        //checks are performed in Ingredient's constructor
+        ingredients.add(new Ingredient(ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit()));
+        return this;
+    }
+
+    /**
      * Sets the number of persons the recipe is for.
      *
      * @param personNumber the number of persons, must be strictly positive

@@ -16,8 +16,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.firebase.Firebase;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeBuilder;
 
 public class PostRecipeFragment extends Fragment {
     private String name;
@@ -112,6 +114,23 @@ public class PostRecipeFragment extends Fragment {
         wrongInputs.put("PrepTime", false);
         wrongInputs.put("CookTime", false);
         wrongInputs.put("Difficulty", false);
+    }
+
+    private void buildRecipeAndPostToFirebase(){
+        RecipeBuilder recipeBuilder = new RecipeBuilder()
+                .setName(name)
+                .setEstimatedCookingTime(estimatedCookingTime)
+                .setPersonNumber(personNumber)
+                .setEstimatedPreparationTime(estimatedPreparationTime)
+                .addPicturePath(R.drawable.ovenbakedsalmon)
+                .setRecipeDifficulty(recipeDifficulty);
+        for(int i=0;i<recipeInstructions.size();i++){
+            recipeBuilder.addInstruction(recipeInstructions.get(i));
+        }
+        for(int i=0;i<ingredients.size();i++){
+            recipeBuilder.addIngredient(ingredients.get(i));
+        }
+        Firebase.addRecipeToFirebase(recipeBuilder.build());
     }
 
 
