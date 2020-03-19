@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -30,7 +34,7 @@ public class PostRecipeFragment extends Fragment {
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
 
-    private Map<String, Boolean> wrongInputs = new HashMap<>();
+    private Map<String, Boolean> wrongInputs;
 
     /**
      * Required empty public constructor.
@@ -40,30 +44,74 @@ public class PostRecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initializeWrongInputsMap();
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post_recipe, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Spinner difficultyInput = (Spinner) getView().findViewById(R.id.difficultyInput);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.difficulty_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        difficultyInput.setAdapter(adapter);
+    }
+
+    private void initializeWrongInputsMap(){
+        wrongInputs = new HashMap<>();
+        wrongInputs.put("Title", false);
+        wrongInputs.put("Ingredients", false);
+        wrongInputs.put("Instructions", false);
+        wrongInputs.put("PersNb", false);
+        wrongInputs.put("PrepTime", false);
+        wrongInputs.put("CookTime", false);
+        wrongInputs.put("Difficulty", false);
+    }
+
     private void getEnteredInputs(){
         EditText nameInput = getView().findViewById(R.id.nameInput);
-
+        // TODO: Add sanitization -> check length, ect...
         name = nameInput.getText().toString();
 
-        // TODO: inputs ingredients, instructions, difficulty
+
+        EditText ingredientsInput = getView().findViewById(R.id.ingredientsList);
+        String ingre = ingredientsInput.getText().toString();
+
+        if ( matchRegexIngredients(ingre) ){
+            wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
+        }
+
+        // TODO: parse instructions
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
 
         if (checkInputIsNumber(persNb)){
-            personNumber = Integer.parseInt(personNb.getText().toString());
+            wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
+            personNumber = Integer.parseInt(persNb);
         }
 
+
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
-        estimatedPreparationTime = Integer.parseInt(prepTimeInput.getText().toString());
+        String prep = prepTimeInput.getText().toString();
+        if (checkInputIsNumber(prep)){
+            wrongInputs.put("PrepTime", true);  // TODO: Use replace when set SDK min24
+            estimatedPreparationTime = Integer.parseInt(prep);
+        }
+
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
-        estimatedCookingTime = Integer.parseInt(cookTimeInput.getText().toString());
+        String cook = cookTimeInput.getText().toString();
+        if (checkInputIsNumber(cook)){
+            wrongInputs.put("CookTime", true);  // TODO: Use replace when set SDK min24
+            estimatedCookingTime = Integer.parseInt(cook);
+        }
+
+        //TODO: parse Difficulty
 
     }
 
@@ -105,17 +153,10 @@ public class PostRecipeFragment extends Fragment {
         return true;
     }
 
-    private void initializeWronginputsMap(){
-        wrongInputs.put("Title", false);
-        wrongInputs.put("Ingredients", false);
-        wrongInputs.put("Instructions", false);
-        wrongInputs.put("PersNb", false);
-        wrongInputs.put("PrepTime", false);
-        wrongInputs.put("CookTime", false);
-        wrongInputs.put("Difficulty", false);
-    }
-
     private void buildRecipeAndPostToFirebase(){
+
+        // TODO: Catch exceptions thrown by builder and set WrongInputsMap accordingly
+
         RecipeBuilder recipeBuilder = new RecipeBuilder()
                 .setName(name)
                 .setEstimatedCookingTime(estimatedCookingTime)
