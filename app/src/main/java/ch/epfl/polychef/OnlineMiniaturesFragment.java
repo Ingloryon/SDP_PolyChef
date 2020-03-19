@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +16,6 @@ import java.util.List;
 
 
 import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
-import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 
 public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
@@ -32,6 +30,8 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
 
     private boolean isLoading = false;
 
+    private Firebase firebase;
+
     public OnlineMiniaturesFragment(){}
 
     @Override
@@ -40,7 +40,6 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
 
         Bundle bundle = getArguments();
         int fragmentID = bundle.getInt("fragmentID");
-
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         onlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, fragmentID));
@@ -90,4 +89,5 @@ public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
     public void onFailure() {
         isLoading = false;
     }
+
 }

@@ -1,11 +1,14 @@
 package ch.epfl.polychef;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,8 +26,6 @@ public class HomePage extends ConnectedActivity {
 
     private NavController navController;
     private MenuItem currentItem;
-
-    private OnlineMiniaturesFragment onlineMiniaturesFragment;
 
 
     public static final String LOG_OUT = "Log out";
