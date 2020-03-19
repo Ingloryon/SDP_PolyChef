@@ -59,7 +59,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:textAlignment="textStart"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:fontFamily="sans-serif-black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeName"/>
@@ -90,7 +90,7 @@
                 android:layout_marginEnd="8dp"
                 android:textAlignment="textStart"
                 android:hint="@string/EnterIngredientList"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:fontFamily="sans-serif-black"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="2000"
@@ -124,7 +124,7 @@
                 android:layout_marginEnd="8dp"
                 android:textAlignment="textStart"
                 android:hint="@string/EnterInstructionsList"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:fontFamily="sans-serif-black"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="2000"
@@ -134,7 +134,7 @@
 
 
             <LinearLayout
-                android:id="@+id/linearLayout"
+                android:id="@+id/postRecipeLinearLayout1"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginStart="8dp"
@@ -158,7 +158,7 @@
                     android:layout_height="match_parent"
                     android:textAlignment="textStart"
                     android:layout_weight="1"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:fontFamily="sans-serif-black" />
 
                 <Space
@@ -180,7 +180,7 @@
                     android:layout_height="match_parent"
                     android:textAlignment="textStart"
                     android:layout_weight="1"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:fontFamily="sans-serif-black" />
 
                 <Space
@@ -202,10 +202,78 @@
                     android:layout_height="match_parent"
                     android:textAlignment="textStart"
                     android:layout_weight="1"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:fontFamily="sans-serif-black" />
 
             </LinearLayout>
+
+            <Space
+                android:id="@+id/verticalSpace"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postRecipeLinearLayout1" />
+
+            <TextView
+                android:id="@+id/recipeDifficulty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="textStart"
+                android:text="@string/EnterDifficulty"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/verticalSpace" />
+
+            <EditText
+                android:id="@+id/difficultyInput"
+                style="@style/Widget.AppCompat.AutoCompleteTextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="textStart"
+                android:textSize="10sp"
+                android:fontFamily="sans-serif-black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipeDifficulty"/>
+
+            <RelativeLayout
+                android:id="@+id/postRecipeRelativeOutput"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/difficultyInput">
+
+                <Button
+                    android:id="@+id/miniature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="12sp"
+                    android:text="@string/UploadMiniature"
+                    />
+                <Button
+                    android:id="@+id/pictures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="12sp"
+                    android:text="@string/UploadPictures"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

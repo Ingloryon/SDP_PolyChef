@@ -22,6 +22,10 @@
     <string name="EnterName">Recipe title:</string>
     <string name="EnterIngredients">Ingredients:</string>
     <string name="EnterInstructions">Instructions:</string>
+    <string name="EnterDifficulty">Difficulty:</string>
+    <string name="UploadMiniature">Upload a miniature</string>
+    <string name="UploadPictures">Upload meal pictures</string>
+
 
     <string name="EnterIngredientList">format: {name, quantity, UNIT}, {name, ...</string>
     <string name="EnterInstructionsList">format: {step1}, {step2}, ...</string>
