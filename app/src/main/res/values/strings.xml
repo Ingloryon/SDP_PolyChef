@@ -19,6 +19,10 @@
     <string name="ErrorOccurred">Error</string>
 
     <string name="CreateRecipe">Create recipe</string>
+    <string name="EnterName">Recipe title:</string>
+    <string name="EnterIngredients">Ingredients:</string>
+
+    <string name="EnterIngredientList">format: {name, quantity, UNIT}, {name, ...</string>
     <string name="EnterPrepTime">Preparation time:</string>
     <string name="EnterCookTime">Cooking time:</string>
 
