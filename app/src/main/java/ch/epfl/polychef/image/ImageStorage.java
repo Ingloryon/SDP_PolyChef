@@ -41,7 +41,7 @@ public class ImageStorage {
      * @param imageName the name of the image
      * @param caller the CallHandler to call on success or failure
      */
-    public void getImage(String imageName, final CallHandler caller) {
+    public void getImage(String imageName, final CallHandler<byte []> caller) {
         Preconditions.checkArgument(imageName != null, "image name to download cannot be null");
         Preconditions.checkArgument(caller != null, "CallHandler cannot be null");
         StorageReference storageRef = getStorage().getReference();
