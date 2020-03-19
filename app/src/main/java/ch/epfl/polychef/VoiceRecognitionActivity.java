@@ -8,6 +8,7 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +31,10 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                     RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
+            intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS,true);
+            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,1_000_000);
+            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS,1_000_000);
+            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS,1_000_000);
             speechRecognizer.startListening(intent);
         });
 
@@ -59,15 +64,41 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
                 @Override
                 public void onBufferReceived(byte[] buffer) {}
                 @Override
-                public void onEndOfSpeech() {}
+                public void onEndOfSpeech() {
+                    Toast.makeText(VoiceRecognitionActivity.this,"END OF SPEECH",Toast.LENGTH_SHORT).show();
+
+                }
                 @Override
                 public void onError(int error) {}
                 @Override
-                public void onPartialResults(Bundle partialResults) {}
+                public void onPartialResults(Bundle partialResults) {
+                    List<String> results=partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                    TextView foundWordsLabel=(TextView) findViewById(R.id.foundWords);
+                    foundWordsLabel.setText(results.get(0));
+                }
+
                 @Override
                 public void onEvent(int eventType, Bundle params) {}
             });
         }
+    }
+
+    /**
+     * initialize the object TextToSpeech
+     */
+    private void initializeTextToSpeech() {
+        textToSpeech= new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(textToSpeech.getEngines().size()==0){
+                    Toast.makeText(VoiceRecognitionActivity.this ,"There is no voice recognition engine.",Toast.LENGTH_LONG).show();
+                    finish();
+                }else{
+                    textToSpeech.setLanguage(Locale.UK);
+                    speak("Ready to start.");
+                }
+            }
+        });
     }
 
     /**
@@ -84,24 +115,6 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
         }else{
             speak("Please repeat, I heard that you were saying "+command);
         }
-    }
-
-    /**
-     * initialize the object TextToSpeech
-     */
-    private void initializeTextToSpeech() {
-        textToSpeech= new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(textToSpeech.getEngines().size()==0){
-                    Toast.makeText(VoiceRecognitionActivity.this ,"There is no voice recognition engine.",Toast.LENGTH_LONG);
-                    finish();
-                }else{
-                    textToSpeech.setLanguage(Locale.UK);
-                    speak("Ready to start.");
-                }
-            }
-        });
     }
 
     /**
