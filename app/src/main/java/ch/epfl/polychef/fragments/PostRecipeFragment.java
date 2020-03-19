@@ -98,7 +98,7 @@ public class PostRecipeFragment extends Fragment {
 
         EditText instructionsInput = getView().findViewById(R.id.instructionsList);
         String instructions = instructionsInput.getText().toString();
-        if (recuperateInstructions(instructions)){
+        if (getInstructions(instructions)){
             wrongInputs.put("Instructions", true);
         }
 
@@ -133,7 +133,7 @@ public class PostRecipeFragment extends Fragment {
         return android.text.TextUtils.isDigitsOnly(input);
     }
 
-    private boolean recuperateInstructions(String instructions){
+    private boolean getInstructions(String instructions){
         final String SEPARATOR = Pattern.quote("}{");
         recipeInstructions = new ArrayList<>();
         instructions = instructions.substring(1);
