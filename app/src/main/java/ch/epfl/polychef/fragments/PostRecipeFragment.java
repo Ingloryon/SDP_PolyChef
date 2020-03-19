@@ -51,7 +51,7 @@ public class PostRecipeFragment extends Fragment {
         String persNb = personNb.getText().toString();
 
         if (checkInputIsNumber(persNb)){
-            
+
         } else {
             personNumber = Integer.parseInt(personNb.getText().toString());
         }
@@ -71,7 +71,12 @@ public class PostRecipeFragment extends Fragment {
 
     private void initializeWronginputsMap(){
         wrongInputs.put("Title", false);
-        //TODO: rest of inputs
+        wrongInputs.put("Ingredients", false);
+        wrongInputs.put("Instructions", false);
+        wrongInputs.put("PersNb", false);
+        wrongInputs.put("PrepTime", false);
+        wrongInputs.put("CookTime", false);
+        wrongInputs.put("Difficulty", false);
     }
 
 
