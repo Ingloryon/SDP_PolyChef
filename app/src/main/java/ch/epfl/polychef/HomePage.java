@@ -79,7 +79,7 @@ public class HomePage extends ConnectedActivity {
                 throw new IllegalArgumentException();
         }
     }
-
+    
     private void setupNavigation(){
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(
