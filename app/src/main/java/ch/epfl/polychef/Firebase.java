@@ -13,13 +13,17 @@ import java.util.function.Function;
 
 import ch.epfl.polychef.recipe.Recipe;
 
-public abstract class Firebase {
-    private static final String TAG="Firebase";
-    private static int id;
-    //Get an instance of the firebase
-    public static FirebaseDatabase firebaseInstance=FirebaseDatabase.getInstance();
+public class Firebase {
+    private final String TAG="Firebase";
+    private int id;
 
-    public static void addRecipeToFirebase(Recipe recipe){
+    public FirebaseDatabase firebaseInstance;
+
+    public Firebase(FirebaseDatabase instance){
+        this.firebaseInstance = instance;
+    }
+
+    public void addRecipeToFirebase(Recipe recipe){
         Preconditions.checkArgument(recipe!=null);
 
         DatabaseReference idRef = firebaseInstance.getReference("id");
@@ -93,7 +97,7 @@ public abstract class Firebase {
         }
     }*/
 
-    public static void readRecipeFromFirebase(int id, CallHandler<Recipe> ch){
+    public void readRecipeFromFirebase(int id, CallHandler<Recipe> ch){
         DatabaseReference myRef = firebaseInstance.getReference("recipe").child(Integer.toString(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

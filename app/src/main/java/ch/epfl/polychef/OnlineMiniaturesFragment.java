@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
 
+        // TODO CHANGE ME WITH BUNDLE
+        firebase = new Firebase(FirebaseDatabase.getInstance());
+
         Bundle bundle = getArguments();
         int fragmentID = bundle.getInt("fragmentID");
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
@@ -57,7 +62,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
                     }
                     // add a certain number of recipes at this end of the actual list
                     for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
-                        Firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
+                        firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
                         currentReadInt++;
                     }
                     isLoading = true;
@@ -73,7 +78,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
         // For now when we enter the page we load the offline recipes first
         // add a certain number of recipes at this end of the actual list
         for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
-            Firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
+            firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
             currentReadInt++;
         }
 
