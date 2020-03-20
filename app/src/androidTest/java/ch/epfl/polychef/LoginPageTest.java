@@ -1,6 +1,7 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -13,6 +14,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
@@ -68,6 +70,18 @@ public class LoginPageTest {
         @Override
         public FirebaseUser getUser() {
             return mock(FirebaseUser.class);
+        }
+
+        @Override
+        public void startNextActivity() {
+            startActivity(new Intent(this, FakeHomePage.class));
+        }
+    }
+
+    private class FakeHomePage extends HomePage {
+        @Override
+        protected void onCreate(Bundle bundle) {
+            super.onCreate(bundle);
         }
     }
 }

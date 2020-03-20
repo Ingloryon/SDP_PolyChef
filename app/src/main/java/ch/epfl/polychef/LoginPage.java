@@ -51,7 +51,8 @@ public class LoginPage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         FirebaseUser user = getUser();
         if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK && user != null) {
-            startActivity(new Intent(this, HomePage.class));
+            //startActivity(new Intent(this, HomePage.class));
+            startNextActivity();
         } else {
             Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
         }
@@ -73,5 +74,9 @@ public class LoginPage extends AppCompatActivity {
 
     public FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public void startNextActivity() {
+        startActivity(new Intent(this, HomePage.class));
     }
 }
