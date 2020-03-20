@@ -134,7 +134,8 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private boolean getInstructions(String instructions){
-        final String SEPARATOR = Pattern.quote("}{");
+        final String SEPARATOR = Pattern.quote("},{");
+
         recipeInstructions = new ArrayList<>();
         instructions = instructions.substring(1);
         String mots[] = instructions.split(SEPARATOR);

@@ -23,14 +23,14 @@ public abstract class Firebase {
 
     public static void addRecipeToFirebase(Recipe recipe) {
         Preconditions.checkArgument(recipe != null);
-
         DatabaseReference idRef = firebaseInstance.getReference("id");
         //Get the last ID used in the database
-        idRef.addValueEventListener(new ValueEventListener() {
+        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value
                 id = dataSnapshot.getValue(Integer.class);
+                sendRecipeToFirebase(recipe);
             }
 
             @Override
@@ -40,7 +40,11 @@ public abstract class Firebase {
             }
         });
         //Change the value of the ID in the database
+    }
+
+    private static void sendRecipeToFirebase(Recipe recipe){
         id += 1;
+        DatabaseReference idRef = firebaseInstance.getReference("id");
         idRef.setValue(id);
         DatabaseReference myRef = firebaseInstance.getReference("recipe");
         myRef.child(Integer.toString(id)).setValue(recipe);
