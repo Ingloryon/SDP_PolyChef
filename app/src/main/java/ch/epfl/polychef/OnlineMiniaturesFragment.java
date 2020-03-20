@@ -11,13 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
+import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
 
 public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Recipe> {
@@ -32,7 +31,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
 
     private boolean isLoading = false;
 
-    private Firebase firebase;
+    private RecipeStorage recipeStorage;
 
     public OnlineMiniaturesFragment(){
         
@@ -43,7 +42,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
         View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
 
         // TODO CHANGE ME WITH BUNDLE
-        firebase = new Firebase(FirebaseDatabase.getInstance());
+        recipeStorage = new RecipeStorage();
 
         Bundle bundle = getArguments();
         int fragmentID = bundle.getInt("fragmentID");
@@ -62,7 +61,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
                     }
                     // add a certain number of recipes at this end of the actual list
                     for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
-                        firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
+                        recipeStorage.readRecipe(currentReadInt, OnlineMiniaturesFragment.this);
                         currentReadInt++;
                     }
                     isLoading = true;
@@ -78,7 +77,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
         // For now when we enter the page we load the offline recipes first
         // add a certain number of recipes at this end of the actual list
         for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
-            firebase.readRecipeFromFirebase(currentReadInt, OnlineMiniaturesFragment.this);
+            recipeStorage.readRecipe(currentReadInt, OnlineMiniaturesFragment.this);
             currentReadInt++;
         }
 

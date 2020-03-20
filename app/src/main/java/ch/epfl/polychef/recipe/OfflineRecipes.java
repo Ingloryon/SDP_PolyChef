@@ -1,6 +1,5 @@
 package ch.epfl.polychef.recipe;
 
-import ch.epfl.polychef.Firebase;
 import ch.epfl.polychef.R;
 
 import java.util.ArrayList;
