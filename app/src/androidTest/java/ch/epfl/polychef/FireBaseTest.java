@@ -28,7 +28,7 @@ public class FireBaseTest {
 
     @Test
     public void testThatReadRecipeFromFirebaseDoesNotThrowError(){
-        FireHandler fireHandler=mock(FireHandler.class);
+        CallHandler<Recipe> fireHandler=mock(CallHandler.class);
         Firebase.readRecipeFromFirebase(0,fireHandler);
     }
 

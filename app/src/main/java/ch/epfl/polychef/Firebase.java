@@ -93,7 +93,7 @@ public abstract class Firebase {
         }
     }*/
 
-    public static void readRecipeFromFirebase(int id, FireHandler ch){
+    public static void readRecipeFromFirebase(int id, CallHandler<Recipe> ch){
         DatabaseReference myRef = firebaseInstance.getReference("recipe").child(Integer.toString(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

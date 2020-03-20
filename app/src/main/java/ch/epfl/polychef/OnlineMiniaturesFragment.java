@@ -18,7 +18,7 @@ import java.util.List;
 import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.Recipe;
 
-public class OnlineMiniaturesFragment extends Fragment implements FireHandler {
+public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Recipe> {
 
     private RecyclerView onlineRecyclerView;
 
