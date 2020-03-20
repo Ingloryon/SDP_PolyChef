@@ -25,7 +25,7 @@ public abstract class Firebase {
         Preconditions.checkArgument(recipe != null);
         DatabaseReference idRef = firebaseInstance.getReference("id");
         //Get the last ID used in the database
-        idRef.addValueEventListener(new ValueEventListener() {
+        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value
