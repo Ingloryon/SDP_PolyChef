@@ -132,9 +132,9 @@ public class PostRecipeFragment extends Fragment {
     private boolean checkInputIsNumber(String input){
         return android.text.TextUtils.isDigitsOnly(input);
     }
-    
+
     private boolean getInstructions(String instructions){
-        final String SEPARATOR = Pattern.quote("}{");
+        final String SEPARATOR = Pattern.quote("},{");
 
         recipeInstructions = new ArrayList<>();
         instructions = instructions.substring(1);
