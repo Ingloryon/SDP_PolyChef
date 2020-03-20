@@ -46,16 +46,10 @@ public class RatingTest {
     public void testRatingToStringMethod(){
         Rating rating = new Rating();
 
-        Random rnd=new Random();
-        int nb=16;
-        int accumulator=0;
-        for(int i=0;i<nb;++i){
-            int r=rnd.nextInt(6);
-            accumulator+=r;
-            rating.addRate(i,r);
-        }
+        int nbIteration=16;
+        int sum=addRandomRatingAndReturnSum(rating,nbIteration);
 
-        String result=String.format(Locale.ENGLISH,"%.2f", ((double)accumulator)/nb) + "/5 stars by " + nb + " users.\n";
+        String result=String.format(Locale.ENGLISH,"%.2f", ((double)sum)/nbIteration) + "/5 stars by " + nbIteration + " users.\n";
         assertEquals(rating.toString(),result);
     }
 
@@ -63,17 +57,12 @@ public class RatingTest {
     public void testGetRatingSum(){
         Rating rating = new Rating();
 
-        Random rnd=new Random();
-        int nb=16;
-        int accumulator=0;
-        for(int i=0;i<nb;++i){
-            int r=rnd.nextInt(6);
-            accumulator+=r;
-            rating.addRate(i,r);
-        }
+        int nbIteration=16;
+        int sum=addRandomRatingAndReturnSum(rating,nbIteration);
 
-        assertEquals(rating.getRatingSum(),accumulator);
+        assertEquals(rating.getRatingSum(),sum);
     }
+
     @Test
     public void testGetAllRatings(){
         Rating rating = new Rating();
@@ -82,12 +71,23 @@ public class RatingTest {
         int nb=16;
         HashMap<Integer,Integer> userToRating=new HashMap<>();
         for(int i=0;i<nb;++i){
-            int r=rnd.nextInt(6);
-            rating.addRate(i,r);
-            userToRating.put(i,r);
+            int randomInt=rnd.nextInt(6);
+            rating.addRate(i,randomInt);
+            userToRating.put(i,randomInt);
         }
 
         assertEquals(rating.getAllRatings(),userToRating);
+    }
+
+    private int addRandomRatingAndReturnSum(Rating rating,int iterationNumber){
+        Random rnd=new Random();
+        int accumulator=0;
+        for(int i=0;i<iterationNumber;++i){
+            int randomInt=rnd.nextInt(6);
+            accumulator+=randomInt;
+            rating.addRate(i,randomInt);
+        }
+        return accumulator;
     }
 
 }

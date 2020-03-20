@@ -19,7 +19,7 @@ import ch.epfl.polychef.recipe.Recipe;
  * Uploader and downloader of {@code Recipe} from the storage.
  */
 public class RecipeStorage {
-    private final String TAG = "Firebase";
+    private static final String TAG = "Firebase";
     private int id;
 
     /**
