@@ -88,7 +88,12 @@ public class PostRecipeFragment extends Fragment {
         difficultyInput.setAdapter(adapter);
     }
 
-
+    /**
+     * Called when user presses "post recipe", will parse and check the entered inputs.
+     * If the inputs are correct it will post the corresponding Recipe on Firebase.
+     * Otherwise it will update the View to display to wrong inputs.
+     * @param view the current view
+     */
     public void setPostButton(View view) {
         getEnteredInputs();
         buildRecipeAndPostToFirebase();
