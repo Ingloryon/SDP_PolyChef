@@ -302,6 +302,21 @@
                     android:visibility="visible" />
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/errorLogs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-black"
+                android:textAlignment="textStart"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postRecipeRelativeOutput2" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

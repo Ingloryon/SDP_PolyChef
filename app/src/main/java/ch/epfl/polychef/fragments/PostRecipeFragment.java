@@ -219,16 +219,15 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void buildRecipeAndPostToFirebase() {
-
-        // TODO: Catch exceptions thrown by builder and set WrongInputsMap accordingly
-
         RecipeBuilder recipeBuilder = new RecipeBuilder();
 
         // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
             printWrongInputsToUser();
+            initializeWrongInputs();
         } else {
             Firebase.addRecipeToFirebase(postedRecipe);
+            //TODO: Leads back to Home page
         }
     }
 
@@ -259,7 +258,6 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void findIllegalInputs(RecipeBuilder rb) {
-
         try{
             rb.setName(name);
         } catch (IllegalArgumentException e){
@@ -315,6 +313,5 @@ public class PostRecipeFragment extends Fragment {
         // Add all strings of errorLogs to textView
         // clear all attributes
         //set textView visible
-
     }
 }
