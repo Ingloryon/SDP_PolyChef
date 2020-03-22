@@ -380,5 +380,8 @@ public class UserTest {
         public FirebaseDatabase getDatabase() {
             return mockDatabase;
         }
+
+        @Override
+        protected String getUserEmail() { return "test@epfl.ch"; }
     }
 }
