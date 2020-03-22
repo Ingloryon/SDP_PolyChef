@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -224,7 +225,6 @@ public class PostRecipeFragment extends Fragment {
         // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
             printWrongInputsToUser();
-            initializeWrongInputs();
         } else {
             Firebase.addRecipeToFirebase(postedRecipe);
             //TODO: Leads back to Home page
@@ -304,14 +304,25 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void printWrongInputsToUser(){
+        TextView errorLog =  getView().findViewById(R.id.errorLogs);
+        errorLog.setText(createErrorMessage());
+        errorLog.setVisibility(View.VISIBLE);
 
-        //TODO: To implement, should update the Page so it displays the wrong inputs entered
+        initializeWrongInputs();
+        errorLogs.clear();
+    }
 
+    private String createErrorMessage(){
+        StringBuilder sb = new StringBuilder();
         // So the errors are displayed by category
         Collections.sort(errorLogs);
 
-        // Add all strings of errorLogs to textView
-        // clear all attributes
-        //set textView visible
+        sb.append("There are errors in the given inputs :");
+        for(int i = 0 ; i < errorLogs.size() ; ++i){
+            sb.append("\n");
+            sb.append(errorLogs.get(i));
+        }
+
+        return sb.toString();
     }
 }
