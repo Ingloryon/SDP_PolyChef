@@ -42,7 +42,7 @@ public class PostRecipeFragment extends Fragment {
     private Button postButton;
 
     private Map<String, Boolean> wrongInputs;
-    private List<String> errorLogs;
+    private List<String> errorLogs = new ArrayList<>();
 
     private Spinner difficultyInput;
 
@@ -52,8 +52,7 @@ public class PostRecipeFragment extends Fragment {
     public PostRecipeFragment() {
     }
 
-    private void initializeErrorDetectionAttributes() {
-        errorLogs = new ArrayList<>();
+    private void initializeWrongInputs() {
         wrongInputs = new HashMap<>();
         wrongInputs.put("Title", false);
         wrongInputs.put("Ingredients", false);
@@ -67,7 +66,7 @@ public class PostRecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        initializeErrorDetectionAttributes();
+        initializeWrongInputs();
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post_recipe, container, false);
@@ -125,7 +124,6 @@ public class PostRecipeFragment extends Fragment {
             wrongInputs.put("Instructions", true); // TODO: Use replace when set SDK min24
         }
 
-
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
         // checks are applied in order so parseInt is always valid
@@ -177,7 +175,7 @@ public class PostRecipeFragment extends Fragment {
             if (list.length != 3) {
                 ingredients.clear();
                 allMatches.clear();
-                errorLogs.add("Ingredients: There should be 3 arguments entered as { a, b, c}");
+                errorLogs.add("Ingredients: There should be 3 arguments entered as {a,b,c}");
                 return false;
             }
             String name = list[0].trim().substring(1).trim();
@@ -225,11 +223,11 @@ public class PostRecipeFragment extends Fragment {
 
         RecipeBuilder recipeBuilder = new RecipeBuilder();
 
-
-        if (checkForIllegalInputs(recipeBuilder)) {
-            Firebase.addRecipeToFirebase(recipeBuilder.build());
-        } else {
+        // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
+        if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
             printWrongInputsToUser();
+        } else {
+            Firebase.addRecipeToFirebase(recipeBuilder.build());
         }
     }
 
@@ -250,14 +248,24 @@ public class PostRecipeFragment extends Fragment {
             }
 
         } catch (IllegalArgumentException e) {
-            findIllegalInputs();
+            findIllegalInputs(new RecipeBuilder());
             return false;
         }
 
         return true;
     }
 
-    private void findIllegalInputs() {
+    private void findIllegalInputs(RecipeBuilder rb) {
+
+        try{
+            rb.setName(name);
+        } catch (IllegalArgumentException e){
+            //errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
+            //System.out.println(e);
+        } catch (NullPointerException e){
+
+        }
+
 
 
     }
@@ -268,5 +276,10 @@ public class PostRecipeFragment extends Fragment {
 
         // So the errors are displayed by category
         Collections.sort(errorLogs);
+
+        // Add all strings of errorLogs to textView
+        // clear all attributes
+        //set textView visible
+
     }
 }

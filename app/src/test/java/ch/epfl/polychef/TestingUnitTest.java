@@ -3,6 +3,8 @@ package ch.epfl.polychef;
 import org.junit.Test;
 import java.io.*;
 
+import ch.epfl.polychef.recipe.RecipeBuilder;
+
 import static junit.framework.TestCase.assertTrue;
 
 public class TestingUnitTest {

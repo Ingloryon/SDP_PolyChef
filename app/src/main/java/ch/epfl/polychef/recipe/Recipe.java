@@ -28,7 +28,6 @@ public final class Recipe implements Serializable, Cloneable {
 
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
     private boolean hasPictures;
-    // TODO should we have this ?
     private boolean hasMiniature;
     private String miniaturePath;
     private List<Integer> picturesNumbers;
