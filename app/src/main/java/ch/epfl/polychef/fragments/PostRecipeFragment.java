@@ -144,7 +144,7 @@ public class PostRecipeFragment extends Fragment {
             wrongInputs.put("PrepTime", true);  // TODO: Use replace when set SDK min24
             estimatedPreparationTime = Integer.parseInt(prep);
         } else {
-            errorLogs.add("Preparation time: should be a number.");
+            errorLogs.add("Preparation time: should be a positive number.");
         }
 
 
@@ -154,10 +154,11 @@ public class PostRecipeFragment extends Fragment {
             wrongInputs.put("CookTime", true);  // TODO: Use replace when set SDK min24
             estimatedCookingTime = Integer.parseInt(cook);
         } else {
-            errorLogs.add("Cooking time: should be a number.");
+            errorLogs.add("Cooking time: should be a positive number.");
         }
 
         recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
+        wrongInputs.put("Difficulty", true);
     }
 
     private boolean checkInputIsNumber(String input) {
@@ -195,7 +196,12 @@ public class PostRecipeFragment extends Fragment {
                 errorLogs.add("Ingredients: The entered unit is not part of the possible units (" + Ingredient.Unit.values() + ").");
                 return false;
             }
-            ingredients.add(new Ingredient(name, quantity, unit));
+
+            try{
+                ingredients.add(new Ingredient(name, quantity, unit));
+            } catch (IllegalArgumentException e){
+                errorLogs.add("Ingredients: " + e.toString().substring(35));
+            }
         }
         return true;
     }
@@ -265,6 +271,12 @@ public class PostRecipeFragment extends Fragment {
         }
 
         try{
+            rb.setPersonNumber(personNumber);
+        }  catch (IllegalArgumentException e){
+            errorLogs.add("Person number: " + e.toString().substring(35));
+        }
+
+        try{
             rb.setEstimatedCookingTime(estimatedCookingTime);
         }  catch (IllegalArgumentException e){
             errorLogs.add("Cooking time: " + e.toString().substring(35));
@@ -284,16 +296,6 @@ public class PostRecipeFragment extends Fragment {
             errorLogs.add("Instructions: the entered value is null");
         } catch (IllegalArgumentException e){
             errorLogs.add("Instructions: " + e.toString().substring(35));
-        }
-
-        try{
-            for (int i = 0; i < ingredients.size(); i++) {
-                rb.addIngredient(ingredients.get(i));
-            }
-        } catch (NullPointerException e){
-            errorLogs.add("Ingredients: the entered value is null");
-        } catch (IllegalArgumentException e){
-            errorLogs.add("Ingredients: " + e.toString().substring(35));
         }
 
         try{
