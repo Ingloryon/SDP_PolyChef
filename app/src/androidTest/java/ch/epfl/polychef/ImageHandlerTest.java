@@ -28,6 +28,7 @@ import org.mockito.MockitoAnnotations;
 
 import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.pages.EntryPage;
 
 
 public class ImageHandlerTest {
