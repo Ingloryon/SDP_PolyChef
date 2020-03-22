@@ -44,7 +44,7 @@ public class HomePage extends ConnectedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        String userEmail = getUser().getEmail();
+        String userEmail = getUserEmail();
         retrieveUserInfo(userEmail);
 
         // Attaching the layout to the toolbar object
@@ -167,7 +167,7 @@ public class HomePage extends ConnectedActivity {
                 });
     }
 
-    private void newUser(String email) {
+    protected void newUser(String email) {
         String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         user = new User(email, username);
 
@@ -183,7 +183,7 @@ public class HomePage extends ConnectedActivity {
 
     }
 
-    private void oldUser(DataSnapshot snap){
+    protected void oldUser(DataSnapshot snap){
         if(snap.exists()){
             user = snap.getValue(User.class);
             userKey = snap.getKey();
@@ -194,7 +194,7 @@ public class HomePage extends ConnectedActivity {
         }
     }
 
-    private void updateUserInfo(){
+    protected void updateUserInfo(){
         Log.d(TAG, "Updating the user");
         getDatabase()
                 .getReference("users/" + userKey).setValue(user);
@@ -203,4 +203,6 @@ public class HomePage extends ConnectedActivity {
     public FirebaseDatabase getDatabase() {
         return FirebaseDatabase.getInstance();
     }
+
+    protected String getUserEmail() { return getUser().getEmail(); }
 }

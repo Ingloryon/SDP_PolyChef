@@ -14,6 +14,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 import static org.junit.Assert.assertNotNull;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.when;
 public class LoginPageTest {
 
     @Mock
-    private FirebaseUser mockUser;
+    private FirebaseUser mockUser = mock(FirebaseUser.class);
 
     private SingleActivityFactory<LoginPage> fakeLoginPage = new SingleActivityFactory<LoginPage>(
             LoginPage.class) {
@@ -72,7 +73,6 @@ public class LoginPageTest {
 
     @Test
     public void clickOnGoogleButtonRaiseNoError() {
-        MockitoAnnotations.initMocks(this);
         when(mockUser.getEmail()).thenReturn("test@epfl.ch");
         when(mockUser.getDisplayName()).thenReturn("TestUsername");
         onView(withId(R.id.googleButton)).perform(click());
@@ -110,5 +110,17 @@ public class LoginPageTest {
 
         @Override
         protected void retrieveUserInfo(String email) { }
+
+        @Override
+        protected void newUser(String email) { }
+
+        @Override
+        protected void oldUser(DataSnapshot snap) { }
+
+        @Override
+        protected void updateUserInfo() { }
+
+        @Override
+        protected String getUserEmail() { return "test@epfl.ch"; }
     }
 }

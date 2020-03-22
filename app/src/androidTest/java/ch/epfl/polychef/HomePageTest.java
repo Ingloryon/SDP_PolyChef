@@ -16,6 +16,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -88,5 +90,20 @@ public class HomePageTest {
         public FirebaseUser getUser() {
             return Mockito.mock(FirebaseUser.class);
         }
+
+        @Override
+        protected void retrieveUserInfo(String email) { }
+
+        @Override
+        protected void newUser(String email) { }
+
+        @Override
+        protected void oldUser(DataSnapshot snap) { }
+
+        @Override
+        protected void updateUserInfo() { }
+
+        @Override
+        protected String getUserEmail() { return "test@epfl.ch"; }
     }
 }
