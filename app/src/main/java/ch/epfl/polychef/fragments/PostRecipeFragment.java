@@ -28,6 +28,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 
 public class PostRecipeFragment extends Fragment {
     private final String TAG = "PostRecipeFragment";
+    private final static int TITLE_MAX_CHAR = 80;
     private String name;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
@@ -102,13 +103,15 @@ public class PostRecipeFragment extends Fragment {
     private void getEnteredInputs() {
 
         EditText nameInput = getView().findViewById(R.id.nameInput);
-        // TODO: Add sanitization -> check length, ect...
-
         String inputName = nameInput.getText().toString();
 
-        name = inputName;
-
-
+        if(inputName.length() > TITLE_MAX_CHAR) {
+            errorLogs.add("The title is too long, the maximum length is " + TITLE_MAX_CHAR + " characters.");
+        } else {
+            wrongInputs.put("Title", true);
+            name = inputName;
+        }
+        
         EditText ingredientsInput = getView().findViewById(R.id.ingredientsList);
         String ingre = ingredientsInput.getText().toString();
         if (parseIngredients(ingre)) {
