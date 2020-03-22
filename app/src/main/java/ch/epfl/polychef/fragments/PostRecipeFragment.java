@@ -262,15 +262,47 @@ public class PostRecipeFragment extends Fragment {
 
         try{
             rb.setName(name);
-        } catch (NullPointerException e){
-            errorLogs.add("Title: the entered value is null");
-            //System.out.println(e);
         } catch (IllegalArgumentException e){
-
+            errorLogs.add("Title: " + e.toString().substring(35));
         }
 
+        try{
+            rb.setEstimatedCookingTime(estimatedCookingTime);
+        }  catch (IllegalArgumentException e){
+            errorLogs.add("Cooking time: " + e.toString().substring(35));
+        }
 
+        try{
+            rb.setEstimatedPreparationTime(estimatedPreparationTime);
+        }  catch (IllegalArgumentException e){
+            errorLogs.add("Preparation time: " + e.toString().substring(35));
+        }
 
+        try{
+            for (int i = 0; i < recipeInstructions.size(); i++) {
+                rb.addInstruction(recipeInstructions.get(i));
+            }
+        } catch (NullPointerException e){
+            errorLogs.add("Instructions: the entered value is null");
+        } catch (IllegalArgumentException e){
+            errorLogs.add("Instructions: " + e.toString().substring(35));
+        }
+
+        try{
+            for (int i = 0; i < ingredients.size(); i++) {
+                rb.addIngredient(ingredients.get(i));
+            }
+        } catch (NullPointerException e){
+            errorLogs.add("Ingredients: the entered value is null");
+        } catch (IllegalArgumentException e){
+            errorLogs.add("Ingredients: " + e.toString().substring(35));
+        }
+
+        try{
+            rb.build();
+        }  catch (IllegalArgumentException e){
+            errorLogs.add("There are missing arguments to the recipe !");
+        }
     }
 
     private void printWrongInputsToUser(){
