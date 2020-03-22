@@ -21,16 +21,32 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginPageTest {
+
+    @Mock
+    private FirebaseUser mockUser;
 
     private SingleActivityFactory<LoginPage> fakeLoginPage = new SingleActivityFactory<LoginPage>(
             LoginPage.class) {
         @Override
         protected LoginPage create(Intent intent) {
             LoginPage activity = new FakeLogin();
+            return activity;
+        }
+    };
+
+    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
+            HomePage.class) {
+        @Override
+        protected HomePage create(Intent intent) {
+            HomePage activity = new FakeHomePage();
             return activity;
         }
     };
@@ -56,6 +72,9 @@ public class LoginPageTest {
 
     @Test
     public void clickOnGoogleButtonRaiseNoError() {
+        MockitoAnnotations.initMocks(this);
+        when(mockUser.getEmail()).thenReturn("test@epfl.ch");
+        when(mockUser.getDisplayName()).thenReturn("TestUsername");
         onView(withId(R.id.googleButton)).perform(click());
     }
 
@@ -74,7 +93,7 @@ public class LoginPageTest {
 
         @Override
         public void startNextActivity() {
-            startActivity(new Intent(this, FakeHomePage.class));
+            startActivity(new Intent(this, fakeHomePage.getActivityClassToIntercept()));
         }
     }
 
@@ -83,5 +102,13 @@ public class LoginPageTest {
         protected void onCreate(Bundle bundle) {
             super.onCreate(bundle);
         }
+
+        @Override
+        public FirebaseUser getUser() {
+            return mockUser;
+        }
+
+        @Override
+        protected void retrieveUserInfo(String email) { }
     }
 }

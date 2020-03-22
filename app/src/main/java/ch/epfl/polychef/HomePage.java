@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -70,6 +71,7 @@ public class HomePage extends ConnectedActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         Button logButton = findViewById(R.id.logButton);
         logButton.setText(LOG_OUT);
         logButton.setOnClickListener(new View.OnClickListener(){
@@ -126,7 +128,7 @@ public class HomePage extends ConnectedActivity {
         );
     }
 
-    private void retrieveUserInfo(String email) {
+    protected void retrieveUserInfo(String email) {
 
         Log.d(TAG, "Retrieving user info");
 
