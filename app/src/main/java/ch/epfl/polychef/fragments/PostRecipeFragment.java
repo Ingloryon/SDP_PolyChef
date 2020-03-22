@@ -39,42 +39,18 @@ public class PostRecipeFragment extends Fragment {
     private Button postButton;
 
     private Map<String, Boolean> wrongInputs;
+    private List<String> errorLogs;
 
     private Spinner difficultyInput;
 
     /**
      * Required empty public constructor.
      */
-    public PostRecipeFragment() {}
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        initializeWrongInputsMap();
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post_recipe, container, false);
+    public PostRecipeFragment() {
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        postButton=getView().findViewById(R.id.postRecipe);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setPostButton(view);
-            }
-        });
-        difficultyInput = (Spinner) getView().findViewById(R.id.difficultyInput);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.difficulty_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        difficultyInput.setAdapter(adapter);
-    }
-
-    private void initializeWrongInputsMap(){
+    private void initializeErrorDetectionAttributes() {
+        errorLogs = new ArrayList<>();
         wrongInputs = new HashMap<>();
         wrongInputs.put("Title", false);
         wrongInputs.put("Ingredients", false);
@@ -85,27 +61,65 @@ public class PostRecipeFragment extends Fragment {
         wrongInputs.put("Difficulty", false);
     }
 
-    private void getEnteredInputs(){
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        initializeErrorDetectionAttributes();
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_post_recipe, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        postButton = getView().findViewById(R.id.postRecipe);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPostButton(view);
+            }
+        });
+        difficultyInput = getView().findViewById(R.id.difficultyInput);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.difficulty_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        difficultyInput.setAdapter(adapter);
+    }
+
+
+    public void setPostButton(View view) {
+        getEnteredInputs();
+        buildRecipeAndPostToFirebase();
+    }
+
+    private void getEnteredInputs() {
+
         EditText nameInput = getView().findViewById(R.id.nameInput);
         // TODO: Add sanitization -> check length, ect...
-        name = nameInput.getText().toString();
+
+        String inputName = nameInput.getText().toString();
+
+        name = inputName;
+
 
         EditText ingredientsInput = getView().findViewById(R.id.ingredientsList);
         String ingre = ingredientsInput.getText().toString();
-        if ( matchRegexIngredients(ingre) ){
+        if (parseIngredients(ingre)) {
             wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
         }
 
         EditText instructionsInput = getView().findViewById(R.id.instructionsList);
         String instructions = instructionsInput.getText().toString();
-        if (getInstructions(instructions)){
+        if (parseInstructions(instructions)) {
             wrongInputs.put("Instructions", true);
         }
 
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
-        if (checkInputIsNumber(persNb)){
+        if (checkInputIsNumber(persNb)) {
             wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
         }
@@ -113,7 +127,7 @@ public class PostRecipeFragment extends Fragment {
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
-        if (checkInputIsNumber(prep)){
+        if (checkInputIsNumber(prep)) {
             wrongInputs.put("PrepTime", true);  // TODO: Use replace when set SDK min24
             estimatedPreparationTime = Integer.parseInt(prep);
         }
@@ -121,42 +135,42 @@ public class PostRecipeFragment extends Fragment {
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
-        if (checkInputIsNumber(cook)){
+        if (checkInputIsNumber(cook)) {
             wrongInputs.put("CookTime", true);  // TODO: Use replace when set SDK min24
             estimatedCookingTime = Integer.parseInt(cook);
         }
 
-        recipeDifficulty= Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
+        recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
     }
 
-    private boolean checkInputIsNumber(String input){
+    private boolean checkInputIsNumber(String input) {
         return android.text.TextUtils.isDigitsOnly(input);
     }
 
-    private boolean getInstructions(String instructions){
+    private boolean parseInstructions(String instructions) {
         final String SEPARATOR = Pattern.quote("},{");
 
         recipeInstructions = new ArrayList<>();
         instructions = instructions.substring(1);
-        String mots[] = instructions.split(SEPARATOR);
-        for(int i=0;i<mots.length-1;i++){
+        String[] mots = instructions.split(SEPARATOR);
+        for (int i = 0; i < mots.length - 1; i++) {
             recipeInstructions.add(mots[i]);
         }
-        recipeInstructions.add(mots[mots.length-1].substring(0,mots[mots.length-1].length()-1));
+        recipeInstructions.add(mots[mots.length - 1].substring(0, mots[mots.length - 1].length() - 1));
         return true;
     }
 
-    private boolean matchRegexIngredients(String toMatch) {
+    private boolean parseIngredients(String toMatch) {
         List<String> allMatches = new ArrayList<>();
         ingredients = new ArrayList<>();
         Matcher m = Pattern.compile("\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}")
                 .matcher(toMatch);
-        while(m.find()) {
+        while (m.find()) {
             allMatches.add(m.group());
         }
-        for(String s: allMatches) {
+        for (String s : allMatches) {
             String[] list = s.split(",");
-            if(list.length != 3) {
+            if (list.length != 3) {
                 ingredients.clear();
                 allMatches.clear();
                 return false;
@@ -166,11 +180,11 @@ public class PostRecipeFragment extends Fragment {
             Ingredient.Unit unit = null;
             String unitString = list[2].trim().substring(0, list[2].trim().length() - 1).trim();
             for (Ingredient.Unit u : Ingredient.Unit.values()) {
-                if(u.toString().toLowerCase().equals(unitString.toLowerCase())) {
+                if (u.toString().toLowerCase().equals(unitString.toLowerCase())) {
                     unit = u;
                 }
             }
-            if(unit == null) {
+            if (unit == null) {
                 ingredients.clear();
                 allMatches.clear();
                 return false;
@@ -180,28 +194,51 @@ public class PostRecipeFragment extends Fragment {
         return true;
     }
 
-    private void buildRecipeAndPostToFirebase(){
+    private void buildRecipeAndPostToFirebase() {
 
         // TODO: Catch exceptions thrown by builder and set WrongInputsMap accordingly
 
-        RecipeBuilder recipeBuilder = new RecipeBuilder()
-                .setName(name)
-                .setEstimatedCookingTime(estimatedCookingTime)
-                .setPersonNumber(personNumber)
-                .setEstimatedPreparationTime(estimatedPreparationTime)
-                .addPicturePath(R.drawable.ovenbakedsalmon)
-                .setRecipeDifficulty(recipeDifficulty);
-        for(int i=0;i<recipeInstructions.size();i++){
-            recipeBuilder.addInstruction(recipeInstructions.get(i));
+        RecipeBuilder recipeBuilder = new RecipeBuilder();
+
+
+        if (checkForIllegalInputs(recipeBuilder)) {
+            Firebase.addRecipeToFirebase(recipeBuilder.build());
+        } else {
+            printWrongInputsToUser();
         }
-        for(int i=0;i<ingredients.size();i++){
-            recipeBuilder.addIngredient(ingredients.get(i));
-        }
-        Firebase.addRecipeToFirebase(recipeBuilder.build());
     }
 
-    public void setPostButton(View view) {
-        getEnteredInputs();
-        buildRecipeAndPostToFirebase();
+    private boolean checkForIllegalInputs(RecipeBuilder rb) {
+
+        try {
+            rb.setName(name)
+                    .setEstimatedCookingTime(estimatedCookingTime)
+                    .setPersonNumber(personNumber)
+                    .setEstimatedPreparationTime(estimatedPreparationTime)
+                    .addPicturePath(R.drawable.ovenbakedsalmon)
+                    .setRecipeDifficulty(recipeDifficulty);
+            for (int i = 0; i < recipeInstructions.size(); i++) {
+                rb.addInstruction(recipeInstructions.get(i));
+            }
+            for (int i = 0; i < ingredients.size(); i++) {
+                rb.addIngredient(ingredients.get(i));
+            }
+
+        } catch (IllegalArgumentException e) {
+            findIllegalInputs();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void findIllegalInputs() {
+
+
+    }
+
+    private void printWrongInputsToUser(){
+
+        //TODO: To implement, should update the Page so it displays the wrong inputs entered
     }
 }
