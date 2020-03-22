@@ -38,6 +38,7 @@ public class PostRecipeFragment extends Fragment {
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
+    private Recipe postedRecipe;
 
     private Button postButton;
 
@@ -227,7 +228,7 @@ public class PostRecipeFragment extends Fragment {
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
             printWrongInputsToUser();
         } else {
-            Firebase.addRecipeToFirebase(recipeBuilder.build());
+            Firebase.addRecipeToFirebase(postedRecipe);
         }
     }
 
@@ -246,12 +247,14 @@ public class PostRecipeFragment extends Fragment {
             for (int i = 0; i < ingredients.size(); i++) {
                 rb.addIngredient(ingredients.get(i));
             }
+            rb.build();
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
             return false;
         }
 
+        postedRecipe = rb.build();
         return true;
     }
 
@@ -259,10 +262,10 @@ public class PostRecipeFragment extends Fragment {
 
         try{
             rb.setName(name);
-        } catch (IllegalArgumentException e){
-            //errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
-            //System.out.println(e);
         } catch (NullPointerException e){
+            errorLogs.add("Title: the entered value is null");
+            //System.out.println(e);
+        } catch (IllegalArgumentException e){
 
         }
 
