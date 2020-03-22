@@ -134,7 +134,8 @@ public class HomePage extends ConnectedActivity {
 
         getDatabase()
                 .getReference("users")
-                .orderByChild("email").equalTo(email)
+                .orderByChild("email")
+                .equalTo(email)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -168,7 +169,7 @@ public class HomePage extends ConnectedActivity {
     }
 
     protected void newUser(String email) {
-        String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        String username = getUserName();
         user = new User(email, username);
 
         //TODO: Integrate with the Firebase class
@@ -197,7 +198,8 @@ public class HomePage extends ConnectedActivity {
     protected void updateUserInfo(){
         Log.d(TAG, "Updating the user");
         getDatabase()
-                .getReference("users/" + userKey).setValue(user);
+                .getReference("users/" + userKey)
+                .setValue(user);
     }
     
     public FirebaseDatabase getDatabase() {
@@ -205,4 +207,6 @@ public class HomePage extends ConnectedActivity {
     }
 
     protected String getUserEmail() { return getUser().getEmail(); }
+
+    protected String getUserName() { return getUser().getDisplayName(); }
 }
