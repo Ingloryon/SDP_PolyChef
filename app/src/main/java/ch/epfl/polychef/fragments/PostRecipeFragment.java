@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,14 +105,13 @@ public class PostRecipeFragment extends Fragment {
 
         EditText nameInput = getView().findViewById(R.id.nameInput);
         String inputName = nameInput.getText().toString();
-
         if(inputName.length() > TITLE_MAX_CHAR) {
-            errorLogs.add("The title is too long, the maximum length is " + TITLE_MAX_CHAR + " characters.");
+            errorLogs.add("Title: too long. The maximum length is " + TITLE_MAX_CHAR + " characters.");
         } else {
             wrongInputs.put("Title", true);
             name = inputName;
         }
-        
+
         EditText ingredientsInput = getView().findViewById(R.id.ingredientsList);
         String ingre = ingredientsInput.getText().toString();
         if (parseIngredients(ingre)) {
@@ -155,19 +155,6 @@ public class PostRecipeFragment extends Fragment {
         return android.text.TextUtils.isDigitsOnly(input);
     }
 
-    private boolean parseInstructions(String instructions) {
-        final String SEPARATOR = Pattern.quote("},{");
-
-        recipeInstructions = new ArrayList<>();
-        instructions = instructions.substring(1);
-        String[] mots = instructions.split(SEPARATOR);
-        for (int i = 0; i < mots.length - 1; i++) {
-            recipeInstructions.add(mots[i]);
-        }
-        recipeInstructions.add(mots[mots.length - 1].substring(0, mots[mots.length - 1].length() - 1));
-        return true;
-    }
-
     private boolean parseIngredients(String toMatch) {
         List<String> allMatches = new ArrayList<>();
         ingredients = new ArrayList<>();
@@ -181,6 +168,7 @@ public class PostRecipeFragment extends Fragment {
             if (list.length != 3) {
                 ingredients.clear();
                 allMatches.clear();
+                errorLogs.add("Ingredients: There should be 3 arguments entered as { a, b, c}");
                 return false;
             }
             String name = list[0].trim().substring(1).trim();
@@ -195,10 +183,30 @@ public class PostRecipeFragment extends Fragment {
             if (unit == null) {
                 ingredients.clear();
                 allMatches.clear();
+                errorLogs.add("Ingredients: The entered unit is not part of the possible units (" + Ingredient.Unit.values() + ").");
                 return false;
             }
             ingredients.add(new Ingredient(name, quantity, unit));
         }
+        return true;
+    }
+
+    private boolean parseInstructions(String instructions) {
+        final String SEPARATOR = Pattern.quote("},{");
+
+        // TODO: Add more precise input checking of instructions
+        if (!instructions.contains("{") || !instructions.contains("}")){
+            errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
+            return false;
+        }
+
+        recipeInstructions = new ArrayList<>();
+        instructions = instructions.substring(1);
+        String[] mots = instructions.split(SEPARATOR);
+        for (int i = 0; i < mots.length - 1; i++) {
+            recipeInstructions.add(mots[i]);
+        }
+        recipeInstructions.add(mots[mots.length - 1].substring(0, mots[mots.length - 1].length() - 1));
         return true;
     }
 
@@ -248,5 +256,8 @@ public class PostRecipeFragment extends Fragment {
     private void printWrongInputsToUser(){
 
         //TODO: To implement, should update the Page so it displays the wrong inputs entered
+
+        // So the errors are displayed by category
+        Collections.sort(errorLogs);
     }
 }
