@@ -30,6 +30,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 public class PostRecipeFragment extends Fragment {
     private final String TAG = "PostRecipeFragment";
     private final static int TITLE_MAX_CHAR = 80;
+    private final static int MAX_PERS_NB = 100;
     private String name;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
@@ -121,15 +122,19 @@ public class PostRecipeFragment extends Fragment {
         EditText instructionsInput = getView().findViewById(R.id.instructionsList);
         String instructions = instructionsInput.getText().toString();
         if (parseInstructions(instructions)) {
-            wrongInputs.put("Instructions", true);
+            wrongInputs.put("Instructions", true); // TODO: Use replace when set SDK min24
         }
 
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
-        if (checkInputIsNumber(persNb)) {
+        // checks are applied in order so parseInt is always valid
+        // we only check persNb <= max since positiveness will already be check by builder
+        if (checkInputIsNumber(persNb) && Integer.parseInt(persNb) <= MAX_PERS_NB) {
             wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
+        } else {
+            errorLogs.add("Person number: should be a number between 0 and " + MAX_PERS_NB + ".");
         }
 
 
@@ -138,6 +143,8 @@ public class PostRecipeFragment extends Fragment {
         if (checkInputIsNumber(prep)) {
             wrongInputs.put("PrepTime", true);  // TODO: Use replace when set SDK min24
             estimatedPreparationTime = Integer.parseInt(prep);
+        } else {
+            errorLogs.add("Preparation time: should be a number.");
         }
 
 
@@ -146,6 +153,8 @@ public class PostRecipeFragment extends Fragment {
         if (checkInputIsNumber(cook)) {
             wrongInputs.put("CookTime", true);  // TODO: Use replace when set SDK min24
             estimatedCookingTime = Integer.parseInt(cook);
+        } else {
+            errorLogs.add("Cooking time: should be a number.");
         }
 
         recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
