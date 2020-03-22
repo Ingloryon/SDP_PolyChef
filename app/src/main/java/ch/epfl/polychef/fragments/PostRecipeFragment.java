@@ -29,9 +29,9 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 
 public class PostRecipeFragment extends Fragment {
-    private final String TAG = "PostRecipeFragment";
-    private final static int TITLE_MAX_CHAR = 80;
-    private final static int MAX_PERS_NB = 100;
+    private final static String TAG = "PostRecipeFragment";
+    private final int TITLE_MAX_CHAR = 80;
+    private final int MAX_PERS_NB = 100;
     private String name;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
@@ -168,10 +168,10 @@ public class PostRecipeFragment extends Fragment {
     private boolean parseIngredients(String toMatch) {
         List<String> allMatches = new ArrayList<>();
         ingredients = new ArrayList<>();
-        Matcher m = Pattern.compile("\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}")
+        Matcher mat = Pattern.compile("\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}")
                 .matcher(toMatch);
-        while (m.find()) {
-            allMatches.add(m.group());
+        while (mat.find()) {
+            allMatches.add(mat.group());
         }
         for (String s : allMatches) {
             String[] list = s.split(",");
@@ -207,7 +207,7 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private boolean parseInstructions(String instructions) {
-        final String SEPARATOR = Pattern.quote("},{");
+        String separator = Pattern.quote("},{");
 
         // TODO: Add more precise input checking of instructions
         if (!instructions.contains("{") || !instructions.contains("}")){
@@ -217,7 +217,7 @@ public class PostRecipeFragment extends Fragment {
 
         recipeInstructions = new ArrayList<>();
         instructions = instructions.substring(1);
-        String[] mots = instructions.split(SEPARATOR);
+        String[] mots = instructions.split(separator);
         for (int i = 0; i < mots.length - 1; i++) {
             recipeInstructions.add(mots[i]);
         }
@@ -234,6 +234,9 @@ public class PostRecipeFragment extends Fragment {
         } else {
             Firebase.addRecipeToFirebase(postedRecipe);
             //TODO: Leads back to Home page
+            //Intent intent = new Intent(this, HomePage.class);
+            //startActivity(intent);
+            // Use navCrontroller ?
         }
     }
 
@@ -328,3 +331,5 @@ public class PostRecipeFragment extends Fragment {
         return sb.toString();
     }
 }
+
+//TODO: Refactor by adding a new class RecipeInputSanitization in package Recipe ? Would contain findIllegalInputs, checkForIllegalInputs, parseInstructions, parseIngredients, getEnteredInputs ?

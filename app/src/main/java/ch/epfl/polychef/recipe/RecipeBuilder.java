@@ -73,7 +73,7 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Add an ingredient from an exiting one
+     * Add an ingredient from an exiting one.
      * @param ingredient an Ingredient
      * @return the recipe builder
      */

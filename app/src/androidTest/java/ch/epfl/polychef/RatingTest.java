@@ -45,15 +45,8 @@ public class RatingTest {
     @Test
     public void testRatingToStringMethod(){
         Rating rating = new Rating();
-
-        Random rnd=new Random();
         int nb=16;
-        int accumulator=0;
-        for(int i=0;i<nb;++i){
-            int r=rnd.nextInt(6);
-            accumulator+=r;
-            rating.addRate(i,r);
-        }
+        int accumulator = initRating(rating, nb);
 
         String result=String.format(Locale.ENGLISH,"%.2f", ((double)accumulator)/nb) + "/5 stars by " + nb + " users.\n";
         assertEquals(rating.toString(),result);
@@ -62,18 +55,24 @@ public class RatingTest {
     @Test
     public void testGetRatingSum(){
         Rating rating = new Rating();
-
-        Random rnd=new Random();
         int nb=16;
-        int accumulator=0;
-        for(int i=0;i<nb;++i){
-            int r=rnd.nextInt(6);
-            accumulator+=r;
-            rating.addRate(i,r);
-        }
+        int accumulator = initRating(rating, nb);
 
         assertEquals(rating.getRatingSum(),accumulator);
     }
+
+    private int initRating(Rating rating, int nb){
+        Random rnd=new Random();
+
+        int accumulator=0;
+        for(int i=0;i<nb;++i){
+            int rndNext =rnd.nextInt(6);
+            accumulator+=rndNext;
+            rating.addRate(i,rndNext);
+        }
+        return accumulator;
+    }
+
     @Test
     public void testGetAllRatings(){
         Rating rating = new Rating();
@@ -82,9 +81,9 @@ public class RatingTest {
         int nb=16;
         HashMap<Integer,Integer> userToRating=new HashMap<>();
         for(int i=0;i<nb;++i){
-            int r=rnd.nextInt(6);
-            rating.addRate(i,r);
-            userToRating.put(i,r);
+            int rndNext=rnd.nextInt(6);
+            rating.addRate(i,rndNext);
+            userToRating.put(i,rndNext);
         }
 
         assertEquals(rating.getAllRatings(),userToRating);
