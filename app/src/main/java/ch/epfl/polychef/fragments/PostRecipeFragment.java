@@ -1,6 +1,8 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +28,8 @@ import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.firebase.Firebase;
+import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.pages.LoginPage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
@@ -31,6 +37,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 public class PostRecipeFragment extends Fragment {
     private final static String TAG = "PostRecipeFragment";
     private final int TITLE_MAX_CHAR = 80;
+    private final int TITLE_MIN_CHAR = 3;
     private final int MAX_PERS_NB = 100;
     private String name;
     private List<String> recipeInstructions;
@@ -100,15 +107,20 @@ public class PostRecipeFragment extends Fragment {
      */
     public void setPostButton(View view) {
         getEnteredInputs();
-        buildRecipeAndPostToFirebase();
+        if(!buildRecipeAndPostToFirebase()){
+            printWrongInputsToUser();
+        }else{
+            Intent intent = new Intent(getActivity(), HomePage.class);
+            startActivity(intent);
+        }
     }
 
     private void getEnteredInputs() {
 
         EditText nameInput = getView().findViewById(R.id.nameInput);
         String inputName = nameInput.getText().toString();
-        if(inputName.length() > TITLE_MAX_CHAR) {
-            errorLogs.add("Title: too long. The maximum length is " + TITLE_MAX_CHAR + " characters.");
+        if(inputName.length() > TITLE_MAX_CHAR || inputName.length() < TITLE_MIN_CHAR) {
+            errorLogs.add("Title: too long or too short. Need to be between " + TITLE_MIN_CHAR + " and " + TITLE_MAX_CHAR + " characters.");
         } else {
             wrongInputs.put("Title", true);
             name = inputName;
@@ -130,7 +142,7 @@ public class PostRecipeFragment extends Fragment {
         String persNb = personNb.getText().toString();
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
-        if (checkInputIsNumber(persNb) && Integer.parseInt(persNb) <= MAX_PERS_NB) {
+        if (persNb.length()!=0 && checkInputIsNumber(persNb) && Integer.parseInt(persNb) <= MAX_PERS_NB){
             wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
         } else {
@@ -140,7 +152,7 @@ public class PostRecipeFragment extends Fragment {
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
-        if (checkInputIsNumber(prep)) {
+        if (prep.length()!=0 && checkInputIsNumber(prep)) {
             wrongInputs.put("PrepTime", true);  // TODO: Use replace when set SDK min24
             estimatedPreparationTime = Integer.parseInt(prep);
         } else {
@@ -150,7 +162,7 @@ public class PostRecipeFragment extends Fragment {
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
-        if (checkInputIsNumber(cook)) {
+        if (cook.length()!=0 && checkInputIsNumber(cook)) {
             wrongInputs.put("CookTime", true);  // TODO: Use replace when set SDK min24
             estimatedCookingTime = Integer.parseInt(cook);
         } else {
@@ -173,6 +185,12 @@ public class PostRecipeFragment extends Fragment {
         while (mat.find()) {
             allMatches.add(mat.group());
         }
+        if(allMatches.size()==0){
+            ingredients.clear();
+            allMatches.clear();
+            errorLogs.add("Ingredients: There should be 3 arguments entered as {a,b,c}");
+            return false;
+        }
         for (String s : allMatches) {
             String[] list = s.split(",");
             if (list.length != 3) {
@@ -193,7 +211,7 @@ public class PostRecipeFragment extends Fragment {
             if (unit == null) {
                 ingredients.clear();
                 allMatches.clear();
-                errorLogs.add("Ingredients: The entered unit is not part of the possible units (" + Ingredient.Unit.values() + ").");
+                errorLogs.add("Ingredients: The entered unit is not part of the possible units " + Arrays.asList(Ingredient.Unit.values()) + ".");
                 return false;
             }
 
@@ -210,7 +228,7 @@ public class PostRecipeFragment extends Fragment {
         String separator = Pattern.quote("},{");
 
         // TODO: Add more precise input checking of instructions
-        if (!instructions.contains("{") || !instructions.contains("}")){
+        if (instructions.length()<3 || !instructions.contains("{") || !instructions.contains("}")){
             errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
             return false;
         }
@@ -225,18 +243,15 @@ public class PostRecipeFragment extends Fragment {
         return true;
     }
 
-    private void buildRecipeAndPostToFirebase() {
+    private boolean buildRecipeAndPostToFirebase() {
         RecipeBuilder recipeBuilder = new RecipeBuilder();
 
         // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
-            printWrongInputsToUser();
+            return false;
         } else {
             Firebase.addRecipeToFirebase(postedRecipe);
-            //TODO: Leads back to Home page
-            //Intent intent = new Intent(this, HomePage.class);
-            //startActivity(intent);
-            // Use navCrontroller ?
+            return true;
         }
     }
 

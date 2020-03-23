@@ -116,7 +116,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder setEstimatedCookingTime(int estimatedCookingTime) {
-        Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated time required must be strictly positive");
+        Preconditions.checkArgument(estimatedCookingTime >= 0, "The estimated time required must be positive");
 
         this.estimatedCookingTime = estimatedCookingTime;
         return this;

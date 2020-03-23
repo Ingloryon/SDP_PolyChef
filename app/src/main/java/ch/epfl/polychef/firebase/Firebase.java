@@ -39,7 +39,6 @@ public abstract class Firebase {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-        //Change the value of the ID in the database
     }
 
     private static void sendRecipeToFirebase(Recipe recipe){
