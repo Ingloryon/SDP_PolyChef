@@ -275,16 +275,30 @@
                 </LinearLayout>
 
 
-                <Button
-                    android:id="@+id/pictures"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
                     android:layout_alignParentEnd="true"
-                    android:fontFamily="sans-serif-black"
-                    android:textSize="12sp"
-                    android:text="@string/UploadPictures"
-                    android:visibility="visible" />
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/pictures"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:fontFamily="sans-serif-black"
+                        android:textSize="12sp"
+                        android:text="@string/UploadPictures"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/mealPicturesText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </LinearLayout>
+
             </RelativeLayout>
 
             <Space

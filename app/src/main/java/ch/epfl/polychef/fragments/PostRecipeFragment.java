@@ -43,6 +43,8 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 
 public class PostRecipeFragment extends Fragment {
     private final static String TAG = "PostRecipeFragment";
+    private final static int MINIATURE_FACTOR = 1;
+    private final static int MEAL_PICTURES_FACTOR = 10;
     private final int TITLE_MAX_CHAR = 80;
     private final int TITLE_MIN_CHAR = 3;
     private final int MAX_PERS_NB = 100;
@@ -63,6 +65,9 @@ public class PostRecipeFragment extends Fragment {
     private Uri currentMiniature = null;
     private String miniatureName = UUID.randomUUID().toString();
     private ImageView imageMiniaturePreview;
+
+    private List<Uri> currentMealPictures = new ArrayList<>();
+    private TextView mealPicturesText;
 
     private ImageHandler imageHandler;
 
@@ -114,16 +119,17 @@ public class PostRecipeFragment extends Fragment {
         addMiniature = getView().findViewById(R.id.miniature);
         imageMiniaturePreview = getView().findViewById(R.id.miniaturePreview);
         addPictures = getView().findViewById(R.id.pictures);
+        mealPicturesText = getView().findViewById(R.id.mealPicturesText);
         addMiniature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addPictureDialog();
+                addPictureDialog(MINIATURE_FACTOR);
             }
         });
         addPictures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addPictureDialog();
+                addPictureDialog(MEAL_PICTURES_FACTOR);
             }
         });
 
@@ -391,21 +397,27 @@ public class PostRecipeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
-        if(currentMiniature != null) {
-            imageMiniaturePreview.setImageURI(currentMiniature);
+        Log.d("TEST+23", requestCode+"");
+        if(requestCode / MEAL_PICTURES_FACTOR > 0) {
+            currentMealPictures.add(imageHandler.handleActivityResult(requestCode / MEAL_PICTURES_FACTOR, resultCode, data));
+            mealPicturesText.setText(currentMealPictures.size() + " to upload");
+        } else {
+            currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
+            if(currentMiniature != null) {
+                imageMiniaturePreview.setImageURI(currentMiniature);
+            }
         }
     }
 
-    private void addPictureDialog() {
+    private void addPictureDialog(int factor) {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add a picture");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
-                startActivityForResult(imageHandler.getCameraIntent(), ImageHandler.REQUEST_IMAGE_CAPTURE);
+                startActivityForResult(imageHandler.getCameraIntent(), ImageHandler.REQUEST_IMAGE_CAPTURE * factor);
             } else if (options[item].equals("Choose from Gallery")) {
-                startActivityForResult(imageHandler.getGalleryIntent(), ImageHandler.REQUEST_IMAGE_FROM_GALLERY);
+                startActivityForResult(imageHandler.getGalleryIntent(), ImageHandler.REQUEST_IMAGE_FROM_GALLERY * factor);
             } else if (options[item].equals("Cancel")) {
                 dialog.dismiss();
             }
