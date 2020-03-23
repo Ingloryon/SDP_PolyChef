@@ -291,11 +291,11 @@ public class PostRecipeFragment extends Fragment {
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
             return false;
         } else {
-            if(miniatureName != null) {
+            if(currentMiniature != null) {
                 imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
             }
-            for(Uri u: currentMealPictures) {
-                imageHandler.uploadFromUri(u, "TODO:NAME", "TODO:USER", postedRecipe.getUuid().toString());
+            for(int i = 1; i <= currentMealPictures.size(); ++i) {
+                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
             }
             Firebase.addRecipeToFirebase(postedRecipe);
             return true;
@@ -328,7 +328,7 @@ public class PostRecipeFragment extends Fragment {
             rb.setMiniaturePath(miniatureName);
         }
 
-        for(int i = 0; i < currentMealPictures.size(); ++i) {
+        for(int i = 1; i <= currentMealPictures.size(); ++i) {
             rb.addPicturePath(i);
         }
 
@@ -406,8 +406,11 @@ public class PostRecipeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("TEST+23", requestCode+"");
         if(requestCode / MEAL_PICTURES_FACTOR > 0) {
-            currentMealPictures.add(imageHandler.handleActivityResult(requestCode / MEAL_PICTURES_FACTOR, resultCode, data));
-            mealPicturesText.setText(currentMealPictures.size() + " to upload");
+            Uri uri = imageHandler.handleActivityResult(requestCode / MEAL_PICTURES_FACTOR, resultCode, data);
+            if(uri != null) {
+                currentMealPictures.add(uri);
+                mealPicturesText.setText(currentMealPictures.size() + " to upload");
+            }
         } else {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
             if(currentMiniature != null) {
