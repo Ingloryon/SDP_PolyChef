@@ -76,12 +76,12 @@ public class ImageHandler {
      *
      * @param imageView the image to upload
      */
-    public void prepareImageAndUpload(ImageView imageView) {
+    public void prepareImageAndUpload(ImageView imageView, String imageName, String user, String recipeUId) {
         Preconditions.checkArgument(imageView != null, "imageView should not be null");
         Drawable drawable = imageView.getDrawable();
 
         BitmapDrawable bitmapDrawable = ((BitmapDrawable) drawable);
-        uploadFromBitMap(bitmapDrawable.getBitmap());
+        uploadFromBitMap(bitmapDrawable.getBitmap(), imageName, user, recipeUId);
     }
 
     /**
@@ -89,23 +89,23 @@ public class ImageHandler {
      *
      * @param image the image to upload
      */
-    public void uploadFromUri(Uri image) {
+    public void uploadFromUri(Uri image, String imageName, String user, String recipeUId) {
         Preconditions.checkArgument(image != null, "image uri should not be null");
         try {
             uploadFromBitMap(MediaStore.Images.Media.getBitmap(context.getContentResolver(),
-                    image));
+                    image), imageName, user, recipeUId);
         } catch (IOException e) {
             Log.d("IMAGE-UPLOAD", "Error");
         }
     }
 
-    private void uploadFromBitMap(Bitmap bitmap) {
+    private void uploadFromBitMap(Bitmap bitmap, String imageName, String user, String recipeUId) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] imageInByte = stream.toByteArray();
 
         ImageStorage uploader = getImageStorage();
-        uploader.upload(imageInByte).addOnSuccessListener(taskSnapshot -> Log.d("IMAGE-UPLOAD",
+        uploader.upload(imageInByte, imageName, user, recipeUId).addOnSuccessListener(taskSnapshot -> Log.d("IMAGE-UPLOAD",
                 "Success")).addOnFailureListener(e -> Log.d("IMAGE-UPLOAD",
                 "Error"));
     }

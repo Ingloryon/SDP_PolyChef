@@ -65,21 +65,21 @@ public class ImageHandlerTest {
 
     @Test
     public void tryToUploadNullReturnNull() {
-        assertThrows(IllegalArgumentException.class, () -> realImageHandler.prepareImageAndUpload(null));
-        assertThrows(IllegalArgumentException.class, () -> realImageHandler.uploadFromUri(null));
+        assertThrows(IllegalArgumentException.class, () -> realImageHandler.prepareImageAndUpload(null, "image_name", null, null));
+        assertThrows(IllegalArgumentException.class, () -> realImageHandler.uploadFromUri(null, "image_name", null, null));
     }
 
     @Test
     public void canUploadFromImageView() {
         imageView = new ImageView(intentsTestRule.getActivity());
         imageView.setImageResource(R.drawable.meatballs);
-        fakeImageHandler.prepareImageAndUpload(imageView);
+        fakeImageHandler.prepareImageAndUpload(imageView, "image_name", null, null);
     }
 
     @Test
     public void canUploadFromUri() {
         Uri fakeUri = Uri.parse("android.resource://ch.epfl.polychef/" + R.drawable.frenchtoast);
-        fakeImageHandler.uploadFromUri(fakeUri);
+        fakeImageHandler.uploadFromUri(fakeUri, "image_name", null, null);
     }
 
     @Test
@@ -106,7 +106,7 @@ public class ImageHandlerTest {
 
     private class FakeImageStorage extends ImageStorage {
         @Override
-        public UploadTask upload(byte[] image) {
+        public UploadTask upload(byte[] image, String imageName, String user, String recipeUId) {
             return task;
         }
     }

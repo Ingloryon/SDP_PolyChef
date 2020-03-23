@@ -53,8 +53,8 @@ public class ImageStorageTest {
         when(firebaseStorage.getReference(any(String.class))).thenReturn(storageReference);
         when(firebaseStorage.getReference()).thenReturn(storageReference);
         when(storageReference.putBytes(any(byte[].class))).thenReturn(mock(UploadTask.class));
-        when(storageReference.child("images/work.png")).thenReturn(imageReferenceSuccess);
-        when(storageReference.child("images/fail.png")).thenReturn(imageReferenceFail);
+        when(storageReference.child("images/work.jpg")).thenReturn(imageReferenceSuccess);
+        when(storageReference.child("images/fail.jpg")).thenReturn(imageReferenceFail);
         when(imageReferenceSuccess.getBytes(anyLong())).thenReturn(successTask);
         when(imageReferenceFail.getBytes(anyLong())).thenReturn(failTask);
     }
@@ -62,8 +62,8 @@ public class ImageStorageTest {
     @Test
     public void nullOrEmptyImageThrowsError() {
         ImageStorage imageStorage = new ImageStorageMock();
-        assertThrows(IllegalArgumentException.class, () -> imageStorage.upload(null));
-        assertThrows(IllegalArgumentException.class, () -> imageStorage.upload(new byte[] {}));
+        assertThrows(IllegalArgumentException.class, () -> imageStorage.upload(null, "image_name", null, null));
+        assertThrows(IllegalArgumentException.class, () -> imageStorage.upload(new byte[] {}, "image_name", null, null));
         assertThrows(IllegalArgumentException.class, () -> imageStorage.getImage(null, new FakeCallHandler(null, true)));
         assertThrows(IllegalArgumentException.class, () -> imageStorage.getImage("test.png", null));
     }
@@ -76,7 +76,7 @@ public class ImageStorageTest {
     @Test
     public void canUploadImages() {
         ImageStorage imageStorage = new ImageStorageMock();
-        UploadTask ut = imageStorage.upload(new byte[] {1});
+        UploadTask ut = imageStorage.upload(new byte[] {1}, "image_name", null, null);
         assertThrows(NullPointerException.class, () -> ut.getResult());
     }
 
@@ -84,9 +84,9 @@ public class ImageStorageTest {
     public synchronized void canDownloadImage() throws InterruptedException {
         ImageStorage imageStorage = new ImageStorageMock();
         FakeCallHandler f1 = new FakeCallHandler(new byte[] {1, 2, 3}, true);
-        imageStorage.getImage("work.png", f1);
+        imageStorage.getImage("work", f1);
         FakeCallHandler f2 = new FakeCallHandler(null, false);
-        imageStorage.getImage("fail.png", f2);
+        imageStorage.getImage("fail", f2);
         wait(1000);
         assertTrue(f1.wasCalled);
         assertTrue(f2.wasCalled);

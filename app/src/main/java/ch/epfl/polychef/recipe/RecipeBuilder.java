@@ -141,7 +141,7 @@ public final class RecipeBuilder {
      */
     public RecipeBuilder setMiniaturePath(@NonNull String miniaturePath) {
         Preconditions.checkArgument(!miniaturePath.isEmpty(), "The miniature path must be non empty");
-        Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
+//        Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
         this.miniaturePath = miniaturePath;
         return this;
     }

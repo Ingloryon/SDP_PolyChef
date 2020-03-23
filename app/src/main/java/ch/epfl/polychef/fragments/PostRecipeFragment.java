@@ -1,6 +1,10 @@
 package ch.epfl.polychef.fragments;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,11 +28,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.firebase.Firebase;
+import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.pages.LoginPage;
 import ch.epfl.polychef.recipe.Ingredient;
@@ -49,6 +56,15 @@ public class PostRecipeFragment extends Fragment {
     private Recipe postedRecipe;
 
     private Button postButton;
+
+    private Button addMiniature;
+    private Button addPictures;
+
+    private Uri currentMiniature = null;
+    private String miniatureName = UUID.randomUUID().toString();
+    private ImageView imageMiniaturePreview;
+
+    private ImageHandler imageHandler;
 
     private Map<String, Boolean> wrongInputs;
     private List<String> errorLogs = new ArrayList<>();
@@ -92,6 +108,25 @@ public class PostRecipeFragment extends Fragment {
                 setPostButton(view);
             }
         });
+
+        // Image handling
+        imageHandler = new ImageHandler(getActivity());
+        addMiniature = getView().findViewById(R.id.miniature);
+        imageMiniaturePreview = getView().findViewById(R.id.miniaturePreview);
+        addPictures = getView().findViewById(R.id.pictures);
+        addMiniature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPictureDialog();
+            }
+        });
+        addPictures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPictureDialog();
+            }
+        });
+
         difficultyInput = getView().findViewById(R.id.difficultyInput);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.difficulty_array, android.R.layout.simple_spinner_item);
@@ -250,6 +285,9 @@ public class PostRecipeFragment extends Fragment {
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
             return false;
         } else {
+            if(miniatureName != null) {
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
+            }
             Firebase.addRecipeToFirebase(postedRecipe);
             return true;
         }
@@ -275,6 +313,10 @@ public class PostRecipeFragment extends Fragment {
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
             return false;
+        }
+
+        if(currentMiniature != null) {
+            rb.setMiniaturePath(miniatureName);
         }
 
         postedRecipe = rb.build();
@@ -344,6 +386,31 @@ public class PostRecipeFragment extends Fragment {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
+        if(currentMiniature != null) {
+            imageMiniaturePreview.setImageURI(currentMiniature);
+        }
+    }
+
+    private void addPictureDialog() {
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Add a picture");
+        builder.setItems(options, (dialog, item) -> {
+            if (options[item].equals("Take Photo")) {
+                startActivityForResult(imageHandler.getCameraIntent(), ImageHandler.REQUEST_IMAGE_CAPTURE);
+            } else if (options[item].equals("Choose from Gallery")) {
+                startActivityForResult(imageHandler.getGalleryIntent(), ImageHandler.REQUEST_IMAGE_FROM_GALLERY);
+            } else if (options[item].equals("Cancel")) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }
 
