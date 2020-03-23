@@ -13,10 +13,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,12 +46,14 @@ public class HomePageTest {
     public IntentsTestRule<FakeHomePage> intentsTestRule =
             new IntentsTestRule<FakeHomePage>(FakeHomePage.class);*/
 
-    @BeforeAll
+    @Before
     public void initActivity() {
-        ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-                true);
-
         intentsTestRule.launchActivity(new Intent());
+    }
+
+    @After
+    public void finishActivity(){
+        intentsTestRule.finishActivity();
     }
 
     @Test
