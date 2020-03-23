@@ -12,13 +12,14 @@ import androidx.test.espresso.contrib.NavigationViewActions;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 import com.google.firebase.auth.FirebaseUser;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
@@ -37,9 +38,15 @@ public class HomePageTest {
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             true);
+    /*@Rule
+    public IntentsTestRule<FakeHomePage> intentsTestRule =
+            new IntentsTestRule<FakeHomePage>(FakeHomePage.class);*/
 
-    @Before
+    @BeforeAll
     public void initActivity() {
+        ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
+                true);
+
         intentsTestRule.launchActivity(new Intent());
     }
 
