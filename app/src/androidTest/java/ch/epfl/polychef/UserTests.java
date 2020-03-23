@@ -25,6 +25,7 @@ import ch.epfl.polychef.users.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -104,6 +105,17 @@ public class UserTests {
         }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
+    public void assertNewUser(User user) {
+        assertNotNull(user);
+        assertEquals(mockUserEmail, user.getEmail());
+        assertEquals(mockUserName, user.getUsername());
+
+        assertEquals(0, user.getRecipes().size());
+        assertEquals(0, user.getFavourites().size());
+        assertEquals(0, user.getSubscribers().size());
+        assertEquals(0, user.getSubscriptions().size());
+    }
+
     @Test
     public void newUserTest() {
 
@@ -118,14 +130,7 @@ public class UserTests {
 
             User userSentBack = call.getArgument(0);
 
-            assertNotNull(userSentBack);
-            assertEquals(mockUserEmail, userSentBack.getEmail());
-            assertEquals(mockUserName, userSentBack.getUsername());
-
-            assertEquals(0, userSentBack.getRecipes().size());
-            assertEquals(0, userSentBack.getFavourites().size());
-            assertEquals(0, userSentBack.getSubscribers().size());
-            assertEquals(0, userSentBack.getSubscriptions().size());
+            assertNewUser(userSentBack);
 
             return null;
         });
@@ -138,14 +143,7 @@ public class UserTests {
         when(mockNewUserRef.setValue(any(User.class))).thenAnswer((call) -> {
             User userSentBack = call.getArgument(0);
 
-            assertNotNull(userSentBack);
-            assertEquals(mockUserEmail, userSentBack.getEmail());
-            assertEquals(mockUserName, userSentBack.getUsername());
-
-            assertEquals(0, userSentBack.getRecipes().size());
-            assertEquals(0, userSentBack.getFavourites().size());
-            assertEquals(0, userSentBack.getSubscribers().size());
-            assertEquals(0, userSentBack.getSubscriptions().size());
+            assertNewUser(userSentBack);
 
             return null;
         });

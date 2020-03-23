@@ -92,16 +92,24 @@ public class HomePageTest {
         }
 
         @Override
-        protected void retrieveUserInfo(String email) { }
+        protected void retrieveUserInfo(String email) {
+
+        }
 
         @Override
-        protected void newUser(String email) { }
+        protected void newUser(String email) {
+
+        }
 
         @Override
-        protected void oldUser(DataSnapshot snap) { }
+        protected void oldUser(DataSnapshot snap) {
+
+        }
 
         @Override
-        protected void updateUserInfo() { }
+        protected void updateUserInfo() {
+
+        }
 
         @Override
         protected String getUserEmail() { return "test@epfl.ch"; }
