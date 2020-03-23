@@ -217,8 +217,8 @@ public class RecipeStorage {
         return FirebaseDatabase.getInstance();
     }
 
-    private Query getNRecipeQuery(int n, int from_id) {
+    private Query getNRecipeQuery(int numberOfRecipes, int fromId) {
         DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
-        return myRef.orderByKey().startAt(Integer.toString(from_id)).endAt(Integer.toString(from_id + n - 1));
+        return myRef.orderByKey().startAt(Integer.toString(fromId)).endAt(Integer.toString(fromId + numberOfRecipes - 1));
     }
 }
