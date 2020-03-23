@@ -142,15 +142,15 @@ public class RecipeStorage {
     }
 
     /**
-     * Get {@code n} recipes from the database starting at {@code from_id} and call the
+     * Get {@code numberOfRecipes} recipes from the database starting at {@code fromId} and call the
      * {@code CallHandler} when all recipes are ready.
      *
-     * @param n       the number of recipes to get
-     * @param from_id the start index from where to get the recipes
-     * @param caller  the caller to call onSuccess
+     * @param numberOfRecipes the number of recipes to get
+     * @param fromId          the start index from where to get the recipes
+     * @param caller          the caller to call onSuccess
      */
-    public void getNRecipes(int n, int from_id, CallHandler<List<Recipe>> caller) {
-        getNRecipeQuery(n, from_id).addValueEventListener(new ValueEventListener() {
+    public void getNRecipes(int numberOfRecipes, int fromId, CallHandler<List<Recipe>> caller) {
+        getNRecipeQuery(numberOfRecipes, fromId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -172,22 +172,22 @@ public class RecipeStorage {
     }
 
     /**
-     * Get {@code n} recipes from the database starting at {@code from_id} and notify the
+     * Get {@code numberOfRecipes} recipes from the database starting at {@code fromId} and notify the
      * {@code CallNotifier} when there is a recipe ready.
      *
-     * @param n       the number of recipes to get
-     * @param from_id the start index from where to get the recipes
-     * @param caller  the caller to notify when data are ready
+     * @param numberOfRecipes the number of recipes to get
+     * @param fromId          the start index from where to get the recipes
+     * @param caller          the caller to notify when data are ready
      */
-    public void getNRecipesOneByOne(int n, int from_id, CallNotifier<Recipe> caller) {
-        getNRecipeQuery(n, from_id).addChildEventListener(new ChildEventListener() {
+    public void getNRecipesOneByOne(int numberOfRecipes, int fromId, CallNotifier<Recipe> caller) {
+        getNRecipeQuery(numberOfRecipes, fromId).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
                 caller.notify(dataSnapshot.getValue(Recipe.class));
             }
 
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
                 caller.notify(dataSnapshot.getValue(Recipe.class));
             }
 
@@ -197,7 +197,7 @@ public class RecipeStorage {
             }
 
             @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
                 caller.notify(dataSnapshot.getValue(Recipe.class));
             }
 
