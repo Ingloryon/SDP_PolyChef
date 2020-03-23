@@ -2,16 +2,26 @@ package ch.epfl.polychef.recipe;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.Preconditions;
 import ch.epfl.polychef.recipe.Recipe;
 
@@ -132,11 +142,83 @@ public class RecipeStorage {
     }
 
     /**
+     * Get {@code n} recipes from the database starting at {@code from_id} and call the
+     * {@code CallHandler} when all recipes are ready.
+     *
+     * @param n       the number of recipes to get
+     * @param from_id the start index from where to get the recipes
+     * @param caller  the caller to call onSuccess
+     */
+    public void getNRecipes(int n, int from_id, CallHandler<List<Recipe>> caller) {
+        getNRecipeQuery(n, from_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    List<Recipe> recipes = new ArrayList<>();
+                    for (DataSnapshot d : dataSnapshot.getChildren()) {
+                        recipes.add(d.getValue(Recipe.class));
+                    }
+                    caller.onSuccess(recipes);
+                } else {
+                    caller.onFailure();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                caller.onFailure();
+            }
+        });
+    }
+
+    /**
+     * Get {@code n} recipes from the database starting at {@code from_id} and notify the
+     * {@code CallNotifier} when there is a recipe ready.
+     *
+     * @param n       the number of recipes to get
+     * @param from_id the start index from where to get the recipes
+     * @param caller  the caller to notify when data are ready
+     */
+    public void getNRecipesOneByOne(int n, int from_id, CallNotifier<Recipe> caller) {
+        getNRecipeQuery(n, from_id).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                caller.notify(dataSnapshot.getValue(Recipe.class));
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                caller.notify(dataSnapshot.getValue(Recipe.class));
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                caller.notify(dataSnapshot.getValue(Recipe.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                caller.onFailure();
+            }
+        });
+    }
+
+    /**
      * Get the current instance of the {@code FirebaseDatabase}.
      *
      * @return the current instance of the {@code FirebaseDatabase}
      */
     public FirebaseDatabase getFirebaseDatabase() {
         return FirebaseDatabase.getInstance();
+    }
+
+    private Query getNRecipeQuery(int n, int from_id) {
+        DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
+        return myRef.orderByKey().startAt(Integer.toString(from_id)).endAt(Integer.toString(from_id + n - 1));
     }
 }

@@ -19,7 +19,7 @@ import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
 
-public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Recipe> {
+public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<Recipe> {
 
     private RecyclerView onlineRecyclerView;
 
@@ -59,11 +59,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
                     if(isLoading){
                         return;
                     }
-                    // add a certain number of recipes at this end of the actual list
-                    for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
-                        recipeStorage.readRecipe(currentReadInt, OnlineMiniaturesFragment.this);
-                        currentReadInt++;
-                    }
+                    recipeStorage.getNRecipesOneByOne(nbOfRecipesLoadedAtATime, currentReadInt, OnlineMiniaturesFragment.this);
+                    currentReadInt += nbOfRecipesLoadedAtATime;
                     isLoading = true;
                 }
             }
@@ -76,18 +73,14 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Re
         super.onViewCreated(view, savedInstanceState);
         // For now when we enter the page we load the offline recipes first
         // add a certain number of recipes at this end of the actual list
-        for(int i = 0; i < nbOfRecipesLoadedAtATime; i++){
-            recipeStorage.readRecipe(currentReadInt, OnlineMiniaturesFragment.this);
-            currentReadInt++;
-        }
-
+        recipeStorage.getNRecipesOneByOne(nbOfRecipesLoadedAtATime, 1, this);
+        currentReadInt += nbOfRecipesLoadedAtATime;
     }
 
     @Override
-    public void onSuccess(Recipe recipe) {
-        // The data has been acquired from database we can now update the recyclerView
+    public void notify(Recipe data) {
         isLoading = false;
-        dynamicRecipeList.add(recipe);
+        dynamicRecipeList.add(data);
         onlineRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
