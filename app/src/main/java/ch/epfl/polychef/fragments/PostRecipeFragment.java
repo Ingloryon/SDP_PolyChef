@@ -294,6 +294,9 @@ public class PostRecipeFragment extends Fragment {
             if(miniatureName != null) {
                 imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
             }
+            for(Uri u: currentMealPictures) {
+                imageHandler.uploadFromUri(u, "TODO:NAME", "TODO:USER", postedRecipe.getUuid().toString());
+            }
             Firebase.addRecipeToFirebase(postedRecipe);
             return true;
         }
@@ -323,6 +326,10 @@ public class PostRecipeFragment extends Fragment {
 
         if(currentMiniature != null) {
             rb.setMiniaturePath(miniatureName);
+        }
+
+        for(int i = 0; i < currentMealPictures.size(); ++i) {
+            rb.addPicturePath(i);
         }
 
         postedRecipe = rb.build();
