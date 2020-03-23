@@ -47,6 +47,11 @@ public class RecipeStorage {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value
                 id = dataSnapshot.getValue(Integer.class);
+                //Change the value of the ID in the database
+                id += 1;
+                idRef.setValue(id);
+                DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
+                myRef.child(Integer.toString(id)).setValue(recipe);
             }
 
             @Override
@@ -55,11 +60,6 @@ public class RecipeStorage {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-        //Change the value of the ID in the database
-        id += 1;
-        idRef.setValue(id);
-        DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
-        myRef.child(Integer.toString(id)).setValue(recipe);
     }
 
     /*public static void readRecipeFromFirebase(UUID Uuid){
