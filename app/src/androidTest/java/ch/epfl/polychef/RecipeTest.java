@@ -53,7 +53,7 @@ public class RecipeTest {
 
         // rejects when no entered estimatedCookingTime
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setEstimatedCookingTime(0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setEstimatedCookingTime(-1));
         rb.setEstimatedCookingTime(45);
 
         // rejects when no entered recipeDifficulty

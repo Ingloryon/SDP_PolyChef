@@ -1,7 +1,10 @@
 package ch.epfl.polychef;
 
-public class PostingRecipeFragmentTest {
+import org.junit.Test;
 
+import ch.epfl.polychef.fragments.PostRecipeFragment;
+
+public class PostingRecipeFragmentTest {
 
 
 }
