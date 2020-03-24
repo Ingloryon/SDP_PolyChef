@@ -39,7 +39,9 @@ public class LoginPageTest {
             true);
 
     @Before
-    public void initActivity() { activityTestRule.launchActivity(new Intent()); }
+    public void initActivity() {
+        activityTestRule.launchActivity(new Intent());
+    }
 
     @Test
     public void shouldNotBeNull() {
