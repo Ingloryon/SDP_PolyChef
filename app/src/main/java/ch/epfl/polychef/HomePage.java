@@ -155,15 +155,14 @@ public class HomePage extends ConnectedActivity {
                             }
 
                         } else {
-                            Log.e(TAG, "Inconsistent result: multiple user with the same email.", new IllegalStateException());
-
+                            throw new IllegalStateException("Inconsistent result: multiple user with the same email.");
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         //TODO: Find good exception to throw
-                        Log.e(TAG, "Query canceled", new IllegalArgumentException());
+                        throw new IllegalArgumentException("Query cancelled");
                     }
                 });
     }
@@ -191,7 +190,7 @@ public class HomePage extends ConnectedActivity {
             Log.d(TAG, user.toString());
         } else {
             //TODO: Find good exception to throw
-            Log.e(TAG, "Unable to reconstruct the user from the JSON.", new IllegalStateException());
+            throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");
         }
     }
 

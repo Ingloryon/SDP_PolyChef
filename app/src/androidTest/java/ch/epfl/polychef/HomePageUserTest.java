@@ -8,6 +8,7 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -16,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import ch.epfl.polychef.users.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -33,7 +35,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
-public class UserTests {
+public class HomePageUserTest {
 
     private FirebaseDatabase mockDatabase;
     private DatabaseReference mockUsersRef;
@@ -51,7 +53,7 @@ public class UserTests {
             HomePage.class) {
         @Override
         protected HomePage create(Intent intent) {
-            HomePage activity = new UserTests.FakeHomePage();
+            HomePage activity = new HomePageUserTest.FakeHomePage();
             return activity;
         }
     };
@@ -72,14 +74,18 @@ public class UserTests {
         }
 
         @Override
-        protected String getUserEmail() { return mockUserEmail; }
+        protected String getUserEmail() {
+            return mockUserEmail;
+        }
 
         @Override
-        protected String getUserName() { return mockUserName; }
+        protected String getUserName() {
+            return mockUserName;
+        }
     }
 
     @Before
-    public void mockInit(){
+    public void sharedMockInit(){
         mockDatabase = mock(FirebaseDatabase.class);
         mockUsersRef = mock(DatabaseReference.class);
         mockOnDataChangeSnapshot = mock(DataSnapshot.class);
@@ -95,7 +101,14 @@ public class UserTests {
         when(mockUsersRef.orderByChild("email")).thenReturn(mockOrderByEmail);
 
         when(mockOrderByEmail.equalTo(any(String.class))).thenReturn(mockEqualToEmail);
+    }
 
+    @AfterEach
+    public void launchActivity() {
+        intentsTestRule.launchActivity(new Intent());
+    }
+
+    public void onDataChangeCallBack(){
         doAnswer((call) -> {
             ValueEventListener listener =  call.getArgument(0);
             listener.onDataChange(mockOnDataChangeSnapshot);
@@ -117,10 +130,11 @@ public class UserTests {
     @Test
     public void newUserTest() {
 
-        DatabaseReference mockNewUserRef = mock(DatabaseReference.class);
-        DatabaseReference mockTempRef = mock(DatabaseReference.class);
+        onDataChangeCallBack();
 
-        when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 0);    //TODO number of children depends on test
+        when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 0);
+
+        DatabaseReference mockTempRef = mock(DatabaseReference.class);
 
         when(mockUsersRef.push()).thenReturn(mockTempRef);
 
@@ -136,6 +150,8 @@ public class UserTests {
         when(mockTempRef.getKey()).thenReturn(mockUserKey);
 
         //updateUser method mock requirements
+        DatabaseReference mockNewUserRef = mock(DatabaseReference.class);
+
         when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
 
         when(mockNewUserRef.setValue(any(User.class))).thenAnswer((call) -> {
@@ -149,12 +165,14 @@ public class UserTests {
 
     @Test
     public void oldUserTest(){
-        DatabaseReference mockOldUserRef = mock(DatabaseReference.class);
-        DataSnapshot mockSnapshotChild = mock(DataSnapshot.class);
+
+        onDataChangeCallBack();
 
         when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 1);
 
         //OnDataChange mock requirements
+        DataSnapshot mockSnapshotChild = mock(DataSnapshot.class);
+
         List<DataSnapshot> children = new ArrayList<>(1);
         children.add(mockSnapshotChild);
         when(mockOnDataChangeSnapshot.getChildren()).thenReturn(children);
@@ -163,8 +181,10 @@ public class UserTests {
         User mockUser = new User(mockUserEmail, mockUserName);
         String fav1 = "First favourite recipe";
         mockUser.addFavourite(fav1);
+
         String fav2 = "Second favourite recipe";
         mockUser.addFavourite(fav2);
+
         String subscription = "Only one subscription";
         mockUser.addSubscriptions(subscription);
 
@@ -173,6 +193,8 @@ public class UserTests {
         when(mockSnapshotChild.getKey()).thenReturn(mockUserKey);
 
         //updateUser method mock requirements
+        DatabaseReference mockOldUserRef = mock(DatabaseReference.class);
+
         when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockOldUserRef);
 
         when(mockOldUserRef.setValue(any(User.class))).thenAnswer((call) -> {
@@ -198,132 +220,52 @@ public class UserTests {
     }
 
     @Test
-    public void gettersWorkOnNewUser() {
+    public void throwsExceptionWhenMultipleUsersExist() {
 
-        String email = mockUserEmail;
-        String username = mockUserName;
-        User alice = new User(email, username);
+        when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 2);
 
-        assertEquals(email, alice.getEmail());
-        assertEquals(username, alice.getUsername());
-        assertEquals(0, alice.getRecipes().size());
-        assertEquals(0, alice.getFavourites().size());
-        assertEquals(0, alice.getSubscribers().size());
-        assertEquals(0, alice.getSubscriptions().size());
+        doAnswer((call) -> {
+            ValueEventListener listener =  call.getArgument(0);
+
+            assertThrows(IllegalStateException.class, () -> listener.onDataChange(mockOnDataChangeSnapshot));
+
+            return null;
+        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     @Test
-    public void gettersWorkOnEmptyUser() {
-        User noOne = new User();
+    public void testJsonErrorThrowsException(){
 
-        assertNull(noOne.getEmail());
-        assertNull(noOne.getUsername());
-        assertEquals(0, noOne.getRecipes().size());
-        assertEquals(0, noOne.getFavourites().size());
-        assertEquals(0, noOne.getSubscribers().size());
-        assertEquals(0, noOne.getSubscriptions().size());
+        when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 1);
+
+        doAnswer((call) -> {
+            ValueEventListener listener =  call.getArgument(0);
+
+            assertThrows(IllegalArgumentException.class, () -> listener.onDataChange(mockOnDataChangeSnapshot));
+
+            return null;
+        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        //OnDataChange mock requirements
+        DataSnapshot mockSnapshotChild = mock(DataSnapshot.class);
+
+        List<DataSnapshot> children = new ArrayList<>(1);
+        children.add(mockSnapshotChild);
+        when(mockOnDataChangeSnapshot.getChildren()).thenReturn(children);
+
+        //oldUser method mock requirements
+        when(mockSnapshotChild.exists()).thenReturn(false);
     }
 
     @Test
-    public void canAddFavouriteRecipes() {
-        String email = mockUserEmail;
-        String username = mockUserName;
-        User alice = new User(email, username);
+    public void throwsExceptionWhenQueryCancelled() {
+        doAnswer((call) -> {
+            ValueEventListener listener =  call.getArgument(0);
 
-        String recipe1 = "Recipe_1";
-        String recipe2 = "Recipe_2";
-        String recipe3 = "Recipe_3";
-        String recipe4 = "Recipe_4";
+            assertThrows(IllegalStateException.class, () -> listener.onCancelled(DatabaseError.fromException(new Exception())));
 
-        alice.addFavourite(recipe1);
-        assertEquals(1, alice.getFavourites().size());
-        assertTrue(alice.getFavourites().contains(recipe1));
-
-        alice.addFavourite(recipe2);
-        assertEquals(2, alice.getFavourites().size());;
-        assertTrue(alice.getFavourites().contains(recipe1));
-        assertTrue(alice.getFavourites().contains(recipe2));
-
-        alice.addFavourite(recipe3);
-        assertEquals(3, alice.getFavourites().size());
-        assertTrue(alice.getFavourites().contains(recipe1));
-        assertTrue(alice.getFavourites().contains(recipe2));
-        assertTrue(alice.getFavourites().contains(recipe3));
-
-        alice.addFavourite(recipe4);
-        assertEquals(4, alice.getFavourites().size());
-        assertTrue(alice.getFavourites().contains(recipe1));
-        assertTrue(alice.getFavourites().contains(recipe2));
-        assertTrue(alice.getFavourites().contains(recipe3));
-        assertTrue(alice.getFavourites().contains(recipe4));
-    }
-
-    @Test
-    public void canAddSubscribers() {
-        String email = mockUserEmail;
-        String username = mockUserName;
-        User alice = new User(email, username);
-
-        String subscriber1 = "Subscriber_1";
-        String subscriber2 = "Subscriber_2";
-        String subscriber3 = "Subscriber_3";
-        String subscriber4 = "Subscriber_4";
-
-        alice.addSubscriber(subscriber1);
-        assertEquals(1, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-
-        alice.addSubscriber(subscriber2);
-        assertEquals(2, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-
-        alice.addSubscriber(subscriber3);
-        assertEquals(3, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-        assertTrue(alice.getSubscribers().contains(subscriber3));
-
-        alice.addSubscriber(subscriber4);
-        assertEquals(4, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-        assertTrue(alice.getSubscribers().contains(subscriber3));
-        assertTrue(alice.getSubscribers().contains(subscriber4));
-    }
-
-    @Test
-    public void canAddSubscriptions() {
-        String email = mockUserEmail;
-        String username = mockUserName;
-        User alice = new User(email, username);
-
-        String subscription1 = "Subscription_1";
-        String subscription2 = "Subscription_2";
-        String subscription3 = "Subscription_3";
-        String subscription4 = "Subscription_4";
-
-        alice.addSubscriptions(subscription1);
-        assertEquals(1, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-
-        alice.addSubscriptions(subscription2);
-        assertEquals(2, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-
-        alice.addSubscriptions(subscription3);
-        assertEquals(3, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-        assertTrue(alice.getSubscriptions().contains(subscription3));
-
-        alice.addSubscriptions(subscription4);
-        assertEquals(4, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-        assertTrue(alice.getSubscriptions().contains(subscription3));
-        assertTrue(alice.getSubscriptions().contains(subscription4));
+            return null;
+        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 }
 
