@@ -34,7 +34,7 @@ public class HomePageTest {
             HomePage activity = new FakeHomePage();
             return activity;
         }
-    };
+    }; 
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
