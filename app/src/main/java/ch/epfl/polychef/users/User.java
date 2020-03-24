@@ -85,15 +85,23 @@ public class User {
 
     @Override
     public boolean equals(@Nullable Object obj) {
+
+        if(this == obj){
+            return true;
+        }
+
         if(obj instanceof User){
             User other = (User) obj;
 
-            return Objects.equals(email, other.email)
-                    && Objects.equals(username, other.username)
-                    && recipes.equals(other.recipes)
-                    && favourites.equals(other.favourites)
-                    && subscribers.equals(other.subscribers)
-                    && subscriptions.equals(other.subscriptions);
+            if(Objects.equals(email, other.email)
+            && Objects.equals(username, other.username)){
+
+                return Objects.equals(email, other.email)
+                        && Objects.equals(recipes, other.recipes)
+                        && Objects.equals(favourites, other.favourites)
+                        && Objects.equals(subscribers, other.subscribers)
+                        && Objects.equals(subscriptions, other.subscriptions);
+            }
         }
 
         return false;

@@ -1,6 +1,8 @@
 package ch.epfl.polychef;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import ch.epfl.polychef.users.User;
 
@@ -15,14 +17,19 @@ public class UserTest {
     private String mockUserEmail = "testUser@epfl.ch";
     private String mockUserName = "Alice InWonderland";
 
+    private User alice;
+
     private User mockUser(){
         return new User(mockUserEmail, mockUserName);
     }
 
+    @Before
+    public void setupAlice(){
+        alice = mockUser();
+    }
+
     @Test
     public void gettersWorkOnNewUser() {
-
-        User alice = mockUser();
 
         assertNotNull(alice);
         assertEquals(mockUserEmail, alice.getEmail());
@@ -48,8 +55,6 @@ public class UserTest {
 
     @Test
     public void canAddRecipes() {
-
-        User alice = mockUser();
 
         String recipe1 = "Recipe_1";
         alice.addSubscription(recipe1);
@@ -80,7 +85,6 @@ public class UserTest {
 
     @Test
     public void canAddFavouriteRecipes() {
-        User alice = mockUser();
 
         String recipe1 = "Recipe_1";
         alice.addFavourite(recipe1);
@@ -112,8 +116,6 @@ public class UserTest {
     @Test
     public void canAddSubscribers() {
 
-        User alice = mockUser();
-
         String subscriber1 = "Subscriber_1";
         alice.addSubscriber(subscriber1);
         assertEquals(1, alice.getSubscribers().size());
@@ -143,8 +145,6 @@ public class UserTest {
 
     @Test
     public void canAddSubscriptions() {
-
-        User alice = mockUser();
 
         String subscription1 = "Subscription_1";
         alice.addSubscription(subscription1);
@@ -176,8 +176,6 @@ public class UserTest {
     @Test
     public void equalsWorksOnTrivialInputs(){
 
-        User alice = mockUser();
-
         assertNotEquals(alice, null);
         assertNotEquals(null, alice);
 
@@ -195,8 +193,6 @@ public class UserTest {
 
     @Test
     public void equalsChecksEachFields(){
-
-        User alice = mockUser();
 
         User doppelganger = mockUser();
         doppelganger.addRecipe("Recipe");
