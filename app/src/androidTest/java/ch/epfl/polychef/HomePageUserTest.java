@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.when;
 public class HomePageUserTest {
 
     private FirebaseDatabase mockDatabase;
+    private FirebaseUser mockFirebaseUser;
     private DatabaseReference mockUsersRef;
 
     private Query mockOrderByEmail;
@@ -70,22 +72,12 @@ public class HomePageUserTest {
     private class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
-            return mock(FirebaseUser.class);
+            return mockFirebaseUser;
         }
 
         @Override
         public FirebaseDatabase getDatabase() {
             return mockDatabase;
-        }
-
-        @Override
-        protected String getUserEmail() {
-            return mockUserEmail;
-        }
-
-        @Override
-        protected String getUserName() {
-            return mockUserName;
         }
     }
 
@@ -106,9 +98,14 @@ public class HomePageUserTest {
         when(mockUsersRef.orderByChild("email")).thenReturn(mockOrderByEmail);
 
         when(mockOrderByEmail.equalTo(any(String.class))).thenReturn(mockEqualToEmail);
+
+        mockFirebaseUser = mock(FirebaseUser.class);
+
+        when(mockFirebaseUser.getEmail()).thenReturn(mockUserEmail);
+        when(mockFirebaseUser.getDisplayName()).thenReturn(mockUserName);
     }
 
-    @AfterEach
+    @After
     public void launchActivity() {
         intentsTestRule.launchActivity(new Intent());
     }
@@ -225,6 +222,7 @@ public class HomePageUserTest {
             return null;
         }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
+
     @Test
     public void throwsExceptionWhenMultipleUsersExist() {
 
