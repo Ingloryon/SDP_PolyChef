@@ -127,8 +127,6 @@ public class HomePage extends ConnectedActivity {
 
     protected void retrieveUserInfo(String email) {
 
-        Log.d(TAG, "Retrieving user info");
-
         getDatabase()
                 .getReference("users")
                 .orderByChild("email")
@@ -141,14 +139,10 @@ public class HomePage extends ConnectedActivity {
 
                         if(childrenCount == 0) {
                             newUser(email);
-                            Log.d(TAG, "New user");
-
 
                         } else if(childrenCount == 1) {
                             for(DataSnapshot child: dataSnapshot.getChildren()){
-                                Log.d(TAG, "Old user");
                                 oldUser(child);
-
                             }
 
                         } else {
@@ -177,14 +171,13 @@ public class HomePage extends ConnectedActivity {
         ref.setValue(user);
 
         userKey = ref.getKey();
-
     }
 
     protected void oldUser(DataSnapshot snap){
+
         if(snap.exists()){
             user = snap.getValue(User.class);
             userKey = snap.getKey();
-            Log.d(TAG, user.toString());
         } else {
             //TODO: Find good exception to throw
             throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");
@@ -192,7 +185,6 @@ public class HomePage extends ConnectedActivity {
     }
 
     protected void updateUserInfo(){
-        Log.d(TAG, "Updating the user");
         getDatabase()
                 .getReference("users/" + userKey)
                 .setValue(user);
