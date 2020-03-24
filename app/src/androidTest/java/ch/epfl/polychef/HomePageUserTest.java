@@ -121,62 +121,15 @@ public class HomePageUserTest {
         }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
-    public void assertNewUser(User user) {
-        assertNotNull(user);
-        assertEquals(mockUserEmail, user.getEmail());
-        assertEquals(mockUserName, user.getUsername());
-
-        assertEquals(0, user.getRecipes().size());
-        assertEquals(0, user.getFavourites().size());
-        assertEquals(0, user.getSubscribers().size());
-        assertEquals(0, user.getSubscriptions().size());
-    }
-
-    @Test
-    public void newUserTest() {
-
-        onDataChangeCallBack();
-
-        when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 0);
-
-        DatabaseReference mockTempRef = mock(DatabaseReference.class);
-
-        when(mockUsersRef.push()).thenReturn(mockTempRef);
-
-        when(mockTempRef.setValue(any(User.class))).thenAnswer((call) -> {
-
-            User userSentBack = call.getArgument(0);
-
-            assertNewUser(userSentBack);
-
-            return null;
-        });
-
-        when(mockTempRef.getKey()).thenReturn(mockUserKey);
-
-        //updateUser method mock requirements
-        DatabaseReference mockNewUserRef = mock(DatabaseReference.class);
-
-        when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
-
-        when(mockNewUserRef.setValue(any(User.class))).thenAnswer((call) -> {
-            User userSentBack = call.getArgument(0);
-
-            assertNewUser(userSentBack);
-
-            return null;
-        });
-    }
-
     public User mockUser() {
         User mockUser = new User(mockUserEmail, mockUserName);
         mockUser.addFavourite(fav1);
         mockUser.addFavourite(fav2);
-        mockUser.addSubscriptions(subscription);
+        mockUser.addSubscription(subscription);
         return mockUser;
     }
 
-    public void assertIsMockUser(User user){
+    public void assertMockUser(User user){
         assertNotNull(user);
         assertEquals(mockUserEmail, user.getEmail());
         assertEquals(mockUserName, user.getUsername());
@@ -191,6 +144,47 @@ public class HomePageUserTest {
 
         assertEquals(1, user.getSubscriptions().size());
         assertTrue(user.getSubscriptions().contains(subscription));
+    }
+
+    public void assertNewUser(User user) {
+        assertNotNull(user);
+        assertEquals(mockUserEmail, user.getEmail());
+        assertEquals(mockUserName, user.getUsername());
+
+        assertEquals(0, user.getRecipes().size());
+        assertEquals(0, user.getFavourites().size());
+        assertEquals(0, user.getSubscribers().size());
+        assertEquals(0, user.getSubscriptions().size());
+    }
+
+    public void assertSendingBackCorrectUser(DatabaseReference ref, User expected){
+        when(ref.setValue(any(User.class))).thenAnswer((call) -> {
+            assertEquals(expected, call.getArgument(0));
+            return null;
+        });
+    }
+
+    @Test
+    public void newUserTest() {
+
+        onDataChangeCallBack();
+
+        when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 0);
+
+        DatabaseReference mockTempRef = mock(DatabaseReference.class);
+
+        when(mockUsersRef.push()).thenReturn(mockTempRef);
+
+        assertSendingBackCorrectUser(mockUsersRef, new User(mockUserEmail, mockUserName));
+
+        when(mockTempRef.getKey()).thenReturn(mockUserKey);
+
+        //updateUser method mock requirements
+        DatabaseReference mockNewUserRef = mock(DatabaseReference.class);
+
+        when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
+
+        assertSendingBackCorrectUser(mockNewUserRef, new User(mockUserEmail, mockUserName));
     }
 
     @Test
@@ -219,11 +213,7 @@ public class HomePageUserTest {
 
         when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockOldUserRef);
 
-        when(mockOldUserRef.setValue(any(User.class))).thenAnswer((call) -> {
-            User userSentBack = call.getArgument(0);
-            assertIsMockUser(userSentBack);
-            return null;
-        });
+        assertSendingBackCorrectUser(mockUsersRef, mockUser);
     }
 
     public void assertOnDataChangeThrowsException(Exception exception){

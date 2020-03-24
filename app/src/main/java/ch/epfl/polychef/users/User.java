@@ -1,9 +1,11 @@
 package ch.epfl.polychef.users;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
 
@@ -54,11 +56,15 @@ public class User {
         return new ArrayList<>(subscriptions);
     }
 
+    public void addRecipe(String recipe) {
+        recipes.add(recipe);
+    }
+
     public void addFavourite(String recipe){
         favourites.add(recipe);
     }
 
-    public void addSubscriptions(String user) {
+    public void addSubscription(String user) {
         subscriptions.add(user);
     }
 
@@ -75,5 +81,21 @@ public class User {
                 + "favourites=" + favourites + ",\n"
                 + "subscribers=" + subscribers + ",\n"
                 + "subscriptions=" + subscriptions;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof User){
+            User other = (User) obj;
+
+            return Objects.equals(email, other.email)
+                    && Objects.equals(username, other.username)
+                    && recipes.equals(other.recipes)
+                    && favourites.equals(other.favourites)
+                    && subscribers.equals(other.subscribers)
+                    && subscriptions.equals(other.subscriptions);
+        }
+
+        return false;
     }
 }

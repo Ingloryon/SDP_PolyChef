@@ -5,6 +5,7 @@ import org.junit.Test;
 import ch.epfl.polychef.users.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,12 +15,14 @@ public class UserTest {
     private String mockUserEmail = "testUser@epfl.ch";
     private String mockUserName = "Alice InWonderland";
 
+    private User mockUser(){
+        return new User(mockUserEmail, mockUserName);
+    }
+
     @Test
     public void gettersWorkOnNewUser() {
 
-        String email = mockUserEmail;
-        String username = mockUserName;
-        User alice = new User(email, username);
+        User alice = mockUser();
 
         assertNotNull(alice);
         assertEquals(mockUserEmail, alice.getEmail());
@@ -44,8 +47,40 @@ public class UserTest {
     }
 
     @Test
+    public void canAddRecipes() {
+
+        User alice = mockUser();
+
+        String recipe1 = "Recipe_1";
+        alice.addSubscription(recipe1);
+        assertEquals(1, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(recipe1));
+
+        String recipe2 = "Recipe_2";
+        alice.addSubscription(recipe2);
+        assertEquals(2, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(recipe1));
+        assertTrue(alice.getSubscriptions().contains(recipe2));
+
+        String recipe3 = "Recipe_3";
+        alice.addSubscription(recipe3);
+        assertEquals(3, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(recipe1));
+        assertTrue(alice.getSubscriptions().contains(recipe2));
+        assertTrue(alice.getSubscriptions().contains(recipe3));
+
+        String recipe4 = "Recipe_4";
+        alice.addSubscription(recipe4);
+        assertEquals(4, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(recipe1));
+        assertTrue(alice.getSubscriptions().contains(recipe2));
+        assertTrue(alice.getSubscriptions().contains(recipe3));
+        assertTrue(alice.getSubscriptions().contains(recipe4));
+    }
+
+    @Test
     public void canAddFavouriteRecipes() {
-        User alice = new User(mockUserEmail, mockUserName);
+        User alice = mockUser();
 
         String recipe1 = "Recipe_1";
         alice.addFavourite(recipe1);
@@ -77,64 +112,110 @@ public class UserTest {
     @Test
     public void canAddSubscribers() {
 
-        User definitelyNotAlice = new User(mockUserEmail, mockUserName);
+        User alice = mockUser();
 
         String subscriber1 = "Subscriber_1";
-        definitelyNotAlice.addSubscriber(subscriber1);
-        assertEquals(1, definitelyNotAlice.getSubscribers().size());
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
+        alice.addSubscriber(subscriber1);
+        assertEquals(1, alice.getSubscribers().size());
+        assertTrue(alice.getSubscribers().contains(subscriber1));
 
         String subscriber2 = "Subscriber_2";
-        definitelyNotAlice.addSubscriber(subscriber2);
-        assertEquals(2, definitelyNotAlice.getSubscribers().size());
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber2));
+        alice.addSubscriber(subscriber2);
+        assertEquals(2, alice.getSubscribers().size());
+        assertTrue(alice.getSubscribers().contains(subscriber1));
+        assertTrue(alice.getSubscribers().contains(subscriber2));
 
         String subscriber3 = "Subscriber_3";
-        definitelyNotAlice.addSubscriber(subscriber3);
-        assertEquals(3, definitelyNotAlice.getSubscribers().size());
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber2));
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber3));
+        alice.addSubscriber(subscriber3);
+        assertEquals(3, alice.getSubscribers().size());
+        assertTrue(alice.getSubscribers().contains(subscriber1));
+        assertTrue(alice.getSubscribers().contains(subscriber2));
+        assertTrue(alice.getSubscribers().contains(subscriber3));
 
         String subscriber4 = "Subscriber_4";
-        definitelyNotAlice.addSubscriber(subscriber4);
-        assertEquals(4, definitelyNotAlice.getSubscribers().size());
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber2));
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber3));
-        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber4));
+        alice.addSubscriber(subscriber4);
+        assertEquals(4, alice.getSubscribers().size());
+        assertTrue(alice.getSubscribers().contains(subscriber1));
+        assertTrue(alice.getSubscribers().contains(subscriber2));
+        assertTrue(alice.getSubscribers().contains(subscriber3));
+        assertTrue(alice.getSubscribers().contains(subscriber4));
     }
 
     @Test
     public void canAddSubscriptions() {
 
-        User certainlyNotAlice = new User(mockUserEmail, mockUserName);
+        User alice = mockUser();
 
         String subscription1 = "Subscription_1";
-        certainlyNotAlice.addSubscriptions(subscription1);
-        assertEquals(1, certainlyNotAlice.getSubscriptions().size());
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
+        alice.addSubscription(subscription1);
+        assertEquals(1, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(subscription1));
 
         String subscription2 = "Subscription_2";
-        certainlyNotAlice.addSubscriptions(subscription2);
-        assertEquals(2, certainlyNotAlice.getSubscriptions().size());
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription2));
+        alice.addSubscription(subscription2);
+        assertEquals(2, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(subscription1));
+        assertTrue(alice.getSubscriptions().contains(subscription2));
 
         String subscription3 = "Subscription_3";
-        certainlyNotAlice.addSubscriptions(subscription3);
-        assertEquals(3, certainlyNotAlice.getSubscriptions().size());
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription2));
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription3));
+        alice.addSubscription(subscription3);
+        assertEquals(3, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(subscription1));
+        assertTrue(alice.getSubscriptions().contains(subscription2));
+        assertTrue(alice.getSubscriptions().contains(subscription3));
 
         String subscription4 = "Subscription_4";
-        certainlyNotAlice.addSubscriptions(subscription4);
-        assertEquals(4, certainlyNotAlice.getSubscriptions().size());
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription2));
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription3));
-        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription4));
+        alice.addSubscription(subscription4);
+        assertEquals(4, alice.getSubscriptions().size());
+        assertTrue(alice.getSubscriptions().contains(subscription1));
+        assertTrue(alice.getSubscriptions().contains(subscription2));
+        assertTrue(alice.getSubscriptions().contains(subscription3));
+        assertTrue(alice.getSubscriptions().contains(subscription4));
+    }
+
+    @Test
+    public void equalsWorksOnTrivialInputs(){
+
+        User alice = mockUser();
+
+        assertNotEquals(alice, null);
+        assertNotEquals(null, alice);
+
+        assertNotEquals(alice, "alice");
+        assertNotEquals("alice", alice);
+
+        assertNotEquals(alice, new User());
+        assertNotEquals(new User(), alice);
+
+        assertNotEquals(alice, new User("bob", "inQuarantine"));
+        assertNotEquals(new User("bob", "inQuarantine"), alice);
+
+        assertEquals(alice, alice);
+    }
+
+    @Test
+    public void equalsChecksEachFields(){
+
+        User alice = mockUser();
+
+        User doppelganger = mockUser();
+        doppelganger.addRecipe("Recipe");
+        assertNotEquals(alice, doppelganger);
+        assertNotEquals(doppelganger, alice);
+
+        doppelganger = mockUser();
+        doppelganger.addFavourite("Favourite");
+        assertNotEquals(alice, doppelganger);
+        assertNotEquals(doppelganger, alice);
+
+        doppelganger = mockUser();
+        doppelganger.addSubscriber("Subscriber");
+        assertNotEquals(alice, doppelganger);
+        assertNotEquals(doppelganger, alice);
+
+        doppelganger = mockUser();
+        doppelganger.addSubscription("Subscription");
+        assertNotEquals(alice, doppelganger);
+        assertNotEquals(doppelganger, alice);
     }
 }
