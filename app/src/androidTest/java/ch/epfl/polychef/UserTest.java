@@ -77,64 +77,64 @@ public class UserTest {
     @Test
     public void canAddSubscribers() {
 
-        User alice = new User(mockUserEmail, mockUserName);
+        User definitelyNotAlice = new User(mockUserEmail, mockUserName);
 
         String subscriber1 = "Subscriber_1";
-        alice.addSubscriber(subscriber1);
-        assertEquals(1, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
+        definitelyNotAlice.addSubscriber(subscriber1);
+        assertEquals(1, definitelyNotAlice.getSubscribers().size());
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
 
         String subscriber2 = "Subscriber_2";
-        alice.addSubscriber(subscriber2);
-        assertEquals(2, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
+        definitelyNotAlice.addSubscriber(subscriber2);
+        assertEquals(2, definitelyNotAlice.getSubscribers().size());
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber2));
 
         String subscriber3 = "Subscriber_3";
-        alice.addSubscriber(subscriber3);
-        assertEquals(3, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-        assertTrue(alice.getSubscribers().contains(subscriber3));
+        definitelyNotAlice.addSubscriber(subscriber3);
+        assertEquals(3, definitelyNotAlice.getSubscribers().size());
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber2));
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber3));
 
         String subscriber4 = "Subscriber_4";
-        alice.addSubscriber(subscriber4);
-        assertEquals(4, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-        assertTrue(alice.getSubscribers().contains(subscriber3));
-        assertTrue(alice.getSubscribers().contains(subscriber4));
+        definitelyNotAlice.addSubscriber(subscriber4);
+        assertEquals(4, definitelyNotAlice.getSubscribers().size());
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber1));
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber2));
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber3));
+        assertTrue(definitelyNotAlice.getSubscribers().contains(subscriber4));
     }
 
     @Test
     public void canAddSubscriptions() {
 
-        User alice = new User(mockUserEmail, mockUserName);
+        User certainlyNotAlice = new User(mockUserEmail, mockUserName);
 
         String subscription1 = "Subscription_1";
-        alice.addSubscriptions(subscription1);
-        assertEquals(1, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
+        certainlyNotAlice.addSubscriptions(subscription1);
+        assertEquals(1, certainlyNotAlice.getSubscriptions().size());
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
 
         String subscription2 = "Subscription_2";
-        alice.addSubscriptions(subscription2);
-        assertEquals(2, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
+        certainlyNotAlice.addSubscriptions(subscription2);
+        assertEquals(2, certainlyNotAlice.getSubscriptions().size());
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription2));
 
         String subscription3 = "Subscription_3";
-        alice.addSubscriptions(subscription3);
-        assertEquals(3, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-        assertTrue(alice.getSubscriptions().contains(subscription3));
+        certainlyNotAlice.addSubscriptions(subscription3);
+        assertEquals(3, certainlyNotAlice.getSubscriptions().size());
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription2));
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription3));
 
         String subscription4 = "Subscription_4";
-        alice.addSubscriptions(subscription4);
-        assertEquals(4, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-        assertTrue(alice.getSubscriptions().contains(subscription3));
-        assertTrue(alice.getSubscriptions().contains(subscription4));
+        certainlyNotAlice.addSubscriptions(subscription4);
+        assertEquals(4, certainlyNotAlice.getSubscriptions().size());
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription1));
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription2));
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription3));
+        assertTrue(certainlyNotAlice.getSubscriptions().contains(subscription4));
     }
 }

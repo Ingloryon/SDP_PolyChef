@@ -49,6 +49,11 @@ public class HomePageUserTest {
     private String mockUserName = "Alice InWonderland";
     private String mockUserKey = "UserKey";
 
+    private String fav1 = "First favourite recipe";
+    private String fav2 = "Second favourite recipe";
+    private String subscription = "Only one subscription";
+
+
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
         @Override
@@ -163,6 +168,31 @@ public class HomePageUserTest {
         });
     }
 
+    public User mockUser() {
+        User mockUser = new User(mockUserEmail, mockUserName);
+        mockUser.addFavourite(fav1);
+        mockUser.addFavourite(fav2);
+        mockUser.addSubscriptions(subscription);
+        return mockUser;
+    }
+
+    public void assertIsMockUser(User user){
+        assertNotNull(user);
+        assertEquals(mockUserEmail, user.getEmail());
+        assertEquals(mockUserName, user.getUsername());
+
+        assertEquals(0, user.getRecipes().size());
+
+        assertEquals(2, user.getFavourites().size());
+        assertTrue(user.getFavourites().contains(fav1));
+        assertTrue(user.getFavourites().contains(fav2));
+
+        assertEquals(0, user.getSubscribers().size());
+
+        assertEquals(1, user.getSubscriptions().size());
+        assertTrue(user.getSubscriptions().contains(subscription));
+    }
+
     @Test
     public void oldUserTest(){
 
@@ -178,15 +208,7 @@ public class HomePageUserTest {
         when(mockOnDataChangeSnapshot.getChildren()).thenReturn(children);
 
         //oldUser method mock requirements
-        User mockUser = new User(mockUserEmail, mockUserName);
-        String fav1 = "First favourite recipe";
-        mockUser.addFavourite(fav1);
-
-        String fav2 = "Second favourite recipe";
-        mockUser.addFavourite(fav2);
-
-        String subscription = "Only one subscription";
-        mockUser.addSubscriptions(subscription);
+        User mockUser = mockUser();
 
         when(mockSnapshotChild.exists()).thenReturn(true);
         when(mockSnapshotChild.getValue(User.class)).thenReturn(mockUser);
@@ -199,38 +221,26 @@ public class HomePageUserTest {
 
         when(mockOldUserRef.setValue(any(User.class))).thenAnswer((call) -> {
             User userSentBack = call.getArgument(0);
-
-            assertNotNull(userSentBack);
-            assertEquals(mockUserEmail, userSentBack.getEmail());
-            assertEquals(mockUserName, userSentBack.getUsername());
-
-            assertEquals(0, userSentBack.getRecipes().size());
-
-            assertEquals(2, userSentBack.getFavourites().size());
-            assertTrue(userSentBack.getFavourites().contains(fav1));
-            assertTrue(userSentBack.getFavourites().contains(fav2));
-
-            assertEquals(0, userSentBack.getSubscribers().size());
-
-            assertEquals(1, userSentBack.getSubscriptions().size());
-            assertTrue(userSentBack.getSubscriptions().contains(subscription));
-
+            assertIsMockUser(userSentBack);
             return null;
         });
     }
 
+    public void assertOnDataChangeThrowsException(Exception exception){
+        doAnswer((call) -> {
+            ValueEventListener listener =  call.getArgument(0);
+
+            assertThrows(exception.getClass(), () -> listener.onDataChange(mockOnDataChangeSnapshot));
+
+            return null;
+        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
     @Test
     public void throwsExceptionWhenMultipleUsersExist() {
 
         when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 2);
 
-        doAnswer((call) -> {
-            ValueEventListener listener =  call.getArgument(0);
-
-            assertThrows(IllegalStateException.class, () -> listener.onDataChange(mockOnDataChangeSnapshot));
-
-            return null;
-        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        assertOnDataChangeThrowsException(new IllegalStateException());
     }
 
     @Test
@@ -238,13 +248,7 @@ public class HomePageUserTest {
 
         when(mockOnDataChangeSnapshot.getChildrenCount()).thenReturn((long) 1);
 
-        doAnswer((call) -> {
-            ValueEventListener listener =  call.getArgument(0);
-
-            assertThrows(IllegalArgumentException.class, () -> listener.onDataChange(mockOnDataChangeSnapshot));
-
-            return null;
-        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        assertOnDataChangeThrowsException(new IllegalArgumentException());
 
         //OnDataChange mock requirements
         DataSnapshot mockSnapshotChild = mock(DataSnapshot.class);
@@ -262,7 +266,7 @@ public class HomePageUserTest {
         doAnswer((call) -> {
             ValueEventListener listener =  call.getArgument(0);
 
-            assertThrows(IllegalStateException.class, () -> listener.onCancelled(DatabaseError.fromException(new Exception())));
+            assertThrows(IllegalArgumentException.class, () -> listener.onCancelled(DatabaseError.fromException(new Exception())));
 
             return null;
         }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));

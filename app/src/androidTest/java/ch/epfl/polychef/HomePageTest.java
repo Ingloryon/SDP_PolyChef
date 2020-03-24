@@ -112,9 +112,13 @@ public class HomePageTest {
         }
 
         @Override
-        protected String getUserEmail() { return "test@epfl.ch"; }
+        protected String getUserEmail() {
+            return "test@epfl.ch";
+        }
 
         @Override
-        protected String getUserName() { return "TestUsername"; }
+        protected String getUserName() {
+            return "TestUsername";
+        }
     }
 }
