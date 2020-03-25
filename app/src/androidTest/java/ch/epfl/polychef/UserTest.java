@@ -1,8 +1,14 @@
 package ch.epfl.polychef;
 
+import androidx.test.espresso.core.internal.deps.guava.base.Function;
+
+import com.google.android.gms.common.util.BiConsumer;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
+
+import java.util.Arrays;
+import java.util.List;
 
 import ch.epfl.polychef.users.User;
 
@@ -53,124 +59,79 @@ public class UserTest {
         assertEquals(0, noOne.getSubscriptions().size());
     }
 
-    @Test
-    public void canAddRecipes() {
+    public void addAndAssert(List<String> toAdd,
+                             BiConsumer<User, String> add,
+                             Function<User, List<String>> content){
 
-        String recipe1 = "Recipe_1";
-        alice.addSubscription(recipe1);
-        assertEquals(1, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(recipe1));
+        assertNotNull(alice);
+        assertNotNull(toAdd);
+        assertEquals(4, toAdd.size());
 
-        String recipe2 = "Recipe_2";
-        alice.addSubscription(recipe2);
-        assertEquals(2, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(recipe1));
-        assertTrue(alice.getSubscriptions().contains(recipe2));
+        add.accept(alice, toAdd.get(0));
+        //alice.addRecipe(toAdd.get(0));
+        assertEquals(1, content.apply(alice).size());
+        assertTrue(content.apply(alice).contains(toAdd.get(0)));
 
-        String recipe3 = "Recipe_3";
-        alice.addSubscription(recipe3);
-        assertEquals(3, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(recipe1));
-        assertTrue(alice.getSubscriptions().contains(recipe2));
-        assertTrue(alice.getSubscriptions().contains(recipe3));
+        //alice.addRecipe(toAdd.get(1));
+        add.accept(alice, toAdd.get(1));
+        assertEquals(2, content.apply(alice).size());
+        assertTrue(content.apply(alice).contains(toAdd.get(0)));
+        assertTrue(content.apply(alice).contains(toAdd.get(1)));
 
-        String recipe4 = "Recipe_4";
-        alice.addSubscription(recipe4);
-        assertEquals(4, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(recipe1));
-        assertTrue(alice.getSubscriptions().contains(recipe2));
-        assertTrue(alice.getSubscriptions().contains(recipe3));
-        assertTrue(alice.getSubscriptions().contains(recipe4));
+        //alice.addRecipe(toAdd.get(2));
+        add.accept(alice, toAdd.get(2));
+        assertEquals(3, content.apply(alice).size());
+        assertTrue(content.apply(alice).contains(toAdd.get(0)));
+        assertTrue(content.apply(alice).contains(toAdd.get(1)));
+        assertTrue(content.apply(alice).contains(toAdd.get(2)));
+
+        //alice.addRecipe(toAdd.get(3));
+        add.accept(alice, toAdd.get(3));
+        assertEquals(4, content.apply(alice).size());
+        assertTrue(content.apply(alice).contains(toAdd.get(0)));
+        assertTrue(content.apply(alice).contains(toAdd.get(1)));
+        assertTrue(content.apply(alice).contains(toAdd.get(2)));
+        assertTrue(content.apply(alice).contains(toAdd.get(3)));
     }
 
     @Test
-    public void canAddFavouriteRecipes() {
+    public void canAddRecipes() {
 
-        String recipe1 = "Recipe_1";
-        alice.addFavourite(recipe1);
-        assertEquals(1, alice.getFavourites().size());
-        assertTrue(alice.getFavourites().contains(recipe1));
+        addAndAssert(
+                Arrays.asList("Recipe_1", "Recipe_2", "Recipe_3", "Recipe_4"),
+                User::addRecipe,
+                User::getRecipes
+        );
+    }
 
-        String recipe2 = "Recipe_2";
-        alice.addFavourite(recipe2);
-        assertEquals(2, alice.getFavourites().size());;
-        assertTrue(alice.getFavourites().contains(recipe1));
-        assertTrue(alice.getFavourites().contains(recipe2));
+    @Test
+    public void canAddFavourites() {
 
-        String recipe3 = "Recipe_3";
-        alice.addFavourite(recipe3);
-        assertEquals(3, alice.getFavourites().size());
-        assertTrue(alice.getFavourites().contains(recipe1));
-        assertTrue(alice.getFavourites().contains(recipe2));
-        assertTrue(alice.getFavourites().contains(recipe3));
-
-        String recipe4 = "Recipe_4";
-        alice.addFavourite(recipe4);
-        assertEquals(4, alice.getFavourites().size());
-        assertTrue(alice.getFavourites().contains(recipe1));
-        assertTrue(alice.getFavourites().contains(recipe2));
-        assertTrue(alice.getFavourites().contains(recipe3));
-        assertTrue(alice.getFavourites().contains(recipe4));
+        addAndAssert(
+                Arrays.asList("Favourite_1", "Favourite_2", "Favourite_3", "Favourite_4"),
+                User::addFavourite,
+                User::getFavourites
+        );
     }
 
     @Test
     public void canAddSubscribers() {
 
-        String subscriber1 = "Subscriber_1";
-        alice.addSubscriber(subscriber1);
-        assertEquals(1, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-
-        String subscriber2 = "Subscriber_2";
-        alice.addSubscriber(subscriber2);
-        assertEquals(2, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-
-        String subscriber3 = "Subscriber_3";
-        alice.addSubscriber(subscriber3);
-        assertEquals(3, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-        assertTrue(alice.getSubscribers().contains(subscriber3));
-
-        String subscriber4 = "Subscriber_4";
-        alice.addSubscriber(subscriber4);
-        assertEquals(4, alice.getSubscribers().size());
-        assertTrue(alice.getSubscribers().contains(subscriber1));
-        assertTrue(alice.getSubscribers().contains(subscriber2));
-        assertTrue(alice.getSubscribers().contains(subscriber3));
-        assertTrue(alice.getSubscribers().contains(subscriber4));
+        addAndAssert(
+                Arrays.asList("Subscriber_1", "Subscriber_2", "Subscriber_3", "Subscriber_4"),
+                User::addSubscriber,
+                User::getSubscribers
+        );
     }
 
     @Test
     public void canAddSubscriptions() {
 
-        String subscription1 = "Subscription_1";
-        alice.addSubscription(subscription1);
-        assertEquals(1, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-
-        String subscription2 = "Subscription_2";
-        alice.addSubscription(subscription2);
-        assertEquals(2, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-
-        String subscription3 = "Subscription_3";
-        alice.addSubscription(subscription3);
-        assertEquals(3, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-        assertTrue(alice.getSubscriptions().contains(subscription3));
-
-        String subscription4 = "Subscription_4";
-        alice.addSubscription(subscription4);
-        assertEquals(4, alice.getSubscriptions().size());
-        assertTrue(alice.getSubscriptions().contains(subscription1));
-        assertTrue(alice.getSubscriptions().contains(subscription2));
-        assertTrue(alice.getSubscriptions().contains(subscription3));
-        assertTrue(alice.getSubscriptions().contains(subscription4));
+        addAndAssert(
+                Arrays.asList("Subscription_1", "Subscription_2", "Subscription_3", "Subscription_4"),
+                User::addSubscription,
+                User::getSubscriptions
+        );
     }
 
     @Test

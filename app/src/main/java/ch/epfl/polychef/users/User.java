@@ -93,15 +93,18 @@ public class User {
         if(obj instanceof User){
             User other = (User) obj;
 
-            if(Objects.equals(email, other.email)
-            && Objects.equals(username, other.username)){
+            boolean isSamePerson = Objects.equals(email, other.email)
+                    && Objects.equals(username, other.username);
 
-                return Objects.equals(email, other.email)
-                        && Objects.equals(recipes, other.recipes)
-                        && Objects.equals(favourites, other.favourites)
-                        && Objects.equals(subscribers, other.subscribers)
-                        && Objects.equals(subscriptions, other.subscriptions);
-            }
+            boolean hasSameRecipes = Objects.equals(recipes, other.recipes)
+                    && Objects.equals(favourites, other.favourites);
+
+            boolean hasSameSubs = Objects.equals(subscribers, other.subscribers)
+                    && Objects.equals(subscriptions, other.subscriptions);
+
+            return isSamePerson
+                    && hasSameRecipes
+                    && hasSameSubs;
         }
 
         return false;

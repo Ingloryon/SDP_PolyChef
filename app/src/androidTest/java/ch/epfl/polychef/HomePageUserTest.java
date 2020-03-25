@@ -18,7 +18,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
@@ -50,11 +49,6 @@ public class HomePageUserTest {
     private String mockUserEmail = "testUser@epfl.ch";
     private String mockUserName = "Alice InWonderland";
     private String mockUserKey = "UserKey";
-
-    private String fav1 = "First favourite recipe";
-    private String fav2 = "Second favourite recipe";
-    private String subscription = "Only one subscription";
-
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
@@ -120,38 +114,17 @@ public class HomePageUserTest {
 
     public User mockUser() {
         User mockUser = new User(mockUserEmail, mockUserName);
+
+        String fav1 = "First favourite recipe";
         mockUser.addFavourite(fav1);
+
+        String fav2 = "Second favourite recipe";
         mockUser.addFavourite(fav2);
+
+        String subscription = "Only one subscription";
         mockUser.addSubscription(subscription);
+
         return mockUser;
-    }
-
-    public void assertMockUser(User user){
-        assertNotNull(user);
-        assertEquals(mockUserEmail, user.getEmail());
-        assertEquals(mockUserName, user.getUsername());
-
-        assertEquals(0, user.getRecipes().size());
-
-        assertEquals(2, user.getFavourites().size());
-        assertTrue(user.getFavourites().contains(fav1));
-        assertTrue(user.getFavourites().contains(fav2));
-
-        assertEquals(0, user.getSubscribers().size());
-
-        assertEquals(1, user.getSubscriptions().size());
-        assertTrue(user.getSubscriptions().contains(subscription));
-    }
-
-    public void assertNewUser(User user) {
-        assertNotNull(user);
-        assertEquals(mockUserEmail, user.getEmail());
-        assertEquals(mockUserName, user.getUsername());
-
-        assertEquals(0, user.getRecipes().size());
-        assertEquals(0, user.getFavourites().size());
-        assertEquals(0, user.getSubscribers().size());
-        assertEquals(0, user.getSubscriptions().size());
     }
 
     public void assertSendingBackCorrectUser(DatabaseReference ref, User expected){
