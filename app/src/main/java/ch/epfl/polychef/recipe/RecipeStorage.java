@@ -118,6 +118,8 @@ public class RecipeStorage {
      * @param ch the {@code CallHandler} to call on success or failure
      */
     public void readRecipe(int id, CallHandler<Recipe> ch) {
+        Preconditions.checkArgument(id > 0, "Id should be positive");
+        Preconditions.checkArgument(ch != null, "Call handler should not be null");
         DatabaseReference myRef = getFirebaseDatabase().getReference("recipe").child(Integer.toString(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -150,6 +152,10 @@ public class RecipeStorage {
      * @param caller          the caller to call onSuccess
      */
     public void getNRecipes(int numberOfRecipes, int fromId, CallHandler<List<Recipe>> caller) {
+        Preconditions.checkArgument(fromId > 0, "Id should be positive");
+        Preconditions.checkArgument(numberOfRecipes > 0, "Number of recipe to get should "+
+                "be positive");
+        Preconditions.checkArgument(caller != null, "Call handler should not be null");
         getNRecipeQuery(numberOfRecipes, fromId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -180,6 +186,10 @@ public class RecipeStorage {
      * @param caller          the caller to notify when data are ready
      */
     public void getNRecipesOneByOne(int numberOfRecipes, int fromId, CallNotifier<Recipe> caller) {
+        Preconditions.checkArgument(fromId > 0, "Id should be positive");
+        Preconditions.checkArgument(numberOfRecipes > 0, "Number of recipe to get should "+
+                "be positive");
+        Preconditions.checkArgument(caller != null, "Call handler should not be null");
         getNRecipeQuery(numberOfRecipes, fromId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
