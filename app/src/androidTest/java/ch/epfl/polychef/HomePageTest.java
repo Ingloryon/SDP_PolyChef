@@ -9,15 +9,17 @@ import androidx.test.espresso.contrib.DrawerActions;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
 import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
+
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +27,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
@@ -42,9 +46,6 @@ public class HomePageTest {
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             true);
-    /*@Rule
-    public IntentsTestRule<FakeHomePage> intentsTestRule =
-            new IntentsTestRule<FakeHomePage>(FakeHomePage.class);*/
 
     @Before
     public void initActivity() {
@@ -99,7 +100,31 @@ public class HomePageTest {
     private class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
-            return Mockito.mock(FirebaseUser.class);
+            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+
+            when(mockUser.getEmail()).thenReturn("test@epfl.ch");
+            when(mockUser.getDisplayName()).thenReturn("TestUsername");
+            return mockUser;
+        }
+
+        @Override
+        protected void retrieveUserInfo(String email) {
+
+        }
+
+        @Override
+        protected void newUser(String email) {
+
+        }
+
+        @Override
+        protected void oldUser(DataSnapshot snap) {
+
+        }
+
+        @Override
+        protected void updateUserInfo() {
+
         }
     }
 }

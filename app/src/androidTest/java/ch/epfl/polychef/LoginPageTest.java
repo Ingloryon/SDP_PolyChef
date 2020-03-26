@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -111,6 +112,12 @@ public class LoginPageTest {
         @Override
         public FirebaseUser getUser() {
             return mock(FirebaseUser.class);
+        }
+
+        @Override
+        public void startNextActivity() {
+            //Shouldn't start Homepage when testing the LoginPage
+            //startActivity(new Intent(this, fakeHomePage.getActivityClassToIntercept()));
         }
     }
 }

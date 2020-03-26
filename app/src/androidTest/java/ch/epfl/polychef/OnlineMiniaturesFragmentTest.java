@@ -1,13 +1,7 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
-import android.os.Bundle;
-
-import android.support.v4.app.*;
-
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
@@ -27,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
 
 import java.util.ArrayList;
 import java.util.List;
