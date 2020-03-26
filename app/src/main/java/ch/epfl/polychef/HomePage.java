@@ -209,6 +209,7 @@ public class HomePage extends ConnectedActivity {
     protected String getUserName() {
         return getUser().getDisplayName();
     }
+    
     public FirebaseDatabase getDatabase(){
         return FirebaseDatabase.getInstance();
     }
