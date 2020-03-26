@@ -46,9 +46,6 @@ public class HomePageTest {
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             true);
-    /*@Rule
-    public IntentsTestRule<FakeHomePage> intentsTestRule =
-            new IntentsTestRule<FakeHomePage>(FakeHomePage.class);*/
 
     @Before
     public void initActivity() {
