@@ -187,7 +187,6 @@ public class PostRecipeFragment extends Fragment {
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
         estimatedPreparationTime = getAndCheckTime(prep,"Preparation Time");
-        Log.w(tag,"prep time: "+estimatedPreparationTime);
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
