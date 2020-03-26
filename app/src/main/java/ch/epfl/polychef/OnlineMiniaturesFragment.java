@@ -41,10 +41,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
 
-        // TODO CHANGE ME WITH BUNDLE
-        recipeStorage = new RecipeStorage();
-
         Bundle bundle = getArguments();
+        recipeStorage = (RecipeStorage) bundle.getSerializable("RecipeStorage");
+
         int fragmentID = bundle.getInt("fragmentID");
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
@@ -88,5 +87,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     public void onFailure() {
         isLoading = false;
     }
+
+    public RecyclerView getRecyclerView(){
+        return onlineRecyclerView;
+    }
+
 
 }
