@@ -153,8 +153,8 @@ public class RecipeStorage {
      */
     public void getNRecipes(int numberOfRecipes, int fromId, CallHandler<List<Recipe>> caller) {
         Preconditions.checkArgument(fromId > 0, "Id should be positive");
-        Preconditions.checkArgument(numberOfRecipes > 0, "Number of recipe to get should "+
-                "be positive");
+        Preconditions.checkArgument(numberOfRecipes > 0, "Number of recipe to get should "
+                + "be positive");
         Preconditions.checkArgument(caller != null, "Call handler should not be null");
         getNRecipeQuery(numberOfRecipes, fromId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -187,8 +187,8 @@ public class RecipeStorage {
      */
     public void getNRecipesOneByOne(int numberOfRecipes, int fromId, CallNotifier<Recipe> caller) {
         Preconditions.checkArgument(fromId > 0, "Id should be positive");
-        Preconditions.checkArgument(numberOfRecipes > 0, "Number of recipe to get should "+
-                "be positive");
+        Preconditions.checkArgument(numberOfRecipes > 0, "Number of recipe to get should "
+                + "be positive");
         Preconditions.checkArgument(caller != null, "Call handler should not be null");
         getNRecipeQuery(numberOfRecipes, fromId).addChildEventListener(new ChildEventListener() {
             @Override
