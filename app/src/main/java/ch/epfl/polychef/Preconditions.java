@@ -1,7 +1,7 @@
 package ch.epfl.polychef;
 
 public final class Preconditions {
-    private Preconditions() {}
+    //private Preconditions() {}
 
     public static void checkArgument(boolean b, String log) {
         if (! b) {

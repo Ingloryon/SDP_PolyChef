@@ -219,7 +219,6 @@ public final class Recipe implements Serializable, Cloneable {
         return super.clone();
     }
 
-
     // TODO: Add setters for needed attributes -> how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
     // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
     // TODO: Or all the UUID setup isn't necessary and just using Object's equals def is enough ?
