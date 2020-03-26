@@ -12,15 +12,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -30,22 +27,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class OnlineMiniaturesFragmentTest {
 
     private RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
     private Recipe testRecipe1 = new RecipeBuilder().setName("test1").setRecipeDifficulty(Recipe.Difficulty.EASY).addInstruction("test1instruction").setPersonNumber(4).setEstimatedCookingTime(30).setEstimatedPreparationTime(30).addIngredient("test1", 1.0, Ingredient.Unit.CUP).build();
-    private Recipe testRecipe2 = new RecipeBuilder().setName("test2").setRecipeDifficulty(Recipe.Difficulty.EASY).addInstruction("test2instruction").setPersonNumber(4).setEstimatedCookingTime(30).setEstimatedPreparationTime(30).addIngredient("test2", 1.0, Ingredient.Unit.CUP).build();
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
@@ -109,7 +102,7 @@ public class OnlineMiniaturesFragmentTest {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
             fakeRecipeStorage.addRecipe(testRecipe1);
         }
-        fakeRecipeStorage.addRecipe(testRecipe2);
+        fakeRecipeStorage.addRecipe(testRecipe1);
 
         initActivity();
         wait(1000);
@@ -118,7 +111,7 @@ public class OnlineMiniaturesFragmentTest {
 
     @Test
     public synchronized void scrollingWithDatabaseSmallerThanMaxLoadedAtATimeShouldAddNothingToTheMiniaturesList() throws InterruptedException {
-        fakeRecipeStorage.addRecipe(testRecipe2);
+        fakeRecipeStorage.addRecipe(testRecipe1);
         initActivity();
         wait(1000);
         onView(withId(R.id.miniaturesOnlineList))
@@ -126,12 +119,13 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
+
     @Test
     public synchronized void scrollingDownLoadANewRecipe() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
             fakeRecipeStorage.addRecipe(testRecipe1);
         }
-        fakeRecipeStorage.addRecipe(testRecipe2);
+        fakeRecipeStorage.addRecipe(testRecipe1);
         initActivity();
         wait(1000);
         onView(withId(R.id.miniaturesOnlineList))
@@ -140,7 +134,59 @@ public class OnlineMiniaturesFragmentTest {
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+    }
 
+//    @Test
+//    public synchronized void scrollingDownLoadANewRecipePeriodically() throws InterruptedException {
+//        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+//            fakeRecipeStorage.addRecipe(testRecipe1);
+//            fakeRecipeStorage.addRecipe(testRecipe2);
+//        }
+//        fakeRecipeStorage.addRecipe(testRecipe2);
+//        fakeRecipeStorage.addRecipe(testRecipe2);
+//        fakeRecipeStorage.addRecipe(testRecipe2);
+//        fakeRecipeStorage.addRecipe(testRecipe2);
+//        fakeRecipeStorage.addRecipe(testRecipe2);
+//        fakeRecipeStorage.addRecipe(testRecipe2);
+//        fakeRecipeStorage.addRecipe(testRecipe2);
+//
+//
+//
+//
+//        initActivity();
+//        wait(1000);
+//        onView(withId(R.id.miniaturesOnlineList))
+//                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+//        wait(4000);
+//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        wait(4000);
+//        onView(withId(R.id.miniaturesOnlineList))
+//                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+//        wait(4000);
+//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        wait(1000);
+//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        wait(1000);
+//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        wait(1000);
+//        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2 + 1, ((FakeRecipeStorage) fakeRecipeStorage).getRecipeList().size());
+//    }
+
+    @Test
+    public synchronized void scrollingDownLoadANewRecipeOnceButNotMore() throws InterruptedException {
+        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+            fakeRecipeStorage.addRecipe(testRecipe1);
+            fakeRecipeStorage.addRecipe(testRecipe1);
+        }
+        fakeRecipeStorage.addRecipe(testRecipe1);
+        initActivity();
+        wait(1000);
+        onView(withId(R.id.miniaturesOnlineList))
+                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+        wait(1000);
+        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+        wait(1000);
+        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
 
     public OnlineMiniaturesFragment getMiniaturesFragment(){
@@ -189,11 +235,17 @@ public class OnlineMiniaturesFragmentTest {
 
         private List<Recipe> recipesInDatabase = new ArrayList<>();
 
-        private int getIndexInArrayList(int indexInDatabase) {return indexInDatabase - 1;}
+        private int getIndexInArrayList(int indexInDatabase) {
+            return indexInDatabase - 1;
+        }
 
         @Override
         public FirebaseDatabase getFirebaseDatabase() {
             return firebaseInstance;
+        }
+
+        public List<Recipe> getRecipeList(){
+           return recipesInDatabase;
         }
 
         @Override
@@ -201,6 +253,7 @@ public class OnlineMiniaturesFragmentTest {
             id += 1;
             recipesInDatabase.add(recipe);
         }
+
         @Override
         public void readRecipe(int id, CallHandler<Recipe> ch){
             int actualIndex = getIndexInArrayList(id);
@@ -209,6 +262,7 @@ public class OnlineMiniaturesFragmentTest {
             }
             ch.onSuccess(recipesInDatabase.get(actualIndex));
         }
+
         @Override
         public void getNRecipes(int numberOfRecipes, int fromId, CallHandler<List<Recipe>> caller){
             int actualFromIndex = getIndexInArrayList(fromId);
@@ -217,6 +271,7 @@ public class OnlineMiniaturesFragmentTest {
             }
             caller.onSuccess(recipesInDatabase.subList(actualFromIndex, Math.min(recipesInDatabase.size(), actualFromIndex + numberOfRecipes + 1)));
         }
+
         @Override
         public void getNRecipesOneByOne(int numberOfRecipes, int fromId, CallNotifier<Recipe> caller){
             int actualFromIndex = getIndexInArrayList(fromId);
