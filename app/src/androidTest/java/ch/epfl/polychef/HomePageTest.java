@@ -85,7 +85,7 @@ public class HomePageTest {
         onView(withId(idFragment)).check(matches(isDisplayed()));
     }
 
-    static class FakeHomePage extends HomePage {
+    private class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
             return Mockito.mock(FirebaseUser.class);

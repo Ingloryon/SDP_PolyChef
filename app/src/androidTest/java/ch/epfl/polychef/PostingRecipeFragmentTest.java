@@ -36,7 +36,7 @@ public class PostingRecipeFragmentTest {
             HomePage.class) {
         @Override
         protected HomePage create(Intent intent) {
-            HomePage activity = new HomePageTest.FakeHomePage();
+            HomePage activity = new PostingRecipeFragmentTest.FakeHomePage();
             return activity;
         }
     };

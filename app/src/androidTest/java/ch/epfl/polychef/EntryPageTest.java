@@ -29,9 +29,8 @@ public class EntryPageTest {
     }
 
     @Test
-    public void onClickLoginGoToLoginPage() throws InterruptedException {
+    public void onClickLoginGoToLoginPage(){
         onView(withId(R.id.logButton)).perform(click());
-        wait(1);
         intended(hasComponent(LoginPage.class.getName()));
     }
 }
