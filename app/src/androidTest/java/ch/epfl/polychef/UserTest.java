@@ -68,24 +68,20 @@ public class UserTest {
         assertEquals(4, toAdd.size());
 
         add.accept(alice, toAdd.get(0));
-        //alice.addRecipe(toAdd.get(0));
         assertEquals(1, content.apply(alice).size());
         assertTrue(content.apply(alice).contains(toAdd.get(0)));
 
-        //alice.addRecipe(toAdd.get(1));
         add.accept(alice, toAdd.get(1));
         assertEquals(2, content.apply(alice).size());
         assertTrue(content.apply(alice).contains(toAdd.get(0)));
         assertTrue(content.apply(alice).contains(toAdd.get(1)));
 
-        //alice.addRecipe(toAdd.get(2));
         add.accept(alice, toAdd.get(2));
         assertEquals(3, content.apply(alice).size());
         assertTrue(content.apply(alice).contains(toAdd.get(0)));
         assertTrue(content.apply(alice).contains(toAdd.get(1)));
         assertTrue(content.apply(alice).contains(toAdd.get(2)));
 
-        //alice.addRecipe(toAdd.get(3));
         add.accept(alice, toAdd.get(3));
         assertEquals(4, content.apply(alice).size());
         assertTrue(content.apply(alice).contains(toAdd.get(0)));
