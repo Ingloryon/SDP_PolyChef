@@ -12,6 +12,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
+import ch.epfl.polychef.pages.LoginPage;
+
 import com.google.firebase.auth.FirebaseUser;
 
 import static org.junit.Assert.assertNotNull;
@@ -19,8 +21,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import ch.epfl.polychef.pages.LoginPage;
 
 import static org.mockito.Mockito.mock;
 
@@ -71,6 +71,12 @@ public class LoginPageTest {
         @Override
         public FirebaseUser getUser() {
             return mock(FirebaseUser.class);
+        }
+
+        @Override
+        public void startNextActivity() {
+            //Shouldn't start Homepage when testing the LoginPage
+            //startActivity(new Intent(this, fakeHomePage.getActivityClassToIntercept()));
         }
     }
 }

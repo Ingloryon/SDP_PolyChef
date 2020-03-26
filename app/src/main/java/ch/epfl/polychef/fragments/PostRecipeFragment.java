@@ -375,10 +375,12 @@ public class PostRecipeFragment extends Fragment {
             if(currentMiniature != null) {
                 try {
                     Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
-                    double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
-                    double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
-                    Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
-                    imageMiniaturePreview.setImageBitmap(newBitmap);
+                    if(oldBitmap != null) {
+                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
+                        double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
+                        Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
+                        imageMiniaturePreview.setImageBitmap(newBitmap);
+                    }
                 } catch (IOException e) {
                     Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
                 }

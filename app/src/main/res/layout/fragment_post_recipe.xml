@@ -158,14 +158,11 @@
                             android:id="@+id/personNbInput"
                             android:layout_width="20dp"
                             android:layout_height="match_parent"
+                            android:layout_marginRight="5dp"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif-black"
                             android:textAlignment="textStart"
                             android:textSize="10sp" />
-
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="30dp" />
 
                         <TextView
                             android:id="@+id/prepTime"
@@ -180,14 +177,12 @@
                             android:id="@+id/prepTimeInput"
                             android:layout_width="20dp"
                             android:layout_height="match_parent"
+                            android:layout_marginRight="5dp"
                             android:layout_weight="1"
+                            android:fadeScrollbars="true"
                             android:fontFamily="sans-serif-black"
                             android:textAlignment="textStart"
                             android:textSize="10sp" />
-
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="30dp" />
 
                         <TextView
                             android:id="@+id/cookTime"
