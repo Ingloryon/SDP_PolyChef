@@ -73,5 +73,8 @@
         <action
             android:id="@+id/action_onlineMiniaturesFragment_to_subscriptionsFragment"
             app:destination="@id/subscriptionsFragment" />
+        <action
+            android:id="@+id/action_onlineMiniaturesFragment_self"
+            app:destination="@id/onlineMiniaturesFragment" />
     </fragment>
 </navigation>

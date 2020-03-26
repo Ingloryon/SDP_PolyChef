@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
 
 import com.google.android.material.navigation.NavigationView;
@@ -23,6 +24,8 @@ public class HomePage extends ConnectedActivity {
 
     private NavController navController;
     private MenuItem currentItem;
+
+    private RecipeStorage recipeStorage = new RecipeStorage();
 
 
     public static final String LOG_OUT = "Log out";
@@ -48,6 +51,8 @@ public class HomePage extends ConnectedActivity {
         // Create new Bundle containing the id of the container for the adapter
         Bundle bundle = new Bundle();
         bundle.putInt("fragmentID", R.id.nav_host_fragment);
+
+        bundle.putSerializable("RecipeStorage", getRecipeStorage());
         // Set this bundle to be an arguments of the startDestination using this trick
         navController.setGraph(R.navigation.nav_graph, bundle);
         setupNavigation();
@@ -100,6 +105,7 @@ public class HomePage extends ConnectedActivity {
 
                         Bundle bundle = new Bundle();
                         bundle.putInt("fragmentID", R.id.nav_host_fragment);
+                        bundle.putSerializable("RecipeStorage", getRecipeStorage());
 
                         navController.navigate(getFragmentId(itemId), bundle);
 
@@ -109,5 +115,9 @@ public class HomePage extends ConnectedActivity {
                     }
                 }
         );
+    }
+
+    public RecipeStorage getRecipeStorage(){
+        return recipeStorage;
     }
 }
