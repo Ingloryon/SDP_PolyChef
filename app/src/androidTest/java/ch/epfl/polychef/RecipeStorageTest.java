@@ -32,7 +32,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RecipeStorageTest {
-
     @Mock
     FirebaseDatabase firebaseDatabase;
     @Mock
@@ -62,7 +61,6 @@ public class RecipeStorageTest {
         RecipeStorage recipeStorage = new RecipeStorage();
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.addRecipe(null));
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipe(0, mock(CallHandler.class)));
-        assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipe(-1, mock(CallHandler.class)));
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipe(2, null));
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.getNRecipes(0, 2, mock(CallHandler.class)));
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.getNRecipes(3, 0, mock(CallHandler.class)));

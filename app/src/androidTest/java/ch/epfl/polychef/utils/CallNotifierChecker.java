@@ -53,7 +53,7 @@ public class CallNotifierChecker<T> implements CallNotifier<T> {
      *
      * @param nTimes the number of times the function must have been called
      */
-    public void assertWasCalled(int nTimes) {
-        assertThat(numberOfCall, equalTo(nTimes));
+    public void assertWasCalled(int times) {
+        assertThat(numberOfCall, equalTo(times));
     }
 }
