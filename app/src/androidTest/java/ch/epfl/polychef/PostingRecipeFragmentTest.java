@@ -105,24 +105,36 @@ public class PostingRecipeFragmentTest {
     }
 
     @Test
+    public void zeroPersonNumberDisplaysErrorLogs() {
+        writeRecipe("Cake","{a,10,gram}","{a},{b}","0","10", "10");
+        checkErrorLog("There are errors in the given inputs :\nPerson number:  The number of persons must be strictly positive\nThere are missing arguments to the recipe !");
+    }
+
+    @Test
+    public void zeroPrepTimeDisplaysErrorLogs() {
+        writeRecipe("Cake","{a,10,gram}","{a},{b}","10","0", "0");
+        checkErrorLog("There are errors in the given inputs :\nPreparation time:  The estimated time required must be strictly positive\nThere are missing arguments to the recipe !");
+    }
+
+    @Test
     public void testOnACompleteRecipe() {
         writeRecipe("aaaa","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.postRecipe)).perform(scrollTo(),click());
+        onView(withId(R.id.postRecipe)).perform(scrollTo() ,click());
     }
 
     private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
-        onView(withId(R.id.nameInput)).perform(typeText(name));
-        onView(withId(R.id.ingredientsList)).perform(typeText(ingre));
-        onView(withId(R.id.instructionsList)).perform(typeText(instru));
-        onView(withId(R.id.personNbInput)).perform(typeText(personNb));
-        onView(withId(R.id.prepTimeInput)).perform(typeText(prep));
-        onView(withId(R.id.cookTimeInput)).perform(typeText(cook));
+        onView(withId(R.id.nameInput)).perform(scrollTo(), typeText(name));
+        onView(withId(R.id.ingredientsList)).perform(scrollTo(), typeText(ingre));
+        onView(withId(R.id.instructionsList)).perform(scrollTo(), typeText(instru));
+        onView(withId(R.id.personNbInput)).perform(scrollTo(), typeText(personNb));
+        onView(withId(R.id.prepTimeInput)).perform(scrollTo(), typeText(prep));
+        onView(withId(R.id.cookTimeInput)).perform(scrollTo(), typeText(cook));
     }
 
     private void checkErrorLog(String expected){
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.postRecipe)).perform(scrollTo(), click());;
+        onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
         (onView(withId(R.id.errorLogs))).check(matches(withText(expected)));
     }
