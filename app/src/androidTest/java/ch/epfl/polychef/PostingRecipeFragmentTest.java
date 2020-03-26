@@ -81,7 +81,7 @@ public class PostingRecipeFragmentTest {
     @Test
     public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
         onView(withId(R.id.ingredientsList)).perform(typeText("{a,1,gram},{b,2,cup}"));
-        onView(withId(R.id.instructionsList)).perform(typeText("{a}{b}"));
+        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
         onView(withId(R.id.personNbInput)).perform(typeText("10"));
         onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
         onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
@@ -94,29 +94,52 @@ public class PostingRecipeFragmentTest {
     }
 
     @Test
-    public void onClickPostRecipeWithEverythingButPreparationTimeDisplaysErrorLogs() {
+    public void nullUnitInIngredientDisplaysErrorLogs() {
         onView(withId(R.id.nameInput)).perform(typeText("Cake"));
-        onView(withId(R.id.ingredientsList)).perform(typeText("{a,1,pound}"));
-        onView(withId(R.id.instructionsList)).perform(typeText("{a}{b}"));
+        onView(withId(R.id.ingredientsList)).perform(typeText("{a,1,null},{a,1}"));
+        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
         onView(withId(R.id.personNbInput)).perform(typeText("10"));
+        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
         onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
         Espresso.closeSoftKeyboard();
         Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
         onView(withId(R.id.postRecipe)).perform(click());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
         (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
-                "\nPreparation Time: should be a positive number.")));
+                "\nIngredients: The entered unit is not part of the possible units [TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE].")));
     }
 
-    //@Test
-    //public void validInputsAreSentToFirebase() {
-        //TODO
-    //}
+    @Test
+    public void noSeparatorInIngredientDisplaysErrorLogs() {
+        onView(withId(R.id.nameInput)).perform(typeText("Cake"));
+        onView(withId(R.id.ingredientsList)).perform(typeText("{a}"));
+        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
+        onView(withId(R.id.personNbInput)).perform(typeText("10"));
+        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
+        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
+        onView(withId(R.id.postRecipe)).perform(click());
+        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
+        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
+                "\nIngredients: There should be 3 arguments entered as {a,b,c}")));
+    }
 
-    //@Test
-    //public void rejectsTooLongTitles() {
-        //TODO: change the EditText of title to a long value and check displays string "blabla name too long" in onView(withId(R.id.errorLogs))
-    //}
+    @Test
+    public void negativeQuantityDisplaysErrorLogs() {
+        onView(withId(R.id.nameInput)).perform(typeText("Cake"));
+        onView(withId(R.id.ingredientsList)).perform(typeText("{a,-1,gram}"));
+        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
+        onView(withId(R.id.personNbInput)).perform(typeText("10"));
+        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
+        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
+        onView(withId(R.id.postRecipe)).perform(click());
+        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
+        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
+                "\nIngredients: There should be 3 arguments entered as {a,b,c}")));
+    }
 
     private class FakeHomePage extends HomePage {
         @Override

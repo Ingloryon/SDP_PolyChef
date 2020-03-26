@@ -226,12 +226,6 @@ public class PostRecipeFragment extends Fragment {
         }
         for (String s : allMatches) {
             String[] list = s.split(",");
-            if (list.length != 3) {
-                ingredients.clear();
-                allMatches.clear();
-                errorLogs.add("Ingredients: There should be 3 arguments entered as {a,b,c}");
-                return false;
-            }
             String name = list[0].trim().substring(1).trim();
             double quantity = Double.parseDouble(list[1].trim()); // TODO: check this method does not throw errors
             Ingredient.Unit unit = null;
