@@ -17,6 +17,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
+import ch.epfl.polychef.pages.LoginPage;
+
 import com.google.firebase.auth.FirebaseUser;
 
 import static org.hamcrest.Matchers.is;

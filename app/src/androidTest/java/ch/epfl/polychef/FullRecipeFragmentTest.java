@@ -15,6 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.pages.EntryPage;
+
 @RunWith(AndroidJUnit4.class)
 public class FullRecipeFragmentTest {
     @Rule

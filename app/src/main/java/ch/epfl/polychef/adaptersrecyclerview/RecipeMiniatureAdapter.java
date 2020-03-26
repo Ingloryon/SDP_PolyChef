@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import ch.epfl.polychef.FullRecipeFragment;
+import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Recipe;
 

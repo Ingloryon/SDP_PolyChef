@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+
+import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
+import ch.epfl.polychef.R;
 
 public class EntryPage extends AppCompatActivity {
 

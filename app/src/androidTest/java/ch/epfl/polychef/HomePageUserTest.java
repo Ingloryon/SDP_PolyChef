@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

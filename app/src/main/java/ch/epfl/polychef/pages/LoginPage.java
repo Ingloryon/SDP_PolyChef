@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import java.util.UUID;
 
 import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
+
+import ch.epfl.polychef.R;
 
 public class LoginPage extends AppCompatActivity {
 

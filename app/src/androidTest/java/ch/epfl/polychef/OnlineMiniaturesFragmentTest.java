@@ -26,6 +26,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
@@ -89,7 +91,7 @@ public class OnlineMiniaturesFragmentTest {
 
     @Test
     public synchronized void maxElementAreLoadedOnActivityStart() throws InterruptedException {
-        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+        for(int i = 0; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
             fakeRecipeStorage.addRecipe(testRecipe1);
         }
         initActivity();

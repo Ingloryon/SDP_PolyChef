@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import ch.epfl.polychef.CallNotifier;
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;

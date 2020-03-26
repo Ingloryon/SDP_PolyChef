@@ -22,15 +22,16 @@ public class ImageStorage {
      * @param image the image to upload
      * @return the {@code UploadTask} for handling Firebase response
      */
-    public UploadTask upload(byte[] image){
+    public UploadTask upload(byte[] image, String imageName, String user, String recipeUId) {
         Preconditions.checkArgument(image != null, "image to upload cannot be null");
         Preconditions.checkArgument(image.length != 0, "image to upload cannot be empty");
-        String path = "images/" + UUID.randomUUID() + ".png";
+        Preconditions.checkArgument(imageName != null, "image path to upload cannot be null");
+        String path = "images/" + imageName + ".jpg";
         StorageReference storageRef = getStorage().getReference(path);
 
         StorageMetadata metadata = new StorageMetadata.Builder()
-                .setCustomMetadata("User", "TODO:USERNAME")
-                .setCustomMetadata("Recipe", "TODO:RECIPE_UID")
+                .setCustomMetadata("User", user == null ? "no_user" : user)
+                .setCustomMetadata("Recipe", recipeUId == null ? "no_recipe" : recipeUId)
                 .build();
 
         return storageRef.putBytes(image, metadata);
@@ -45,7 +46,7 @@ public class ImageStorage {
         Preconditions.checkArgument(imageName != null, "image name to download cannot be null");
         Preconditions.checkArgument(caller != null, "CallHandler cannot be null");
         StorageReference storageRef = getStorage().getReference();
-        StorageReference imgRef = storageRef.child("images/"+imageName);
+        StorageReference imgRef = storageRef.child("images/" + imageName + ".jpg");
         imgRef.getBytes(TEN_MEGABYTE).addOnSuccessListener(bytes -> caller.onSuccess(bytes))
                 .addOnFailureListener(exception -> caller.onFailure());
     }

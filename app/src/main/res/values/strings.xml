@@ -18,6 +18,30 @@
     <string name="Subscribers">Subscribers</string>
     <string name="ErrorOccurred">Error</string>
 
+    <string name="CreateRecipe">Create recipe</string>
+    <string name="EnterName">Recipe title:</string>
+    <string name="EnterIngredients">Ingredients:</string>
+    <string name="EnterInstructions">Instructions:</string>
+    <string name="EnterDifficulty">Difficulty:</string>
+    <string name="UploadMiniature">Upload a miniature</string>
+    <string name="UploadPictures">Upload meal pictures</string>
+    <string name="EnterIngredientList">format: {name, quantity, UNIT}, {name, ...</string>
+    <string name="EnterInstructionsList">format: {step1},{step2},{...</string>
+    <string name="EnterPersonNb">Number of persons:</string>
+    <string name="EnterPrepTime">Preparation time:</string>
+    <string name="EnterCookTime">Cooking time:</string>
+    <string name="PostRecipe">Post your Recipe !</string>
+
+    <string name="difficulty_prompt">Select difficulty...</string>
+    <string-array name="difficulty_array">
+        <item>Very easy</item>
+        <item>Easy</item>
+        <item>Intermediate</item>
+        <item>Hard</item>
+        <item>Very hard</item>
+    </string-array>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

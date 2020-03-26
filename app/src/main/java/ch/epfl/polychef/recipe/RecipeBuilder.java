@@ -73,6 +73,17 @@ public final class RecipeBuilder {
     }
 
     /**
+     * Add an ingredient from an exiting one.
+     * @param ingredient an Ingredient
+     * @return the recipe builder
+     */
+    public RecipeBuilder addIngredient(@NonNull Ingredient ingredient) {
+        //checks are performed in Ingredient's constructor
+        ingredients.add(new Ingredient(ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit()));
+        return this;
+    }
+
+    /**
      * Sets the number of persons the recipe is for.
      *
      * @param personNumber the number of persons, must be strictly positive
@@ -105,7 +116,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder setEstimatedCookingTime(int estimatedCookingTime) {
-        Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated time required must be strictly positive");
+        Preconditions.checkArgument(estimatedCookingTime >= 0, "The estimated time required must be positive");
 
         this.estimatedCookingTime = estimatedCookingTime;
         return this;
@@ -130,7 +141,7 @@ public final class RecipeBuilder {
      */
     public RecipeBuilder setMiniaturePath(@NonNull String miniaturePath) {
         Preconditions.checkArgument(!miniaturePath.isEmpty(), "The miniature path must be non empty");
-        Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
+//        Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
         this.miniaturePath = miniaturePath;
         return this;
     }

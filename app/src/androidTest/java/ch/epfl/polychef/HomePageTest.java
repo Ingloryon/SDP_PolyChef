@@ -31,6 +31,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 
+import ch.epfl.polychef.pages.HomePage;
+
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
 
@@ -41,7 +43,7 @@ public class HomePageTest {
             HomePage activity = new FakeHomePage();
             return activity;
         }
-    };
+    }; 
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,

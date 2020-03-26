@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
 
@@ -23,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ch.epfl.polychef.users.ConnectedActivity;
 import ch.epfl.polychef.users.User;
 
 public class HomePage extends ConnectedActivity {
@@ -96,11 +96,13 @@ public class HomePage extends ConnectedActivity {
                 return R.id.subscribersFragment;
             case R.id.nav_subscriptions:
                 return R.id.subscriptionsFragment;
+            case R.id.nav_recipe:
+                return R.id.postRecipeFragment;
             default:
                 throw new IllegalArgumentException();
         }
     }
-    
+
     private void setupNavigation(){
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(

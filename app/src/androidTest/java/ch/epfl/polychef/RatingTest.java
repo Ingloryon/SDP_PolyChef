@@ -45,22 +45,32 @@ public class RatingTest {
     @Test
     public void testRatingToStringMethod(){
         Rating rating = new Rating();
+        int nb=16;
+        int accumulator = initRating(rating, nb);
 
-        int nbIteration=16;
-        int sum=addRandomRatingAndReturnSum(rating,nbIteration);
-
-        String result=String.format(Locale.ENGLISH,"%.2f", ((double)sum)/nbIteration) + "/5 stars by " + nbIteration + " users.\n";
+        String result=String.format(Locale.ENGLISH,"%.2f", ((double)accumulator)/nb) + "/5 stars by " + nb + " users.\n";
         assertEquals(rating.toString(),result);
     }
 
     @Test
     public void testGetRatingSum(){
         Rating rating = new Rating();
+        int nb=16;
+        int accumulator = initRating(rating, nb);
 
-        int nbIteration=16;
-        int sum=addRandomRatingAndReturnSum(rating,nbIteration);
+        assertEquals(rating.getRatingSum(),accumulator);
+    }
 
-        assertEquals(rating.getRatingSum(),sum);
+    private int initRating(Rating rating, int nb){
+        Random rnd=new Random();
+
+        int accumulator=0;
+        for(int i=0;i<nb;++i){
+            int rndNext =rnd.nextInt(6);
+            accumulator+=rndNext;
+            rating.addRate(i,rndNext);
+        }
+        return accumulator;
     }
 
     @Test
@@ -71,23 +81,12 @@ public class RatingTest {
         int nb=16;
         HashMap<Integer,Integer> userToRating=new HashMap<>();
         for(int i=0;i<nb;++i){
-            int randomInt=rnd.nextInt(6);
-            rating.addRate(i,randomInt);
-            userToRating.put(i,randomInt);
+            int rndNext=rnd.nextInt(6);
+            rating.addRate(i,rndNext);
+            userToRating.put(i,rndNext);
         }
 
         assertEquals(rating.getAllRatings(),userToRating);
-    }
-
-    private int addRandomRatingAndReturnSum(Rating rating,int iterationNumber){
-        Random rnd=new Random();
-        int accumulator=0;
-        for(int i=0;i<iterationNumber;++i){
-            int randomInt=rnd.nextInt(6);
-            accumulator+=randomInt;
-            rating.addRate(i,randomInt);
-        }
-        return accumulator;
     }
 
 }

@@ -8,6 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.pages.LoginPage;
+
 @RunWith(AndroidJUnit4.class)
 public class RealLoginPageTest {
 

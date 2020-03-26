@@ -15,6 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.pages.EntryPage;
+import ch.epfl.polychef.pages.LoginPage;
+
 @RunWith(AndroidJUnit4.class)
 public class EntryPageTest {
     @Rule
@@ -26,7 +29,7 @@ public class EntryPageTest {
     }
 
     @Test
-    public void onClickLoginGoToLoginPage() {
+    public void onClickLoginGoToLoginPage(){
         onView(withId(R.id.logButton)).perform(click());
         intended(hasComponent(LoginPage.class.getName()));
     }
