@@ -107,13 +107,13 @@ public class PostingRecipeFragmentTest {
     @Test
     public void zeroPersonNumberDisplaysErrorLogs() {
         writeRecipe("Cake","{a,10,gram}","{a},{b}","0","10", "10");
-        checkErrorLog("There are errors in the given inputs :\nPerson number:  The number of persons must be strictly positive\nThere are missing arguments to the recipe !");
+        checkErrorLog("There are errors in the given inputs :\nPerson number:  The number of persons must be strictly positive");
     }
 
     @Test
     public void zeroPrepTimeDisplaysErrorLogs() {
         writeRecipe("Cake","{a,10,gram}","{a},{b}","10","0", "0");
-        checkErrorLog("There are errors in the given inputs :\nPreparation time:  The estimated time required must be strictly positive\nThere are missing arguments to the recipe !");
+        checkErrorLog("There are errors in the given inputs :\nPreparation time:  The estimated time required must be strictly positive");
     }
 
     @Test
