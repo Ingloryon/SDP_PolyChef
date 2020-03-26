@@ -28,6 +28,7 @@ import ch.epfl.polychef.pages.HomePage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -65,61 +66,49 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
-        Espresso.closeSoftKeyboard();
-        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
-        onView(withId(R.id.postRecipe)).perform(click());
-        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
-        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
+        checkErrorLog("There are errors in the given inputs :" +
                 "\nCooking Time: should be a positive number." +
                 "\nIngredients: There should be 3 arguments entered as {a,b,c}" +
                 "\nInstructions: the entered instructions should match format {a},{b},... (no spaces)" +
                 "\nPerson number: should be a number between 0 and 100." +
                 "\nPreparation Time: should be a positive number." +
-                "\nTitle: too long or too short. Need to be between 3 and 80 characters.")));
+                "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
     }
 
     @Test
     public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
         writeRecipe("","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
-        Espresso.closeSoftKeyboard();
-        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
-        onView(withId(R.id.postRecipe)).perform(click());
-        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
-        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
-                "\nTitle: too long or too short. Need to be between 3 and 80 characters.")));
+        checkErrorLog("There are errors in the given inputs :" +
+                "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
     }
 
     @Test
     public void nullUnitInIngredientDisplaysErrorLogs() {
         writeRecipe("Cake","{a,1,null},{a,1}","{a},{b}","10","10", "10");
-        Espresso.closeSoftKeyboard();
-        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
-        onView(withId(R.id.postRecipe)).perform(click());
-        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
-        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
-                "\nIngredients: The entered unit is not part of the possible units [TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE].")));
-    }
+        checkErrorLog("There are errors in the given inputs :" +
+                "\nIngredients: The entered unit is not part of the possible units " +
+                "[TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE].");
+        }
 
     @Test
     public void noSeparatorInIngredientDisplaysErrorLogs() {
         writeRecipe("Cake","{a}","{a},{b}","10","10", "10");
-        Espresso.closeSoftKeyboard();
-        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
-        onView(withId(R.id.postRecipe)).perform(click());
-        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
-        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
-                "\nIngredients: There should be 3 arguments entered as {a,b,c}")));
+        checkErrorLog("There are errors in the given inputs :" +
+                "\nIngredients: There should be 3 arguments entered as {a,b,c}");
     }
 
     @Test
     public void negativeQuantityDisplaysErrorLogs() {
         writeRecipe("Cake","{a,-1,gram}","{a},{b}","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :" +
+                "\nIngredients: There should be 3 arguments entered as {a,b,c}");
+    }
+
+    @Test
+    public void testOnACompleteRecipe() {
+        writeRecipe("aaaa","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
-        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
-        onView(withId(R.id.postRecipe)).perform(click());
-        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
-        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
-                "\nIngredients: There should be 3 arguments entered as {a,b,c}")));
+        onView(withId(R.id.postRecipe)).perform(scrollTo(),click());
     }
 
     private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
@@ -129,6 +118,13 @@ public class PostingRecipeFragmentTest {
         onView(withId(R.id.personNbInput)).perform(typeText(personNb));
         onView(withId(R.id.prepTimeInput)).perform(typeText(prep));
         onView(withId(R.id.cookTimeInput)).perform(typeText(cook));
+    }
+
+    private void checkErrorLog(String expected){
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.postRecipe)).perform(scrollTo(), click());;
+        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
+        (onView(withId(R.id.errorLogs))).check(matches(withText(expected)));
     }
 
     private class FakeHomePage extends HomePage {
