@@ -32,6 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RecipeStorageTest {
+    
     @Mock
     FirebaseDatabase firebaseDatabase;
     @Mock
