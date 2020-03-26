@@ -141,18 +141,12 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void testHandleActivityGallery() {
-        setActivityResultGallery();
-        onView(withId(R.id.miniature)).perform(scrollTo(), click());
-        onView(withText("Add a picture")).check(matches(isDisplayed()));
-        onView(withText("Choose from Gallery")).perform(click());
+        setActivityResultGallery(R.id.miniature);
     }
 
     @Test
     public void testHandleActivityGalleryMealPictures() {
-        setActivityResultGallery();
-        onView(withId(R.id.pictures)).perform(scrollTo(), click());
-        onView(withText("Add a picture")).check(matches(isDisplayed()));
-        onView(withText("Choose from Gallery")).perform(click());
+        setActivityResultGallery(R.id.pictures);
     }
 
     @Test
@@ -165,7 +159,7 @@ public class PostingRecipeFragmentTest {
         onView(withText("Take Photo")).perform(click());
     }
 
-    private void setActivityResultGallery() {
+    private void setActivityResultGallery(int id) {
         Intent resultData = new Intent(Intent.ACTION_GET_CONTENT);
         Bitmap icon = BitmapFactory.decodeResource(
                 ApplicationProvider.getApplicationContext().getResources(),
@@ -173,6 +167,9 @@ public class PostingRecipeFragmentTest {
         resultData.putExtra("data", icon);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasAction(Intent.ACTION_CHOOSER)).respondWith(result);
+        onView(withId(id)).perform(scrollTo(), click());
+        onView(withText("Add a picture")).check(matches(isDisplayed()));
+        onView(withText("Choose from Gallery")).perform(click());
     }
 
     private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
