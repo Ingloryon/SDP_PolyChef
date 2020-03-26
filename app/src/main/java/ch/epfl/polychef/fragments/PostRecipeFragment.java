@@ -38,9 +38,9 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 
 public class PostRecipeFragment extends Fragment {
-    private final String TAG = "PostRecipeFragment";
-    private final static int MINIATURE_FACTOR = 1;
-    private final int MEAL_PICTURES_FACTOR = 10;
+    private final String tag = "PostRecipeFragment";
+    private final int miniatureFactor = 1;
+    private final int mealPicturesFactor = 10;
     private final int titleMaxChar = 80;
     private final int titleMinChar = 3;
     private final int maxPersNb = 100;
@@ -119,13 +119,13 @@ public class PostRecipeFragment extends Fragment {
         addMiniature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPictureDialog(MINIATURE_FACTOR);
+                addPictureDialog(miniatureFactor);
             }
         });
         addPictures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPictureDialog(MEAL_PICTURES_FACTOR);
+                addPictureDialog(mealPicturesFactor);
             }
         });
 
@@ -398,8 +398,8 @@ public class PostRecipeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("TEST+23", requestCode+"");
-        if(requestCode / MEAL_PICTURES_FACTOR > 0) {
-            Uri uri = imageHandler.handleActivityResult(requestCode / MEAL_PICTURES_FACTOR, resultCode, data);
+        if(requestCode / mealPicturesFactor > 0) {
+            Uri uri = imageHandler.handleActivityResult(requestCode / mealPicturesFactor, resultCode, data);
             if(uri != null) {
                 currentMealPictures.add(uri);
                 mealPicturesText.setText(currentMealPictures.size() + " to upload");
