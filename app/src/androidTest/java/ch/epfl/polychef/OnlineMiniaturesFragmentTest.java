@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 
 import java.util.List;
 
+import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.RecipeStorage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +50,6 @@ public class OnlineMiniaturesFragmentTest {
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             true);
 
-    @Before
     public void initActivity() {
         intentsTestRule.launchActivity(new Intent());
     }
@@ -70,16 +70,26 @@ public class OnlineMiniaturesFragmentTest {
     }
 
     @Test
-    public synchronized void databaseEmptyDoesntAddAnythingToView() throws InterruptedException {
+    public synchronized void databaseEmptyAddNothingToView() throws InterruptedException {
+        initActivity();
+        assertEquals(0, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+    }
 
+    @Test
+    public synchronized void databaseOneElementIsDisplayedOnActivityLoad(){
+        fakeRecipeStorage.addRecipe(OfflineRecipes.getInstance().getOfflineRecipes().get(0));
+        initActivity();
+        // Incoming code 
+
+    }
+
+    public OnlineMiniaturesFragment getMiniaturesFragment(){
         FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
 
         NavHostFragment hostFragment = (NavHostFragment)
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
-        OnlineMiniaturesFragment displayedFragment = (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
-        wait(1000);
 
-        assertEquals(0, displayedFragment.getRecyclerView().getAdapter().getItemCount());
+        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
     }
 
 
