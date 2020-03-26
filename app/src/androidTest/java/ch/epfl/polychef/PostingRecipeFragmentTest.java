@@ -1,6 +1,7 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
+import android.widget.EditText;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
@@ -64,6 +65,13 @@ public class PostingRecipeFragmentTest {
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.postRecipe)).perform(click());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
+        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
+                "\nCooking Time: should be a positive number." +
+                "\nIngredients: There should be 3 arguments entered as {a,b,c}" +
+                "\nInstructions: the entered instructions should match format {a},{b},... (no spaces)" +
+                "\nPerson number: should be a number between 0 and 100." +
+                "\nPreparation Time: should be a positive number." +
+                "\nTitle: too long or too short. Need to be between 3 and 80 characters.")));
     }
 
     //@Test
