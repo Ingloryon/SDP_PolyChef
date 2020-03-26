@@ -1,13 +1,7 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
-import android.os.Bundle;
-
-import android.support.v4.app.*;
-
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -21,8 +15,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.util.List;
 
 import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.RecipeStorage;
