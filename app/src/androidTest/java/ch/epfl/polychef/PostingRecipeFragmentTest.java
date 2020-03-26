@@ -187,6 +187,7 @@ public class PostingRecipeFragmentTest {
     private void checkErrorLog(String expected){
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
+        onView(withId(R.id.errorLogs)).perform(scrollTo());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
         (onView(withId(R.id.errorLogs))).check(matches(withText(expected)));
     }
