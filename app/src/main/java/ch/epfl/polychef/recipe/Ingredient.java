@@ -11,6 +11,9 @@ import ch.epfl.polychef.Preconditions;
  */
 public final class Ingredient implements Serializable {
 
+    public Ingredient(){
+    }
+
     public enum Unit {
         TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE
     }
