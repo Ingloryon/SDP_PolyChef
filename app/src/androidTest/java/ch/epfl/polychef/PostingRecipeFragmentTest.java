@@ -60,7 +60,6 @@ public class PostingRecipeFragmentTest {
     @Test
     public void onClickPostRecipeWithEmptyDisplaysErrorLogs() throws InterruptedException {
         onView(withId(R.id.postRecipe)).perform(click());
-        wait((long) 0.1);
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
     }
 
