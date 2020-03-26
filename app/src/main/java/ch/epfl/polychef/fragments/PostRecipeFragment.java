@@ -158,7 +158,7 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void getEnteredInputs() {
-
+        Log.w(tag,"clicked");
         String inputName = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
         if(inputName.length() > titleMaxChar || inputName.length() < titleMinChar) {
             errorLogs.add("Title: too long or too short. Need to be between " + titleMinChar + " and " + titleMaxChar + " characters.");

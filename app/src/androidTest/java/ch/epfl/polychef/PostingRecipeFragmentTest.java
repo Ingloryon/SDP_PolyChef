@@ -2,6 +2,7 @@ package ch.epfl.polychef;
 
 import android.content.Intent;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -58,20 +59,21 @@ public class PostingRecipeFragmentTest {
     }
 
     @Test
-    public void onClickPostRecipeWithEmptyDisplaysErrorLogs() throws InterruptedException {
+    public void onClickPostRecipeWithEmptyDisplaysErrorLogs(){
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.postRecipe)).perform(click());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void validInputsAreSentToFirebase() {
+    //@Test
+    //public void validInputsAreSentToFirebase() {
         //TODO
-    }
+    //}
 
-    @Test
-    public void rejectsTooLongTitles() {
+    //@Test
+    //public void rejectsTooLongTitles() {
         //TODO: change the EditText of title to a long value and check displays string "blabla name too long" in onView(withId(R.id.errorLogs))
-    }
+    //}
 
     private class FakeHomePage extends HomePage {
         @Override
