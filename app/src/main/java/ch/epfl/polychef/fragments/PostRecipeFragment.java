@@ -335,11 +335,7 @@ public class PostRecipeFragment extends Fragment {
             errorLogs.add("Preparation time: " + e.toString().substring(35));
         }
 
-        try{
-            rb.build();
-        }  catch (IllegalArgumentException e){
-            errorLogs.add("There are missing arguments to the recipe !");
-        }
+        // All the other exceptions cannot be raised, they are checked while parsing
     }
 
     private void printWrongInputsToUser(){
