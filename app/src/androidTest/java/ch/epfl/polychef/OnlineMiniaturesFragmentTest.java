@@ -61,8 +61,6 @@ public class OnlineMiniaturesFragmentTest {
     @Mock
     FirebaseDatabase firebaseInstance;
 
-    @BeforeEach
-
     @Before
     public void initMockAndStorage() {
         MockitoAnnotations.initMocks(this);
@@ -93,6 +91,7 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
+
     @Test
     public synchronized void maxElementAreLoadedOnActivityStart() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
@@ -102,6 +101,7 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
+
     @Test
     public synchronized void maxElementAreLoadedOnActivityStartAndNoMore() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
@@ -113,6 +113,7 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
+
     @Test
     public synchronized void scrollingWithDatabaseSmallerThanMaxLoadedAtATimeShouldAddNothingToTheMiniaturesList() throws InterruptedException {
         fakeRecipeStorage.addRecipe(testRecipe2);
@@ -123,6 +124,8 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
+    @Test
+    public synchronized void scrollingWithDatabase
 
     public OnlineMiniaturesFragment getMiniaturesFragment(){
         FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
