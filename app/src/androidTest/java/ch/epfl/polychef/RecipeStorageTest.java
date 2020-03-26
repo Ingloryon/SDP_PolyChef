@@ -9,7 +9,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,13 +21,9 @@ import java.util.function.Consumer;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.utils.CallHandlerChecker;
+import ch.epfl.polychef.utils.CallNotifierChecker;
 
-import static junit.framework.TestCase.assertTrue;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isIn;
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -40,25 +35,18 @@ public class RecipeStorageTest {
 
     @Mock
     FirebaseDatabase firebaseDatabase;
-
     @Mock
     DatabaseReference databaseIdReference;
-
     @Mock
     DatabaseReference databaseRecipeReference;
-
     @Mock
     DatabaseReference databaseIdRecipeReference;
-
     @Mock
     Query query;
-
     @Mock
     DataSnapshot dataSnapshot;
-
     @Mock
     DataSnapshot dataSnapshot2;
-
     @Mock
     DatabaseError databaseError;
 
@@ -113,10 +101,10 @@ public class RecipeStorageTest {
         Recipe recipe = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
         when(dataSnapshot.getValue(Recipe.class)).thenReturn(recipe);
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallHandler<Recipe> fakeCallHandler = new FakeCallHandler<>(recipe, true);
+        CallHandlerChecker<Recipe> fakeCallHandler = new CallHandlerChecker<>(recipe, true);
         fakeRecipeStorage.readRecipe(2, fakeCallHandler);
         wait(1000);
-        assertTrue(fakeCallHandler.wasCalled);
+        fakeCallHandler.assertWasCalled();
     }
 
     @Test
@@ -125,10 +113,10 @@ public class RecipeStorageTest {
         prepareAsyncCallRead((listener) -> listener.onDataChange(dataSnapshot));
         when(dataSnapshot.getValue(Recipe.class)).thenReturn(null);
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallHandler<Recipe> fakeCallHandler = new FakeCallHandler<>(null, false);
+        CallHandlerChecker<Recipe> fakeCallHandler = new CallHandlerChecker<>(null, false);
         fakeRecipeStorage.readRecipe(4, fakeCallHandler);
         wait(1000);
-        assertTrue(fakeCallHandler.wasCalled);
+        fakeCallHandler.assertWasCalled();
     }
 
     @Test
@@ -137,10 +125,10 @@ public class RecipeStorageTest {
         when(databaseRecipeReference.child(Integer.toString(4))).thenReturn(databaseIdRecipeReference);
         prepareAsyncCallRead((listener) -> listener.onCancelled(databaseError));
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallHandler<Recipe> fakeCallHandler = new FakeCallHandler<>(null, false);
+        CallHandlerChecker<Recipe> fakeCallHandler = new CallHandlerChecker<>(null, false);
         fakeRecipeStorage.readRecipe(4, fakeCallHandler);
         wait(1000);
-        assertTrue(fakeCallHandler.wasCalled);
+        fakeCallHandler.assertWasCalled();
     }
 
     @Test
@@ -162,10 +150,10 @@ public class RecipeStorageTest {
         when(dataSnapshot.getChildren()).thenReturn(dataSnapshots);
         when(dataSnapshot.getValue()).thenReturn(new Object());
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallHandler<List<Recipe>> fakeCallHandler = new FakeCallHandler<>(recipes, true);
+        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(recipes, true);
         fakeRecipeStorage.getNRecipes(5, 2, fakeCallHandler);
         wait(1000);
-        assertTrue(fakeCallHandler.wasCalled);
+        fakeCallHandler.assertWasCalled();
     }
 
     @Test
@@ -174,10 +162,10 @@ public class RecipeStorageTest {
         prepareAsyncNCall((listener) -> listener.onDataChange(dataSnapshot));
         when(dataSnapshot.getValue(Recipe.class)).thenReturn(null);
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallHandler<List<Recipe>> fakeCallHandler = new FakeCallHandler<>(null, false);
+        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(null, false);
         fakeRecipeStorage.getNRecipes(3, 1, fakeCallHandler);
         wait(1000);
-        assertTrue(fakeCallHandler.wasCalled);
+        fakeCallHandler.assertWasCalled();
     }
 
     @Test
@@ -186,10 +174,10 @@ public class RecipeStorageTest {
         prepareNRecipesFor(2, 5);
         prepareAsyncNCall((listener) -> listener.onCancelled(databaseError));
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallHandler<List<Recipe>> fakeCallHandler = new FakeCallHandler<>(null, false);
+        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(null, false);
         fakeRecipeStorage.getNRecipes(4, 2, fakeCallHandler);
         wait(1000);
-        assertTrue(fakeCallHandler.wasCalled);
+        fakeCallHandler.assertWasCalled();
     }
 
     @Test
@@ -207,10 +195,10 @@ public class RecipeStorageTest {
         when(dataSnapshot.getValue(Recipe.class)).thenReturn(recipe1);
         when(dataSnapshot2.getValue(Recipe.class)).thenReturn(recipe2);
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallNotifier fakeCallNotifier = new FakeCallNotifier(recipes, true);
+        CallNotifierChecker<Recipe> fakeCallNotifier = new CallNotifierChecker<>(recipes, true);
         fakeRecipeStorage.getNRecipesOneByOne(2, 4, fakeCallNotifier);
         wait(1000);
-        assertThat(fakeCallNotifier.numberOfCall, equalTo(2));
+        fakeCallNotifier.assertWasCalled(2);
     }
 
     @Test
@@ -229,10 +217,10 @@ public class RecipeStorageTest {
         when(dataSnapshot.getValue(Recipe.class)).thenReturn(recipe1);
         when(dataSnapshot2.getValue(Recipe.class)).thenReturn(recipe2);
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallNotifier fakeCallNotifier = new FakeCallNotifier(recipes, true);
+        CallNotifierChecker<Recipe> fakeCallNotifier = new CallNotifierChecker<>(recipes, true);
         fakeRecipeStorage.getNRecipesOneByOne(2, 2, fakeCallNotifier);
         wait(1000);
-        assertThat(fakeCallNotifier.numberOfCall, equalTo(2));
+        fakeCallNotifier.assertWasCalled(2);
     }
 
     @Test
@@ -241,10 +229,10 @@ public class RecipeStorageTest {
         prepareNRecipesFor(2, 5);
         prepareAsyncNCallChild((listener) -> listener.onCancelled(databaseError));
         RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-        FakeCallNotifier fakeCallNotifier = new FakeCallNotifier(null, false);
+        CallNotifierChecker<Recipe> fakeCallNotifier = new CallNotifierChecker<>(null, false);
         fakeRecipeStorage.getNRecipesOneByOne(4, 2, fakeCallNotifier);
         wait(1000);
-        assertThat(fakeCallNotifier.numberOfCall, equalTo(1));
+        fakeCallNotifier.assertWasCalled(1);
     }
 
     private void prepareAsyncCallAdd(Consumer<ValueEventListener> func) {
@@ -285,59 +273,6 @@ public class RecipeStorageTest {
         @Override
         public FirebaseDatabase getFirebaseDatabase() {
             return firebaseDatabase;
-        }
-    }
-
-    private class FakeCallHandler<T> implements CallHandler<T> {
-
-        private final T expected;
-        private final boolean shouldBeSuccessful;
-
-        private boolean wasCalled = false;
-
-        public FakeCallHandler(T expected, boolean shouldBeSuccessful) {
-            this.expected = expected;
-            this.shouldBeSuccessful = shouldBeSuccessful;
-        }
-
-        @Override
-        public void onSuccess(T data) {
-            assertThat(data, equalTo(expected));
-            Assert.assertTrue(shouldBeSuccessful);
-            wasCalled = true;
-        }
-
-        @Override
-        public void onFailure() {
-            assertFalse(shouldBeSuccessful);
-            wasCalled = true;
-        }
-    }
-
-    private class FakeCallNotifier implements CallNotifier<Recipe> {
-
-        private final List<Recipe> expected;
-        private final boolean shouldBeSuccessful;
-
-        private int numberOfCall = 0;
-
-        public FakeCallNotifier(List<Recipe> expected, boolean shouldBeSuccessful) {
-            this.expected = expected;
-            this.shouldBeSuccessful = shouldBeSuccessful;
-        }
-
-        @Override
-        public void notify(Recipe data) {
-            assertThat(data, isIn(expected));
-            expected.remove(data);
-            Assert.assertTrue(shouldBeSuccessful);
-            ++numberOfCall;
-        }
-
-        @Override
-        public void onFailure() {
-            assertFalse(shouldBeSuccessful);
-            ++numberOfCall;
         }
     }
 }

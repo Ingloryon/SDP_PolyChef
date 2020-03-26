@@ -7,6 +7,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -64,7 +65,7 @@ public class ImageStorageTest {
         ImageStorage imageStorage = new ImageStorageMock();
         assertThrows(IllegalArgumentException.class, () -> imageStorage.upload(null));
         assertThrows(IllegalArgumentException.class, () -> imageStorage.upload(new byte[] {}));
-        assertThrows(IllegalArgumentException.class, () -> imageStorage.getImage(null, new FakeCallHandler(null, true)));
+        assertThrows(IllegalArgumentException.class, () -> imageStorage.getImage(null, new CallHandlerChecker<byte []>(null, true)));
         assertThrows(IllegalArgumentException.class, () -> imageStorage.getImage("test.png", null));
     }
 
@@ -83,45 +84,19 @@ public class ImageStorageTest {
     @Test
     public synchronized void canDownloadImage() throws InterruptedException {
         ImageStorage imageStorage = new ImageStorageMock();
-        FakeCallHandler f1 = new FakeCallHandler(new byte[] {1, 2, 3}, true);
+        CallHandlerChecker<byte []> f1 = new CallHandlerChecker<>(new byte[] {1, 2, 3}, true);
         imageStorage.getImage("work.png", f1);
-        FakeCallHandler f2 = new FakeCallHandler(null, false);
+        CallHandlerChecker<byte []> f2 = new CallHandlerChecker<>(null, false);
         imageStorage.getImage("fail.png", f2);
         wait(1000);
-        assertTrue(f1.wasCalled);
-        assertTrue(f2.wasCalled);
+        f1.assertWasCalled();
+        f2.assertWasCalled();
     }
 
     private class ImageStorageMock extends ImageStorage {
         @Override
         public FirebaseStorage getStorage() {
             return firebaseStorage;
-        }
-    }
-
-    private class FakeCallHandler implements CallHandler<byte []> {
-
-        private final byte[] expected;
-        private final boolean shouldBeSuccessful;
-
-        private boolean wasCalled = false;
-
-        public FakeCallHandler(byte[] expected, boolean shouldBeSuccessful) {
-            this.expected = expected;
-            this.shouldBeSuccessful = shouldBeSuccessful;
-        }
-
-        @Override
-        public void onSuccess(byte[] bytes) {
-            assertThat(bytes, equalTo(expected));
-            assertTrue(shouldBeSuccessful);
-            wasCalled = true;
-        }
-
-        @Override
-        public void onFailure() {
-            assertFalse(shouldBeSuccessful);
-            wasCalled = true;
         }
     }
 }
