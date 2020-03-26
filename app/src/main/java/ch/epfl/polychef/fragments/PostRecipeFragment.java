@@ -2,8 +2,6 @@ package ch.epfl.polychef.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,18 +33,17 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.firebase.Firebase;
 import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.pages.HomePage;
-import ch.epfl.polychef.pages.LoginPage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 
 public class PostRecipeFragment extends Fragment {
-    private final static String TAG = "PostRecipeFragment";
+    private final String TAG = "PostRecipeFragment";
     private final static int MINIATURE_FACTOR = 1;
-    private final static int MEAL_PICTURES_FACTOR = 10;
-    private final int TITLE_MAX_CHAR = 80;
-    private final int TITLE_MIN_CHAR = 3;
-    private final int MAX_PERS_NB = 100;
+    private final int MEAL_PICTURES_FACTOR = 10;
+    private final int titleMaxChar = 80;
+    private final int titleMinChar = 3;
+    private final int maxPersNb = 100;
     private String name;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
@@ -122,13 +118,13 @@ public class PostRecipeFragment extends Fragment {
         mealPicturesText = getView().findViewById(R.id.mealPicturesText);
         addMiniature.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 addPictureDialog(MINIATURE_FACTOR);
             }
         });
         addPictures.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 addPictureDialog(MEAL_PICTURES_FACTOR);
             }
         });
@@ -158,17 +154,15 @@ public class PostRecipeFragment extends Fragment {
 
     private void getEnteredInputs() {
 
-        EditText nameInput = getView().findViewById(R.id.nameInput);
-        String inputName = nameInput.getText().toString();
-        if(inputName.length() > TITLE_MAX_CHAR || inputName.length() < TITLE_MIN_CHAR) {
-            errorLogs.add("Title: too long or too short. Need to be between " + TITLE_MIN_CHAR + " and " + TITLE_MAX_CHAR + " characters.");
+        String inputName = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
+        if(inputName.length() > titleMaxChar || inputName.length() < titleMinChar) {
+            errorLogs.add("Title: too long or too short. Need to be between " + titleMinChar + " and " + titleMaxChar + " characters.");
         } else {
             wrongInputs.put("Title", true);
             name = inputName;
         }
 
-        EditText ingredientsInput = getView().findViewById(R.id.ingredientsList);
-        String ingre = ingredientsInput.getText().toString();
+        String ingre = ((EditText) getView().findViewById(R.id.ingredientsList)).getText().toString();
         if (parseIngredients(ingre)) {
             wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
         }
@@ -183,11 +177,11 @@ public class PostRecipeFragment extends Fragment {
         String persNb = personNb.getText().toString();
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
-        if (persNb.length()!=0 && checkInputIsNumber(persNb) && Integer.parseInt(persNb) <= MAX_PERS_NB){
+        if (persNb.length()!=0 && checkInputIsNumber(persNb) && Integer.parseInt(persNb) <= maxPersNb){
             wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
         } else {
-            errorLogs.add("Person number: should be a number between 0 and " + MAX_PERS_NB + ".");
+            errorLogs.add("Person number: should be a number between 0 and " + maxPersNb + ".");
         }
 
 
@@ -266,8 +260,6 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private boolean parseInstructions(String instructions) {
-        String separator = Pattern.quote("},{");
-
         // TODO: Add more precise input checking of instructions
         if (instructions.length()<3 || !instructions.contains("{") || !instructions.contains("}")){
             errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
@@ -276,6 +268,7 @@ public class PostRecipeFragment extends Fragment {
 
         recipeInstructions = new ArrayList<>();
         instructions = instructions.substring(1);
+        String separator = Pattern.quote("},{");
         String[] mots = instructions.split(separator);
         for (int i = 0; i < mots.length - 1; i++) {
             recipeInstructions.add(mots[i]);
