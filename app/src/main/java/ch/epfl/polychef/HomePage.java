@@ -139,7 +139,7 @@ public class HomePage extends ConnectedActivity {
 
     protected void retrieveUserInfo(String email) {
 
-        getRecipeStorage().getFirebaseDatabase()
+        getDatabase()
                 .getReference("users")
                 .orderByChild("email")
                 .equalTo(email)
@@ -176,7 +176,7 @@ public class HomePage extends ConnectedActivity {
 
         //TODO: Integrate with the Firebase class
         //TODO: Add OnSuccess and OnFailure listener
-        DatabaseReference ref = getRecipeStorage().getFirebaseDatabase()
+        DatabaseReference ref = getDatabase()
                 .getReference("users")
                 .push();
 
@@ -197,7 +197,7 @@ public class HomePage extends ConnectedActivity {
     }
 
     protected void updateUserInfo(){
-        getRecipeStorage().getFirebaseDatabase()
+        getDatabase()
                 .getReference("users/" + userKey)
                 .setValue(user);
     }
@@ -209,7 +209,6 @@ public class HomePage extends ConnectedActivity {
     protected String getUserName() {
         return getUser().getDisplayName();
     }
-    //TODO REMOVE ME
     public FirebaseDatabase getDatabase(){
         return FirebaseDatabase.getInstance();
     }
