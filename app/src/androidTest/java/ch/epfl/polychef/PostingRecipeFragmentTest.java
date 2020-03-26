@@ -47,10 +47,11 @@ public class PostingRecipeFragmentTest {
             true);
 
     @Before
-    public void initActivity() {
+    public void initActivity(){
         intentsTestRule.launchActivity(new Intent());
         onView(withId(R.id.drawer)).perform(DrawerActions.open());
         onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_recipe));
+        onView(withId(R.id.drawer)).perform(DrawerActions.close());
     }
 
     @Test
@@ -59,7 +60,7 @@ public class PostingRecipeFragmentTest {
     }
 
     @Test
-    public void onClickPostRecipeWithEmptyDisplaysErrorLogs(){
+    public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.postRecipe)).perform(click());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
