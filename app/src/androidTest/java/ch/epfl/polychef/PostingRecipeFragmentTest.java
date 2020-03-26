@@ -129,7 +129,7 @@ public class PostingRecipeFragmentTest {
         onView(withId(R.id.instructionsList)).perform(scrollTo(), typeText(instru));
         onView(withId(R.id.personNbInput)).perform(scrollTo(), typeText(personNb));
         onView(withId(R.id.prepTimeInput)).perform(scrollTo(), typeText(prep));
-        onView(withId(R.id.cookTimeInput)).perform(scrollTo(), typeText(cook));
+        onView(withId(R.id.cookTimeInput)).perform(typeText(cook));
     }
 
     private void checkErrorLog(String expected){
