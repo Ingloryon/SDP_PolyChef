@@ -1,5 +1,7 @@
 package ch.epfl.polychef;
 
+import androidx.core.util.Consumer;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
