@@ -35,12 +35,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.firebase.Firebase;
 import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
+import ch.epfl.polychef.recipe.RecipeStorage;
 
 public class PostRecipeFragment extends Fragment {
     private final String tag = "PostRecipeFragment";
@@ -76,6 +76,8 @@ public class PostRecipeFragment extends Fragment {
     private List<String> errorLogs = new ArrayList<>();
 
     private Spinner difficultyInput;
+
+    private RecipeStorage recipeStorage = new RecipeStorage();
 
     /**
      * Required empty public constructor.
@@ -282,7 +284,7 @@ public class PostRecipeFragment extends Fragment {
             for(int i = 1; i <= currentMealPictures.size(); ++i) {
                 imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
             }
-            Firebase.addRecipeToFirebase(postedRecipe);
+            recipeStorage.addRecipe(postedRecipe);
             return true;
         }
     }

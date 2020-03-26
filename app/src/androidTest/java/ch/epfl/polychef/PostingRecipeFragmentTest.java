@@ -17,6 +17,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 
 import org.junit.After;
 import org.junit.Before;
@@ -193,6 +194,26 @@ public class PostingRecipeFragmentTest {
         @Override
         public FirebaseUser getUser() {
             return Mockito.mock(FirebaseUser.class);
+        }
+
+        @Override
+        protected void retrieveUserInfo(String email) {
+
+        }
+
+        @Override
+        protected void newUser(String email) {
+
+        }
+
+        @Override
+        protected void oldUser(DataSnapshot snap) {
+
+        }
+
+        @Override
+        protected void updateUserInfo() {
+
         }
     }
 }

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;

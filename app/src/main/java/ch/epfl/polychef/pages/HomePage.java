@@ -96,6 +96,8 @@ public class HomePage extends ConnectedActivity {
                 return R.id.subscribersFragment;
             case R.id.nav_subscriptions:
                 return R.id.subscriptionsFragment;
+            case R.id.nav_recipe:
+                return R.id.postRecipeFragment;
             default:
                 throw new IllegalArgumentException();
         }
