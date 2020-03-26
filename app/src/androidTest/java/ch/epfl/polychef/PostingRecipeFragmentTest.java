@@ -165,6 +165,20 @@ public class PostingRecipeFragmentTest {
     }
 
     @Test
+    public void testHandleActivityGalleryMealPictures() {
+        Intent resultData = new Intent(Intent.ACTION_GET_CONTENT);
+        Bitmap icon = BitmapFactory.decodeResource(
+                ApplicationProvider.getApplicationContext().getResources(),
+                R.drawable.frenchtoast);
+        resultData.putExtra("data", icon);
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(hasAction(Intent.ACTION_CHOOSER)).respondWith(result);
+        onView(withId(R.id.pictures)).perform(scrollTo(), click());
+        onView(withText("Add a picture")).check(matches(isDisplayed()));
+        onView(withText("Choose from Gallery")).perform(click());
+    }
+
+    @Test
     public void testHandleActivityTakePhoto() {
         Intent resultData = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Bitmap icon = BitmapFactory.decodeResource(
