@@ -6,18 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
-import android.widget.EditText;
 
-import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.matcher.IntentMatchers;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -28,24 +22,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import ch.epfl.polychef.fragments.PostRecipeFragment;
-import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.HomePage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -152,43 +141,35 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void testHandleActivityGallery() {
-        Intent resultData = new Intent(Intent.ACTION_GET_CONTENT);
-        Bitmap icon = BitmapFactory.decodeResource(
-                ApplicationProvider.getApplicationContext().getResources(),
-                R.drawable.frenchtoast);
-        resultData.putExtra("data", icon);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-        intending(hasAction(Intent.ACTION_CHOOSER)).respondWith(result);
-        onView(withId(R.id.miniature)).perform(scrollTo(), click());
-        onView(withText("Add a picture")).check(matches(isDisplayed()));
-        onView(withText("Choose from Gallery")).perform(click());
+        setActivityResultGallery(R.id.miniature);
     }
 
     @Test
     public void testHandleActivityGalleryMealPictures() {
-        Intent resultData = new Intent(Intent.ACTION_GET_CONTENT);
-        Bitmap icon = BitmapFactory.decodeResource(
-                ApplicationProvider.getApplicationContext().getResources(),
-                R.drawable.frenchtoast);
-        resultData.putExtra("data", icon);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-        intending(hasAction(Intent.ACTION_CHOOSER)).respondWith(result);
-        onView(withId(R.id.pictures)).perform(scrollTo(), click());
-        onView(withText("Add a picture")).check(matches(isDisplayed()));
-        onView(withText("Choose from Gallery")).perform(click());
+        setActivityResultGallery(R.id.pictures);
     }
 
     @Test
     public void testHandleActivityTakePhoto() {
         Intent resultData = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Bitmap icon = BitmapFactory.decodeResource(
-                ApplicationProvider.getApplicationContext().getResources(),
-                R.drawable.frenchtoast);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(result);
         onView(withId(R.id.miniature)).perform(scrollTo(), click());
         onView(withText("Add a picture")).check(matches(isDisplayed()));
         onView(withText("Take Photo")).perform(click());
+    }
+
+    private void setActivityResultGallery(int id) {
+        Intent resultData = new Intent(Intent.ACTION_GET_CONTENT);
+        Bitmap icon = BitmapFactory.decodeResource(
+                ApplicationProvider.getApplicationContext().getResources(),
+                R.drawable.frenchtoast);
+        resultData.putExtra("data", icon);
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(hasAction(Intent.ACTION_CHOOSER)).respondWith(result);
+        onView(withId(id)).perform(scrollTo(), click());
+        onView(withText("Add a picture")).check(matches(isDisplayed()));
+        onView(withText("Choose from Gallery")).perform(click());
     }
 
     private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
@@ -203,6 +184,7 @@ public class PostingRecipeFragmentTest {
     private void checkErrorLog(String expected){
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
+        onView(withId(R.id.errorLogs)).perform(scrollTo());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
         (onView(withId(R.id.errorLogs))).check(matches(withText(expected)));
     }

@@ -20,6 +20,11 @@ public class RecipeTest {
     public void recipeBuilderAndSettersRejectInvalidInputs() {
         RecipeBuilder rb = new RecipeBuilder();
 
+        Recipe recipe = new Recipe();
+        Ingredient ingre = new Ingredient();
+
+        Assertions.assertEquals(recipe.getRating(), null);
+
         // rejects empty names
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
         // setter rejects empty names
@@ -87,6 +92,8 @@ public class RecipeTest {
 
         Recipe.Difficulty.values();
         Recipe.Difficulty.valueOf("VERY_HARD");
+        Ingredient.Unit.valueOf("NONE");
+        Preconditions pre = new Preconditions();
         Recipe recipe = rb.build();
         recipe.getRating();
 
