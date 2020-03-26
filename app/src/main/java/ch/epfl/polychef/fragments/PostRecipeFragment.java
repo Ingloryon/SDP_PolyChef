@@ -177,39 +177,32 @@ public class PostRecipeFragment extends Fragment {
         String persNb = personNb.getText().toString();
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
-        if (persNb.length()!=0 && checkInputIsNumber(persNb) && Integer.parseInt(persNb) <= maxPersNb){
+        if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= maxPersNb){
             wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
         } else {
             errorLogs.add("Person number: should be a number between 0 and " + maxPersNb + ".");
         }
 
-
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
-        if (prep.length()!=0 && checkInputIsNumber(prep)) {
-            wrongInputs.put("PrepTime", true);  // TODO: Use replace when set SDK min24
-            estimatedPreparationTime = Integer.parseInt(prep);
-        } else {
-            errorLogs.add("Preparation time: should be a positive number.");
-        }
-
+        checkTime(prep,estimatedPreparationTime,"PrepTime");
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
-        if (cook.length()!=0 && checkInputIsNumber(cook)) {
-            wrongInputs.put("CookTime", true);  // TODO: Use replace when set SDK min24
-            estimatedCookingTime = Integer.parseInt(cook);
-        } else {
-            errorLogs.add("Cooking time: should be a positive number.");
-        }
+        checkTime(cook,estimatedCookingTime,"CookTime");
 
         recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
         wrongInputs.put("Difficulty", true);
     }
 
-    private boolean checkInputIsNumber(String input) {
-        return android.text.TextUtils.isDigitsOnly(input);
+    private void checkTime(String input, int time, String message){
+        if (input.length()!=0 && android.text.TextUtils.isDigitsOnly(input)) {
+            wrongInputs.put(message, true);  // TODO: Use replace when set SDK min24
+            time = Integer.parseInt(input);
+        } else {
+            errorLogs.add(message+": should be a positive number.");
+        }
     }
 
     private boolean parseIngredients(String toMatch) {
