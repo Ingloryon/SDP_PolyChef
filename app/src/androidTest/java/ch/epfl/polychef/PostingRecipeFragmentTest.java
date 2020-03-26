@@ -80,11 +80,7 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
-        onView(withId(R.id.ingredientsList)).perform(typeText("{a,1,gram},{b,2,cup}"));
-        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
-        onView(withId(R.id.personNbInput)).perform(typeText("10"));
-        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
-        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        writeRecipe("","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
         Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
         onView(withId(R.id.postRecipe)).perform(click());
@@ -95,12 +91,7 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void nullUnitInIngredientDisplaysErrorLogs() {
-        onView(withId(R.id.nameInput)).perform(typeText("Cake"));
-        onView(withId(R.id.ingredientsList)).perform(typeText("{a,1,null},{a,1}"));
-        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
-        onView(withId(R.id.personNbInput)).perform(typeText("10"));
-        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
-        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        writeRecipe("Cake","{a,1,null},{a,1}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
         Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
         onView(withId(R.id.postRecipe)).perform(click());
@@ -111,12 +102,7 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void noSeparatorInIngredientDisplaysErrorLogs() {
-        onView(withId(R.id.nameInput)).perform(typeText("Cake"));
-        onView(withId(R.id.ingredientsList)).perform(typeText("{a}"));
-        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
-        onView(withId(R.id.personNbInput)).perform(typeText("10"));
-        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
-        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        writeRecipe("Cake","{a}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
         Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
         onView(withId(R.id.postRecipe)).perform(click());
@@ -127,18 +113,22 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void negativeQuantityDisplaysErrorLogs() {
-        onView(withId(R.id.nameInput)).perform(typeText("Cake"));
-        onView(withId(R.id.ingredientsList)).perform(typeText("{a,-1,gram}"));
-        onView(withId(R.id.instructionsList)).perform(typeText("{a},{b}"));
-        onView(withId(R.id.personNbInput)).perform(typeText("10"));
-        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
-        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        writeRecipe("Cake","{a,-1,gram}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
         Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
         onView(withId(R.id.postRecipe)).perform(click());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
         (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
                 "\nIngredients: There should be 3 arguments entered as {a,b,c}")));
+    }
+
+    private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
+        onView(withId(R.id.nameInput)).perform(typeText(name));
+        onView(withId(R.id.ingredientsList)).perform(typeText(ingre));
+        onView(withId(R.id.instructionsList)).perform(typeText(instru));
+        onView(withId(R.id.personNbInput)).perform(typeText(personNb));
+        onView(withId(R.id.prepTimeInput)).perform(typeText(prep));
+        onView(withId(R.id.cookTimeInput)).perform(typeText(cook));
     }
 
     private class FakeHomePage extends HomePage {
