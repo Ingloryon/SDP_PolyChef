@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.widget.EditText;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -26,6 +28,7 @@ import ch.epfl.polychef.pages.HomePage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -63,6 +66,7 @@ public class PostingRecipeFragmentTest {
     @Test
     public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
         Espresso.closeSoftKeyboard();
+        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
         onView(withId(R.id.postRecipe)).perform(click());
         onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
         (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
@@ -72,6 +76,36 @@ public class PostingRecipeFragmentTest {
                 "\nPerson number: should be a number between 0 and 100." +
                 "\nPreparation Time: should be a positive number." +
                 "\nTitle: too long or too short. Need to be between 3 and 80 characters.")));
+    }
+
+    @Test
+    public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
+        onView(withId(R.id.ingredientsList)).perform(typeText("{a,1,gram},{b,2,cup}"));
+        onView(withId(R.id.instructionsList)).perform(typeText("{a}{b}"));
+        onView(withId(R.id.personNbInput)).perform(typeText("10"));
+        onView(withId(R.id.prepTimeInput)).perform(typeText("10"));
+        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
+        onView(withId(R.id.postRecipe)).perform(click());
+        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
+        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
+                "\nTitle: too long or too short. Need to be between 3 and 80 characters.")));
+    }
+
+    @Test
+    public void onClickPostRecipeWithEverythingButPreparationTimeDisplaysErrorLogs() {
+        onView(withId(R.id.nameInput)).perform(typeText("Cake"));
+        onView(withId(R.id.ingredientsList)).perform(typeText("{a,1,pound}"));
+        onView(withId(R.id.instructionsList)).perform(typeText("{a}{b}"));
+        onView(withId(R.id.personNbInput)).perform(typeText("10"));
+        onView(withId(R.id.cookTimeInput)).perform(typeText("10"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(ViewMatchers.withId(R.id.postRecipeFragment)).perform(ViewActions.swipeUp());
+        onView(withId(R.id.postRecipe)).perform(click());
+        onView(withId(R.id.errorLogs)).check(matches(isDisplayed()));
+        (onView(withId(R.id.errorLogs))).check(matches(withText("There are errors in the given inputs :" +
+                "\nPreparation Time: should be a positive number.")));
     }
 
     //@Test
