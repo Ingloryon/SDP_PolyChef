@@ -322,11 +322,6 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void findIllegalInputs(RecipeBuilder rb) {
-        try{
-            rb.setName(name);
-        } catch (IllegalArgumentException e){
-            errorLogs.add("Title: " + e.toString().substring(35));
-        }
 
         try{
             rb.setPersonNumber(personNumber);
@@ -335,25 +330,9 @@ public class PostRecipeFragment extends Fragment {
         }
 
         try{
-            rb.setEstimatedCookingTime(estimatedCookingTime);
-        }  catch (IllegalArgumentException e){
-            errorLogs.add("Cooking time: " + e.toString().substring(35));
-        }
-
-        try{
             rb.setEstimatedPreparationTime(estimatedPreparationTime);
         }  catch (IllegalArgumentException e){
             errorLogs.add("Preparation time: " + e.toString().substring(35));
-        }
-
-        try{
-            for (int i = 0; i < recipeInstructions.size(); i++) {
-                rb.addInstruction(recipeInstructions.get(i));
-            }
-        } catch (NullPointerException e){
-            errorLogs.add("Instructions: the entered value is null");
-        } catch (IllegalArgumentException e){
-            errorLogs.add("Instructions: " + e.toString().substring(35));
         }
 
         try{
