@@ -83,9 +83,9 @@ public class PostRecipeFragment extends Fragment {
         wrongInputs.put("Title", false);
         wrongInputs.put("Ingredients", false);
         wrongInputs.put("Instructions", false);
-        wrongInputs.put("PersNb", false);
-        wrongInputs.put("PrepTime", false);
-        wrongInputs.put("CookTime", false);
+        wrongInputs.put("Person Number", false);
+        wrongInputs.put("Preparation Time", false);
+        wrongInputs.put("Cooking Time", false);
         wrongInputs.put("Difficulty", false);
     }
 
@@ -178,7 +178,7 @@ public class PostRecipeFragment extends Fragment {
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
         if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= maxPersNb){
-            wrongInputs.put("PersNb", true);  // TODO: Use replace when set SDK min24
+            wrongInputs.put("Person Number", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
         } else {
             errorLogs.add("Person number: should be a number between 0 and " + maxPersNb + ".");
@@ -186,22 +186,24 @@ public class PostRecipeFragment extends Fragment {
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
-        checkTime(prep,estimatedPreparationTime,"PrepTime");
+        estimatedPreparationTime = getAndCheckTime(prep,"Preparation Time");
+        Log.w(tag,"prep time: "+estimatedPreparationTime);
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
-        checkTime(cook,estimatedCookingTime,"CookTime");
+        estimatedCookingTime = getAndCheckTime(cook,"Cooking Time");
 
         recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
         wrongInputs.put("Difficulty", true);
     }
 
-    private void checkTime(String input, int time, String message){
+    private int getAndCheckTime(String input, String message){
         if (input.length()!=0 && android.text.TextUtils.isDigitsOnly(input)) {
             wrongInputs.put(message, true);  // TODO: Use replace when set SDK min24
-            time = Integer.parseInt(input);
+            return Integer.parseInt(input);
         } else {
             errorLogs.add(message+": should be a positive number.");
+            return 0;
         }
     }
 
