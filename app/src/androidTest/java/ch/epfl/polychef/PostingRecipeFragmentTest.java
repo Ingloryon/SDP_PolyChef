@@ -68,76 +68,76 @@ public class PostingRecipeFragmentTest {
         Intents.release();
     }
 
-//    @Test
-//    public void checkThatFragmentIsDisplayed() {
-//        onView(withId(R.id.postRecipeFragment)).check(matches(isDisplayed()));
-//    }
-//
-//    @Test
-//    public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
-//        checkErrorLog("There are errors in the given inputs :"
-//                + "\nCooking Time: should be a positive number."
-//                + "\nIngredients: There should be 3 arguments entered as {a,b,c}"
-//                + "\nInstructions: the entered instructions should match format {a},{b},... (no spaces)"
-//                + "\nPerson number: should be a number between 0 and 100."
-//                + "\nPreparation Time: should be a positive number."
-//                + "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
-//    }
-//
-//    @Test
-//    public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
-//        writeRecipe("","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
-//        checkErrorLog("There are errors in the given inputs :"
-//                + "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
-//    }
-//
-//    @Test
-//    public void nullUnitInIngredientDisplaysErrorLogs() {
-//        writeRecipe("Cake","{a,1,null},{a,1}","{a},{b}","10","10", "10");
-//        checkErrorLog("There are errors in the given inputs :"
-//                + "\nIngredients: The entered unit is not part of the possible units "
-//                + "[TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE].");
-//        }
-//
-//    @Test
-//    public void noSeparatorInIngredientDisplaysErrorLogs() {
-//        writeRecipe("Cake","{a}","{a},{b}","10","10", "10");
-//        checkErrorLog("There are errors in the given inputs :"
-//                + "\nIngredients: There should be 3 arguments entered as {a,b,c}");
-//    }
-//
-//    @Test
-//    public void negativeQuantityDisplaysErrorLogs() {
-//        writeRecipe("Cake","{a,-1,gram}","{a},{b}","10","10", "10");
-//        checkErrorLog("There are errors in the given inputs :"
-//                + "\nIngredients: There should be 3 arguments entered as {a,b,c}");
-//    }
-//
-//    @Test
-//    public void zeroPersonNumberDisplaysErrorLogs() {
-//        writeRecipe("Cake","{a,10,gram}","{a},{b}","0","10", "10");
-//        checkErrorLog("There are errors in the given inputs :\nPerson number:  The number of persons must be strictly positive");
-//    }
-//
-//    @Test
-//    public void zeroPrepTimeDisplaysErrorLogs() {
-//        writeRecipe("Cake","{a,10,gram}","{a},{b}","10","0", "0");
-//        checkErrorLog("There are errors in the given inputs :\nPreparation time:  The estimated time required must be strictly positive");
-//    }
-//
-//    @Test
-//    public void testOnACompleteRecipe() {
-//        writeRecipe("aaaa","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
-//        Espresso.closeSoftKeyboard();
-//        onView(withId(R.id.postRecipe)).perform(scrollTo() ,click());
-//    }
-//
-//    @Test
-//    public void testClickOnMiniatureButtonOpenDialog() {
-//        onView(withId(R.id.miniature)).perform(scrollTo(), click());
-//        onView(withText("Add a picture")).check(matches(isDisplayed()));
-//        onView(withText("Cancel")).perform(click());
-//    }
+    @Test
+    public void checkThatFragmentIsDisplayed() {
+        onView(withId(R.id.postRecipeFragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
+        checkErrorLog("There are errors in the given inputs :"
+                + "\nCooking Time: should be a positive number."
+                + "\nIngredients: There should be 3 arguments entered as {a,b,c}"
+                + "\nInstructions: the entered instructions should match format {a},{b},... (no spaces)"
+                + "\nPerson number: should be a number between 0 and 100."
+                + "\nPreparation Time: should be a positive number."
+                + "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
+    }
+
+    @Test
+    public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
+        writeRecipe("","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :"
+                + "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
+    }
+
+    @Test
+    public void nullUnitInIngredientDisplaysErrorLogs() {
+        writeRecipe("Cake","{a,1,null},{a,1}","{a},{b}","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :"
+                + "\nIngredients: The entered unit is not part of the possible units "
+                + "[TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE].");
+        }
+
+    @Test
+    public void noSeparatorInIngredientDisplaysErrorLogs() {
+        writeRecipe("Cake","{a}","{a},{b}","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :"
+                + "\nIngredients: There should be 3 arguments entered as {a,b,c}");
+    }
+
+    @Test
+    public void negativeQuantityDisplaysErrorLogs() {
+        writeRecipe("Cake","{a,-1,gram}","{a},{b}","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :"
+                + "\nIngredients: There should be 3 arguments entered as {a,b,c}");
+    }
+
+    @Test
+    public void zeroPersonNumberDisplaysErrorLogs() {
+        writeRecipe("Cake","{a,10,gram}","{a},{b}","0","10", "10");
+        checkErrorLog("There are errors in the given inputs :\nPerson number:  The number of persons must be strictly positive");
+    }
+
+    @Test
+    public void zeroPrepTimeDisplaysErrorLogs() {
+        writeRecipe("Cake","{a,10,gram}","{a},{b}","10","0", "0");
+        checkErrorLog("There are errors in the given inputs :\nPreparation time:  The estimated time required must be strictly positive");
+    }
+
+    @Test
+    public void testOnACompleteRecipe() {
+        writeRecipe("aaaa","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.postRecipe)).perform(scrollTo() ,click());
+    }
+
+    @Test
+    public void testClickOnMiniatureButtonOpenDialog() {
+        onView(withId(R.id.miniature)).perform(scrollTo(), click());
+        onView(withText("Add a picture")).check(matches(isDisplayed()));
+        onView(withText("Cancel")).perform(click());
+    }
 
     @Test
     public void testHandleActivityGallery() {
