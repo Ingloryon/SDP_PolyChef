@@ -12,10 +12,14 @@ import androidx.test.espresso.contrib.NavigationViewActions;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.Mockito.when;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -86,7 +90,31 @@ public class HomePageTest {
     private class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
-            return Mockito.mock(FirebaseUser.class);
+            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+
+            when(mockUser.getEmail()).thenReturn("test@epfl.ch");
+            when(mockUser.getDisplayName()).thenReturn("TestUsername");
+            return mockUser;
+        }
+
+        @Override
+        protected void retrieveUserInfo(String email) {
+
+        }
+
+        @Override
+        protected void newUser(String email) {
+
+        }
+
+        @Override
+        protected void oldUser(DataSnapshot snap) {
+
+        }
+
+        @Override
+        protected void updateUserInfo() {
+
         }
     }
 }
