@@ -127,8 +127,14 @@ public class PostingRecipeFragmentTest {
     }
 
     @Test
+    public void invalidIngredientsAreRejectedAndPrintErrorLog() {
+        writeRecipe("Cake","{,10,gram}","{a},{b}","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :\\nIngredients:  The ingredient's name must be non empty");
+    }
+
+    @Test
     public void testOnACompleteRecipe() {
-        writeRecipe("aaaa","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
+        writeRecipe("Cake","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.postRecipe)).perform(scrollTo() ,click());
     }

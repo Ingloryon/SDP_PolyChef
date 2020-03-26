@@ -7,7 +7,7 @@ public class PreconditionsTest {
 
     @Test
     public void checkArgumentOnlyRejectsFalseBooleans(){
-
+        Preconditions pre = new Preconditions();
         Preconditions.checkArgument(true, "The conditions is true");
         Preconditions.checkArgument(true);
         assertThrows(IllegalArgumentException.class, () -> Preconditions.checkArgument(false));

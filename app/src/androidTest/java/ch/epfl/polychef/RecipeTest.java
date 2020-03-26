@@ -93,7 +93,6 @@ public class RecipeTest {
         Recipe.Difficulty.values();
         Recipe.Difficulty.valueOf("VERY_HARD");
         Ingredient.Unit.valueOf("NONE");
-        Preconditions pre = new Preconditions();
         Recipe recipe = rb.build();
         recipe.getRating();
 
