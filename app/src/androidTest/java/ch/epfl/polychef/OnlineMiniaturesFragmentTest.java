@@ -107,12 +107,6 @@ public class OnlineMiniaturesFragmentTest {
             fakeRecipeStorage.addRecipe(testRecipe1);
         }
         fakeRecipeStorage.addRecipe(testRecipe2);
-        fakeRecipeStorage.addRecipe(testRecipe2);
-        fakeRecipeStorage.addRecipe(testRecipe2);
-        fakeRecipeStorage.addRecipe(testRecipe2);
-        fakeRecipeStorage.addRecipe(testRecipe2);
-        fakeRecipeStorage.addRecipe(testRecipe2);
-
 
         initActivity();
         wait(1000);
@@ -120,12 +114,13 @@ public class OnlineMiniaturesFragmentTest {
     }
     @Test
     public synchronized void scrollingWithDatabaseSmallerThanMaxLoadedAtATimeShouldAddNothingToTheMiniaturesList() throws InterruptedException {
-//        initActivity();
-//        wait(1000);
-//        onView(withId(R.id.miniaturesOnlineList))
-//                .perform(RecyclerViewActions.scrollToPosition(0));
-//        wait(1000);
-//        assertEquals(0, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        fakeRecipeStorage.addRecipe(testRecipe2);
+        initActivity();
+        wait(1000);
+        onView(withId(R.id.miniaturesOnlineList))
+                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+        wait(1000);
+        assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
 
     public OnlineMiniaturesFragment getMiniaturesFragment(){
