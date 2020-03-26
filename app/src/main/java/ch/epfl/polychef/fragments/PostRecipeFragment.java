@@ -2,8 +2,10 @@ package ch.epfl.polychef.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -401,7 +406,16 @@ public class PostRecipeFragment extends Fragment {
         } else {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
             if(currentMiniature != null) {
-                imageMiniaturePreview.setImageURI(currentMiniature);
+                try {
+                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
+                    double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
+                    double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
+                    Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
+                    imageMiniaturePreview.setImageBitmap(newBitmap);
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
+                }
+
             }
         }
     }
