@@ -364,7 +364,6 @@ public class PostRecipeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("TEST+23", requestCode+"");
         if(requestCode / mealPicturesFactor > 0) {
             Uri uri = imageHandler.handleActivityResult(requestCode / mealPicturesFactor, resultCode, data);
             if(uri != null) {

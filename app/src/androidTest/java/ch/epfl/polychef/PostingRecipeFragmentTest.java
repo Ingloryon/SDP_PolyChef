@@ -123,6 +123,13 @@ public class PostingRecipeFragmentTest {
         onView(withId(R.id.postRecipe)).perform(scrollTo() ,click());
     }
 
+    @Test
+    public void testClickOnMiniatureButtonOpenDialog() {
+        onView(withId(R.id.miniature)).perform(scrollTo(), click());
+        onView(withText("Add a picture")).check(matches(isDisplayed()));
+        onView(withText("Cancel")).perform(click());
+    }
+
     private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
         onView(withId(R.id.nameInput)).perform(scrollTo(), typeText(name));
         onView(withId(R.id.ingredientsList)).perform(scrollTo(), typeText(ingre));
