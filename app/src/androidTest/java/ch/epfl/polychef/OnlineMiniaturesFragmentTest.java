@@ -9,6 +9,7 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -144,6 +145,25 @@ public class OnlineMiniaturesFragmentTest {
             return fakeRecipeStorage;
         }
 
+        @Override
+        protected void retrieveUserInfo(String email) {
+
+        }
+
+        @Override
+        protected void newUser(String email) {
+
+        }
+
+        @Override
+        protected void oldUser(DataSnapshot snap) {
+
+        }
+
+        @Override
+        protected void updateUserInfo() {
+
+        }
     }
 
     public class FakeRecipeStorage extends RecipeStorage {
