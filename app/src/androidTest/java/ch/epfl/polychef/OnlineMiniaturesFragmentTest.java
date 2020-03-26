@@ -3,7 +3,9 @@ package ch.epfl.polychef;
 import android.content.Intent;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -125,7 +127,21 @@ public class OnlineMiniaturesFragmentTest {
         assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
     @Test
-    public synchronized void scrollingWithDatabase
+    public synchronized void scrollingDownLoadANewRecipe() throws InterruptedException {
+        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+            fakeRecipeStorage.addRecipe(testRecipe1);
+        }
+        fakeRecipeStorage.addRecipe(testRecipe2);
+        initActivity();
+        wait(1000);
+        onView(withId(R.id.miniaturesOnlineList))
+                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+        wait(1000);
+        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+        wait(1000);
+        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+
+    }
 
     public OnlineMiniaturesFragment getMiniaturesFragment(){
         FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
