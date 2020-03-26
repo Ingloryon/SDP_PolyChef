@@ -2,6 +2,7 @@ package ch.epfl.polychef.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +15,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+
+import ch.epfl.polychef.recipe.OfflineRecipes;
+import ch.epfl.polychef.recipe.Recipe;
 
 import ch.epfl.polychef.R;
 
@@ -57,20 +62,6 @@ public class LoginPage extends AppCompatActivity {
         } else {
             Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
         }
-    }
-
-    /**
-     * Called when the user taps the log button.
-     */
-    public void tequilaLogin(View view) {
-        createSignInIntent(view);
-    }
-
-    /**
-     * Called when the user taps the log button.
-     */
-    public void googleLogin(View view) {
-        createSignInIntent(view);
     }
 
     public FirebaseUser getUser() {

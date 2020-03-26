@@ -9,22 +9,27 @@ import androidx.test.espresso.contrib.DrawerActions;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
 import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.mockito.Mockito.when;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
+
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
 
 import ch.epfl.polychef.pages.HomePage;
 
@@ -49,6 +54,11 @@ public class HomePageTest {
         intentsTestRule.launchActivity(new Intent());
     }
 
+    @After
+    public void finishActivity(){
+        intentsTestRule.finishActivity();
+    }
+
     @Test
     public void buttonTextIsLogoutAndCanClick() {
         onView(withId(R.id.logButton)).check(matches(withText("Log out")));
@@ -57,7 +67,7 @@ public class HomePageTest {
 
     @Test
     public void onClickHomeGoesToHome() {
-        testNavButton(R.id.nav_home, R.id.offlineMiniaturesFragment);
+        testNavButton(R.id.nav_home, R.id.onlineMiniaturesFragment);
     }
 
     @Test

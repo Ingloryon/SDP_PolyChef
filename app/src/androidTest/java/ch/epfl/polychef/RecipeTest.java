@@ -184,6 +184,7 @@ public class RecipeTest {
                 endingString;
 
         // The ingredients can be displayed in any order so toString() can be either str1 or str2
+        // TODO FIX ME PLS, leave it like this for the moment to gain coverage but refactor later
         assertTrue(str1.equals(recipe.toString()) || str2.equals(recipe.toString()));
     }
 

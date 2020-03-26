@@ -14,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
 
 import com.google.android.material.navigation.NavigationView;
@@ -31,6 +32,8 @@ public class HomePage extends ConnectedActivity {
 
     private NavController navController;
     private MenuItem currentItem;
+
+    private RecipeStorage recipeStorage = new RecipeStorage();
 
     private User user;
     private String userKey;
@@ -62,6 +65,8 @@ public class HomePage extends ConnectedActivity {
         // Create new Bundle containing the id of the container for the adapter
         Bundle bundle = new Bundle();
         bundle.putInt("fragmentID", R.id.nav_host_fragment);
+
+        bundle.putSerializable("RecipeStorage", getRecipeStorage());
         // Set this bundle to be an arguments of the startDestination using this trick
         navController.setGraph(R.navigation.nav_graph, bundle);
         setupNavigation();
@@ -79,6 +84,21 @@ public class HomePage extends ConnectedActivity {
                 signOut();
             }
         });
+    }
+
+    private int getFragmentId(int itemId) {
+        switch(itemId){
+            case R.id.nav_home:
+                return R.id.onlineMiniaturesFragment;
+            case R.id.nav_fav:
+                return R.id.favouritesFragment;
+            case R.id.nav_subscribers:
+                return R.id.subscribersFragment;
+            case R.id.nav_subscriptions:
+                return R.id.subscriptionsFragment;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     private void setupNavigation(){
@@ -101,6 +121,7 @@ public class HomePage extends ConnectedActivity {
 
                         Bundle bundle = new Bundle();
                         bundle.putInt("fragmentID", R.id.nav_host_fragment);
+                        bundle.putSerializable("RecipeStorage", getRecipeStorage());
 
                         navController.navigate(getFragmentId(itemId), bundle);
 
@@ -112,21 +133,8 @@ public class HomePage extends ConnectedActivity {
         );
     }
 
-    private int getFragmentId(int itemId) {
-        switch(itemId){
-            case R.id.nav_home:
-                return R.id.offlineMiniaturesFragment;
-            case R.id.nav_recipe:
-                return R.id.postRecipeFragment;
-            case R.id.nav_fav:
-                return R.id.favouritesFragment;
-            case R.id.nav_subscribers:
-                return R.id.subscribersFragment;
-            case R.id.nav_subscriptions:
-                return R.id.subscriptionsFragment;
-            default:
-                throw new IllegalArgumentException();
-        }
+    public RecipeStorage getRecipeStorage(){
+        return recipeStorage;
     }
 
     protected void retrieveUserInfo(String email) {
@@ -193,10 +201,6 @@ public class HomePage extends ConnectedActivity {
                 .getReference("users/" + userKey)
                 .setValue(user);
     }
-    
-    public FirebaseDatabase getDatabase() {
-        return FirebaseDatabase.getInstance();
-    }
 
     protected String getUserEmail() {
         return getUser().getEmail();
@@ -204,5 +208,9 @@ public class HomePage extends ConnectedActivity {
 
     protected String getUserName() {
         return getUser().getDisplayName();
+    }
+    
+    public FirebaseDatabase getDatabase(){
+        return FirebaseDatabase.getInstance();
     }
 }

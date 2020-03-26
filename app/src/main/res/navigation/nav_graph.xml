@@ -10,18 +10,18 @@
         android:name="ch.epfl.polychef.fragments.FavouritesFragment"
         android:label="fragment_favourites"
         tools:layout="@layout/fragment_favourites" >
-    <action
-        android:id="@+id/action_favouritesFragment_to_postRecipeFragment"
-        app:destination="@id/postRecipeFragment" />
-    <action
-        android:id="@+id/action_favouritesFragment_to_subscriptionsFragment"
-        app:destination="@id/subscriptionsFragment" />
-    <action
-        android:id="@+id/action_favouritesFragment_to_subscribersFragment"
-        app:destination="@id/subscribersFragment" />
-    <action
-        android:id="@+id/action_favouritesFragment_to_offlineMiniaturesFragment"
-        app:destination="@id/offlineMiniaturesFragment" />
+        <action
+            android:id="@+id/action_favouritesFragment_to_postRecipeFragment"
+            app:destination="@id/postRecipeFragment" />
+        <action
+            android:id="@+id/action_favouritesFragment_to_subscriptionsFragment"
+            app:destination="@id/subscriptionsFragment" />
+        <action
+            android:id="@+id/action_favouritesFragment_to_subscribersFragment"
+            app:destination="@id/subscribersFragment" />
+        <action
+            android:id="@+id/action_favouritesFragment_to_offlineMiniaturesFragment"
+            app:destination="@id/offlineMiniaturesFragment" />
     </fragment>
 
     <fragment

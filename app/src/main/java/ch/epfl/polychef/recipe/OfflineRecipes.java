@@ -36,7 +36,6 @@ public final class OfflineRecipes {
                 e.printStackTrace();
             }
         }
-        // TODO Should we make it unmodifiable or not?  --> yes (#Guillaume)
         return Collections.unmodifiableList(copiedList);
     }
 

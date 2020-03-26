@@ -11,6 +11,11 @@ import java.util.UUID;
 
 public final class Recipe implements Serializable, Cloneable {
 
+    public Recipe(){
+        recipeUuid=null;
+        rating=null;
+    }
+
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
@@ -54,6 +59,7 @@ public final class Recipe implements Serializable, Cloneable {
         this.recipeUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
+        //TODO save deepCopy of ingredients;
         this.ingredients = new ArrayList<>(ingredients);
         this.personNumber = personNumber;
         this.estimatedPreparationTime = estimatedPreparationTime;
@@ -65,11 +71,6 @@ public final class Recipe implements Serializable, Cloneable {
         if(hasPictures) {
             this.picturesNumbers.addAll(picturesNumbers);
         }
-    }
-
-    public Recipe(){
-        recipeUuid=null;
-        rating=null;
     }
 
     /**
