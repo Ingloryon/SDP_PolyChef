@@ -18,8 +18,6 @@ public final class OfflineRecipes {
         return offlineRecipesInstance;
     }
 
-    // TODO REMOVE ME FAST
-
     private OfflineRecipes(){
         offlineRecipes = new ArrayList<>();
         offlineRecipes.add(recipe1);

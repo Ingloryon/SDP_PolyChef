@@ -31,7 +31,7 @@ import ch.epfl.polychef.recipe.Recipe;
  */
 public class RecipeStorage implements Serializable {
     private static final String TAG = "Firebase";
-    private int id;
+    public int id;
 
     /**
      * Add a new {@code Recipe} to the storage.

@@ -27,7 +27,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
 
     private int currentReadInt = 1;
 
-    private int nbOfRecipesLoadedAtATime = 5;
+    public final static int nbOfRecipesLoadedAtATime = 5;
 
     private boolean isLoading = false;
 
@@ -91,6 +91,5 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     public RecyclerView getRecyclerView(){
         return onlineRecyclerView;
     }
-
 
 }
