@@ -63,54 +63,6 @@ public class RecipeStorage implements Serializable {
         });
     }
 
-    /*public static void readRecipeFromFirebase(UUID Uuid){
-        DatabaseReference idRef = firebaseInstance.getReference("id");
-        //Get the last ID used in the database
-        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value
-                id=dataSnapshot.getValue(Integer.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-        for(int i=1;i<id+1;i++) {
-            DatabaseReference myRef = firebaseInstance.getReference("recipe").child(Integer.toString(i)).child("uuid");
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    UUID value = dataSnapshot.getValue(UUID.class);
-                    if (value.equals(Uuid)) {
-                        myRef.getParent().addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
-                                //call a method that display a recipe
-                                Log.w(TAG, recipe.toString());
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError error) {
-                                // Failed to read value
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
-                        });
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });
-        }
-    }*/
     public void readRecipeFromUUID(UUID uuid, CallHandler<Recipe> ch){
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
         DatabaseReference idRef = getFirebaseDatabase().getReference("id");

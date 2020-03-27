@@ -6,12 +6,13 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class User {
 
     private String email;
     private String username;
-    private List<String> recipes;
+    private List<UUID> recipes;
     private List<String> favourites;
     private List<String> subscribers;
     private List<String> subscriptions;
@@ -40,7 +41,7 @@ public class User {
         return username;
     }
 
-    public List<String> getRecipes() {
+    public List<UUID> getRecipes() {
         return new ArrayList<>(recipes);
     }
 
@@ -56,7 +57,7 @@ public class User {
         return new ArrayList<>(subscriptions);
     }
 
-    public void addRecipe(String recipe) {
+    public void addRecipe(UUID recipe) {
         recipes.add(recipe);
     }
 
