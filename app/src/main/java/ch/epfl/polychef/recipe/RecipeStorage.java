@@ -111,6 +111,60 @@ public class RecipeStorage implements Serializable {
             });
         }
     }*/
+    public void readRecipeFromUUID(UUID uuid, CallHandler<Recipe> ch){
+        Preconditions.checkArgument(ch != null, "Call handler should not be null");
+        DatabaseReference idRef = getFirebaseDatabase().getReference("id");
+        //Get the last ID used in the database
+        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value
+                id=dataSnapshot.getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        for(int i=1;i<id+1;i++) {
+            DatabaseReference myRef = getFirebaseDatabase().getReference("recipe").child(Integer.toString(i)).child("uuid");
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    UUID value = dataSnapshot.getValue(UUID.class);
+                    if (value.equals(uuid)) {
+                        myRef.getParent().addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                if (value == null) {
+                                    ch.onFailure();
+                                } else {
+                                    ch.onSuccess(recipe);
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                ch.onFailure();
+                                // Failed to read value
+                                Log.w(TAG, "Failed to read value.", error.toException());
+                            }
+                        });
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    ch.onFailure();
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        }
+    }
 
     /**
      * Get a {@code Recipe} from the storage.
