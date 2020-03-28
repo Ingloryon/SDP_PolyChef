@@ -65,9 +65,8 @@ public class RecipeTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
         rb.setRecipeDifficulty(Recipe.Difficulty.EASY);
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setMiniaturePath(""));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setMiniatureFromPath(""));
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(0));
-//        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setMiniaturePath("Does not end by png"));
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(-1));
 
         rb.build();
@@ -104,15 +103,14 @@ public class RecipeTest {
         assertEquals(recipe.getEstimatedCookingTime(), 50);
         assertEquals(recipe.getRecipeDifficulty(), Recipe.Difficulty.VERY_HARD);
         assertEquals(recipe.getEstimatedTotalTime(), 95);
-        assertEquals(recipe.getMiniaturePath(), "/src/default_miniature.png");
-        assertEquals(recipe.getPicturesNumbers(), Arrays.asList(R.drawable.frenchtoast));
-
+        assertTrue(recipe.getMiniaturePath().isNone());
+        assertEquals(recipe.getPicturesNumbers(), Collections.emptyList());
         rb.addPicturePath(15);
-        rb.setMiniaturePath("/src/miniature.jpeg");
-        rb.setMiniaturePath("/src/miniature.png");
+        rb.setMiniatureFromPath("miniature1");
+        rb.setMiniatureFromPath("miniature2");
         Recipe recipe2 = rb.build();
 
-        assertEquals(recipe2.getMiniaturePath(), "/src/miniature.png");
+        assertEquals(recipe2.getMiniaturePath().getLeft(), "miniature2");
         assertEquals(recipe2.getPicturesNumbers(), Arrays.asList(15));
     }
 

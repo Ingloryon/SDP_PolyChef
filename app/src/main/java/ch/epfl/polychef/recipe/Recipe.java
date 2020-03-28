@@ -1,10 +1,13 @@
 package ch.epfl.polychef.recipe;
 
+import androidx.annotation.NonNull;
+
 import ch.epfl.polychef.Preconditions;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.utils.Either;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -32,12 +35,9 @@ public final class Recipe implements Serializable, Cloneable {
     private final Rating rating;
 
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
-    private boolean hasPictures;
-    private boolean hasMiniature;
-    private String miniaturePath;
+    private Either<String, Integer> miniaturePath;
     private List<Integer> picturesNumbers;
-    private static final String DEFAULT_MINIATURE_PATH = "/src/default_miniature.png";
-    private static final List<Integer> DEFAULT_PICTURE_PATH = Arrays.asList(R.drawable.frenchtoast);
+    public static final int DEFAULT_MINIATURE_PATH = R.drawable.default_miniature;
 
     /**
      * Creates a new Recipe.
@@ -48,14 +48,10 @@ public final class Recipe implements Serializable, Cloneable {
      * @param estimatedPreparationTime the approximate time needed to prepare the recipe, in minutes (strictly positive)
      * @param estimatedCookingTime the approximate time needed to cook the recipe, in minutes (strictly positive)
      * @param recipeDifficulty the difficulty of the recipe
-     * @param miniaturePath path to access the miniature image, provide empty string for default miniature
+     * @param miniaturePath path to access the miniature image, provide {@code Either.none()} for default miniature
      * @param picturesNumbers path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<Integer> picturesNumbers){
-
-        this.hasMiniature = !miniaturePath.isEmpty();
-        this.hasPictures = picturesNumbers.size()!=0;
-
+    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, Either<String, Integer> miniaturePath, @NonNull List<Integer> picturesNumbers){
         this.recipeUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
@@ -68,9 +64,7 @@ public final class Recipe implements Serializable, Cloneable {
         this.rating = new Rating();
         this.miniaturePath = miniaturePath;
         this.picturesNumbers = new ArrayList<>();
-        if(hasPictures) {
-            this.picturesNumbers.addAll(picturesNumbers);
-        }
+        this.picturesNumbers.addAll(picturesNumbers);
     }
 
     /**
@@ -162,11 +156,11 @@ public final class Recipe implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the miniature path of the recipe.
+     * Returns if it exists the miniature path of the recipe.
      * @return the rating of the recipe
      */
-    public String getMiniaturePath() {
-        return hasMiniature ? miniaturePath : DEFAULT_MINIATURE_PATH;
+    public Either<String, Integer> getMiniaturePath() {
+        return miniaturePath;
     }
 
     /**
@@ -174,7 +168,11 @@ public final class Recipe implements Serializable, Cloneable {
      * @return List of picture numbers
      */
     public List<Integer> getPicturesNumbers() {
-        return hasPictures ? Collections.unmodifiableList(picturesNumbers) : DEFAULT_PICTURE_PATH;
+        return Collections.unmodifiableList(picturesNumbers);
+    }
+
+    private boolean hasPictures() {
+        return picturesNumbers.size() != 0;
     }
 
     /**

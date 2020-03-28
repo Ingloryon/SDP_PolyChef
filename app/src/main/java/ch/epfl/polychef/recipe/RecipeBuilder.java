@@ -2,6 +2,8 @@ package ch.epfl.polychef.recipe;
 
 import androidx.annotation.NonNull;
 import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.utils.Either;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public final class RecipeBuilder {
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
 
-    private String miniaturePath = "";
+    private Either<String, Integer> miniaturePath = Either.none();
     private ArrayList<Integer> picturesNumbers = new ArrayList<>();
 
     /**
@@ -136,13 +138,23 @@ public final class RecipeBuilder {
     /**
      * Sets the path where to find the miniature.
      *
-     * @param miniaturePath path to find the miniature, must be non-empty and lead to a .png or .jpeg image
+     * @param miniaturePath path to find the miniature, must be non-empty
      * @return the modified builder
      */
-    public RecipeBuilder setMiniaturePath(@NonNull String miniaturePath) {
+    public RecipeBuilder setMiniatureFromPath(@NonNull String miniaturePath) {
         Preconditions.checkArgument(!miniaturePath.isEmpty(), "The miniature path must be non empty");
-//        Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
-        this.miniaturePath = miniaturePath;
+        this.miniaturePath = Either.left(miniaturePath);
+        return this;
+    }
+
+    /**
+     * Sets the id of the miniature.
+     *
+     * @param miniatureId id the local miniature
+     * @return the modified builder
+     */
+    public RecipeBuilder setMiniatureFromId(@NonNull Integer miniatureId) {
+        this.miniaturePath = Either.right(miniatureId);
         return this;
     }
 

@@ -55,7 +55,8 @@ public final class FullRecipeFragment extends Fragment {
      */
     private void displayImage(View view) {
         ImageView recipeImage = view.findViewById(R.id.recipeImage);
-        recipeImage.setImageResource(currentRecipe.getPicturesNumbers().get(0));
+
+//        recipeImage.setImageResource(currentRecipe.getPicturesNumbers().get(0));
     }
 
     /**
