@@ -81,7 +81,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
         Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
-            holder.image.setImageResource(recipe.DEFAULT_MINIATURE_PATH);
+            holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
         } else {
@@ -110,7 +110,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
     @Override
     public void onFailure() {
-        Toast.makeText(mainContext, mainContext.getString(R.string.error_image_retrieve), Toast.LENGTH_LONG);
+        Toast.makeText(mainContext, mainContext.getString(R.string.error_image_retrieve), Toast.LENGTH_LONG).show();
     }
 
     /**

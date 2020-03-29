@@ -17,7 +17,7 @@ public final class RecipeBuilder {
     private Recipe.Difficulty recipeDifficulty;
 
     private Either<String, Integer> miniaturePath = Either.none();
-    private ArrayList<Integer> picturesNumbers = new ArrayList<>();
+    private ArrayList<String> picturesName = new ArrayList<>();
 
     /**
      * Builds a Recipe.
@@ -33,7 +33,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesNumbers);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName);
     }
 
     /**
@@ -161,12 +161,12 @@ public final class RecipeBuilder {
     /**
      * Adds the path of an image of the meal.
      *
-     * @param pictureNb Integer number of an image, must be positive
+     * @param pictureName String path of an image
      * @return the modified builder
      */
-    public RecipeBuilder addPicturePath(@NonNull Integer pictureNb) {
-        Preconditions.checkArgument(pictureNb > 0, "The number of the picture must be positive");
-        this.picturesNumbers.add(pictureNb);
+    public RecipeBuilder addPicturePath(@NonNull String pictureName) {
+        Preconditions.checkArgument(pictureName != null, "Picture path should not be null");
+        this.picturesName.add(pictureName);
         return this;
     }
 }

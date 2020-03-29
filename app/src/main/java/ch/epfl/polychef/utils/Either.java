@@ -1,6 +1,7 @@
 package ch.epfl.polychef.utils;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.firebase.database.Exclude;
 
@@ -61,6 +62,21 @@ public final class Either<L, R> implements Serializable {
     @Exclude
     public boolean isNone() {
         return !isLeft() && !isRight();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof Either)) {
+            return false;
+        }
+        Either other = (Either)obj;
+        if(this.isRight() && other.isRight()) {
+            return this.getRight().equals(other.getRight());
+        } else if(this.isLeft() && other.isRight()) {
+            return this.getLeft().equals(other.getLeft());
+        } else {
+            return this.isNone() && other.isNone();
+        }
     }
 
     @NonNull

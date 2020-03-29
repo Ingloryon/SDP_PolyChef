@@ -31,6 +31,8 @@ import ch.epfl.polychef.recipe.Recipe;
  */
 public class RecipeStorage implements Serializable {
     private static final String TAG = "Firebase";
+    private static final String DB_NAME = "recipe";
+    private static final String DB_ID = "id";
     public int id;
 
     /**
@@ -41,7 +43,7 @@ public class RecipeStorage implements Serializable {
     public void addRecipe(Recipe recipe) {
         Preconditions.checkArgument(recipe != null);
 
-        DatabaseReference idRef = getFirebaseDatabase().getReference("id");
+        DatabaseReference idRef = getFirebaseDatabase().getReference(DB_ID);
         //Get the last ID used in the database
         idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -51,7 +53,7 @@ public class RecipeStorage implements Serializable {
                 //Change the value of the ID in the database
                 id += 1;
                 idRef.setValue(id);
-                DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
+                DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME);
                 myRef.child(Integer.toString(id)).setValue(recipe);
             }
 
@@ -121,7 +123,7 @@ public class RecipeStorage implements Serializable {
     public void readRecipe(int id, CallHandler<Recipe> ch) {
         Preconditions.checkArgument(id > 0, "Id should be positive");
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
-        DatabaseReference myRef = getFirebaseDatabase().getReference("recipe").child(Integer.toString(id));
+        DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME).child(Integer.toString(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -229,7 +231,7 @@ public class RecipeStorage implements Serializable {
     }
 
     private Query getNRecipeQuery(int numberOfRecipes, int fromId) {
-        DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
+        DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME);
         return myRef.orderByKey().startAt(Integer.toString(fromId)).endAt(Integer.toString(fromId + numberOfRecipes - 1));
     }
 }

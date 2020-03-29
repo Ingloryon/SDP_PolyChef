@@ -66,8 +66,7 @@ public class RecipeTest {
         rb.setRecipeDifficulty(Recipe.Difficulty.EASY);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setMiniatureFromPath(""));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(0));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(null));
 
         rb.build();
     }
@@ -104,14 +103,14 @@ public class RecipeTest {
         assertEquals(recipe.getRecipeDifficulty(), Recipe.Difficulty.VERY_HARD);
         assertEquals(recipe.getEstimatedTotalTime(), 95);
         assertTrue(recipe.getMiniaturePath().isNone());
-        assertEquals(recipe.getPicturesNumbers(), Collections.emptyList());
-        rb.addPicturePath(15);
+        assertEquals(recipe.getPicturesPath(), Collections.emptyList());
+        rb.addPicturePath("pic_15");
         rb.setMiniatureFromPath("miniature1");
         rb.setMiniatureFromPath("miniature2");
         Recipe recipe2 = rb.build();
 
         assertEquals(recipe2.getMiniaturePath().getLeft(), "miniature2");
-        assertEquals(recipe2.getPicturesNumbers(), Arrays.asList(15));
+        assertEquals(recipe2.getPicturesPath(), Arrays.asList("pic_15"));
     }
 
     @Test
