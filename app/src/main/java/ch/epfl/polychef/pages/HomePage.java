@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -71,6 +73,33 @@ public class HomePage extends ConnectedActivity {
         navController.setGraph(R.navigation.nav_graph, bundle);
         setupNavigation();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        updateDrawerInfo();
+        setUserProfileAction();
+    }
+
+    public void updateDrawerInfo() {
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        View parentView = navigationView.getHeaderView(0);
+        ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getUserEmail());
+        ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getUserName());
+    }
+
+    public void setUserProfileAction() {
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        View parentView = navigationView.getHeaderView(0);
+
+        ImageView profileImage = parentView.findViewById(R.id.drawerProfileImage);
+
+        profileImage.setOnClickListener((view) ->
+            navController.navigate(R.id.fullUsersFragment)
+        );
+    }
+
 
     @Override
     protected void onResume() {
