@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,14 +23,11 @@ import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
@@ -41,6 +36,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.utils.RecipeInputChecking;
 
 public class PostRecipeFragment extends Fragment {
     private final String tag = "PostRecipeFragment";
@@ -169,18 +165,20 @@ public class PostRecipeFragment extends Fragment {
         }
 
         String ingre = ((EditText) getView().findViewById(R.id.ingredientsList)).getText().toString();
-        if (parseIngredients(ingre)) {
+        String pattern = "\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}";
+        if (RecipeInputChecking.parseIngredients(ingre, pattern, ingredients, errorLogs)) {
             wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
         }
 
         EditText instructionsInput = getView().findViewById(R.id.instructionsList);
         String instructions = instructionsInput.getText().toString();
-        if (parseInstructions(instructions)) {
+        if (RecipeInputChecking.parseInstructions(instructions, recipeInstructions, errorLogs)) {
             wrongInputs.put("Instructions", true); // TODO: Use replace when set SDK min24
         }
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
+
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
         if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= maxPersNb){
@@ -210,65 +208,6 @@ public class PostRecipeFragment extends Fragment {
             errorLogs.add(message+": should be a positive number.");
             return 0;
         }
-    }
-
-    private boolean parseIngredients(String toMatch) {
-        List<String> allMatches = new ArrayList<>();
-        ingredients = new ArrayList<>();
-        Matcher mat = Pattern.compile("\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}")
-                .matcher(toMatch);
-        while (mat.find()) {
-            allMatches.add(mat.group());
-        }
-        if(allMatches.size()==0){
-            ingredients.clear();
-            allMatches.clear();
-            errorLogs.add("Ingredients: There should be 3 arguments entered as {a,b,c}");
-            return false;
-        }
-        for (String s : allMatches) {
-            String[] list = s.split(",");
-            String name = list[0].trim().substring(1).trim();
-            double quantity = Double.parseDouble(list[1].trim()); // TODO: check this method does not throw errors
-            Ingredient.Unit unit = null;
-            String unitString = list[2].trim().substring(0, list[2].trim().length() - 1).trim();
-            for (Ingredient.Unit u : Ingredient.Unit.values()) {
-                if (u.toString().toLowerCase().equals(unitString.toLowerCase())) {
-                    unit = u;
-                }
-            }
-            if (unit == null) {
-                ingredients.clear();
-                allMatches.clear();
-                errorLogs.add("Ingredients: The entered unit is not part of the possible units " + Arrays.asList(Ingredient.Unit.values()) + ".");
-                return false;
-            }
-
-            try{
-                ingredients.add(new Ingredient(name, quantity, unit));
-            } catch (IllegalArgumentException e){
-                errorLogs.add("Ingredients: " + e.toString().substring(35));
-            }
-        }
-        return true;
-    }
-
-    private boolean parseInstructions(String instructions) {
-        // TODO: Add more precise input checking of instructions
-        if (instructions.length()<3 || !instructions.contains("{") || !instructions.contains("}")){
-            errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
-            return false;
-        }
-
-        recipeInstructions = new ArrayList<>();
-        instructions = instructions.substring(1);
-        String separator = Pattern.quote("},{");
-        String[] mots = instructions.split(separator);
-        for (int i = 0; i < mots.length - 1; i++) {
-            recipeInstructions.add(mots[i]);
-        }
-        recipeInstructions.add(mots[mots.length - 1].substring(0, mots[mots.length - 1].length() - 1));
-        return true;
     }
 
     private boolean buildRecipeAndPostToFirebase() {
@@ -336,7 +275,6 @@ public class PostRecipeFragment extends Fragment {
         }  catch (IllegalArgumentException e){
             errorLogs.add("Preparation time: " + e.toString().substring(35));
         }
-
         // All the other exceptions cannot be raised, they are checked while parsing
     }
 
@@ -407,5 +345,3 @@ public class PostRecipeFragment extends Fragment {
         builder.show();
     }
 }
-
-//TODO: Refactor by adding a new class RecipeInputSanitization in package Recipe ? Would contain findIllegalInputs, checkForIllegalInputs, parseInstructions, parseIngredients, getEnteredInputs ?
