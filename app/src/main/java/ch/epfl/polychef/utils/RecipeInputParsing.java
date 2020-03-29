@@ -9,11 +9,8 @@ import java.util.regex.Pattern;
 
 import ch.epfl.polychef.recipe.Ingredient;
 
-public final class RecipeInputChecking {
-    //private RecipeInputChecking() {}
-
-    //TODO: Refactor by adding a new class RecipeInputSanitization in package Recipe ? Would contain findIllegalInputs, checkForIllegalInputs, parseInstructions, parseIngredients, getEnteredInputs ?
-
+public final class RecipeInputParsing {
+    //private RecipeInputParsing() {}
 
     public static boolean parseInstructions(String instructions, List<String> recipeInstructions, List<String> errorLogs) {
         // TODO: Add more precise input checking of instructions

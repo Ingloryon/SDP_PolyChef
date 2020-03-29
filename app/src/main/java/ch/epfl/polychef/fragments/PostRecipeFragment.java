@@ -36,7 +36,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.utils.RecipeInputChecking;
+import ch.epfl.polychef.utils.RecipeInputParsing;
 
 public class PostRecipeFragment extends Fragment {
     private final String tag = "PostRecipeFragment";
@@ -79,17 +79,6 @@ public class PostRecipeFragment extends Fragment {
      * Required empty public constructor.
      */
     public PostRecipeFragment() {
-    }
-
-    private void initializeWrongInputs() {
-        wrongInputs = new HashMap<>();
-        wrongInputs.put("Title", false);
-        wrongInputs.put("Ingredients", false);
-        wrongInputs.put("Instructions", false);
-        wrongInputs.put("Person Number", false);
-        wrongInputs.put("Preparation Time", false);
-        wrongInputs.put("Cooking Time", false);
-        wrongInputs.put("Difficulty", false);
     }
 
     @Override
@@ -139,6 +128,34 @@ public class PostRecipeFragment extends Fragment {
         difficultyInput.setAdapter(adapter);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode / mealPicturesFactor > 0) {
+            Uri uri = imageHandler.handleActivityResult(requestCode / mealPicturesFactor, resultCode, data);
+            if(uri != null) {
+                currentMealPictures.add(uri);
+                mealPicturesText.setText(currentMealPictures.size() + " to upload");
+            }
+        } else {
+            currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
+            if(currentMiniature != null) {
+                try {
+                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
+                    if(oldBitmap != null) {
+                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
+                        double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
+                        Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
+                        imageMiniaturePreview.setImageBitmap(newBitmap);
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+    }
+
     /**
      * Called when user presses "post recipe", will parse and check the entered inputs.
      * If the inputs are correct it will post the corresponding Recipe on Firebase.
@@ -146,7 +163,7 @@ public class PostRecipeFragment extends Fragment {
      * @param view the current view
      */
     public void setPostButton(View view) {
-        getEnteredInputs();
+        getAndCheckEnteredInputs();
         if(!buildRecipeAndPostToFirebase()){
             printWrongInputsToUser();
         }else{
@@ -155,7 +172,25 @@ public class PostRecipeFragment extends Fragment {
         }
     }
 
-    private void getEnteredInputs() {
+    private boolean buildRecipeAndPostToFirebase() {
+        RecipeBuilder recipeBuilder = new RecipeBuilder();
+
+        // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
+        if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
+            return false;
+        } else {
+            if(currentMiniature != null) {
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
+            }
+            for(int i = 1; i <= currentMealPictures.size(); ++i) {
+                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
+            }
+            recipeStorage.addRecipe(postedRecipe);
+            return true;
+        }
+    }
+
+    private void getAndCheckEnteredInputs() {
         String inputName = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
         if(inputName.length() > titleMaxChar || inputName.length() < titleMinChar) {
             errorLogs.add("Title: too long or too short. Need to be between " + titleMinChar + " and " + titleMaxChar + " characters.");
@@ -166,13 +201,13 @@ public class PostRecipeFragment extends Fragment {
 
         String ingre = ((EditText) getView().findViewById(R.id.ingredientsList)).getText().toString();
         String pattern = "\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}";
-        if (RecipeInputChecking.parseIngredients(ingre, pattern, ingredients, errorLogs)) {
+        if (RecipeInputParsing.parseIngredients(ingre, pattern, ingredients, errorLogs)) {
             wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
         }
 
         EditText instructionsInput = getView().findViewById(R.id.instructionsList);
         String instructions = instructionsInput.getText().toString();
-        if (RecipeInputChecking.parseInstructions(instructions, recipeInstructions, errorLogs)) {
+        if (RecipeInputParsing.parseInstructions(instructions, recipeInstructions, errorLogs)) {
             wrongInputs.put("Instructions", true); // TODO: Use replace when set SDK min24
         }
 
@@ -207,24 +242,6 @@ public class PostRecipeFragment extends Fragment {
         } else {
             errorLogs.add(message+": should be a positive number.");
             return 0;
-        }
-    }
-
-    private boolean buildRecipeAndPostToFirebase() {
-        RecipeBuilder recipeBuilder = new RecipeBuilder();
-
-        // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
-        if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
-            return false;
-        } else {
-            if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
-            }
-            for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
-            }
-            recipeStorage.addRecipe(postedRecipe);
-            return true;
         }
     }
 
@@ -278,13 +295,15 @@ public class PostRecipeFragment extends Fragment {
         // All the other exceptions cannot be raised, they are checked while parsing
     }
 
-    private void printWrongInputsToUser(){
-        TextView errorLog =  getView().findViewById(R.id.errorLogs);
-        errorLog.setText(createErrorMessage());
-        errorLog.setVisibility(View.VISIBLE);
-
-        initializeWrongInputs();
-        errorLogs.clear();
+    private void initializeWrongInputs() {
+        wrongInputs = new HashMap<>();
+        wrongInputs.put("Title", false);
+        wrongInputs.put("Ingredients", false);
+        wrongInputs.put("Instructions", false);
+        wrongInputs.put("Person Number", false);
+        wrongInputs.put("Preparation Time", false);
+        wrongInputs.put("Cooking Time", false);
+        wrongInputs.put("Difficulty", false);
     }
 
     private String createErrorMessage(){
@@ -301,32 +320,13 @@ public class PostRecipeFragment extends Fragment {
         return sb.toString();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode / mealPicturesFactor > 0) {
-            Uri uri = imageHandler.handleActivityResult(requestCode / mealPicturesFactor, resultCode, data);
-            if(uri != null) {
-                currentMealPictures.add(uri);
-                mealPicturesText.setText(currentMealPictures.size() + " to upload");
-            }
-        } else {
-            currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
-            if(currentMiniature != null) {
-                try {
-                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
-                    if(oldBitmap != null) {
-                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
-                        double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
-                        Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
-                        imageMiniaturePreview.setImageBitmap(newBitmap);
-                    }
-                } catch (IOException e) {
-                    Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
-                }
+    private void printWrongInputsToUser(){
+        TextView errorLog =  getView().findViewById(R.id.errorLogs);
+        errorLog.setText(createErrorMessage());
+        errorLog.setVisibility(View.VISIBLE);
 
-            }
-        }
+        initializeWrongInputs();
+        errorLogs.clear();
     }
 
     private void addPictureDialog(int factor) {
