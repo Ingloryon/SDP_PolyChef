@@ -197,32 +197,32 @@ public class RecipeStorage implements Serializable {
         Preconditions.checkArgument(numberOfRecipes > 0, "Number of recipe to get should "
                 + "be positive");
         Preconditions.checkArgument(caller != null, "Call handler should not be null");
-        getNRecipeQuery(numberOfRecipes, fromId).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
-                caller.notify(dataSnapshot.getValue(Recipe.class));
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
-                caller.notify(dataSnapshot.getValue(Recipe.class));
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
-                caller.notify(dataSnapshot.getValue(Recipe.class));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                caller.onFailure();
-            }
-        });
+//        getNRecipeQuery(numberOfRecipes, fromId).addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
+//                caller.notify(dataSnapshot.getValue(Recipe.class));
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
+//                caller.notify(dataSnapshot.getValue(Recipe.class));
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
+//                caller.notify(dataSnapshot.getValue(Recipe.class));
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                caller.onFailure();
+//            }
+//        });
     }
 
     /**

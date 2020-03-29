@@ -1,6 +1,7 @@
 package ch.epfl.polychef.pages;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,9 @@ public class HomePage extends ConnectedActivity {
     private DrawerLayout drawer;
 
     private NavController navController;
+    private NavigationView navView;
     private MenuItem currentItem;
+    private MenuItem previousItem;
 
     private RecipeStorage recipeStorage = new RecipeStorage();
 
@@ -64,6 +67,8 @@ public class HomePage extends ConnectedActivity {
 
         navController = NavHostFragment.findNavController(hostFragment);
 
+        navView = findViewById(R.id.navigationView);
+
         // Create new Bundle containing the id of the container for the adapter
         Bundle bundle = new Bundle();
         bundle.putInt("fragmentID", R.id.nav_host_fragment);
@@ -78,28 +83,24 @@ public class HomePage extends ConnectedActivity {
     public void onStart() {
         super.onStart();
 
-        updateDrawerInfo();
-        setUserProfileAction();
+        updateDrawerInfo(navView.getHeaderView(0));
     }
 
-    public void updateDrawerInfo() {
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        View parentView = navigationView.getHeaderView(0);
+    public void updateDrawerInfo(View parentView) {
         ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getUserEmail());
         ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getUserName());
     }
 
-    public void setUserProfileAction() {
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        View parentView = navigationView.getHeaderView(0);
-
+    public void setupUserProfileNavigation(View parentView){
         ImageView profileImage = parentView.findViewById(R.id.drawerProfileImage);
 
-        profileImage.setOnClickListener((view) ->
-            navController.navigate(R.id.fullUsersFragment)
-        );
+        profileImage.setOnClickListener((view) -> {
+            setCurrentItemChecked(false);
+            currentItem = null;
+            navController.navigate(R.id.fullUsersFragment);
+            drawer.closeDrawer(GravityCompat.START, true);
+        });
     }
-
 
     @Override
     protected void onResume() {
@@ -113,6 +114,37 @@ public class HomePage extends ConnectedActivity {
                 signOut();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        setCurrentItemChecked(false);
+
+        int destination = navController.getCurrentDestination().getId();
+
+        if(destination == R.id.fullUsersFragment ||
+                destination == R.id.fullRecipeFragment) {
+
+            currentItem = null;
+        } else {
+            changeItem(navView.getMenu().findItem(getMenuItem(destination)));
+        }
+
+        drawer.closeDrawer(GravityCompat.START, true);
+    }
+
+    public void changeItem(MenuItem newItem){
+        setCurrentItemChecked(false);
+        currentItem = newItem;
+        setCurrentItemChecked(true);
+    }
+
+    public void setCurrentItemChecked(Boolean bool){
+        if(currentItem != null) {
+            currentItem.setChecked(bool);
+        }
     }
 
     private int getFragmentId(int itemId) {
@@ -132,19 +164,36 @@ public class HomePage extends ConnectedActivity {
         }
     }
 
+    private int getMenuItem(int fragmentId){
+        switch(fragmentId){
+            case R.id.onlineMiniaturesFragment:
+                return R.id.nav_home;
+
+            case R.id.favouritesFragment:
+                return R.id.nav_fav;
+
+            case R.id.subscribersFragment:
+                return R.id.nav_subscribers;
+
+            case R.id.subscriptionsFragment:
+                return R.id.nav_subscriptions;
+
+            case R.id.postRecipeFragment:
+                return R.id.nav_recipe;
+
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
     private void setupNavigation(){
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(
+
+        navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem selectedItem) {
 
-                        if (currentItem != null) {
-                            currentItem.setChecked(false);
-                        }
-
-                        selectedItem.setChecked(true);
-                        currentItem = selectedItem;
+                        changeItem(selectedItem);
 
                         invalidateOptionsMenu();
 
@@ -162,6 +211,12 @@ public class HomePage extends ConnectedActivity {
                     }
                 }
         );
+
+        setupUserProfileNavigation(navView.getHeaderView(0));
+
+        //Home should be checked initially
+        currentItem = navView.getMenu().findItem(R.id.nav_home);
+        currentItem.setChecked(true);
     }
 
     public RecipeStorage getRecipeStorage(){
