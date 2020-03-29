@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.utils;
 
 public final class Preconditions {
     //private Preconditions() {}
