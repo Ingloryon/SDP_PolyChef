@@ -63,6 +63,9 @@ public final class Recipe implements Serializable, Cloneable {
         this.recipeDifficulty = recipeDifficulty;
         this.rating = new Rating();
         this.miniaturePath = miniaturePath;
+        if(this.miniaturePath == null) {
+            this.miniaturePath = Either.none();
+        }
         this.picturesNumbers = new ArrayList<>();
         this.picturesNumbers.addAll(picturesNumbers);
     }
@@ -160,7 +163,7 @@ public final class Recipe implements Serializable, Cloneable {
      * @return the rating of the recipe
      */
     public Either<String, Integer> getMiniaturePath() {
-        return miniaturePath;
+        return miniaturePath != null ? miniaturePath : Either.none();
     }
 
     /**
