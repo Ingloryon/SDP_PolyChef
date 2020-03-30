@@ -24,7 +24,7 @@
             app:destination="@id/onlineMiniaturesFragment" />
         <action
             android:id="@+id/action_favouritesFragment_to_fullUsersFragment"
-            app:destination="@id/fullUsersFragment" />
+            app:destination="@id/userProfileFragment" />
     </fragment>
 
     <fragment
@@ -46,7 +46,7 @@
             app:destination="@id/onlineMiniaturesFragment" />
         <action
             android:id="@+id/action_postRecipeFragment_to_fullUsersFragment"
-            app:destination="@id/fullUsersFragment" />
+            app:destination="@id/userProfileFragment" />
     </fragment>
 
     <fragment
@@ -68,7 +68,7 @@
             app:destination="@id/postRecipeFragment" />
         <action
             android:id="@+id/action_subscribersFragment_to_fullUsersFragment"
-            app:destination="@id/fullUsersFragment" />
+            app:destination="@id/userProfileFragment" />
     </fragment>
 
     <fragment
@@ -90,7 +90,7 @@
             app:destination="@id/postRecipeFragment" />
         <action
             android:id="@+id/action_subscriptionsFragment_to_fullUsersFragment"
-            app:destination="@id/fullUsersFragment" />
+            app:destination="@id/userProfileFragment" />
     </fragment>
 
     <fragment
@@ -132,16 +132,16 @@
             app:destination="@id/postRecipeFragment" />
         <action
             android:id="@+id/action_fullRecipeFragment_to_fullUsersFragment"
-            app:destination="@id/fullUsersFragment" />
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/fullUsersFragment"
-        android:name="ch.epfl.polychef.fragments.FullUsersFragment"
+        android:id="@+id/userProfileFragment"
+        android:name="ch.epfl.polychef.fragments.UserProfileFragment"
         android:label="fragment_full_users"
-        tools:layout="@layout/fragment_full_users" >
+        tools:layout="@layout/fragment_user_profile" >
         <action
             android:id="@+id/action_fullUsersFragment_self"
-            app:destination="@id/fullUsersFragment" />
+            app:destination="@id/userProfileFragment" />
         <action
             android:id="@+id/action_fullUsersFragment_to_onlineMiniaturesFragment"
             app:destination="@id/onlineMiniaturesFragment" />

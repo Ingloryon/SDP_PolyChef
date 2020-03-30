@@ -1,7 +1,6 @@
 package ch.epfl.polychef.pages;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -97,7 +96,7 @@ public class HomePage extends ConnectedActivity {
         profileImage.setOnClickListener((view) -> {
             setCurrentItemChecked(false);
             currentItem = null;
-            navController.navigate(R.id.fullUsersFragment);
+            navController.navigate(R.id.userProfileFragment);
             drawer.closeDrawer(GravityCompat.START, true);
         });
     }
@@ -124,7 +123,7 @@ public class HomePage extends ConnectedActivity {
 
         int destination = navController.getCurrentDestination().getId();
 
-        if(destination == R.id.fullUsersFragment ||
+        if(destination == R.id.userProfileFragment ||
                 destination == R.id.fullRecipeFragment) {
 
             currentItem = null;

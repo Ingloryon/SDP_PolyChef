@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,13 +13,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.ConnectedActivity;
 
 
-public class FullUsersFragment extends Fragment {
+public class UserProfileFragment extends Fragment {
 
-    public FullUsersFragment() {
+    public UserProfileFragment() {
         // Required empty public constructor
     }
 
@@ -35,7 +33,7 @@ public class FullUsersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_full_users, container, false);
+        return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
 
     @Override
