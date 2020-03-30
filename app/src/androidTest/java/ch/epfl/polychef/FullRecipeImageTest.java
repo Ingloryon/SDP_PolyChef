@@ -21,6 +21,7 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
@@ -63,7 +64,7 @@ public class FullRecipeImageTest {
     @Test
     public void canShowPicturesOnFullRecipe() {
         setUp("test_2");
-        onView(withId(R.id.recipeImages)).check(matches(isDisplayed()));
+        onView(withId(R.id.recipeImages)).perform(scrollTo()).check(matches(isDisplayed()));
         CarouselView carouselView = intentsTestRule.getActivity().findViewById(R.id.recipeImages);
         assertThat(carouselView.getCurrentItem(), is(0));
         onView(withId(R.id.recipeImages)).perform(swipeLeft());
@@ -77,7 +78,7 @@ public class FullRecipeImageTest {
     @Test
     public void callOnFailureIfImageDoesNotExistsShowToast() {
         setUp("other_not_found_string");
-        onView(withId(R.id.recipeImages)).check(matches(isDisplayed()));
+        onView(withId(R.id.recipeImages)).perform(scrollTo()).check(matches(isDisplayed()));
         onView(withText(R.string.errorImageRetrieve))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
