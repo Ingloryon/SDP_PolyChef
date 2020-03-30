@@ -40,22 +40,23 @@ public class FullRecipeImageTest {
     private void setUp(String path) {
         Recipe recipe = new RecipeBuilder()
                 .setName("test")
-                .setRecipeDifficulty(Recipe.Difficulty.EASY)
-                .addInstruction("test1instruction").setPersonNumber(4)
-                .setEstimatedCookingTime(30)
-                .setEstimatedPreparationTime(30)
+                .addInstruction("test instruction")
+                .setPersonNumber(4)
+                .setEstimatedCookingTime(35)
+                .setEstimatedPreparationTime(40)
                 .addIngredient("test", 1.0, Ingredient.Unit.CUP)
                 .setMiniatureFromPath("test_path")
                 .addPicturePath("test_1")
                 .addPicturePath(path)
+                .setRecipeDifficulty(Recipe.Difficulty.EASY)
                 .build();
-        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Recipe", recipe);
         bundle.putInt("fragmentID", R.id.nav_entry_fragment);
-        Fragment mFragment = new FragmentTest();
-        mFragment.setArguments(bundle);
-        transaction.replace(R.id.nav_entry_fragment, mFragment).addToBackStack(null);
+        Fragment fragment = new FragmentTest();
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_entry_fragment, fragment).addToBackStack(null);
         transaction.commit();
     }
 
