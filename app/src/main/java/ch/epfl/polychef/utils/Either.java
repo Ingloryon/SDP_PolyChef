@@ -7,6 +7,8 @@ import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
+import ch.epfl.polychef.Preconditions;
+
 /**
  * Class that represent either {@code left}, {@code right} or is {@code none}.
  * <p>This class does not use java's {@code Optional} internally because it is intended to be uploaded to Firebase and Optionals cannot be serialized</p>
@@ -29,36 +31,86 @@ public final class Either<L, R> implements Serializable {
         this.right = right;
     }
 
+    /**
+     * Create a new {@code Either} defined left with value {@code val}.
+     *
+     * @param val the left value
+     * @param <L> type of the left part of the {@code Either}
+     * @param <R> type of the right part of the {@code Either}
+     * @return the new left defined {@code Either}
+     */
     public static <L, R> Either<L, R> left(@NonNull L val) {
+        Preconditions.checkArgument(val != null, "Left value cannot be null");
         return new Either<L, R>(val, null);
     }
 
+    /**
+     * Create a new {@code Either} defined right with value {@code val}.
+     *
+     * @param val the right value
+     * @param <L> type of the left part of the {@code Either}
+     * @param <R> type of the right part of the {@code Either}
+     * @return the new right defined {@code Either}
+     */
     public static <L, R> Either<L, R> right(@NonNull R val) {
+        Preconditions.checkArgument(val != null, "Right value cannot be null");
         return new Either<L, R>(null, val);
     }
 
+    /**
+     * Create a new {@code Either} defined as a none (not left nor right).
+     *
+     * @param <L> type of the left part of the {@code Either}
+     * @param <R> type of the right part of the {@code Either}
+     * @return the new none defined {@code Either}
+     */
     public static <L, R> Either<L, R> none() {
         return new Either<L, R>(null, null);
     }
 
+    /**
+     * Return whether this is a left {@code Either}.
+     *
+     * @return whether this is a left {@code Either}
+     */
     @Exclude
     public boolean isLeft() {
         return left != null;
     }
 
+    /**
+     * Return the left {@code Either} or null if it not a left {@¢ode Either}.
+     *
+     * @return the left {@code Either}
+     */
     public L getLeft() {
         return left;
     }
 
+    /**
+     * Return whether this is a right {@code Either}.
+     *
+     * @return whether this is a right {@code Either}
+     */
     @Exclude
     public boolean isRight() {
         return right != null;
     }
 
+    /**
+     * Return the right {@code Either} or null if it not a right {@¢ode Either}.
+     *
+     * @return the right {@code Either}
+     */
     public R getRight() {
         return right;
     }
 
+    /**
+     * Return whether this is a none {@code Either}.
+     *
+     * @return whether this is a none {@code Either}
+     */
     @Exclude
     public boolean isNone() {
         return !isLeft() && !isRight();
@@ -66,13 +118,13 @@ public final class Either<L, R> implements Serializable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if(!(obj instanceof Either)) {
+        if (!(obj instanceof Either)) {
             return false;
         }
-        Either other = (Either)obj;
-        if(this.isRight() && other.isRight()) {
+        Either other = (Either) obj;
+        if (this.isRight() && other.isRight()) {
             return this.getRight().equals(other.getRight());
-        } else if(this.isLeft() && other.isRight()) {
+        } else if (this.isLeft() && other.isLeft()) {
             return this.getLeft().equals(other.getLeft());
         } else {
             return this.isNone() && other.isNone();
@@ -82,6 +134,6 @@ public final class Either<L, R> implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "Either: defined for: " + (isNone() ? "none" : isRight() ? "right" : "left") + " value: " + (isRight() ? getRight() : getLeft());
+        return "Either: " + (isNone() ? "none" : isRight() ? "right" : "left") + (isNone() ? "" : " value: " + (isRight() ? getRight() : getLeft()));
     }
 }

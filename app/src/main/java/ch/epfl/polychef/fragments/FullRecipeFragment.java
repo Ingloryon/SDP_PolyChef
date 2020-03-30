@@ -28,7 +28,7 @@ import java.util.List;
 public final class FullRecipeFragment extends Fragment implements CallHandler<byte[]> {
     private Recipe currentRecipe;
     private static final String NEW_LINE = System.lineSeparator();
-    private final List<Bitmap> images_to_display = new ArrayList<>();
+    private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
 
     /**
@@ -65,16 +65,16 @@ public final class FullRecipeFragment extends Fragment implements CallHandler<by
      */
     private void displayImage(View view) {
         carouselView = view.findViewById(R.id.recipeImages);
-        carouselView.setPageCount(images_to_display.size());
-        carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(images_to_display.get(position)));
+        carouselView.setPageCount(imagesToDisplay.size());
+        carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(imagesToDisplay.get(position)));
         ImageStorage imageStorage = new ImageStorage();
         Either<String, Integer> miniatureMeta = currentRecipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
-            images_to_display.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
-            carouselView.setPageCount(images_to_display.size());
+            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
+            carouselView.setPageCount(imagesToDisplay.size());
         } else if(miniatureMeta.isRight()) {
-            images_to_display.add(BitmapFactory.decodeResource(getActivity().getResources(), miniatureMeta.getRight()));
-            carouselView.setPageCount(images_to_display.size());
+            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), miniatureMeta.getRight()));
+            carouselView.setPageCount(imagesToDisplay.size());
         } else {
             imageStorage.getImage(miniatureMeta.getLeft(), this);
         }
@@ -157,8 +157,8 @@ public final class FullRecipeFragment extends Fragment implements CallHandler<by
 
     @Override
     public void onSuccess(byte[] data) {
-        images_to_display.add(BitmapFactory.decodeByteArray(data, 0, data.length));
-        carouselView.setPageCount(images_to_display.size());
+        imagesToDisplay.add(BitmapFactory.decodeByteArray(data, 0, data.length));
+        carouselView.setPageCount(imagesToDisplay.size());
     }
 
     @Override
