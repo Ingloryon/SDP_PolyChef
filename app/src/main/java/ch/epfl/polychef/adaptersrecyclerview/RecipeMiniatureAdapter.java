@@ -110,7 +110,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
     @Override
     public void onFailure() {
-        Toast.makeText(mainContext, mainContext.getString(R.string.error_image_retrieve), Toast.LENGTH_LONG).show();
+        Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
     }
 
     /**

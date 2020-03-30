@@ -41,7 +41,7 @@
         <item>Very hard</item>
     </string-array>
 
-    <string name="error_image_retrieve">Error while retrieving the picture</string>
+    <string name="errorImageRetrieve">Error while retrieving the picture</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

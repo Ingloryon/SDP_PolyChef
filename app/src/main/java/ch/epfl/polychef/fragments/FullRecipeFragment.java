@@ -25,7 +25,7 @@ import ch.epfl.polychef.utils.Either;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FullRecipeFragment extends Fragment implements CallHandler<byte[]> {
+public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> {
     private Recipe currentRecipe;
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
@@ -67,7 +67,7 @@ public final class FullRecipeFragment extends Fragment implements CallHandler<by
         carouselView = view.findViewById(R.id.recipeImages);
         carouselView.setPageCount(imagesToDisplay.size());
         carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(imagesToDisplay.get(position)));
-        ImageStorage imageStorage = new ImageStorage();
+        ImageStorage imageStorage = getImageStorage();
         Either<String, Integer> miniatureMeta = currentRecipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
             imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
@@ -163,6 +163,10 @@ public final class FullRecipeFragment extends Fragment implements CallHandler<by
 
     @Override
     public void onFailure() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.error_image_retrieve), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+    }
+
+    public ImageStorage getImageStorage() {
+        return new ImageStorage();
     }
 }
