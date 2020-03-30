@@ -122,13 +122,12 @@ public final class Either<L, R> implements Serializable {
             return false;
         }
         Either other = (Either) obj;
-        if (this.isRight() && other.isRight()) {
-            return this.getRight().equals(other.getRight());
-        } else if (this.isLeft() && other.isLeft()) {
-            return this.getLeft().equals(other.getLeft());
-        } else {
-            return this.isNone() && other.isNone();
-        }
+        boolean rightEqual = this.isRight() && other.isRight()
+                && this.getRight().equals(other.getRight());
+        boolean leftEqual = this.isLeft() && other.isLeft()
+                && this.getLeft().equals(other.getLeft());
+        boolean noneEqual = this.isNone() && other.isNone();
+        return rightEqual || leftEqual || noneEqual;
     }
 
     @NonNull
