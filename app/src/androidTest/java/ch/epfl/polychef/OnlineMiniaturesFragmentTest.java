@@ -8,6 +8,8 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
+
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import com.google.firebase.auth.FirebaseUser;
@@ -133,7 +135,7 @@ public class OnlineMiniaturesFragmentTest {
         onView(withId(R.id.miniaturesOnlineList))
                 .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
-        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(scrollTo(), ViewActions.swipeUp());
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
