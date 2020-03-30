@@ -79,7 +79,7 @@ public final class Either<L, R> implements Serializable {
     }
 
     /**
-     * Return the left {@code Either} or null if it not a left {@¢ode Either}.
+     * Return the left {@code Either} or null if it not a left {@code Either}.
      *
      * @return the left {@code Either}
      */
@@ -98,7 +98,7 @@ public final class Either<L, R> implements Serializable {
     }
 
     /**
-     * Return the right {@code Either} or null if it not a right {@¢ode Either}.
+     * Return the right {@code Either} or null if it not a right {@code Either}.
      *
      * @return the right {@code Either}
      */

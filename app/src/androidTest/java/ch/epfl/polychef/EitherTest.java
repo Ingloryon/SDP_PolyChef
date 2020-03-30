@@ -48,10 +48,10 @@ public class EitherTest {
     public void notEqualityForDifferentType() {
         Either<String, Integer> e1 = Either.left("test");
         Either<Integer, Integer> e2 = Either.left(1);
-        Either<String, Integer> e3 = Either.right(1);
-        Either<String, Integer> e4 = Either.none();
         assertTrue(!e1.equals(e2));
+        Either<String, Integer> e3 = Either.right(1);
         assertTrue(!e1.equals(e3));
+        Either<String, Integer> e4 = Either.none();
         assertTrue(!e1.equals(e4));
         assertTrue(!e2.equals(e3));
         assertTrue(!e2.equals(e4));
@@ -61,12 +61,12 @@ public class EitherTest {
     @Test
     public void toStringProduceRightString() {
         Either<String, Integer> e1 = Either.left("test");
-        Either<Integer, Integer> e2 = Either.left(1);
-        Either<String, Integer> e3 = Either.right(1);
-        Either<String, Integer> e4 = Either.none();
         assertThat(e1.toString(), equalTo("Either: left value: test"));
+        Either<Integer, Integer> e2 = Either.left(1);
         assertThat(e2.toString(), equalTo("Either: left value: 1"));
+        Either<String, Integer> e3 = Either.right(1);
         assertThat(e3.toString(), equalTo("Either: right value: 1"));
+        Either<String, Integer> e4 = Either.none();
         assertThat(e4.toString(), equalTo("Either: none"));
     }
 }
