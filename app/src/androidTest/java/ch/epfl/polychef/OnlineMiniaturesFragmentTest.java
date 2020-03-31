@@ -116,7 +116,7 @@ public class OnlineMiniaturesFragmentTest {
         fakeRecipeStorage.addRecipe(testRecipe1);
         initActivity();
         wait(1000);
-        onView(withId(R.id.miniaturesOnlineList))
+        onView(withId(R.id.miniaturesList))
                 .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
         assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
@@ -130,10 +130,10 @@ public class OnlineMiniaturesFragmentTest {
         fakeRecipeStorage.addRecipe(testRecipe1);
         initActivity();
         wait(1000);
-        onView(withId(R.id.miniaturesOnlineList))
+        onView(withId(R.id.miniaturesList))
                 .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
-        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+        onView(ViewMatchers.withId(R.id.miniaturesList)).perform(ViewActions.swipeUp());
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
@@ -157,19 +157,19 @@ public class OnlineMiniaturesFragmentTest {
 //
 //        initActivity();
 //        wait(1000);
-//        onView(withId(R.id.miniaturesOnlineList))
+//        onView(withId(R.id.miniaturesList))
 //                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
 //        wait(4000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        onView(ViewMatchers.withId(R.id.miniaturesList)).perform(ViewActions.swipeUp());
 //        wait(4000);
-//        onView(withId(R.id.miniaturesOnlineList))
+//        onView(withId(R.id.miniaturesList))
 //                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
 //        wait(4000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        onView(ViewMatchers.withId(R.id.miniaturesList)).perform(ViewActions.swipeUp());
 //        wait(1000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        onView(ViewMatchers.withId(R.id.miniaturesList)).perform(ViewActions.swipeUp());
 //        wait(1000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+//        onView(ViewMatchers.withId(R.id.miniaturesList)).perform(ViewActions.swipeUp());
 //        wait(1000);
 //        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2 + 1, ((FakeRecipeStorage) fakeRecipeStorage).getRecipeList().size());
 //    }
@@ -183,10 +183,10 @@ public class OnlineMiniaturesFragmentTest {
         fakeRecipeStorage.addRecipe(testRecipe1);
         initActivity();
         wait(1000);
-        onView(withId(R.id.miniaturesOnlineList))
+        onView(withId(R.id.miniaturesList))
                 .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
-        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
+        onView(ViewMatchers.withId(R.id.miniaturesList)).perform(ViewActions.swipeUp());
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }

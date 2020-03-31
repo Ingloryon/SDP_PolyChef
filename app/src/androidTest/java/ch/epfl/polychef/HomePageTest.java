@@ -67,7 +67,7 @@ public class HomePageTest {
 
     @Test
     public void onClickHomeGoesToHome() {
-        testNavButton(R.id.nav_home, R.id.onlineMiniaturesFragment);
+        testNavButton(R.id.nav_home, R.id.miniatureFragment);
     }
 
     @Test

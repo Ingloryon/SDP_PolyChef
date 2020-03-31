@@ -1,7 +1,9 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,29 +12,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
+import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 
-public final class OfflineMiniaturesFragment extends Fragment {
-    private RecyclerView offlineRecyclerView;
+public final class OfflineMiniaturesFragment extends MiniaturesFragment<EntryPage> {
+    //private RecyclerView offlineRecyclerView;
 
     public OfflineMiniaturesFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_miniatures_offline, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        recipes = OfflineRecipes.getInstance().getOfflineRecipes();
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
-        // Get the fragmentID of the container which has this fragment in it
-        Bundle bundle = getArguments();
-        int fragmentID = bundle.getInt("fragmentID");
+    @Override
+    public void updateContent(RecyclerView recycler, int newState) {
 
-        // Instantiate the recyclerView with the adapter and the layout manager
-        offlineRecyclerView = view.findViewById(R.id.miniaturesOfflineList);
-        offlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        offlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), OfflineRecipes.getInstance().getOfflineRecipes(), offlineRecyclerView, fragmentID));
+    }
 
-        return view;
+    @Override
+    public void initialiseContent() {
+
+    }
+
+    @Override
+    public void attachPage(Context context) {
+        if(context instanceof EntryPage){
+            hostActivity = (EntryPage) context;
+        } else {
+            super.attachPage(context);
+        }
     }
 }
