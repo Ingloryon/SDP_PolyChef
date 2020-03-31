@@ -40,6 +40,7 @@ public class HomePage extends ConnectedActivity {
     private RecipeStorage recipeStorage = new RecipeStorage();
 
     private User user;
+    private User userToDisplay;
     private String userKey;
 
     public static final String LOG_OUT = "Log out";
@@ -96,9 +97,14 @@ public class HomePage extends ConnectedActivity {
         profileImage.setOnClickListener((view) -> {
             setCurrentItemChecked(false);
             currentItem = null;
+            userToDisplay = user;
             navController.navigate(R.id.userProfileFragment);
             drawer.closeDrawer(GravityCompat.START, true);
         });
+    }
+
+    public User getUserToDisplay() {
+        return userToDisplay;
     }
 
     @Override

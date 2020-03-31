@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.users.ConnectedActivity;
+import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
 
 
 public class UserProfileFragment extends Fragment {
@@ -22,8 +25,11 @@ public class UserProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private ConnectedActivity hostActivity;
+    private HomePage hostActivity;  //TODO use ConnectedActivity if possible
+    private RecipeStorage recipeStorage;
+    private User userToDisplay;
 
+    private RecyclerView onlineRecyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,17 +46,19 @@ public class UserProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //TODO use .getUsername() and .getUserEmail() once the refactor has been done
-        ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(hostActivity.getUser().getEmail());
-        ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(hostActivity.getUser().getDisplayName());
+        userToDisplay = hostActivity.getUserToDisplay();
+
+        ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
+        ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if(context instanceof ConnectedActivity){
-            hostActivity = (ConnectedActivity) context;
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+            recipeStorage = hostActivity.getRecipeStorage();
         } else {
             throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
         }
