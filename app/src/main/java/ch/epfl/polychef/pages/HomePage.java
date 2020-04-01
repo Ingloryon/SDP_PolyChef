@@ -18,13 +18,7 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class HomePage extends ConnectedActivity {

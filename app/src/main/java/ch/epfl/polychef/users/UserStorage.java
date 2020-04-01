@@ -105,7 +105,12 @@ public class UserStorage {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    private FirebaseDatabase getDatabase(){
+    /**
+     * Get the current instance of the {@code FirebaseDatabase}.
+     *
+     * @return the current instance of the {@code FirebaseDatabase}
+     */
+    public FirebaseDatabase getDatabase() {
         return FirebaseDatabase.getInstance();
     }
 }
