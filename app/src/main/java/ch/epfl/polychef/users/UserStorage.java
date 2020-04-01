@@ -21,7 +21,8 @@ public class UserStorage {
         return INSTANCE;
     }
 
-    private UserStorage(){}
+    private UserStorage(){
+    }
 
     public void initializeUserFromAuthenticatedUser() {
         String email=getAuthenticatedUserEmail();
