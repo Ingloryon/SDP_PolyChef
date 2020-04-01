@@ -101,7 +101,7 @@ public class UserStorage {
         return getAuthenticatedUser().getDisplayName();
     }
 
-    private FirebaseUser getAuthenticatedUser() {
+    public FirebaseUser getAuthenticatedUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 

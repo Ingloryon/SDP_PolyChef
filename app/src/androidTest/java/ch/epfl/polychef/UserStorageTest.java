@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class UserStorageTest {
-
 
     private FirebaseDatabase mockDatabase;
     private FirebaseUser mockFirebaseUser;
@@ -74,13 +74,19 @@ public class UserStorageTest {
         when(mockFirebaseUser.getDisplayName()).thenReturn(mockUserName);
 
         when(fakeUserStorage.getDatabase()).thenReturn(mockDatabase);
+        when(fakeUserStorage.getAuthenticatedUser()).thenReturn(mockFirebaseUser);
+    }
+
+
+    @After
+    public void initializeFakeUserStorage() {
+        fakeUserStorage.initializeUserFromAuthenticatedUser();
     }
 
     @Test
     public void testMethodGetInstanceExist(){
         UserStorage.getInstance();
     }
-
 
     @Test
     public void newUserTest() {
