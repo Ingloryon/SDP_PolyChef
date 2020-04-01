@@ -15,23 +15,28 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.Preconditions;
-import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.UserStorage;
 
 /**
  * Uploader and downloader of {@code Recipe} from the storage.
  */
 public class RecipeStorage implements Serializable {
+
+    private static RecipeStorage INSTANCE=new RecipeStorage();
+
     private static final String TAG = "Firebase";
-    public int id;
+    private int id;
+
+
+    public static RecipeStorage getInstance(){return INSTANCE;}
+
+    private RecipeStorage(){
+    }
 
     /**
      * Add a new {@code Recipe} to the storage.

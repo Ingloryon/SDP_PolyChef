@@ -34,8 +34,6 @@ public class HomePage extends ConnectedActivity {
     private NavController navController;
     private MenuItem currentItem;
 
-    private RecipeStorage recipeStorage = new RecipeStorage();
-
     public static final String LOG_OUT = "Log out";
     private static final String TAG = "HomePage-TAG";
 
@@ -137,6 +135,6 @@ public class HomePage extends ConnectedActivity {
     }
 
     protected RecipeStorage getRecipeStorage(){
-        return recipeStorage;
+        return RecipeStorage.getInstance();
     }
 }

@@ -77,8 +77,6 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
-    private RecipeStorage recipeStorage = new RecipeStorage();
-
     /**
      * Required empty public constructor.
      */
@@ -284,7 +282,7 @@ public class PostRecipeFragment extends Fragment {
             for(int i = 1; i <= currentMealPictures.size(); ++i) {
                 imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
             }
-            recipeStorage.addRecipe(postedRecipe);
+            RecipeStorage.getInstance().addRecipe(postedRecipe);
             return true;
         }
     }
