@@ -74,58 +74,7 @@ public class OnlineMiniaturesFragmentTest {
 
         recipesInDatabase = new ArrayList<Recipe>();
 
-        when(fakeRecipeStorage.getFirebaseDatabase()).thenReturn(firebaseInstance);
-
-        doAnswer(invocation -> {
-            recipesInDatabase.add(invocation.getArgument(0));
-            return null;
-        }).when(fakeRecipeStorage).addRecipe(any(Recipe.class));
-
-        doAnswer(invocation -> {
-            int id=invocation.getArgument(0);
-            CallHandler<Recipe> ch = invocation.getArgument(1);
-            int actualIndex = getIndexInArrayList(id);
-            if(!(actualIndex >= 0 && actualIndex < recipesInDatabase.size())){
-                ch.onFailure();
-            }
-            ch.onSuccess(recipesInDatabase.get(actualIndex));
-            return null;
-        }).when(fakeRecipeStorage).readRecipe(any(Integer.class),any(CallHandler.class));
-
-
-        doAnswer(invocation -> {
-            int numberOfRecipes=invocation.getArgument(0);
-            int fromId=invocation.getArgument(1);
-            CallHandler<List<Recipe>> caller = invocation.getArgument(2);
-
-            int actualFromIndex = getIndexInArrayList(fromId);
-            if(actualFromIndex >= recipesInDatabase.size()){
-                return null;
-            }
-            caller.onSuccess(recipesInDatabase.subList(actualFromIndex, Math.min(recipesInDatabase.size(), actualFromIndex + numberOfRecipes + 1)));
-
-            return null;
-        }).when(fakeRecipeStorage).getNRecipes(any(Integer.class),any(Integer.class),any(CallHandler.class));
-
-
-        doAnswer(invocation -> {
-            int numberOfRecipes=invocation.getArgument(0);
-            int fromId=invocation.getArgument(1);
-            CallNotifier<Recipe> caller = invocation.getArgument(2);
-
-            int actualFromIndex = getIndexInArrayList(fromId);
-            if(actualFromIndex >= recipesInDatabase.size()){
-                return null;
-            }
-            int maxIndexWithData = Math.min(recipesInDatabase.size() - 1, actualFromIndex + numberOfRecipes - 1);
-            for(int i = actualFromIndex; i <= maxIndexWithData; i ++){
-                caller.notify(recipesInDatabase.get(i));
-            }
-
-            return null;
-        }).when(fakeRecipeStorage).getNRecipesOneByOne(any(Integer.class),any(Integer.class),any(CallNotifier.class));
-
-
+        initializeMockRecipeStorage();
     }
 
     public void initActivity() {
@@ -285,5 +234,53 @@ public class OnlineMiniaturesFragmentTest {
 
     private int getIndexInArrayList(int indexInDatabase) {
         return indexInDatabase - 1;
+    }
+
+    private void initializeMockRecipeStorage(){
+        when(fakeRecipeStorage.getFirebaseDatabase()).thenReturn(firebaseInstance);
+
+        doAnswer(invocation -> {
+            recipesInDatabase.add(invocation.getArgument(0));
+            return null;
+        }).when(fakeRecipeStorage).addRecipe(any(Recipe.class));
+
+        doAnswer(invocation -> {
+            int id=invocation.getArgument(0);
+            CallHandler<Recipe> ch = invocation.getArgument(1);
+            int actualIndex = getIndexInArrayList(id);
+            if(!(actualIndex >= 0 && actualIndex < recipesInDatabase.size())){
+                ch.onFailure();
+            }
+            ch.onSuccess(recipesInDatabase.get(actualIndex));
+            return null;
+        }).when(fakeRecipeStorage).readRecipe(any(Integer.class),any(CallHandler.class));
+
+        doAnswer(invocation -> {
+            int numberOfRecipes=invocation.getArgument(0);
+            int fromId=invocation.getArgument(1);
+            CallHandler<List<Recipe>> caller = invocation.getArgument(2);
+
+            int actualFromIndex = getIndexInArrayList(fromId);
+            if(actualFromIndex < recipesInDatabase.size()){
+                caller.onSuccess(recipesInDatabase.subList(actualFromIndex, Math.min(recipesInDatabase.size(), actualFromIndex + numberOfRecipes + 1)));
+            }
+            return null;
+        }).when(fakeRecipeStorage).getNRecipes(any(Integer.class),any(Integer.class),any(CallHandler.class));
+
+
+        doAnswer(invocation -> {
+            int numberOfRecipes=invocation.getArgument(0);
+            int fromId=invocation.getArgument(1);
+            CallNotifier<Recipe> caller = invocation.getArgument(2);
+
+            int actualFromIndex = getIndexInArrayList(fromId);
+            if(actualFromIndex < recipesInDatabase.size()){
+                int maxIndexWithData = Math.min(recipesInDatabase.size() - 1, actualFromIndex + numberOfRecipes - 1);
+                for (int i = actualFromIndex; i <= maxIndexWithData; i++) {
+                    caller.notify(recipesInDatabase.get(i));
+                }
+            }
+            return null;
+        }).when(fakeRecipeStorage).getNRecipesOneByOne(any(Integer.class),any(Integer.class),any(CallNotifier.class));
     }
 }
