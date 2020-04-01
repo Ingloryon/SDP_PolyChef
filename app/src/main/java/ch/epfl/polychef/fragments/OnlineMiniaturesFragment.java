@@ -135,13 +135,15 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
 
     private void searchForRecipe(int id){
         FirebaseDatabase database=recipeStorage.getFirebaseDatabase();
+        dynamicRecipeList.clear();
+        onlineRecyclerView.getAdapter().notifyDataSetChanged();
         for(int i=1;i<=id;i++){
-            DatabaseReference nameRef = database.getReference("recipe").child(Integer.toString(i)).child("name");
+            DatabaseReference nameRef = database.getReference("recipe").child(Integer.toString(i));
             nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // This method is called once with the initial value
-                    String value = dataSnapshot.getValue(String.class);
+                    Recipe value = dataSnapshot.getValue(Recipe.class);
                     compareName(value);
                 }
 
@@ -154,12 +156,13 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         }
     }
 
-    private void compareName(String value){
+    private void compareName(Recipe value){
         String searchInput=((EditText)getView().findViewById(R.id.searchBar)).getText().toString();
         searchInput=searchInput.toLowerCase();
-        value=value.toLowerCase();
-        if(searchInput.contains(value) || value.contains(searchInput)){
-            Log.w(TAG,value+" is a correct search");
+        String name=value.getName().toLowerCase();
+        if(searchInput.contains(name) || name.contains(searchInput)){
+            dynamicRecipeList.add(value);
+            onlineRecyclerView.getAdapter().notifyDataSetChanged();
         }
 
     }
