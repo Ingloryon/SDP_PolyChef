@@ -20,6 +20,7 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.ConnectedActivity;
 
 public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<Recipe> {
 
