@@ -39,7 +39,6 @@ public final class RecipeInputParsing {
             allMatches.add(mat.group());
         }
         if(allMatches.size()==0){
-            ingredients.clear();
             allMatches.clear();
             errorLogs.add("Ingredients: There should be 3 arguments entered as {a,b,c}");
             return false;
@@ -56,7 +55,6 @@ public final class RecipeInputParsing {
                 }
             }
             if (unit == null) {
-                ingredients.clear();
                 allMatches.clear();
                 errorLogs.add("Ingredients: The entered unit is not part of the possible units " + Arrays.asList(Ingredient.Unit.values()) + ".");
                 return false;
@@ -66,6 +64,7 @@ public final class RecipeInputParsing {
                 ingredients.add(new Ingredient(name, quantity, unit));
             } catch (IllegalArgumentException e){
                 errorLogs.add("Ingredients: " + e.toString().substring(35));
+                return false;
             }
         }
         return true;

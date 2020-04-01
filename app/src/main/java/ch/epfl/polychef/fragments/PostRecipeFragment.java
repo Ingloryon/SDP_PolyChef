@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -175,8 +176,11 @@ public class PostRecipeFragment extends Fragment {
     private boolean buildRecipeAndPostToFirebase() {
         RecipeBuilder recipeBuilder = new RecipeBuilder();
 
+        Log.w(tag, "I get in the method !");
+
         // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
+            Log.w(tag, "I get in false condi !");
             return false;
         } else {
             if(currentMiniature != null) {
