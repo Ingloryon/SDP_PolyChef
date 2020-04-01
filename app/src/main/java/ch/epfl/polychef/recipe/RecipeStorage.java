@@ -32,7 +32,6 @@ public class RecipeStorage implements Serializable {
     private static final String TAG = "Firebase";
     private int id;
 
-
     public static RecipeStorage getInstance(){return INSTANCE;}
 
     private RecipeStorage(){
@@ -229,7 +228,7 @@ public class RecipeStorage implements Serializable {
      *
      * @return the current instance of the {@code FirebaseDatabase}
      */
-    protected FirebaseDatabase getFirebaseDatabase() {
+    public FirebaseDatabase getFirebaseDatabase() {
         return FirebaseDatabase.getInstance();
     }
 
