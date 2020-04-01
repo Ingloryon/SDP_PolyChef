@@ -47,8 +47,8 @@ public class PostRecipeFragment extends Fragment {
     private final int titleMinChar = 3;
     private final int maxPersNb = 100;
     private String name;
-    private List<String> recipeInstructions;
-    private List<Ingredient> ingredients;
+    private List<String> recipeInstructions = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
@@ -176,11 +176,8 @@ public class PostRecipeFragment extends Fragment {
     private boolean buildRecipeAndPostToFirebase() {
         RecipeBuilder recipeBuilder = new RecipeBuilder();
 
-        Log.w(tag, "I get in the method !");
-
         // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
-            Log.w(tag, "I get in false condi !");
             return false;
         } else {
             if(currentMiniature != null) {
