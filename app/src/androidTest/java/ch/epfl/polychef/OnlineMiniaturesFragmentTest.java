@@ -32,6 +32,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -207,29 +208,15 @@ public class OnlineMiniaturesFragmentTest {
             return Mockito.mock(FirebaseUser.class);
         }
 
+
         @Override
-        public RecipeStorage getRecipeStorage(){
+        protected UserStorage getUserStorage(){
+            return Mockito.mock(UserStorage.class);
+        }
+
+        @Override
+        protected RecipeStorage getRecipeStorage(){
             return fakeRecipeStorage;
-        }
-
-        @Override
-        protected void retrieveUserInfo(String email) {
-
-        }
-
-        @Override
-        protected void newUser(String email) {
-
-        }
-
-        @Override
-        protected void oldUser(DataSnapshot snap) {
-
-        }
-
-        @Override
-        protected void updateUserInfo() {
-
         }
     }
 

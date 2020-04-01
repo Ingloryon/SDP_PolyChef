@@ -224,7 +224,7 @@ public class RecipeStorage implements Serializable {
      *
      * @return the current instance of the {@code FirebaseDatabase}
      */
-    public FirebaseDatabase getFirebaseDatabase() {
+    protected FirebaseDatabase getFirebaseDatabase() {
         return FirebaseDatabase.getInstance();
     }
 

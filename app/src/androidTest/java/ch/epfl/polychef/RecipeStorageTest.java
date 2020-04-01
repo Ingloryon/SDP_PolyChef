@@ -271,7 +271,7 @@ public class RecipeStorageTest {
 
     private class FakeRecipeStorage extends RecipeStorage {
         @Override
-        public FirebaseDatabase getFirebaseDatabase() {
+        protected FirebaseDatabase getFirebaseDatabase() {
             return firebaseDatabase;
         }
     }

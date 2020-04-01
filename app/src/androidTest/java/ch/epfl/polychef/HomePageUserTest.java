@@ -19,17 +19,17 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -71,9 +71,14 @@ public class HomePageUserTest {
         }
 
         @Override
-        public FirebaseDatabase getDatabase() {
-            return mockDatabase;
+        protected UserStorage getUserStorage(){
+            return Mockito.mock(UserStorage.class);
         }
+
+        /*@Override
+        /*public FirebaseDatabase getDatabase() {
+            return mockDatabase;
+        }*/
     }
 
     @Before
@@ -159,7 +164,7 @@ public class HomePageUserTest {
     }
 
     @Test
-    public void oldUserTest(){
+    public void existingUserTest(){
 
         onDataChangeCallBack();
 

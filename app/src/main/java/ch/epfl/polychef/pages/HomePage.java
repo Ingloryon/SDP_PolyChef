@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
 public class HomePage extends ConnectedActivity {
 
@@ -35,9 +36,6 @@ public class HomePage extends ConnectedActivity {
 
     private RecipeStorage recipeStorage = new RecipeStorage();
 
-    private User user;
-    private String userKey;
-
     public static final String LOG_OUT = "Log out";
     private static final String TAG = "HomePage-TAG";
 
@@ -46,8 +44,7 @@ public class HomePage extends ConnectedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        String userEmail = getUserEmail();
-        retrieveUserInfo(userEmail);
+        getUserStorage().initializeUserFromAuthenticatedUser();
 
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -80,7 +77,7 @@ public class HomePage extends ConnectedActivity {
         logButton.setText(LOG_OUT);
         logButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
-                updateUserInfo();
+                getUserStorage().updateUserInfo();
                 signOut();
             }
         });
@@ -135,84 +132,11 @@ public class HomePage extends ConnectedActivity {
         );
     }
 
-    public RecipeStorage getRecipeStorage(){
+    protected UserStorage getUserStorage(){
+        return UserStorage.getInstance();
+    }
+
+    protected RecipeStorage getRecipeStorage(){
         return recipeStorage;
-    }
-
-    protected void retrieveUserInfo(String email) {
-
-        getDatabase()
-                .getReference("users")
-                .orderByChild("email")
-                .equalTo(email)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        long childrenCount = dataSnapshot.getChildrenCount();
-
-                        if(childrenCount == 0) {
-                            newUser(email);
-
-                        } else if(childrenCount == 1) {
-                            for(DataSnapshot child: dataSnapshot.getChildren()){
-                                oldUser(child);
-                            }
-
-                        } else {
-                            throw new IllegalStateException("Inconsistent result: multiple user with the same email.");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        //TODO: Find good exception to throw
-                        throw new IllegalArgumentException("Query cancelled");
-                    }
-                });
-    }
-
-    protected void newUser(String email) {
-        String username = getUserName();
-        user = new User(email, username);
-
-        //TODO: Integrate with the Firebase class
-        //TODO: Add OnSuccess and OnFailure listener
-        DatabaseReference ref = getDatabase()
-                .getReference("users")
-                .push();
-
-        ref.setValue(user);
-
-        userKey = ref.getKey();
-    }
-
-    protected void oldUser(DataSnapshot snap){
-
-        if(snap.exists()){
-            user = snap.getValue(User.class);
-            userKey = snap.getKey();
-        } else {
-            //TODO: Find good exception to throw
-            throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");
-        }
-    }
-
-    protected void updateUserInfo(){
-        getDatabase()
-                .getReference("users/" + userKey)
-                .setValue(user);
-    }
-
-    protected String getUserEmail() {
-        return getUser().getEmail();
-    }
-
-    protected String getUserName() {
-        return getUser().getDisplayName();
-    }
-    
-    public FirebaseDatabase getDatabase(){
-        return FirebaseDatabase.getInstance();
     }
 }
