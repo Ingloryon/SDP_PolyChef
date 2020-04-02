@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -251,7 +250,6 @@ public class PostRecipeFragment extends Fragment {
                     .setEstimatedCookingTime(estimatedCookingTime)
                     .setPersonNumber(personNumber)
                     .setEstimatedPreparationTime(estimatedPreparationTime)
-                    .addPicturePath(R.drawable.ovenbakedsalmon)
                     .setRecipeDifficulty(recipeDifficulty);
             for (int i = 0; i < recipeInstructions.size(); i++) {
                 rb.addInstruction(recipeInstructions.get(i));
@@ -267,11 +265,11 @@ public class PostRecipeFragment extends Fragment {
         }
 
         if(currentMiniature != null) {
-            rb.setMiniaturePath(miniatureName);
+            rb.setMiniatureFromPath(miniatureName);
         }
-
+        String uuidPath = miniatureName + "_";
         for(int i = 1; i <= currentMealPictures.size(); ++i) {
-            rb.addPicturePath(i);
+            rb.addPicturePath(uuidPath + i);
         }
 
         postedRecipe = rb.build();

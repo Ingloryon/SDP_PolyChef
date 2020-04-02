@@ -1,6 +1,8 @@
 package ch.epfl.polychef.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,26 +10,32 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.utils.Either;
 
 import java.util.List;
 
 /**
  * This class is an adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView that is in the activity where the miniatures are shown.
  */
-public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> {
+public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> implements CallHandler<byte []> {
 
     private Context mainContext;
     private List<Recipe> recipeList;
     private RecyclerView recyclerview;
     private int fragmentContainerID;
+    private MiniatureViewHolder currentMinViewHolder = null;
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -71,8 +79,15 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         Recipe recipe = recipeList.get(position);
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
-        // TODO change to the selected image by the cooker who posted the recipe
-        holder.image.setImageResource(recipe.getPicturesNumbers().get(0));
+        Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
+        if(miniatureMeta.isNone()) {
+            holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
+        } else if(miniatureMeta.isRight()) {
+            holder.image.setImageResource(miniatureMeta.getRight());
+        } else {
+            currentMinViewHolder = holder;
+            new ImageStorage().getImage(miniatureMeta.getLeft(), this);
+        }
     }
 
     /**
@@ -83,6 +98,19 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     @Override
     public int getItemCount() {
         return recipeList.size();
+    }
+
+    @Override
+    public void onSuccess(byte[] data) {
+        if(currentMinViewHolder != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+            currentMinViewHolder.image.setImageBitmap(bmp);
+        }
+    }
+
+    @Override
+    public void onFailure() {
+        Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
     }
 
     /**
