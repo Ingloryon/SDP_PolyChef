@@ -35,7 +35,6 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
-    private RecipeStorage recipeStorage;
     private User userToDisplay;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
@@ -70,7 +69,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
                 if(!recyclerView.canScrollVertically(1)){
                     for(int i = currentIndex; i < Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size()); i++){
                         String stringUID = userToDisplay.getRecipes().get(i);
-                        recipeStorage.readRecipeFromUUID(stringUID, UserProfileFragment.this);
+                        hostActivity.getRecipeStorage().readRecipeFromUUID(stringUID, UserProfileFragment.this);
                     }
 
                     currentIndex = Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size());
@@ -91,7 +90,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         for(int i = 0; i < Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size()); i++){
             String stringUID = userToDisplay.getRecipes().get(i);
-            recipeStorage.readRecipeFromUUID(stringUID, this);
+            hostActivity.getRecipeStorage().readRecipeFromUUID(stringUID, this);
         }
         currentIndex += Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size());
     }
@@ -102,7 +101,6 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         if(context instanceof HomePage){
             hostActivity = (HomePage) context;
-            recipeStorage = RecipeStorage.getInstance();
         } else {
             throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
         }
