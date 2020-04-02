@@ -168,7 +168,7 @@ public final class Recipe implements Serializable, Cloneable {
      * @return List of picture path
      */
     public List<String> getPicturesPath() {
-        return Collections.unmodifiableList(picturesPath);
+        return picturesPath != null ? Collections.unmodifiableList(picturesPath) : new ArrayList<>();
     }
 
     /**
