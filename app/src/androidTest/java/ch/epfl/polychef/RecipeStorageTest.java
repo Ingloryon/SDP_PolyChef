@@ -263,24 +263,4 @@ public class RecipeStorageTest {
         when(databaseRecipeReference.startAt(""+start)).thenReturn(databaseRecipeReference);
         when(databaseRecipeReference.endAt(""+end)).thenReturn(query);
     }
-
-    /*private class FakeRecipeStorage extends RecipeStorage {
-
-        private RecipeStorage INSTANCE=RecipeStorage.getInstance();
-
-
-        public static FakeRecipeStorage getInstance(){return INSTANCE;}
-
-        private RecipeStorage(){
-        }
-
-        private FakeRecipeStorage(){
-            super();
-        }
-
-        @Override
-        protected FirebaseDatabase getFirebaseDatabase() {
-            return firebaseDatabase;
-        }
-    }*/
 }
