@@ -5,8 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,28 +13,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.SearchRecipe;
 
-public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<Recipe> {
+public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<Recipe>, CallHandler<List<Recipe>> {
 
     private static final String TAG = "OnlineMiniaturesFrag";
     private RecyclerView onlineRecyclerView;
 
-    private Button searchButton;
+    private SearchView searchView;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
@@ -84,15 +78,35 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        searchButton = getView().findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        searchView = getView().findViewById(R.id.searchBar);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                setSearchButton(view);
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                dynamicRecipeList.clear();
+                SearchRecipe.getInstance().searchForRecipe(query, OnlineMiniaturesFragment.this);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
             }
         });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                initFirstNRecipes();
+                return false;
+            }
+        });
+        initFirstNRecipes();
+    }
+
+    private void initFirstNRecipes() {
         // For now when we enter the page we load the offline recipes first
         // add a certain number of recipes at this end of the actual list
+        dynamicRecipeList.clear();
         recipeStorage.getNRecipesOneByOne(nbOfRecipesLoadedAtATime, 1, this);
         currentReadInt += nbOfRecipesLoadedAtATime;
     }
@@ -105,66 +119,20 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     }
 
     @Override
+    public void onSuccess(List<Recipe> data) {
+        isLoading = false;
+        dynamicRecipeList.addAll(data);
+        onlineRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
     public void onFailure() {
         isLoading = false;
+        Log.w(TAG, "No Recipe found");
     }
 
     public RecyclerView getRecyclerView(){
         return onlineRecyclerView;
-    }
-
-    private void setSearchButton(View view){
-        FirebaseDatabase database=recipeStorage.getFirebaseDatabase();
-        DatabaseReference idRef = database.getReference("id");
-        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value
-                int value = dataSnapshot.getValue(Integer.class);
-                searchForRecipe(value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-
-    }
-
-    private void searchForRecipe(int id){
-        FirebaseDatabase database=recipeStorage.getFirebaseDatabase();
-        dynamicRecipeList.clear();
-        onlineRecyclerView.getAdapter().notifyDataSetChanged();
-        for(int i=1;i<=id;i++){
-            DatabaseReference nameRef = database.getReference("recipe").child(Integer.toString(i));
-            nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value
-                    Recipe value = dataSnapshot.getValue(Recipe.class);
-                    compareName(value);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });
-        }
-    }
-
-    private void compareName(Recipe value){
-        String searchInput=((EditText)getView().findViewById(R.id.searchBar)).getText().toString();
-        searchInput=searchInput.toLowerCase();
-        String name=value.getName().toLowerCase();
-        if(searchInput.contains(name) || name.contains(searchInput)){
-            dynamicRecipeList.add(value);
-            onlineRecyclerView.getAdapter().notifyDataSetChanged();
-        }
-
     }
 
 }

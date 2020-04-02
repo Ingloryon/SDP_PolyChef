@@ -22,30 +22,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <SearchView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/searchBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:ems="8"
-                        android:hint="@string/searchMessage"
-                        android:inputType="textPersonName" />
-
-                    <Button
-                        android:id="@+id/searchButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/Search"
-                        android:visibility="visible" />
-
-                </LinearLayout>
+                    android:queryHint="@string/searchMessage"
+                    android:id="@+id/searchBar" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/miniaturesOnlineList"
