@@ -8,8 +8,6 @@ import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.UUID;
-
 /**
  * Uploader and downloader of image from the Firebase Storage.
  */
