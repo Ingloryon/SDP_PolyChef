@@ -14,9 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -89,6 +88,29 @@ public class UserStorageTest {
     }
 
     @Test
+    public void testUpdateUserInfoThrowExceptionWhenNotInitialized(){
+
+        assertThrows(IllegalStateException.class, () -> fakeUserStorage.updateUserInfo());
+    }
+
+    /*@Test
+    public void testUpdateUserInfo(){
+
+        when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
+
+    }*/
+
+    /*public void updateUserInfo() {
+        if (user != null && userKey != null) {
+            getDatabase()
+                    .getReference("users/" + userKey)
+                    .setValue(user);
+        } else {
+            throw new IllegalStateException("The user have not been initialized");
+        }
+    }*/
+
+    @Test
     public void newUserTest() {
 
         onDataChangeCallBack();
@@ -109,6 +131,12 @@ public class UserStorageTest {
         when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
 
         assertSendingBackCorrectUser(mockNewUserRef, new User(mockUserEmail, mockUserName));
+
+        fakeUserStorage.initializeUserFromAuthenticatedUser();
+        //Need to launch updateUserInfo after initialization
+        fakeUserStorage.updateUserInfo();
+        //the initialization in the @After is superfluous
+        doNothing().when(fakeUserStorage).initializeUserFromAuthenticatedUser();
     }
 
 
