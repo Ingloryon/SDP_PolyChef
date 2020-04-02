@@ -26,6 +26,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -52,13 +53,15 @@ import static androidx.test.espresso.Espresso.onView;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class OnlineMiniaturesFragmentTest {
 
     private RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
     private Recipe testRecipe1 = new RecipeBuilder().setName("test1").setRecipeDifficulty(Recipe.Difficulty.EASY).addInstruction("test1instruction").setPersonNumber(4).setEstimatedCookingTime(30).setEstimatedPreparationTime(30).addIngredient("test1", 1.0, Ingredient.Unit.CUP).build();
-    private SearchRecipe mockSearchRecipe=Mockito.mock(SearchRecipe.class);
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
@@ -75,11 +78,19 @@ public class OnlineMiniaturesFragmentTest {
 
     @Mock
     FirebaseDatabase firebaseInstance;
+    @Mock
+    SearchRecipe mockSearchRecipe;
 
     @Before
     public void initMockAndStorage() {
         MockitoAnnotations.initMocks(this);
         fakeRecipeStorage = new FakeRecipeStorage();
+
+        doAnswer((call) -> {
+            CallHandler<List<Recipe>> ch=call.getArgument(1);
+            ch.onSuccess(null);
+            return null;
+        }).when(mockSearchRecipe).searchForRecipe(any(String.class),any(CallHandler.class));
     }
 
     public void initActivity() {
