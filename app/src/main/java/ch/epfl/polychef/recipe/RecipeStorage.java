@@ -19,8 +19,8 @@ import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
-import ch.epfl.polychef.Preconditions;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.Preconditions;
 
 /**
  * Uploader and downloader of {@code Recipe} from the storage.
