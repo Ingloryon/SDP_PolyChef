@@ -47,14 +47,6 @@ public class User implements Serializable {
     }
 
     public List<UUID> getRecipes() {
-        ArrayList<UUID> test = new ArrayList<UUID>(recipes);
-        Log.d("USERSTORGAGE-TAG", "new ArrayList(recipes) = " + test);
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-
         return new ArrayList<>(recipes);
     }
 
@@ -71,15 +63,7 @@ public class User implements Serializable {
     }
 
     public void addRecipe(UUID recipe) {
-
         recipes.add(recipe);
-
-        Log.d("USERSTORGAGE-TAG", "Add recipe => recipes =" + recipes);
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
-
     }
 
     public void addFavourite(String recipe){

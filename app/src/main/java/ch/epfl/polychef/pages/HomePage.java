@@ -40,7 +40,7 @@ public class HomePage extends ConnectedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        getUserStorage().initializeUserFromAuthenticatedUser();
+        //getUserStorage().initializeUserFromAuthenticatedUser();
 
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.toolbar);
