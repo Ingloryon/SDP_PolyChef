@@ -1,6 +1,7 @@
 package ch.epfl.polychef.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.RecipeInputParsing;
 
 public class PostRecipeFragment extends Fragment {
@@ -73,10 +75,23 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
+    private HomePage hostActivity;
+
     /**
      * Required empty public constructor.
      */
     public PostRecipeFragment() {
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+        } else {
+            throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
+        }
     }
 
     @Override
@@ -184,6 +199,7 @@ public class PostRecipeFragment extends Fragment {
                 imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
             }
             RecipeStorage.getInstance().addRecipe(postedRecipe);
+            UserStorage.getInstance().getPolyChefUser().addRecipe(postedRecipe.getUuid()); //TODO need to check that the recipe was successfully added
             return true;
         }
     }

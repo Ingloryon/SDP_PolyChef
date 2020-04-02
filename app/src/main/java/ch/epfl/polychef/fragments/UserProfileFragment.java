@@ -23,6 +23,7 @@ import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 
@@ -55,14 +56,10 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Check if this bundle is also part of this profile or only the startDestination profile
-//        Bundle bundle = getArguments();
-//        int fragmentID = bundle.getInt("fragmentID");
-
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         userRecyclerView = view.findViewById(R.id.UserRecipesList);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        userRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, userRecyclerView, R.id.nav_host_fragment));
+        userRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, userRecyclerView, container.getId()));
 
         userRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -89,7 +86,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        userToDisplay = hostActivity.getUserToDisplay();
+        userToDisplay = UserStorage.getInstance().getPolyChefUser();
 
         ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());

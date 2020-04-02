@@ -31,11 +31,6 @@ public class HomePage extends ConnectedActivity {
     private NavController navController;
     private NavigationView navView;
     private MenuItem currentItem;
-    private MenuItem previousItem;
-
-    private User user;
-    private User userToDisplay;
-    private String userKey;
 
     public static final String LOG_OUT = "Log out";
     private static final String TAG = "HomePage-TAG";
@@ -90,14 +85,9 @@ public class HomePage extends ConnectedActivity {
         profileImage.setOnClickListener((view) -> {
             setCurrentItemChecked(false);
             currentItem = null;
-            userToDisplay = user;
             navController.navigate(R.id.userProfileFragment);
             drawer.closeDrawer(GravityCompat.START, true);
         });
-    }
-
-    public User getUserToDisplay() {
-        return userToDisplay;
     }
 
     @Override

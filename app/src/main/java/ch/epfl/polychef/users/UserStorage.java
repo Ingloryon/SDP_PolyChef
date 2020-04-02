@@ -105,6 +105,10 @@ public class UserStorage {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    public User getPolyChefUser() {
+        return user;
+    }
+
     /**
      * Get the current instance of the {@code FirebaseDatabase}.
      *
