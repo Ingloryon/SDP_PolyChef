@@ -1,8 +1,15 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.SearchView;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -12,12 +19,15 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,6 +48,8 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 
 import static androidx.test.espresso.Espresso.onView;
+
+import static org.hamcrest.Matchers.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -82,6 +94,15 @@ public class OnlineMiniaturesFragmentTest {
         initActivity();
         wait(1000);
         assertEquals(0, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+    }
+
+    @Test
+    public synchronized void clickOnSearch() throws InterruptedException {
+        initActivity();
+        wait(1000);
+        onView(withId(R.id.searchBar)).perform(typeSearchViewText("test"));
+        onView(withId(R.id.searchBar)).perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER));
+        wait(1000);
     }
 
     @Test
@@ -290,6 +311,29 @@ public class OnlineMiniaturesFragmentTest {
                 caller.notify(recipesInDatabase.get(i));
             }
         }
+    }
+
+    public static ViewAction typeSearchViewText(final String text){
+        return new ViewAction(){
+            @Override
+            public Matcher<View> getConstraints() {
+                //Ensure that only apply if it is a SearchView and if it is visible.
+                return allOf(isDisplayed(), isAssignableFrom(SearchView.class));
+            }
+
+            @Override
+            public String getDescription() {
+                return "Change view text";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((SearchView) view).setIconified(false);
+                ((SearchView) view).setIconified(true);
+                ((SearchView) view).setQuery(text,false);
+                ((SearchView) view).setIconified(false);
+            }
+        };
     }
 
 }
