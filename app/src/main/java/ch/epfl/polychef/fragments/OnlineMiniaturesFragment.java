@@ -19,7 +19,7 @@ import java.util.List;
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.adaptersrecyclerview.RecipeMiniatureAdapter;
+import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.SearchRecipe;

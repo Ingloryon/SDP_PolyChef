@@ -1,7 +1,7 @@
 package ch.epfl.polychef.image;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.utils.Preconditions;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
