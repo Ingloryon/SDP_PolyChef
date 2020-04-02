@@ -145,6 +145,9 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         @Override
         public void onClick(View view) {
 
+            // TODO: Bug on nav to fix (in progress)
+/*
+            // To fix problem of offlineRecipe can dirtily add a if else with old case
             //Here we know that the context is an activity
             AppCompatActivity activity = (AppCompatActivity) mainContext;
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -169,9 +172,9 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
             navController.navigate(R.id.fullRecipeFragment, bundle);
 
-            //fragmentManager.beginTransaction().addToBackStack(null).commit();
+            //fragmentManager.beginTransaction().addToBackStack(null).commit();*/
 
-/*
+
             //Here we know that the context is an activity
             AppCompatActivity activity = (AppCompatActivity) mainContext;
             FragmentManager fragMana = activity.getSupportFragmentManager();
@@ -187,7 +190,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
             FullRecipeFragment recipeFragment = new FullRecipeFragment();
             recipeFragment.setArguments(bundle);
 
-            fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();*/
+            fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
         }
     }
 
