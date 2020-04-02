@@ -125,11 +125,11 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindOverString(){
-        List<Recipe> e=new ArrayList<>();
-        e.add(recipe0);
-        e.add(recipe1);
+        List<Recipe> list=new ArrayList<>();
+        list.add(recipe0);
+        list.add(recipe1);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(e ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
 
         mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
 
@@ -154,12 +154,12 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientIsCaseInsensitive(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
-        expectedRecipeList.add(recipe0);
-        expectedRecipeList.add(recipe1);
-        expectedRecipeList.add(recipe2);
+        List<Recipe> recipeList=new ArrayList<>();
+        recipeList.add(recipe0);
+        recipeList.add(recipe1);
+        recipeList.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(recipeList ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
 
@@ -170,10 +170,10 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientFindParticularValue(){
-        List<Recipe> expect=new ArrayList<>();
-        expect.add(recipe1);
+        List<Recipe> expectRep=new ArrayList<>();
+        expectRep.add(recipe1);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expect ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectRep ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("ssssaltttt",callHandlerChecker);
 
@@ -188,12 +188,12 @@ public class SearchRecipeTest {
         mockDataSnapshotWithRecipe2=Mockito.mock(DataSnapshot.class);
 
         recipe0=new RecipeBuilder().setName("Fuck Travis").addInstruction("Fuck CC")
-                .addIngredient("Mockitooo", 69, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6).setEstimatedPreparationTime(1000).setEstimatedCookingTime(1000)
+                .addIngredient("CodeClimate", 69, Ingredient.Unit.CUP)
+                .setPersonNumber(6).setEstimatedPreparationTime(69).setEstimatedCookingTime(69)
                 .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
         recipe1=new RecipeBuilder().setName("34").addInstruction("Yay").addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
                 .addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6).setEstimatedPreparationTime(1000).setEstimatedCookingTime(1000)
+                .setPersonNumber(6).setEstimatedPreparationTime(999).setEstimatedCookingTime(999)
                 .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
         recipe2=new RecipeBuilder().setName("43-aBcD").addInstruction("Yay")
                 .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM).setPersonNumber(6).setEstimatedPreparationTime(1000)
