@@ -46,6 +46,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.recipe.SearchRecipe;
 
 import static androidx.test.espresso.Espresso.onView;
 
@@ -57,6 +58,7 @@ public class OnlineMiniaturesFragmentTest {
 
     private RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
     private Recipe testRecipe1 = new RecipeBuilder().setName("test1").setRecipeDifficulty(Recipe.Difficulty.EASY).addInstruction("test1instruction").setPersonNumber(4).setEstimatedCookingTime(30).setEstimatedPreparationTime(30).addIngredient("test1", 1.0, Ingredient.Unit.CUP).build();
+    private SearchRecipe mockSearchRecipe=Mockito.mock(SearchRecipe.class);
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
