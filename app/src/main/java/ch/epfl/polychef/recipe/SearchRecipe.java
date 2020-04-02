@@ -21,7 +21,7 @@ import ch.epfl.polychef.CallHandler;
 public class SearchRecipe {
     private static final String TAG = "Search Recipe";
 
-    private final static SearchRecipe INSTANCE = new SearchRecipe();
+    private static final  SearchRecipe INSTANCE = new SearchRecipe();
 
     private SearchRecipe() {
     }

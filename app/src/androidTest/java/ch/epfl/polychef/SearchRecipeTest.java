@@ -125,11 +125,11 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindOverString(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
-        expectedRecipeList.add(recipe0);
-        expectedRecipeList.add(recipe1);
+        List<Recipe> e=new ArrayList<>();
+        e.add(recipe0);
+        e.add(recipe1);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(e ,true);
 
         mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
 
@@ -140,10 +140,10 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeIsCaseInsensitive(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
-        expectedRecipeList.add(recipe2);
+        List<Recipe> expected=new ArrayList<>();
+        expected.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expected ,true);
 
         mockSearchRecipe.searchForRecipe("AbcD",callHandlerChecker);
 
@@ -170,10 +170,10 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientFindParticularValue(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
-        expectedRecipeList.add(recipe1);
+        List<Recipe> expect=new ArrayList<>();
+        expect.add(recipe1);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expect ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("ssssaltttt",callHandlerChecker);
 
@@ -187,13 +187,9 @@ public class SearchRecipeTest {
         mockDataSnapshotWithRecipe1=Mockito.mock(DataSnapshot.class);
         mockDataSnapshotWithRecipe2=Mockito.mock(DataSnapshot.class);
 
-        recipe0=new RecipeBuilder()
-                .setName("123456")
-                .addInstruction("Yay")
-                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6)
-                .setEstimatedPreparationTime(1000)
-                .setEstimatedCookingTime(1000)
+        recipe0=new RecipeBuilder().setName("Fuck Travis").addInstruction("Fuck CC")
+                .addIngredient("Mockitooo", 69, Ingredient.Unit.KILOGRAM)
+                .setPersonNumber(6).setEstimatedPreparationTime(1000).setEstimatedCookingTime(1000)
                 .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
         recipe1=new RecipeBuilder().setName("34").addInstruction("Yay").addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
                 .addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)

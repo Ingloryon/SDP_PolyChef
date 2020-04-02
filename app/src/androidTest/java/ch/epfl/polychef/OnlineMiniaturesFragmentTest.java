@@ -59,13 +59,10 @@ public class OnlineMiniaturesFragmentTest {
     private RecipeStorage fakeRecipeStorage = Mockito.mock(RecipeStorage.class,CALLS_REAL_METHODS );
     private List<Recipe> recipesInDatabase = new ArrayList<>();
 
-    private Recipe testRecipe1 = new RecipeBuilder()
-            .setName("test1")
+    private Recipe testRecipe1 = new RecipeBuilder().setName("test1")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
-            .addInstruction("test1instruction")
-            .setPersonNumber(4)
-            .setEstimatedCookingTime(30)
-            .setEstimatedPreparationTime(30)
+            .addInstruction("test1instruction").setPersonNumber(4)
+            .setEstimatedCookingTime(30).setEstimatedPreparationTime(30)
             .addIngredient("test1", 1.0, Ingredient.Unit.CUP)
             .build();
 
