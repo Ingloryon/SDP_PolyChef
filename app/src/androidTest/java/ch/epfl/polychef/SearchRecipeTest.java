@@ -213,8 +213,8 @@ public class SearchRecipeTest {
         when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
     }
 
-    public void addRecipes(List <Recipe> l){
-        l.add(recipe0);
-        l.add(recipe1);
+    public void addRecipes(List <Recipe> list){
+        list.add(recipe0);
+        list.add(recipe1);
     }
 }
