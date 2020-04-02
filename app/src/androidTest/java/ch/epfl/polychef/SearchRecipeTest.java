@@ -154,12 +154,12 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientIsCaseInsensitive(){
-        List<Recipe> recipeList=new ArrayList<>();
-        recipeList.add(recipe0);
-        recipeList.add(recipe1);
-        recipeList.add(recipe2);
+        List<Recipe> iLoveCodeClimate=new ArrayList<>();
+        iLoveCodeClimate.add(recipe0);
+        iLoveCodeClimate.add(recipe1);
+        iLoveCodeClimate.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(recipeList ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(iLoveCodeClimate ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
 
@@ -170,10 +170,10 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientFindParticularValue(){
-        List<Recipe> expectRep=new ArrayList<>();
-        expectRep.add(recipe1);
+        List<Recipe> maListLaMailer=new ArrayList<>();
+        maListLaMailer.add(recipe1);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectRep ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(maListLaMailer ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("ssssaltttt",callHandlerChecker);
 
@@ -188,9 +188,9 @@ public class SearchRecipeTest {
         mockDataSnapshotWithRecipe2=Mockito.mock(DataSnapshot.class);
 
         recipe0=new RecipeBuilder().setName("Fuck Travis").addInstruction("Fuck CC")
+                .setEstimatedPreparationTime(69).setEstimatedCookingTime(69).setPersonNumber(2)
                 .addIngredient("CodeClimate", 69, Ingredient.Unit.CUP)
-                .setPersonNumber(6).setEstimatedPreparationTime(69).setEstimatedCookingTime(69)
-                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
+                .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE).build();
         recipe1=new RecipeBuilder().setName("34").addInstruction("Yay").addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
                 .addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
                 .setPersonNumber(6).setEstimatedPreparationTime(999).setEstimatedCookingTime(999)
