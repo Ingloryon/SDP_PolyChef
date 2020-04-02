@@ -245,24 +245,24 @@ public class PostRecipeFragment extends Fragment {
 
     private boolean checkForIllegalInputs(RecipeBuilder rb) {
 
-        try {
-            rb.setName(name)
-                    .setEstimatedCookingTime(estimatedCookingTime)
-                    .setPersonNumber(personNumber)
-                    .setEstimatedPreparationTime(estimatedPreparationTime)
-                    .setRecipeDifficulty(recipeDifficulty);
-            for (int i = 0; i < recipeInstructions.size(); i++) {
-                rb.addInstruction(recipeInstructions.get(i));
-            }
-            for (int i = 0; i < ingredients.size(); i++) {
-                rb.addIngredient(ingredients.get(i));
-            }
-            rb.build();
+        /*try {*/
+        rb.setName(name)
+                .setEstimatedCookingTime(estimatedCookingTime)
+                .setPersonNumber(personNumber)
+                .setEstimatedPreparationTime(estimatedPreparationTime)
+                .setRecipeDifficulty(recipeDifficulty);
+        for (int i = 0; i < recipeInstructions.size(); i++) {
+            rb.addInstruction(recipeInstructions.get(i));
+        }
+        for (int i = 0; i < ingredients.size(); i++) {
+            rb.addIngredient(ingredients.get(i));
+        }
+        rb.build();
 
-        } catch (IllegalArgumentException e) {
+        /*} catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
             return false;
-        }
+        }*/
 
         if(currentMiniature != null) {
             rb.setMiniatureFromPath(miniatureName);
