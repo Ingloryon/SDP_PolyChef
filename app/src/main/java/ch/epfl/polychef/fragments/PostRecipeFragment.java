@@ -245,7 +245,7 @@ public class PostRecipeFragment extends Fragment {
 
     private boolean checkForIllegalInputs(RecipeBuilder rb) {
 
-        /*try {*/
+        try {
         rb.setName(name)
                 .setEstimatedCookingTime(estimatedCookingTime)
                 .setPersonNumber(personNumber)
@@ -259,10 +259,10 @@ public class PostRecipeFragment extends Fragment {
         }
         rb.build();
 
-        /*} catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
             return false;
-        }*/
+        }
 
         if(currentMiniature != null) {
             rb.setMiniatureFromPath(miniatureName);
