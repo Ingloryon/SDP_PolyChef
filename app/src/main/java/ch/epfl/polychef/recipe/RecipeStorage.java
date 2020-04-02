@@ -19,14 +19,25 @@ import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Preconditions;
 
 /**
  * Uploader and downloader of {@code Recipe} from the storage.
  */
 public class RecipeStorage implements Serializable {
+
+    private static RecipeStorage INSTANCE=new RecipeStorage();
+
     private static final String TAG = "Firebase";
-    public int id;
+    private int id;
+
+    public static RecipeStorage getInstance(){
+        return INSTANCE;
+    }
+
+    private RecipeStorage(){
+    }
 
     /**
      * Add a new {@code Recipe} to the storage.
