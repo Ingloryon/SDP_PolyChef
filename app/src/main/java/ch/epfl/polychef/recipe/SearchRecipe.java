@@ -89,7 +89,7 @@ public class SearchRecipe {
     private boolean compareIngredient(String ingredient, Recipe value) {
         String searchInput = ingredient;
         searchInput = searchInput.toLowerCase();
-        for (String ing : value.getIngredients().stream().map(Ingredient::toString).collect(Collectors.toList())) {
+        for (String ing : value.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList())) {
             if (searchInput.contains(ing.toLowerCase()) || ing.toLowerCase().contains(searchInput)) {
                 return true;
             }

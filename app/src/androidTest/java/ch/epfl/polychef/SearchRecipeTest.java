@@ -62,6 +62,11 @@ public class SearchRecipeTest {
     }
 
     @Test
+    public void methodGetInstanceExist(){
+        SearchRecipe.getInstance();
+    }
+
+    @Test
     public void testSearchForRecipeFailWithSnapshotNullValue(){
 
         CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(null,false);
@@ -91,11 +96,6 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindRecipeWithGivenWord(){
-        List<DataSnapshot> snapshotsList=new ArrayList<>();
-        snapshotsList.add(mockDataSnapshotWithRecipe0);
-        snapshotsList.add(mockDataSnapshotWithRecipe1);
-        snapshotsList.add(mockDataSnapshotWithRecipe2);
-
         List<Recipe> expectedRecipeList=new ArrayList<>();
         expectedRecipeList.add(recipe0);
         expectedRecipeList.add(recipe1);
@@ -106,18 +106,12 @@ public class SearchRecipeTest {
         mockSearchRecipe.searchForRecipe("3",callHandlerChecker);
 
         when(mockDataSnapshot.getValue()).thenReturn(0);
-        when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
 
         givenValueEventListener.onDataChange(mockDataSnapshot);
     }
 
     @Test
     public void testSearchForRecipeFindNothing(){
-        List<DataSnapshot> snapshotsList=new ArrayList<>();
-        snapshotsList.add(mockDataSnapshotWithRecipe0);
-        snapshotsList.add(mockDataSnapshotWithRecipe1);
-        snapshotsList.add(mockDataSnapshotWithRecipe2);
-
         List<Recipe> expectedRecipeList=new ArrayList<>();
 
         CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
@@ -125,18 +119,12 @@ public class SearchRecipeTest {
         mockSearchRecipe.searchForRecipe("8",callHandlerChecker);
 
         when(mockDataSnapshot.getValue()).thenReturn(0);
-        when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
 
         givenValueEventListener.onDataChange(mockDataSnapshot);
     }
 
     @Test
     public void testSearchForRecipeFindOverString(){
-        List<DataSnapshot> snapshotsList=new ArrayList<>();
-        snapshotsList.add(mockDataSnapshotWithRecipe0);
-        snapshotsList.add(mockDataSnapshotWithRecipe1);
-        snapshotsList.add(mockDataSnapshotWithRecipe2);
-
         List<Recipe> expectedRecipeList=new ArrayList<>();
         expectedRecipeList.add(recipe0);
         expectedRecipeList.add(recipe1);
@@ -146,7 +134,50 @@ public class SearchRecipeTest {
         mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
 
         when(mockDataSnapshot.getValue()).thenReturn(0);
-        when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
+
+        givenValueEventListener.onDataChange(mockDataSnapshot);
+    }
+
+    @Test
+    public void testSearchForRecipeIsCaseInsensitive(){
+        List<Recipe> expectedRecipeList=new ArrayList<>();
+        expectedRecipeList.add(recipe2);
+
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+
+        mockSearchRecipe.searchForRecipe("AbcD",callHandlerChecker);
+
+        when(mockDataSnapshot.getValue()).thenReturn(0);
+
+        givenValueEventListener.onDataChange(mockDataSnapshot);
+    }
+
+    @Test
+    public void testSearchForIngredientIsCaseInsensitive(){
+        List<Recipe> expectedRecipeList=new ArrayList<>();
+        expectedRecipeList.add(recipe0);
+        expectedRecipeList.add(recipe1);
+        expectedRecipeList.add(recipe2);
+
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+
+        mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
+
+        when(mockDataSnapshot.getValue()).thenReturn(0);
+
+        givenValueEventListener.onDataChange(mockDataSnapshot);
+    }
+
+    @Test
+    public void testSearchForIngredientFindParticularValue(){
+        List<Recipe> expectedRecipeList=new ArrayList<>();
+        expectedRecipeList.add(recipe1);
+
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+
+        mockSearchRecipe.searchRecipeByIngredient("ssssaltttt",callHandlerChecker);
+
+        when(mockDataSnapshot.getValue()).thenReturn(0);
 
         givenValueEventListener.onDataChange(mockDataSnapshot);
     }
@@ -168,12 +199,13 @@ public class SearchRecipeTest {
                 .setName("34")
                 .addInstruction("Yay")
                 .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
+                .addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
                 .setPersonNumber(6)
                 .setEstimatedPreparationTime(1000)
                 .setEstimatedCookingTime(1000)
                 .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
         recipe2=new RecipeBuilder()
-                .setName("43")
+                .setName("43-aBcD")
                 .addInstruction("Yay")
                 .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
                 .setPersonNumber(6)
@@ -184,5 +216,12 @@ public class SearchRecipeTest {
         when(mockDataSnapshotWithRecipe0.getValue(Recipe.class)).thenReturn(recipe0);
         when(mockDataSnapshotWithRecipe1.getValue(Recipe.class)).thenReturn(recipe1);
         when(mockDataSnapshotWithRecipe2.getValue(Recipe.class)).thenReturn(recipe2);
+
+        List<DataSnapshot> snapshotsList=new ArrayList<>();
+        snapshotsList.add(mockDataSnapshotWithRecipe0);
+        snapshotsList.add(mockDataSnapshotWithRecipe1);
+        snapshotsList.add(mockDataSnapshotWithRecipe2);
+
+        when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
     }
 }
