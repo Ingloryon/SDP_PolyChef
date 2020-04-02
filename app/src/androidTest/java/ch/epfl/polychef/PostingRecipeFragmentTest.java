@@ -136,7 +136,7 @@ public class PostingRecipeFragmentTest {
     public void testOnACompleteRecipe() {
         writeRecipe("Cake","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.postRecipe)).perform(scrollTo() ,click());
+        onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
     }
 
     @Test
