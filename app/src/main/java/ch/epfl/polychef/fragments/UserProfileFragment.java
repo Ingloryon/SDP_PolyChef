@@ -57,6 +57,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         userRecyclerView = view.findViewById(R.id.UserRecipesList);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
@@ -73,7 +75,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 //                    }
                     for(int i = currentIndex; i < Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size()); i++){
                         String stringUID = userToDisplay.getRecipes().get(i);
-                        recipeStorage.readRecipeFromUUID(UUID.fromString(stringUID), UserProfileFragment.this);
+                        recipeStorage.readRecipeFromUUID(stringUID, UserProfileFragment.this);
                     }
 
                     currentIndex = Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size());
@@ -95,7 +97,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         for(int i = 0; i < Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size()); i++){
             String stringUID = userToDisplay.getRecipes().get(i);
-            recipeStorage.readRecipeFromUUID(UUID.fromString(stringUID), this);
+            recipeStorage.readRecipeFromUUID(stringUID, this);
         }
         currentIndex += Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size());
     }
