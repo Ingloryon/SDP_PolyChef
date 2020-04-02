@@ -23,14 +23,11 @@ import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
@@ -39,6 +36,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.utils.RecipeInputParsing;
 
 public class PostRecipeFragment extends Fragment {
     private final String tag = "PostRecipeFragment";
@@ -48,8 +46,8 @@ public class PostRecipeFragment extends Fragment {
     private final int titleMinChar = 3;
     private final int maxPersNb = 100;
     private String name;
-    private List<String> recipeInstructions;
-    private List<Ingredient> ingredients;
+    private List<String> recipeInstructions = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
@@ -75,23 +73,10 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
-    private RecipeStorage recipeStorage = new RecipeStorage();
-
     /**
      * Required empty public constructor.
      */
     public PostRecipeFragment() {
-    }
-
-    private void initializeWrongInputs() {
-        wrongInputs = new HashMap<>();
-        wrongInputs.put("Title", false);
-        wrongInputs.put("Ingredients", false);
-        wrongInputs.put("Instructions", false);
-        wrongInputs.put("Person Number", false);
-        wrongInputs.put("Preparation Time", false);
-        wrongInputs.put("Cooking Time", false);
-        wrongInputs.put("Difficulty", false);
     }
 
     @Override
@@ -141,6 +126,34 @@ public class PostRecipeFragment extends Fragment {
         difficultyInput.setAdapter(adapter);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode / mealPicturesFactor > 0) {
+            Uri uri = imageHandler.handleActivityResult(requestCode / mealPicturesFactor, resultCode, data);
+            if(uri != null) {
+                currentMealPictures.add(uri);
+                mealPicturesText.setText(currentMealPictures.size() + " to upload");
+            }
+        } else {
+            currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
+            if(currentMiniature != null) {
+                try {
+                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
+                    if(oldBitmap != null) {
+                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
+                        double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
+                        Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
+                        imageMiniaturePreview.setImageBitmap(newBitmap);
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+    }
+
     /**
      * Called when user presses "post recipe", will parse and check the entered inputs.
      * If the inputs are correct it will post the corresponding Recipe on Firebase.
@@ -148,7 +161,7 @@ public class PostRecipeFragment extends Fragment {
      * @param view the current view
      */
     public void setPostButton(View view) {
-        getEnteredInputs();
+        getAndCheckEnteredInputs();
         if(!buildRecipeAndPostToFirebase()){
             printWrongInputsToUser();
         }else{
@@ -157,7 +170,25 @@ public class PostRecipeFragment extends Fragment {
         }
     }
 
-    private void getEnteredInputs() {
+    private boolean buildRecipeAndPostToFirebase() {
+        RecipeBuilder recipeBuilder = new RecipeBuilder();
+
+        // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
+        if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
+            return false;
+        } else {
+            if(currentMiniature != null) {
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
+            }
+            for(int i = 1; i <= currentMealPictures.size(); ++i) {
+                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
+            }
+            RecipeStorage.getInstance().addRecipe(postedRecipe);
+            return true;
+        }
+    }
+
+    private void getAndCheckEnteredInputs() {
         String inputName = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
         if(inputName.length() > titleMaxChar || inputName.length() < titleMinChar) {
             errorLogs.add("Title: too long or too short. Need to be between " + titleMinChar + " and " + titleMaxChar + " characters.");
@@ -167,18 +198,20 @@ public class PostRecipeFragment extends Fragment {
         }
 
         String ingre = ((EditText) getView().findViewById(R.id.ingredientsList)).getText().toString();
-        if (parseIngredients(ingre)) {
+        String pattern = "\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}";
+        if (RecipeInputParsing.parseIngredients(ingre, pattern, ingredients, errorLogs)) {
             wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
         }
 
         EditText instructionsInput = getView().findViewById(R.id.instructionsList);
         String instructions = instructionsInput.getText().toString();
-        if (parseInstructions(instructions)) {
+        if (RecipeInputParsing.parseInstructions(instructions, recipeInstructions, errorLogs)) {
             wrongInputs.put("Instructions", true); // TODO: Use replace when set SDK min24
         }
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
+
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
         if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= maxPersNb){
@@ -207,83 +240,6 @@ public class PostRecipeFragment extends Fragment {
         } else {
             errorLogs.add(message+": should be a positive number.");
             return 0;
-        }
-    }
-
-    private boolean parseIngredients(String toMatch) {
-        List<String> allMatches = new ArrayList<>();
-        ingredients = new ArrayList<>();
-        Matcher mat = Pattern.compile("\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}")
-                .matcher(toMatch);
-        while (mat.find()) {
-            allMatches.add(mat.group());
-        }
-        if(allMatches.size()==0){
-            ingredients.clear();
-            allMatches.clear();
-            errorLogs.add("Ingredients: There should be 3 arguments entered as {a,b,c}");
-            return false;
-        }
-        for (String s : allMatches) {
-            String[] list = s.split(",");
-            String name = list[0].trim().substring(1).trim();
-            double quantity = Double.parseDouble(list[1].trim()); // TODO: check this method does not throw errors
-            Ingredient.Unit unit = null;
-            String unitString = list[2].trim().substring(0, list[2].trim().length() - 1).trim();
-            for (Ingredient.Unit u : Ingredient.Unit.values()) {
-                if (u.toString().toLowerCase().equals(unitString.toLowerCase())) {
-                    unit = u;
-                }
-            }
-            if (unit == null) {
-                ingredients.clear();
-                allMatches.clear();
-                errorLogs.add("Ingredients: The entered unit is not part of the possible units " + Arrays.asList(Ingredient.Unit.values()) + ".");
-                return false;
-            }
-
-            try{
-                ingredients.add(new Ingredient(name, quantity, unit));
-            } catch (IllegalArgumentException e){
-                errorLogs.add("Ingredients: " + e.toString().substring(35));
-            }
-        }
-        return true;
-    }
-
-    private boolean parseInstructions(String instructions) {
-        // TODO: Add more precise input checking of instructions
-        if (instructions.length()<3 || !instructions.contains("{") || !instructions.contains("}")){
-            errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
-            return false;
-        }
-
-        recipeInstructions = new ArrayList<>();
-        instructions = instructions.substring(1);
-        String separator = Pattern.quote("},{");
-        String[] mots = instructions.split(separator);
-        for (int i = 0; i < mots.length - 1; i++) {
-            recipeInstructions.add(mots[i]);
-        }
-        recipeInstructions.add(mots[mots.length - 1].substring(0, mots[mots.length - 1].length() - 1));
-        return true;
-    }
-
-    private boolean buildRecipeAndPostToFirebase() {
-        RecipeBuilder recipeBuilder = new RecipeBuilder();
-
-        // By first checking the parsing part is right first we avoid the second checking part (would fail due to the errors in parsing)
-        if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
-            return false;
-        } else {
-            if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
-            }
-            for(int i = 0; i < currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getUuid().toString());
-            }
-            recipeStorage.addRecipe(postedRecipe);
-            return true;
         }
     }
 
@@ -333,17 +289,18 @@ public class PostRecipeFragment extends Fragment {
         }  catch (IllegalArgumentException e){
             errorLogs.add("Preparation time: " + e.toString().substring(35));
         }
-
         // All the other exceptions cannot be raised, they are checked while parsing
     }
 
-    private void printWrongInputsToUser(){
-        TextView errorLog =  getView().findViewById(R.id.errorLogs);
-        errorLog.setText(createErrorMessage());
-        errorLog.setVisibility(View.VISIBLE);
-
-        initializeWrongInputs();
-        errorLogs.clear();
+    private void initializeWrongInputs() {
+        wrongInputs = new HashMap<>();
+        wrongInputs.put("Title", false);
+        wrongInputs.put("Ingredients", false);
+        wrongInputs.put("Instructions", false);
+        wrongInputs.put("Person Number", false);
+        wrongInputs.put("Preparation Time", false);
+        wrongInputs.put("Cooking Time", false);
+        wrongInputs.put("Difficulty", false);
     }
 
     private String createErrorMessage(){
@@ -360,32 +317,13 @@ public class PostRecipeFragment extends Fragment {
         return sb.toString();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode / mealPicturesFactor > 0) {
-            Uri uri = imageHandler.handleActivityResult(requestCode / mealPicturesFactor, resultCode, data);
-            if(uri != null) {
-                currentMealPictures.add(uri);
-                mealPicturesText.setText(currentMealPictures.size() + " to upload");
-            }
-        } else {
-            currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
-            if(currentMiniature != null) {
-                try {
-                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
-                    if(oldBitmap != null) {
-                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
-                        double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
-                        Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
-                        imageMiniaturePreview.setImageBitmap(newBitmap);
-                    }
-                } catch (IOException e) {
-                    Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
-                }
+    private void printWrongInputsToUser(){
+        TextView errorLog =  getView().findViewById(R.id.errorLogs);
+        errorLog.setText(createErrorMessage());
+        errorLog.setVisibility(View.VISIBLE);
 
-            }
-        }
+        initializeWrongInputs();
+        errorLogs.clear();
     }
 
     private void addPictureDialog(int factor) {
@@ -404,5 +342,3 @@ public class PostRecipeFragment extends Fragment {
         builder.show();
     }
 }
-
-//TODO: Refactor by adding a new class RecipeInputSanitization in package Recipe ? Would contain findIllegalInputs, checkForIllegalInputs, parseInstructions, parseIngredients, getEnteredInputs ?

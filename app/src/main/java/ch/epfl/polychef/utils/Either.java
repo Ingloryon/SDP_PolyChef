@@ -7,7 +7,7 @@ import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
-import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.utils.Preconditions;
 
 /**
  * Class that represent either {@code left}, {@code right} or is {@code none}.

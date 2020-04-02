@@ -11,7 +11,6 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.After;
@@ -32,15 +31,30 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 public class OnlineMiniaturesFragmentTest {
 
-    private RecipeStorage fakeRecipeStorage = new FakeRecipeStorage();
-    private Recipe testRecipe1 = new RecipeBuilder().setName("test1").setRecipeDifficulty(Recipe.Difficulty.EASY).addInstruction("test1instruction").setPersonNumber(4).setEstimatedCookingTime(30).setEstimatedPreparationTime(30).addIngredient("test1", 1.0, Ingredient.Unit.CUP).build();
+
+    private RecipeStorage fakeRecipeStorage = Mockito.mock(RecipeStorage.class,CALLS_REAL_METHODS );
+    private List<Recipe> recipesInDatabase = new ArrayList<>();
+
+    private Recipe testRecipe1 = new RecipeBuilder()
+            .setName("test1")
+            .setRecipeDifficulty(Recipe.Difficulty.EASY)
+            .addInstruction("test1instruction")
+            .setPersonNumber(4)
+            .setEstimatedCookingTime(30)
+            .setEstimatedPreparationTime(30)
+            .addIngredient("test1", 1.0, Ingredient.Unit.CUP)
+            .build();
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
@@ -61,7 +75,11 @@ public class OnlineMiniaturesFragmentTest {
     @Before
     public void initMockAndStorage() {
         MockitoAnnotations.initMocks(this);
-        fakeRecipeStorage = new FakeRecipeStorage();
+        fakeRecipeStorage = Mockito.mock(RecipeStorage.class);
+
+        recipesInDatabase = new ArrayList<Recipe>();
+
+        initializeMockRecipeStorage();
     }
 
     public void initActivity() {
@@ -207,84 +225,67 @@ public class OnlineMiniaturesFragmentTest {
             return Mockito.mock(FirebaseUser.class);
         }
 
+
         @Override
-        public RecipeStorage getRecipeStorage(){
+        protected UserStorage getUserStorage(){
+            return Mockito.mock(UserStorage.class);
+        }
+
+        @Override
+        protected RecipeStorage getRecipeStorage(){
             return fakeRecipeStorage;
         }
-
-        @Override
-        protected void retrieveUserInfo(String email) {
-
-        }
-
-        @Override
-        protected void newUser(String email) {
-
-        }
-
-        @Override
-        protected void oldUser(DataSnapshot snap) {
-
-        }
-
-        @Override
-        protected void updateUserInfo() {
-
-        }
     }
 
-    public class FakeRecipeStorage extends RecipeStorage {
+    private int getIndexInArrayList(int indexInDatabase) {
+        return indexInDatabase - 1;
+    }
 
-        private List<Recipe> recipesInDatabase = new ArrayList<>();
+    private void initializeMockRecipeStorage(){
+        when(fakeRecipeStorage.getFirebaseDatabase()).thenReturn(firebaseInstance);
 
-        private int getIndexInArrayList(int indexInDatabase) {
-            return indexInDatabase - 1;
-        }
+        doAnswer(invocation -> {
+            recipesInDatabase.add(invocation.getArgument(0));
+            return null;
+        }).when(fakeRecipeStorage).addRecipe(any(Recipe.class));
 
-        @Override
-        public FirebaseDatabase getFirebaseDatabase() {
-            return firebaseInstance;
-        }
-
-        public List<Recipe> getRecipeList(){
-           return recipesInDatabase;
-        }
-
-        @Override
-        public void addRecipe(Recipe recipe) {
-            id += 1;
-            recipesInDatabase.add(recipe);
-        }
-
-        @Override
-        public void readRecipe(int id, CallHandler<Recipe> ch){
+        doAnswer(invocation -> {
+            int id=invocation.getArgument(0);
+            CallHandler<Recipe> ch = invocation.getArgument(1);
             int actualIndex = getIndexInArrayList(id);
             if(!(actualIndex >= 0 && actualIndex < recipesInDatabase.size())){
-               ch.onFailure();
+                ch.onFailure();
             }
             ch.onSuccess(recipesInDatabase.get(actualIndex));
-        }
+            return null;
+        }).when(fakeRecipeStorage).readRecipe(any(Integer.class),any(CallHandler.class));
 
-        @Override
-        public void getNRecipes(int numberOfRecipes, int fromId, CallHandler<List<Recipe>> caller){
-            int actualFromIndex = getIndexInArrayList(fromId);
-            if(actualFromIndex >= recipesInDatabase.size()){
-                return;
-            }
-            caller.onSuccess(recipesInDatabase.subList(actualFromIndex, Math.min(recipesInDatabase.size(), actualFromIndex + numberOfRecipes + 1)));
-        }
+        doAnswer(invocation -> {
+            int numberOfRecipes=invocation.getArgument(0);
+            int fromId=invocation.getArgument(1);
+            CallHandler<List<Recipe>> caller = invocation.getArgument(2);
 
-        @Override
-        public void getNRecipesOneByOne(int numberOfRecipes, int fromId, CallNotifier<Recipe> caller){
             int actualFromIndex = getIndexInArrayList(fromId);
-            if(actualFromIndex >= recipesInDatabase.size()){
-                return;
+            if(actualFromIndex < recipesInDatabase.size()){
+                caller.onSuccess(recipesInDatabase.subList(actualFromIndex, Math.min(recipesInDatabase.size(), actualFromIndex + numberOfRecipes + 1)));
             }
-            int maxIndexWithData = Math.min(recipesInDatabase.size() - 1, actualFromIndex + numberOfRecipes - 1);
-            for(int i = actualFromIndex; i <= maxIndexWithData; i ++){
-                caller.notify(recipesInDatabase.get(i));
+            return null;
+        }).when(fakeRecipeStorage).getNRecipes(any(Integer.class),any(Integer.class),any(CallHandler.class));
+
+
+        doAnswer(invocation -> {
+            int numberOfRecipes=invocation.getArgument(0);
+            int fromId=invocation.getArgument(1);
+            CallNotifier<Recipe> caller = invocation.getArgument(2);
+
+            int actualFromIndex = getIndexInArrayList(fromId);
+            if(actualFromIndex < recipesInDatabase.size()){
+                int maxIndexWithData = Math.min(recipesInDatabase.size() - 1, actualFromIndex + numberOfRecipes - 1);
+                for (int i = actualFromIndex; i <= maxIndexWithData; i++) {
+                    caller.notify(recipesInDatabase.get(i));
+                }
             }
-        }
+            return null;
+        }).when(fakeRecipeStorage).getNRecipesOneByOne(any(Integer.class),any(Integer.class),any(CallNotifier.class));
     }
-
 }

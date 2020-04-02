@@ -1,9 +1,9 @@
 package ch.epfl.polychef.recipe;
 
 import androidx.annotation.NonNull;
-import ch.epfl.polychef.Preconditions;
-import ch.epfl.polychef.utils.Either;
 
+import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 
