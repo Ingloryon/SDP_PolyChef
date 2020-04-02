@@ -72,7 +72,7 @@ public class RecipeStorage implements Serializable {
         });
     }
 
-    public void readRecipeFromUUID(String uuid, CallHandler<Recipe> ch){
+    public void readRecipeFromUUID(UUID uuid, CallHandler<Recipe> ch){
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
         DatabaseReference idRef = getFirebaseDatabase().getReference("id");
         //Get the last ID used in the database
@@ -96,7 +96,7 @@ public class RecipeStorage implements Serializable {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
-                    String value = dataSnapshot.getValue(String.class);
+                    UUID value = dataSnapshot.getValue(UUID.class);
                     if (value.equals(uuid)) {
                         myRef.getParent().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
