@@ -3,12 +3,13 @@ package ch.epfl.polychef.users;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User {
+public class User implements Serializable {
 
     private String email;
     private String username;
