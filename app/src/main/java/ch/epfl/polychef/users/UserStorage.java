@@ -1,5 +1,7 @@
 package ch.epfl.polychef.users;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,6 +90,7 @@ public class UserStorage {
             getDatabase()
                     .getReference("users/" + userKey)
                     .setValue(user);
+            Log.d("USERSTORAGE-TAG", "User sen back:" + user.toString());
         } else {
             throw new IllegalStateException("The user have not been initialized");
         }
