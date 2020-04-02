@@ -31,8 +31,8 @@ public class RecipeStorage implements Serializable {
     private static RecipeStorage INSTANCE=new RecipeStorage();
 
     private static final String TAG = "Firebase";
-    private static final String DB_NAME = "recipe_test";
-    private static final String DB_ID = "id_test";
+    private static final String DB_NAME = "recipe";
+    private static final String DB_ID = "id";
     private int id;
 
     public static RecipeStorage getInstance(){
@@ -90,14 +90,14 @@ public class RecipeStorage implements Serializable {
             }
         });
         for(int i=1;i<id+1;i++) {
-            DatabaseReference myRef = getFirebaseDatabase().getReference("recipe").child(Integer.toString(i)).child("stringUid");
+            DatabaseReference myRef = getFirebaseDatabase().getReference("recipe").child(Integer.toString(i)).child("recipeUuid");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
                     String value = dataSnapshot.getValue(String.class);
-                    if (value.equals(uuid)) {
+                    if (uuid.equals(value)) {
                         myRef.getParent().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {

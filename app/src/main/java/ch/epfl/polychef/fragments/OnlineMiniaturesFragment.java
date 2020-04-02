@@ -46,12 +46,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
 
-        Bundle bundle = getArguments();
-
-        int fragmentID = bundle.getInt("fragmentID");
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        onlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, fragmentID));
+        onlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, container.getId()));
         // Add a scroll listener when we reach the end of the list we load new recipes from database
         onlineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

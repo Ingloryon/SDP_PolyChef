@@ -46,18 +46,16 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
     private int currentIndex = 0;
 
-    //private boolean isLoading = false;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    //TODO add getNRecipesFromUuid and add an isLoading variation
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
 
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         userRecyclerView = view.findViewById(R.id.UserRecipesList);
@@ -70,16 +68,12 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if(!recyclerView.canScrollVertically(1)){
-//                    if(isLoading){
-//                        return;
-//                    }
                     for(int i = currentIndex; i < Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size()); i++){
                         String stringUID = userToDisplay.getRecipes().get(i);
                         recipeStorage.readRecipeFromUUID(stringUID, UserProfileFragment.this);
                     }
 
                     currentIndex = Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size());
-                    //isLoading = true;
                 }
             }
         });
@@ -116,13 +110,11 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
     @Override
     public void onSuccess(Recipe data) {
-        //isLoading = false;
         dynamicRecipeList.add(data);
         userRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void onFailure() {
-        //isLoading = false;
     }
 }

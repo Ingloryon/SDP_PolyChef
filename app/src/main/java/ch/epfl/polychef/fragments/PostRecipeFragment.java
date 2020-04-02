@@ -193,13 +193,13 @@ public class PostRecipeFragment extends Fragment {
             return false;
         } else {
             if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getStringUid().toString());
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getRecipeUuid().toString());
             }
             for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getStringUid().toString() + "_" + i, "TODO:USER", postedRecipe.getStringUid().toString());
+                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getRecipeUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getRecipeUuid().toString());
             }
             hostActivity.getRecipeStorage().addRecipe(postedRecipe);
-            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getStringUid()); //TODO need to check that the recipe was successfully added
+            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
 
             return true;
         }
