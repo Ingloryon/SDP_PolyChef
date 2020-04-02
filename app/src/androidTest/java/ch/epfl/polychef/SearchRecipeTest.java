@@ -195,23 +195,13 @@ public class SearchRecipeTest {
                 .setEstimatedPreparationTime(1000)
                 .setEstimatedCookingTime(1000)
                 .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
-        recipe1=new RecipeBuilder()
-                .setName("34")
-                .addInstruction("Yay")
-                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
+        recipe1=new RecipeBuilder().setName("34").addInstruction("Yay").addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
                 .addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6)
-                .setEstimatedPreparationTime(1000)
-                .setEstimatedCookingTime(1000)
+                .setPersonNumber(6).setEstimatedPreparationTime(1000).setEstimatedCookingTime(1000)
                 .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
-        recipe2=new RecipeBuilder()
-                .setName("43-aBcD")
-                .addInstruction("Yay")
-                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6)
-                .setEstimatedPreparationTime(1000)
-                .setEstimatedCookingTime(1000)
-                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
+        recipe2=new RecipeBuilder().setName("43-aBcD").addInstruction("Yay")
+                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM).setPersonNumber(6).setEstimatedPreparationTime(1000)
+                .setEstimatedCookingTime(1000).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
 
         when(mockDataSnapshotWithRecipe0.getValue(Recipe.class)).thenReturn(recipe0);
         when(mockDataSnapshotWithRecipe1.getValue(Recipe.class)).thenReturn(recipe1);

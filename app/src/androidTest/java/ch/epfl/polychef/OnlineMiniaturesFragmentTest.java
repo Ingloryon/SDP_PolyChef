@@ -126,7 +126,6 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         onView(withId(R.id.searchBar)).perform(typeSearchViewText("test"));
         onView(withId(R.id.searchBar)).perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER));
-        wait(1000);
     }
 
     @Test
@@ -187,42 +186,6 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
     }
-
-//    @Test
-//    public synchronized void scrollingDownLoadANewRecipePeriodically() throws InterruptedException {
-//        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
-//            fakeRecipeStorage.addRecipe(testRecipe1);
-//            fakeRecipeStorage.addRecipe(testRecipe2);
-//        }
-//        fakeRecipeStorage.addRecipe(testRecipe2);
-//        fakeRecipeStorage.addRecipe(testRecipe2);
-//        fakeRecipeStorage.addRecipe(testRecipe2);
-//        fakeRecipeStorage.addRecipe(testRecipe2);
-//        fakeRecipeStorage.addRecipe(testRecipe2);
-//        fakeRecipeStorage.addRecipe(testRecipe2);
-//        fakeRecipeStorage.addRecipe(testRecipe2);
-//
-//
-//
-//
-//        initActivity();
-//        wait(1000);
-//        onView(withId(R.id.miniaturesOnlineList))
-//                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
-//        wait(4000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
-//        wait(4000);
-//        onView(withId(R.id.miniaturesOnlineList))
-//                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
-//        wait(4000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
-//        wait(1000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
-//        wait(1000);
-//        onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
-//        wait(1000);
-//        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2 + 1, ((FakeRecipeStorage) fakeRecipeStorage).getRecipeList().size());
-//    }
 
     @Test
     public synchronized void scrollingDownLoadANewRecipeOnceButNotMore() throws InterruptedException {
