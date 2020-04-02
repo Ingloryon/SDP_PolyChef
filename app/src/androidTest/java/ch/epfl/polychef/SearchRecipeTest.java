@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.polychef.recipe.Ingredient;
@@ -125,11 +126,10 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindOverString(){
-        List<Recipe> list=new ArrayList<>();
-        list.add(recipe0);
-        list.add(recipe1);
+        List<Recipe> recipeArrayList=new ArrayList<>();
+        addRecipes(recipeArrayList);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
 
         mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
 
@@ -154,12 +154,11 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientIsCaseInsensitive(){
-        List<Recipe> iLoveCodeClimate=new ArrayList<>();
-        iLoveCodeClimate.add(recipe0);
-        iLoveCodeClimate.add(recipe1);
-        iLoveCodeClimate.add(recipe2);
+        List<Recipe> list=new ArrayList<>();
+        addRecipes(list);
+        list.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(iLoveCodeClimate ,true);
+        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
 
@@ -170,8 +169,7 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientFindParticularValue(){
-        List<Recipe> maListLaMailer=new ArrayList<>();
-        maListLaMailer.add(recipe1);
+        List<Recipe> maListLaMailer=new ArrayList(Collections.singleton(recipe1));
 
         CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(maListLaMailer ,true);
 
@@ -187,17 +185,21 @@ public class SearchRecipeTest {
         mockDataSnapshotWithRecipe1=Mockito.mock(DataSnapshot.class);
         mockDataSnapshotWithRecipe2=Mockito.mock(DataSnapshot.class);
 
-        recipe0=new RecipeBuilder().setName("Fuck Travis").addInstruction("Fuck CC")
-                .setEstimatedPreparationTime(69).setEstimatedCookingTime(69).setPersonNumber(2)
-                .addIngredient("CodeClimate", 69, Ingredient.Unit.CUP)
-                .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE).build();
-        recipe1=new RecipeBuilder().setName("34").addInstruction("Yay").addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
-                .addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6).setEstimatedPreparationTime(999).setEstimatedCookingTime(999)
-                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
+        recipe0=new RecipeBuilder().setName("123456").setEstimatedPreparationTime(1000)
+                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
+                .setPersonNumber(6).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
+                .setEstimatedCookingTime(1000).addInstruction("Yay")
+                .build();
+        recipe1=new RecipeBuilder().setEstimatedCookingTime(1000).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
+                .setName("34").setPersonNumber(6).addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
+                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
+                .addInstruction("Yay").setEstimatedPreparationTime(1000).build();
+
+
         recipe2=new RecipeBuilder().setName("43-aBcD").addInstruction("Yay")
-                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM).setPersonNumber(6).setEstimatedPreparationTime(1000)
-                .setEstimatedCookingTime(1000).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
+                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
+                .setPersonNumber(6).setEstimatedPreparationTime(1000).setEstimatedCookingTime(1000)
+                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
 
         when(mockDataSnapshotWithRecipe0.getValue(Recipe.class)).thenReturn(recipe0);
         when(mockDataSnapshotWithRecipe1.getValue(Recipe.class)).thenReturn(recipe1);
@@ -209,5 +211,10 @@ public class SearchRecipeTest {
         snapshotsList.add(mockDataSnapshotWithRecipe2);
 
         when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
+    }
+
+    public void addRecipes(List <Recipe> l){
+        l.add(recipe0);
+        l.add(recipe1);
     }
 }
