@@ -25,6 +25,28 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fullRecipeFragment"
+        android:name="ch.epfl.polychef.fragments.FullRecipeFragment"
+        android:label="fragment_full_recipe"
+        tools:layout="@layout/fragment_full_recipe" >
+        <action
+            android:id="@+id/action_fullRecipeFragment_to_subscribersFragment"
+            app:destination="@id/subscribersFragment" />
+        <action
+            android:id="@+id/action_fullRecipeFragment_to_subscriptionsFragment"
+            app:destination="@id/subscriptionsFragment" />
+        <action
+            android:id="@+id/action_fullRecipeFragment_to_favouritesFragment"
+            app:destination="@id/favouritesFragment" />
+        <action
+            android:id="@+id/action_fullRecipeFragment_to_postRecipeFragment"
+            app:destination="@id/postRecipeFragment" />
+        <action
+            android:id="@+id/action_fullRecipeFragment_to_onlineMiniaturesFragment"
+            app:destination="@id/onlineMiniaturesFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/postRecipeFragment"
         android:name="ch.epfl.polychef.fragments.PostRecipeFragment"
         android:label="fragment_post_recipe"
@@ -84,7 +106,8 @@
     <fragment
         android:id="@+id/onlineMiniaturesFragment"
         android:name="ch.epfl.polychef.fragments.OnlineMiniaturesFragment"
-        android:label="OnlineMiniaturesFragment" >
+        android:label="fragment_miniatures_online"
+        tools:layout="@layout/fragment_miniatures_online" >
         <action
             android:id="@+id/action_onlineMiniaturesFragment_to_subscribersFragment"
             app:destination="@id/subscribersFragment" />
@@ -100,28 +123,6 @@
         <action
             android:id="@+id/action_onlineMiniaturesFragment_to_postRecipeFragment"
             app:destination="@id/postRecipeFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/fullRecipeFragment"
-        android:name="ch.epfl.polychef.fragments.FullRecipeFragment"
-        android:label="FullRecipeFragment"
-        tools:layout="@layout/fragment_full_recipe">
-        <action
-            android:id="@+id/action_fullRecipeFragment_to_subscribersFragment"
-            app:destination="@id/subscribersFragment" />
-        <action
-            android:id="@+id/action_fullRecipeFragment_to_subscriptionsFragment"
-            app:destination="@id/subscriptionsFragment" />
-        <action
-            android:id="@+id/action_fullRecipeFragment_to_favouritesFragment"
-            app:destination="@id/favouritesFragment" />
-        <action
-            android:id="@+id/action_fullRecipeFragment_to_postRecipeFragment"
-            app:destination="@id/postRecipeFragment" />
-        <action
-            android:id="@+id/action_fullRecipeFragment_to_onlineMiniaturesFragment"
-            app:destination="@id/onlineMiniaturesFragment" />
     </fragment>
 
 </navigation>

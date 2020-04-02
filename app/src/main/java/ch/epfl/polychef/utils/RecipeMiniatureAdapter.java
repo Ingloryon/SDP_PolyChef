@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ch.epfl.polychef.CallHandler;
@@ -22,7 +24,6 @@ import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.utils.Either;
 
 import java.util.List;
 
@@ -146,6 +147,33 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
             //Here we know that the context is an activity
             AppCompatActivity activity = (AppCompatActivity) mainContext;
+            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+
+            NavHostFragment hostFragment = (NavHostFragment)
+                    fragmentManager.findFragmentById(R.id.nav_host_fragment);
+
+            NavController navController = NavHostFragment.findNavController(hostFragment);
+
+            // Get the clicked recipe from the recyclerView
+            int recipePosition = recyclerView.getChildLayoutPosition(view);
+            Recipe clickedRecipe = recipeList.get(recipePosition);
+
+            // Create new Bundle containing the id of the container for the adapter
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Recipe", clickedRecipe);
+            FullRecipeFragment recipeFragment = new FullRecipeFragment();
+            recipeFragment.setArguments(bundle);
+
+            // Set this bundle to be an arguments of the startDestination using this trick
+            navController.setGraph(R.navigation.nav_graph, bundle);
+
+            navController.navigate(R.id.fullRecipeFragment, bundle);
+
+            //fragmentManager.beginTransaction().addToBackStack(null).commit();
+
+/*
+            //Here we know that the context is an activity
+            AppCompatActivity activity = (AppCompatActivity) mainContext;
             FragmentManager fragMana = activity.getSupportFragmentManager();
 
             // Get the clicked recipe from the recyclerView
@@ -159,7 +187,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
             FullRecipeFragment recipeFragment = new FullRecipeFragment();
             recipeFragment.setArguments(bundle);
 
-            fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
+            fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();*/
         }
     }
 
