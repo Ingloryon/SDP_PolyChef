@@ -29,6 +29,7 @@ public class FullRecipeFragmentTest {
 
     @Test
     public void canClickOnFirstElement() {
+        onView(withId(R.id.miniaturesOfflineList)).check(matches(isDisplayed()));
         onView(withId(R.id.fullRecipeFragment)).check(doesNotExist());
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.fullRecipeFragment)).check(matches(isDisplayed()));

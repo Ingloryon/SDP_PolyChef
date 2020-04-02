@@ -1,5 +1,7 @@
 package ch.epfl.polychef.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,19 +9,27 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.synnapps.carouselview.CarouselView;
+
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.utils.Either;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public final class FullRecipeFragment extends Fragment {
+public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> {
     private Recipe currentRecipe;
     private static final String NEW_LINE = System.lineSeparator();
+    private final List<Bitmap> imagesToDisplay = new ArrayList<>();
+    private CarouselView carouselView;
 
     /**
      * Required empty public constructor.
@@ -51,11 +61,26 @@ public final class FullRecipeFragment extends Fragment {
     }
 
     /**
-     * Display the recipe main image in the correct field in the activity.
+     * Display the recipe images in the correct field in the activity.
      */
     private void displayImage(View view) {
-        ImageView recipeImage = view.findViewById(R.id.recipeImage);
-        recipeImage.setImageResource(currentRecipe.getPicturesNumbers().get(0));
+        carouselView = view.findViewById(R.id.recipeImages);
+        carouselView.setPageCount(imagesToDisplay.size());
+        carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(imagesToDisplay.get(position)));
+        ImageStorage imageStorage = getImageStorage();
+        Either<String, Integer> miniatureMeta = currentRecipe.getMiniaturePath();
+        if(miniatureMeta.isNone()) {
+            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
+            carouselView.setPageCount(imagesToDisplay.size());
+        } else if(miniatureMeta.isRight()) {
+            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), miniatureMeta.getRight()));
+            carouselView.setPageCount(imagesToDisplay.size());
+        } else {
+            imageStorage.getImage(miniatureMeta.getLeft(), this);
+        }
+        for(String path: currentRecipe.getPicturesPath()) {
+            imageStorage.getImage(path, this);
+        }
     }
 
     /**
@@ -128,5 +153,20 @@ public final class FullRecipeFragment extends Fragment {
         strBuilder.deleteCharAt(strBuilder.length() - 1);
         TextView instructions = view.findViewById(R.id.instructionsList);
         instructions.setText(strBuilder.toString());
+    }
+
+    @Override
+    public void onSuccess(byte[] data) {
+        imagesToDisplay.add(BitmapFactory.decodeByteArray(data, 0, data.length));
+        carouselView.setPageCount(imagesToDisplay.size());
+    }
+
+    @Override
+    public void onFailure() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+    }
+
+    public ImageStorage getImageStorage() {
+        return new ImageStorage();
     }
 }
