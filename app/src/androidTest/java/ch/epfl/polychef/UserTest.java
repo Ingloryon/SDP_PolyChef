@@ -94,16 +94,17 @@ public class UserTest {
     @Test
     public void canAddRecipes() {
 
-        UUID uuids[] = new UUID[] {UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()};
+        String stringUids[] = new String[] {UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()};
         User fakeUser = new User();
-        fakeUser.addRecipe(uuids[0]);
-        fakeUser.addRecipe(uuids[1]);
-        fakeUser.addRecipe(uuids[2]);
-        fakeUser.addRecipe(uuids[3]);
-        assertEquals(uuids[0], fakeUser.getRecipes().get(0));
-        assertEquals(uuids[1], fakeUser.getRecipes().get(1));
-        assertEquals(uuids[2], fakeUser.getRecipes().get(2));
-        assertEquals(uuids[3], fakeUser.getRecipes().get(3));
+        fakeUser.addRecipe(stringUids[0]);
+        fakeUser.addRecipe(stringUids[1]);
+        fakeUser.addRecipe(stringUids[2]);
+        fakeUser.addRecipe(stringUids[3]);
+
+        assertEquals(stringUids[0], fakeUser.getRecipes().get(0));
+        assertEquals(stringUids[1], fakeUser.getRecipes().get(1));
+        assertEquals(stringUids[2], fakeUser.getRecipes().get(2));
+        assertEquals(stringUids[3], fakeUser.getRecipes().get(3));
     }
 
     @Test
@@ -158,7 +159,7 @@ public class UserTest {
     public void equalsChecksEachFields(){
 
         User doppelganger = mockUser();
-        doppelganger.addRecipe(UUID.randomUUID());
+        doppelganger.addRecipe(UUID.randomUUID().toString());
         assertNotEquals(alice, doppelganger);
         assertNotEquals(doppelganger, alice);
 

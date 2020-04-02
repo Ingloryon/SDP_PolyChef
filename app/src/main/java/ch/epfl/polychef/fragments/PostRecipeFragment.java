@@ -200,7 +200,7 @@ public class PostRecipeFragment extends Fragment {
                 imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
             }
             RecipeStorage.getInstance().addRecipe(postedRecipe);
-            UserStorage.getInstance().getPolyChefUser().addRecipe(postedRecipe.getUuid()); //TODO need to check that the recipe was successfully added
+            UserStorage.getInstance().getPolyChefUser().addRecipe(postedRecipe); //TODO need to check that the recipe was successfully added
 
             return true;
         }

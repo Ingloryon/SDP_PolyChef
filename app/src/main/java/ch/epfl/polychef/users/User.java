@@ -13,11 +13,12 @@ import java.util.UUID;
 
 import ch.epfl.polychef.recipe.Recipe;
 
+//TODO remove serializable
 public class User implements Serializable {
 
     private String email;
     private String username;
-    private List<UUID> recipes;
+    private List<String> recipes;
     private List<String> favourites;
     private List<String> subscribers;
     private List<String> subscriptions;
@@ -46,7 +47,7 @@ public class User implements Serializable {
         return username;
     }
 
-    public List<UUID> getRecipes() {
+    public List<String> getRecipes() {
         return new ArrayList<>(recipes);
     }
 
@@ -62,7 +63,7 @@ public class User implements Serializable {
         return new ArrayList<>(subscriptions);
     }
 
-    public void addRecipe(UUID recipe) {
+    public void addRecipe(String recipe) {
         recipes.add(recipe);
     }
 

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
@@ -71,7 +72,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 //                        return;
 //                    }
                     for(int i = currentIndex; i < Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size()); i++){
-                        recipeStorage.readRecipeFromUUID(userToDisplay.getRecipes().get(i), UserProfileFragment.this);
+                        String stringUID = userToDisplay.getRecipes().get(i);
+                        recipeStorage.readRecipeFromUUID(UUID.fromString(stringUID), UserProfileFragment.this);
                     }
 
                     currentIndex = Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size());
@@ -92,7 +94,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
         for(int i = 0; i < Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size()); i++){
-            recipeStorage.readRecipeFromUUID(userToDisplay.getRecipes().get(i), this);
+            String stringUID = userToDisplay.getRecipes().get(i);
+            recipeStorage.readRecipeFromUUID(UUID.fromString(stringUID), this);
         }
         currentIndex += Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size());
     }
