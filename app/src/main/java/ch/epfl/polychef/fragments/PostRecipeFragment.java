@@ -180,8 +180,8 @@ public class PostRecipeFragment extends Fragment {
             if(currentMiniature != null) {
                 imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
             }
-            for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
+            for(int i = 0; i < currentMealPictures.size(); ++i) {
+                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getUuid().toString());
             }
             RecipeStorage.getInstance().addRecipe(postedRecipe);
             return true;
@@ -246,18 +246,18 @@ public class PostRecipeFragment extends Fragment {
     private boolean checkForIllegalInputs(RecipeBuilder rb) {
 
         try {
-            rb.setName(name)
-                    .setEstimatedCookingTime(estimatedCookingTime)
-                    .setPersonNumber(personNumber)
-                    .setEstimatedPreparationTime(estimatedPreparationTime)
-                    .setRecipeDifficulty(recipeDifficulty);
-            for (int i = 0; i < recipeInstructions.size(); i++) {
-                rb.addInstruction(recipeInstructions.get(i));
-            }
-            for (int i = 0; i < ingredients.size(); i++) {
-                rb.addIngredient(ingredients.get(i));
-            }
-            rb.build();
+        rb.setName(name)
+                .setEstimatedCookingTime(estimatedCookingTime)
+                .setPersonNumber(personNumber)
+                .setEstimatedPreparationTime(estimatedPreparationTime)
+                .setRecipeDifficulty(recipeDifficulty);
+        for (int i = 0; i < recipeInstructions.size(); i++) {
+            rb.addInstruction(recipeInstructions.get(i));
+        }
+        for (int i = 0; i < ingredients.size(); i++) {
+            rb.addIngredient(ingredients.get(i));
+        }
+        rb.build();
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());

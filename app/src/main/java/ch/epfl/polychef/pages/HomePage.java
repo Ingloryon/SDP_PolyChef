@@ -1,6 +1,7 @@
 package ch.epfl.polychef.pages;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -58,6 +59,7 @@ public class HomePage extends ConnectedActivity {
         bundle.putSerializable("RecipeStorage", getRecipeStorage());
         // Set this bundle to be an arguments of the startDestination using this trick
         navController.setGraph(R.navigation.nav_graph, bundle);
+
         setupNavigation();
     }
 
