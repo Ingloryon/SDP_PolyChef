@@ -180,8 +180,8 @@ public class PostRecipeFragment extends Fragment {
             if(currentMiniature != null) {
                 imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
             }
-            for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
+            for(int i = 0; i < currentMealPictures.size(); ++i) {
+                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getUuid().toString());
             }
             RecipeStorage.getInstance().addRecipe(postedRecipe);
             return true;
