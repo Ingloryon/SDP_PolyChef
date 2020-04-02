@@ -45,6 +45,7 @@ public class UserStorage {
                         } else if(childrenCount == 1) {
                             for(DataSnapshot child: dataSnapshot.getChildren()){
                                 initializeExistingUser(child);
+                                Log.d("USERSTORGAGE-TAG", "This is an existing user");
                             }
 
                         } else {
@@ -63,7 +64,7 @@ public class UserStorage {
     private void initializeNewUser(String email) {
         String username = getAuthenticatedUserName();
         user = new User(email, username);
-
+        Log.d("USERSTORGAGE-TAG", "Initialising a new User");
         //TODO: Add OnSuccess and OnFailure listener
         DatabaseReference ref = getDatabase()
                 .getReference("users")
@@ -90,7 +91,12 @@ public class UserStorage {
             getDatabase()
                     .getReference("users/" + userKey)
                     .setValue(user);
-            Log.d("USERSTORAGE-TAG", "User sen back:" + user.toString());
+            Log.d("USERSTORAGE-TAG", "User sent back:" + user.toString());
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
         } else {
             throw new IllegalStateException("The user have not been initialized");
         }

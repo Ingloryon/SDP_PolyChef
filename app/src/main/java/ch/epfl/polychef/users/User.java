@@ -1,5 +1,7 @@
 package ch.epfl.polychef.users;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import ch.epfl.polychef.recipe.Recipe;
 
 public class User implements Serializable {
 
@@ -43,6 +47,14 @@ public class User implements Serializable {
     }
 
     public List<UUID> getRecipes() {
+        ArrayList<UUID> test = new ArrayList<UUID>(recipes);
+        Log.d("USERSTORGAGE-TAG", "new ArrayList(recipes) = " + test);
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+
         return new ArrayList<>(recipes);
     }
 
@@ -59,7 +71,15 @@ public class User implements Serializable {
     }
 
     public void addRecipe(UUID recipe) {
+
         recipes.add(recipe);
+
+        Log.d("USERSTORGAGE-TAG", "Add recipe => recipes =" + recipes);
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+        Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+
     }
 
     public void addFavourite(String recipe){
@@ -80,6 +100,7 @@ public class User implements Serializable {
         return "User: \n"
                 + "Email=" + email + ",\n"
                 + "username=" + username + ",\n"
+                + "recipes=" + recipes + ",\n"
                 + "favourites=" + favourites + ",\n"
                 + "subscribers=" + subscribers + ",\n"
                 + "subscriptions=" + subscriptions;

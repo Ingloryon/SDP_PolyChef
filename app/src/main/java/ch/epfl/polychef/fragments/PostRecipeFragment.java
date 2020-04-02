@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -199,7 +200,16 @@ public class PostRecipeFragment extends Fragment {
                 imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
             }
             RecipeStorage.getInstance().addRecipe(postedRecipe);
+            Log.d("USERSTORGAGE-TAG", "Before: " + UserStorage.getInstance().getPolyChefUser());
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
             UserStorage.getInstance().getPolyChefUser().addRecipe(postedRecipe.getUuid()); //TODO need to check that the recipe was successfully added
+            Log.d("USERSTORGAGE-TAG", "After: " + UserStorage.getInstance().getPolyChefUser());
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+            Log.d("USERSTORGAGE-TAG", "==============================================================================================");
+
             return true;
         }
     }
