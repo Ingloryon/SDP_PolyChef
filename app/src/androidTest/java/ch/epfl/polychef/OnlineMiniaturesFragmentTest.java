@@ -232,7 +232,7 @@ public class OnlineMiniaturesFragmentTest {
         }
 
         @Override
-        protected RecipeStorage getRecipeStorage(){
+        public RecipeStorage getRecipeStorage(){
             return fakeRecipeStorage;
         }
     }

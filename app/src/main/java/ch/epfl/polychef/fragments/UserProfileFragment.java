@@ -75,7 +75,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 //                    }
                     for(int i = currentIndex; i < Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size()); i++){
                         String stringUID = userToDisplay.getRecipes().get(i);
-                        recipeStorage.readRecipeFromUUID(UUID.fromString(stringUID), UserProfileFragment.this);
+                        recipeStorage.readRecipeFromUUID(stringUID, UserProfileFragment.this);
                     }
 
                     currentIndex = Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size());
@@ -97,7 +97,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         for(int i = 0; i < Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size()); i++){
             String stringUID = userToDisplay.getRecipes().get(i);
-            recipeStorage.readRecipeFromUUID(UUID.fromString(stringUID), this);
+            recipeStorage.readRecipeFromUUID(stringUID, this);
         }
         currentIndex += Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size());
     }
