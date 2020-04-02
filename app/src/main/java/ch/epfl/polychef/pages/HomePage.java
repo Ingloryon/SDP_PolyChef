@@ -61,7 +61,6 @@ public class HomePage extends ConnectedActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("fragmentID", R.id.nav_host_fragment);
 
-        bundle.putSerializable("RecipeStorage", getRecipeStorage());
         // Set this bundle to be an arguments of the startDestination using this trick
         navController.setGraph(R.navigation.nav_graph, bundle);
         setupNavigation();
@@ -189,7 +188,6 @@ public class HomePage extends ConnectedActivity {
 
                         Bundle bundle = new Bundle();
                         bundle.putInt("fragmentID", R.id.nav_host_fragment);
-                        bundle.putSerializable("RecipeStorage", getRecipeStorage());
 
                         navController.navigate(getFragmentId(itemId), bundle);
 

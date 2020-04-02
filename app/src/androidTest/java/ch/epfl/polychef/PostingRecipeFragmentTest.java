@@ -60,7 +60,7 @@ public class PostingRecipeFragmentTest {
 
     private RecipeStorage mockRecipeStorage;
     private UserStorage mockUserStorage;
-    private User mockUser = Mockito.mock(User.class);
+    private User mockUser;
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -212,13 +212,8 @@ public class PostingRecipeFragmentTest {
 
     private void mockInit() {
 
-        mockRecipeStorage = Mockito.mock(RecipeStorage.class);
-        mockUserStorage = Mockito.mock(UserStorage.class);
-
         doNothing().when(mockRecipeStorage).addRecipe(any(Recipe.class));
         doNothing().when(mockRecipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
-        when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
-        doNothing().when(mockUser).addRecipe(any(String.class));
     }
 
     private class FakeHomePage extends HomePage {
@@ -229,11 +224,16 @@ public class PostingRecipeFragmentTest {
 
         @Override
         public RecipeStorage getRecipeStorage() {
+            mockRecipeStorage = Mockito.mock(RecipeStorage.class);
             return mockRecipeStorage;
         }
 
         @Override
         public UserStorage getUserStorage() {
+            mockUser = Mockito.mock(User.class);
+            mockUserStorage = Mockito.mock(UserStorage.class);
+            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
+            doNothing().when(mockUser).addRecipe(any(String.class));
             return mockUserStorage;
         }
     }

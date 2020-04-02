@@ -47,7 +47,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
 
         Bundle bundle = getArguments();
-        recipeStorage = (RecipeStorage) bundle.getSerializable("RecipeStorage");
 
         int fragmentID = bundle.getInt("fragmentID");
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
