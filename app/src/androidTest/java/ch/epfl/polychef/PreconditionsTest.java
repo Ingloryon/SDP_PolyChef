@@ -1,13 +1,16 @@
 package ch.epfl.polychef;
 
 import org.junit.Test;
+
+import ch.epfl.polychef.utils.Preconditions;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PreconditionsTest {
 
     @Test
     public void checkArgumentOnlyRejectsFalseBooleans(){
-
+        Preconditions pre = new Preconditions();
         Preconditions.checkArgument(true, "The conditions is true");
         Preconditions.checkArgument(true);
         assertThrows(IllegalArgumentException.class, () -> Preconditions.checkArgument(false));

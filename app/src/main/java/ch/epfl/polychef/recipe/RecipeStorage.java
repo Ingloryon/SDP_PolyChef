@@ -15,23 +15,32 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
-import ch.epfl.polychef.Preconditions;
-import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.Preconditions;
 
 /**
  * Uploader and downloader of {@code Recipe} from the storage.
  */
 public class RecipeStorage implements Serializable {
+
+    private static RecipeStorage INSTANCE=new RecipeStorage();
+
     private static final String TAG = "Firebase";
-    public int id;
+    private static final String DB_NAME = "recipe";
+    private static final String DB_ID = "id";
+    private int id;
+
+    public static RecipeStorage getInstance(){
+        return INSTANCE;
+    }
+
+    private RecipeStorage(){
+    }
 
     /**
      * Add a new {@code Recipe} to the storage.
@@ -41,7 +50,7 @@ public class RecipeStorage implements Serializable {
     public void addRecipe(Recipe recipe) {
         Preconditions.checkArgument(recipe != null);
 
-        DatabaseReference idRef = getFirebaseDatabase().getReference("id");
+        DatabaseReference idRef = getFirebaseDatabase().getReference(DB_ID);
         //Get the last ID used in the database
         idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -51,7 +60,7 @@ public class RecipeStorage implements Serializable {
                 //Change the value of the ID in the database
                 id += 1;
                 idRef.setValue(id);
-                DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
+                DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME);
                 myRef.child(Integer.toString(id)).setValue(recipe);
             }
 
@@ -127,7 +136,7 @@ public class RecipeStorage implements Serializable {
     public void readRecipe(int id, CallHandler<Recipe> ch) {
         Preconditions.checkArgument(id > 0, "Id should be positive");
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
-        DatabaseReference myRef = getFirebaseDatabase().getReference("recipe").child(Integer.toString(id));
+        DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME).child(Integer.toString(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -235,7 +244,7 @@ public class RecipeStorage implements Serializable {
     }
 
     private Query getNRecipeQuery(int numberOfRecipes, int fromId) {
-        DatabaseReference myRef = getFirebaseDatabase().getReference("recipe");
+        DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME);
         return myRef.orderByKey().startAt(Integer.toString(fromId)).endAt(Integer.toString(fromId + numberOfRecipes - 1));
     }
 }

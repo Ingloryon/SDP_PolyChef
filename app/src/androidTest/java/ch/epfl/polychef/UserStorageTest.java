@@ -1,10 +1,6 @@
 package ch.epfl.polychef;
 
-import android.content.Intent;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -16,27 +12,27 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
-public class HomePageUserTest {
+public class UserStorageTest {
 
     private FirebaseDatabase mockDatabase;
     private FirebaseUser mockFirebaseUser;
@@ -51,38 +47,16 @@ public class HomePageUserTest {
     private String mockUserName = "Alice InWonderland";
     private String mockUserKey = "UserKey";
 
-    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
-            HomePage.class) {
-        @Override
-        protected HomePage create(Intent intent) {
-            HomePage activity = new HomePageUserTest.FakeHomePage();
-            return activity;
-        }
-    };
-
-    @Rule
-    public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            false);
-
-    private class FakeHomePage extends HomePage {
-        @Override
-        public FirebaseUser getUser() {
-            return mockFirebaseUser;
-        }
-
-        @Override
-        public FirebaseDatabase getDatabase() {
-            return mockDatabase;
-        }
-    }
+    private UserStorage fakeUserStorage = Mockito.mock(UserStorage.class,CALLS_REAL_METHODS );
 
     @Before
-    public void sharedMockInit(){
+    public void initMockFirebaseDatabase() {
         mockDatabase = mock(FirebaseDatabase.class);
         mockUsersRef = mock(DatabaseReference.class);
         mockOnDataChangeSnapshot = mock(DataSnapshot.class);
         mockOrderByEmail = mock(Query.class);
         mockEqualToEmail = mock(Query.class);
+        mockFirebaseUser = mock(FirebaseUser.class);
 
         when(mockDatabase.getReference("users")).thenAnswer(
                 (call) -> {
@@ -94,46 +68,47 @@ public class HomePageUserTest {
 
         when(mockOrderByEmail.equalTo(any(String.class))).thenReturn(mockEqualToEmail);
 
-        mockFirebaseUser = mock(FirebaseUser.class);
 
         when(mockFirebaseUser.getEmail()).thenReturn(mockUserEmail);
         when(mockFirebaseUser.getDisplayName()).thenReturn(mockUserName);
+
+        when(fakeUserStorage.getDatabase()).thenReturn(mockDatabase);
+        when(fakeUserStorage.getAuthenticatedUser()).thenReturn(mockFirebaseUser);
     }
+
 
     @After
-    public void launchActivity() {
-        intentsTestRule.launchActivity(new Intent());
+    public void initializeFakeUserStorage() {
+        fakeUserStorage.initializeUserFromAuthenticatedUser();
     }
 
-    public void onDataChangeCallBack(){
-        doAnswer((call) -> {
-            ValueEventListener listener =  call.getArgument(0);
-            listener.onDataChange(mockOnDataChangeSnapshot);
-            return null;
-        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
+    @Test
+    public void testMethodGetInstanceExist(){
+        UserStorage.getInstance();
     }
 
-    public User mockUser() {
-        User mockUser = new User(mockUserEmail, mockUserName);
+    @Test
+    public void testUpdateUserInfoThrowExceptionWhenNotInitialized(){
 
-        String fav1 = "First favourite recipe";
-        mockUser.addFavourite(fav1);
-
-        String fav2 = "Second favourite recipe";
-        mockUser.addFavourite(fav2);
-
-        String subscription = "Only one subscription";
-        mockUser.addSubscription(subscription);
-
-        return mockUser;
+        assertThrows(IllegalStateException.class, () -> fakeUserStorage.updateUserInfo());
     }
 
-    public void assertSendingBackCorrectUser(DatabaseReference ref, User expected){
-        when(ref.setValue(any(User.class))).thenAnswer((call) -> {
-            assertEquals(expected, call.getArgument(0));
-            return null;
-        });
-    }
+    /*@Test
+    public void testUpdateUserInfo(){
+
+        when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
+
+    }*/
+
+    /*public void updateUserInfo() {
+        if (user != null && userKey != null) {
+            getDatabase()
+                    .getReference("users/" + userKey)
+                    .setValue(user);
+        } else {
+            throw new IllegalStateException("The user have not been initialized");
+        }
+    }*/
 
     @Test
     public void newUserTest() {
@@ -156,10 +131,17 @@ public class HomePageUserTest {
         when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
 
         assertSendingBackCorrectUser(mockNewUserRef, new User(mockUserEmail, mockUserName));
+
+        fakeUserStorage.initializeUserFromAuthenticatedUser();
+        //Need to launch updateUserInfo after initialization
+        fakeUserStorage.updateUserInfo();
+        //the initialization in the @After is superfluous
+        doNothing().when(fakeUserStorage).initializeUserFromAuthenticatedUser();
     }
 
+
     @Test
-    public void oldUserTest(){
+    public void existingUserTest(){
 
         onDataChangeCallBack();
 
@@ -185,16 +167,6 @@ public class HomePageUserTest {
         when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockOldUserRef);
 
         assertSendingBackCorrectUser(mockUsersRef, mockUser);
-    }
-
-    public void assertOnDataChangeThrowsException(Exception exception){
-        doAnswer((call) -> {
-            ValueEventListener listener =  call.getArgument(0);
-
-            assertThrows(exception.getClass(), () -> listener.onDataChange(mockOnDataChangeSnapshot));
-
-            return null;
-        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     @Test
@@ -229,6 +201,47 @@ public class HomePageUserTest {
             ValueEventListener listener =  call.getArgument(0);
 
             assertThrows(IllegalArgumentException.class, () -> listener.onCancelled(DatabaseError.fromException(new Exception())));
+
+            return null;
+        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
+
+
+    private void onDataChangeCallBack(){
+        doAnswer((call) -> {
+            ValueEventListener listener =  call.getArgument(0);
+            listener.onDataChange(mockOnDataChangeSnapshot);
+            return null;
+        }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
+
+    private void assertSendingBackCorrectUser(DatabaseReference ref, User expected){
+        when(ref.setValue(any(User.class))).thenAnswer((call) -> {
+            assertEquals(expected, call.getArgument(0));
+            return null;
+        });
+    }
+
+    private User mockUser() {
+        User mockUser = new User(mockUserEmail, mockUserName);
+
+        String fav1 = "First favourite recipe";
+        mockUser.addFavourite(fav1);
+
+        String fav2 = "Second favourite recipe";
+        mockUser.addFavourite(fav2);
+
+        String subscription = "Only one subscription";
+        mockUser.addSubscription(subscription);
+
+        return mockUser;
+    }
+
+    private void assertOnDataChangeThrowsException(Exception exception){
+        doAnswer((call) -> {
+            ValueEventListener listener =  call.getArgument(0);
+
+            assertThrows(exception.getClass(), () -> listener.onDataChange(mockOnDataChangeSnapshot));
 
             return null;
         }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
