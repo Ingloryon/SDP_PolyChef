@@ -175,14 +175,14 @@ public final class Recipe implements Serializable, Cloneable {
      * Returns the String representation of the unique id of the recipe.
      * @return string of recipe's unique id
      */
-    public String getUuid(){
+    public String getStringUid(){
         return recipeUuid;
     }
 
     @Override
     public boolean equals(Object otherRecipe){
         if ( otherRecipe instanceof Recipe ){
-            return ((Recipe) otherRecipe).getUuid().equals(this.recipeUuid) ;
+            return ((Recipe) otherRecipe).getStringUid().equals(this.recipeUuid) ;
         }
         return false;
     }

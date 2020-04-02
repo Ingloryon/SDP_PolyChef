@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,13 +193,13 @@ public class PostRecipeFragment extends Fragment {
             return false;
         } else {
             if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getStringUid().toString());
             }
             for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getUuid().toString());
+                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getStringUid().toString() + "_" + i, "TODO:USER", postedRecipe.getStringUid().toString());
             }
-            RecipeStorage.getInstance().addRecipe(postedRecipe);
-            UserStorage.getInstance().getPolyChefUser().addRecipe(postedRecipe.getUuid().toString()); //TODO need to check that the recipe was successfully added
+            hostActivity.getRecipeStorage().addRecipe(postedRecipe);
+            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getStringUid()); //TODO need to check that the recipe was successfully added
 
             return true;
         }
@@ -358,5 +357,13 @@ public class PostRecipeFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    protected RecipeStorage getRecipeStorage() {
+        return RecipeStorage.getInstance();
+    }
+
+    protected UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 }

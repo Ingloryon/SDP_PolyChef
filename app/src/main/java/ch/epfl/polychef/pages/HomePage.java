@@ -207,7 +207,7 @@ public class HomePage extends ConnectedActivity {
         currentItem.setChecked(true);
     }
 
-    protected UserStorage getUserStorage(){
+    public UserStorage getUserStorage(){
         return UserStorage.getInstance();
     }
 

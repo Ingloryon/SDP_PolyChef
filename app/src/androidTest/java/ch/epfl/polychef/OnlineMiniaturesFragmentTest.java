@@ -227,7 +227,7 @@ public class OnlineMiniaturesFragmentTest {
 
 
         @Override
-        protected UserStorage getUserStorage(){
+        public UserStorage getUserStorage(){
             return Mockito.mock(UserStorage.class);
         }
 

@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
@@ -68,6 +70,20 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
             }
         });
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            recipeStorage = ((HomePage) context).getRecipeStorage();
+            if(recipeStorage == null){
+                throw new IllegalStateException();
+            }
+        } else {
+            throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
+        }
     }
 
     @Override

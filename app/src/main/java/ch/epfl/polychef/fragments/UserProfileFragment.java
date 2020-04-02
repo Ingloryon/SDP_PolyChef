@@ -108,7 +108,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         if(context instanceof HomePage){
             hostActivity = (HomePage) context;
-            recipeStorage = hostActivity.getRecipeStorage();
+            recipeStorage = RecipeStorage.getInstance();
         } else {
             throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
         }
