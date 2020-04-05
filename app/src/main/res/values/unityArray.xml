@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="unit">
+        <item>TEASPOON</item>
+        <item>TABLESPOON</item>
+        <item>POUND</item>
+        <item>KILOGRAM</item>
+        <item>GRAM</item>
+        <item>CUP</item>
+        <item>OUNCE</item>
+        <item>NO_UNIT</item>
+        <item>NONE</item>
+    </array>
+</resources>

@@ -17,7 +17,6 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 
 import org.junit.After;
 import org.junit.Before;
@@ -182,8 +181,8 @@ public class PostingRecipeFragmentTest {
 
     private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
         onView(withId(R.id.nameInput)).perform(scrollTo(), typeText(name));
-        onView(withId(R.id.ingredientsList)).perform(scrollTo(), typeText(ingre));
-        onView(withId(R.id.instructionsList)).perform(scrollTo(), typeText(instru));
+        onView(withId(R.id.ingredient0)).perform(scrollTo(), typeText(ingre));
+        onView(withId(R.id.instruction0)).perform(scrollTo(), typeText(instru));
         onView(withId(R.id.personNbInput)).perform(scrollTo(), typeText(personNb));
         onView(withId(R.id.prepTimeInput)).perform(scrollTo(), typeText(prep));
         onView(withId(R.id.cookTimeInput)).perform(typeText(cook));

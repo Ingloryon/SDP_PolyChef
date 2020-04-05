@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +47,15 @@ public class PostRecipeFragment extends Fragment {
     private final int titleMaxChar = 80;
     private final int titleMinChar = 3;
     private final int maxPersNb = 100;
+    private final int maxInstructions = 20;
+    private final int maxIngredients = 20;
+    private int numberOfInstruction = 1;
+    private int numberOfIngredients = 1;
     private String name;
+    private List<Integer> instructionsId = new ArrayList<>();
+    private List<Integer> ingredientsId = new ArrayList<>();
+    private List<Integer> quantityId = new ArrayList<>();
+    private List<Integer> unitId = new ArrayList<>();
     private List<String> recipeInstructions = new ArrayList<>();
     private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
@@ -53,9 +63,15 @@ public class PostRecipeFragment extends Fragment {
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
     private Recipe postedRecipe;
-
+    private LinearLayout instructionLayout;
+    private LinearLayout ingredientLayout;
+    private LinearLayout oneIngredient;
+    private EditText instructionText;
+    private EditText ingredientText;
+    private EditText quantity;
+    private Button addIngredientButton;
+    private Button addInstructionButton;
     private Button postButton;
-
     private Button addMiniature;
     private Button addPictures;
 
@@ -72,6 +88,7 @@ public class PostRecipeFragment extends Fragment {
     private List<String> errorLogs = new ArrayList<>();
 
     private Spinner difficultyInput;
+    private Spinner unitInput;
 
     /**
      * Required empty public constructor.
@@ -97,6 +114,28 @@ public class PostRecipeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setPostButton(view);
+            }
+        });
+
+        unitInput = getView().findViewById(R.id.unit0);
+        instructionLayout =  getView().findViewById(R.id.listOfInstructions);
+        ingredientLayout = getView().findViewById(R.id.listOfIngredients);
+        oneIngredient = getView().findViewById(R.id.oneIngredient);
+        instructionText = getView().findViewById(R.id.instruction0);
+        ingredientText = getView().findViewById(R.id.ingredient0);
+        quantity = getView().findViewById(R.id.quantity0);
+        addInstructionButton = getView().findViewById(R.id.buttonAddInstr);
+        addInstructionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAddInstructionButton(view);
+            }
+        });
+        addIngredientButton = getView().findViewById(R.id.buttonAddIngre);
+        addIngredientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAddIngredientButton(view);
             }
         });
 
@@ -197,17 +236,9 @@ public class PostRecipeFragment extends Fragment {
             name = inputName;
         }
 
-        String ingre = ((EditText) getView().findViewById(R.id.ingredientsList)).getText().toString();
-        String pattern = "\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}";
-        if (RecipeInputParsing.parseIngredients(ingre, pattern, ingredients, errorLogs)) {
-            wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
-        }
+        getAndCheckInstructions();
 
-        EditText instructionsInput = getView().findViewById(R.id.instructionsList);
-        String instructions = instructionsInput.getText().toString();
-        if (RecipeInputParsing.parseInstructions(instructions, recipeInstructions, errorLogs)) {
-            wrongInputs.put("Instructions", true); // TODO: Use replace when set SDK min24
-        }
+        getAndCheckIngredients();
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
@@ -340,5 +371,111 @@ public class PostRecipeFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    private void setAddInstructionButton(View view) {
+        if(numberOfInstruction>maxInstructions-1){
+            //TODO: add message when trying to add to many instructions
+        }else {
+            final ViewGroup.LayoutParams lparams = instructionText.getLayoutParams();
+            final EditText textView = new EditText(getActivity());
+            textView.setLayoutParams(lparams);
+            numberOfInstruction++;
+            textView.setHint("Instruction " + numberOfInstruction);
+            int id = View.generateViewId();
+            instructionsId.add(id);
+            textView.setId(id);
+            instructionLayout.addView(textView);
+        }
+    }
+    private void setAddIngredientButton(View view) {
+        if(numberOfIngredients>maxIngredients-1){
+            //TODO: print a message when trying to add too many ingredients
+        }else {
+            final ViewGroup.LayoutParams oneIngredientLayoutParams = oneIngredient.getLayoutParams();
+            final ViewGroup.LayoutParams unitLayoutParams = unitInput.getLayoutParams();
+
+            numberOfIngredients++;
+
+            LinearLayout linearLayout = new LinearLayout(getActivity());
+            int id = View.generateViewId();
+            linearLayout.setId(id);
+            linearLayout.setLayoutParams(oneIngredientLayoutParams);
+
+            final Spinner unit = new Spinner(getActivity());
+            unit.setLayoutParams(unitLayoutParams);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                    R.array.unit, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            unit.setAdapter(adapter);
+            id = View.generateViewId();
+            unitId.add(id);
+            unit.setId(id);
+
+            final EditText ingredient = new EditText(getActivity());
+            ingredient.setWidth(ingredientText.getWidth());
+            ingredient.setHint("Ingredient " + numberOfIngredients);
+            id = View.generateViewId();
+            ingredientsId.add(id);
+            ingredient.setId(id);
+
+            final EditText quantity = new EditText(getActivity());
+            //TODO:find a better way to set width
+            quantity.setWidth(255);
+            quantity.setHint("Quantity");
+            id = View.generateViewId();
+            quantityId.add(id);
+            quantity.setId(id);
+
+            linearLayout.addView(ingredient);
+            linearLayout.addView(quantity);
+            linearLayout.addView(unit);
+
+            ingredientLayout.addView(linearLayout);
+        }
+    }
+
+    private void getAndCheckInstructions(){
+        String instruction = ((EditText) getView().findViewById(R.id.instruction0)).getText().toString();
+        if(instruction.length()==0){
+            errorLogs.add("Instructions: the first instruction shouldn't be empty");
+        }else {
+            recipeInstructions.add(instruction);
+            for (int i = 1; i < numberOfInstruction; i++) {
+                String instruction1 = ((EditText) getView().findViewById(instructionsId.get(i-1))).getText().toString();
+                if (instruction1.length() == 0) {
+                }else{
+                    recipeInstructions.add(instruction1);
+                }
+            }
+            wrongInputs.put("Instructions", true);
+        }
+    }
+
+    private void getAndCheckIngredients(){
+        String ingredient = ((EditText) getView().findViewById(R.id.ingredient0)).getText().toString();
+        String quantity = ((EditText) getView().findViewById(R.id.quantity0)).getText().toString();
+        Ingredient.Unit unit = Ingredient.Unit.values()[((Spinner)getView().findViewById(R.id.unit0)).getSelectedItemPosition()];
+        if(ingredient.length()==0){
+            errorLogs.add("Ingredients: the ingredient shouldn't be empty");
+        }else if(quantity.length()==0 || !android.text.TextUtils.isDigitsOnly(quantity)){
+            errorLogs.add("Ingredient: the quantity needs to be a number");
+        }else{
+            ingredients.add(new Ingredient(ingredient, Double.parseDouble(quantity),unit));
+            for (int i = 1; i < numberOfIngredients; i++) {
+                String ingredient1 = ((EditText) getView().findViewById(ingredientsId.get(i-1))).getText().toString();
+                String quantity1 = ((EditText) getView().findViewById(quantityId.get(i-1))).getText().toString();
+                Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner)getView().findViewById(unitId.get(i-1))).getSelectedItemPosition()];
+                if(ingredient1.length()==0 || quantity1.length()==0) {
+                }else if(!android.text.TextUtils.isDigitsOnly(quantity1)){
+                    errorLogs.add("Ingredient: the quantity needs to be a number");
+                    return;
+                }else{
+                    ingredients.add(new Ingredient(ingredient1,Double.parseDouble(quantity1),unit1));
+                }
+            }
+            wrongInputs.put("Ingredients", true);
+        }
+
     }
 }

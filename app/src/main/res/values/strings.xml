@@ -48,4 +48,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="searchMessage">Search for a recipe</string>
     <string name="Search">Search</string>
+    <string name="plus">+</string>
+    <string name="hintInstr">Instruction 1</string>
+    <string name="EnterIngredient">Ingrdient 1</string>
+    <string name="EnterIngr">Ingredient 1</string>
+    <string name="Quantity">Quantity</string>
 </resources>
