@@ -110,8 +110,6 @@ public class HomePage extends ConnectedActivity {
 
                         invalidateOptionsMenu();
 
-                        int itemId = selectedItem.getItemId();
-
                         Bundle bundle = new Bundle();
                         bundle.putInt("fragmentID", R.id.nav_host_fragment);
                         bundle.putSerializable("RecipeStorage", getRecipeStorage());
@@ -119,10 +117,11 @@ public class HomePage extends ConnectedActivity {
                         if(navController.getCurrentDestination().getId() != R.id.nav_host_fragment){
                             // This nav prevents to return to login screen when on home
                             navController.navigate(R.id.favouritesFragment, bundle);
-                            // This returns to home so the navigation system works
+                            // This returns to home frag so the navigation system can handle
                             HomePage.super.onBackPressed();
                         }
 
+                        int itemId = selectedItem.getItemId();
                         navController.navigate(getFragmentId(itemId), bundle);
 
                         drawer.closeDrawer(GravityCompat.START, true);
