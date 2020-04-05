@@ -101,6 +101,12 @@ public class HomePage extends ConnectedActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem selectedItem) {
 
+                        /*
+                        if(navController.getCurrentDestination().getId() != R.id.nav_host_fragment){
+                            HomePage.super.onBackPressed();
+                        }*/
+
+
                         if (currentItem != null) {
                             currentItem.setChecked(false);
                         }
