@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.recipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;

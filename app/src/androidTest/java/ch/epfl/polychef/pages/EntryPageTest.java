@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -9,12 +9,14 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.LoginPage;
 
@@ -25,7 +27,7 @@ public class EntryPageTest {
 
     @Test
     public void buttonTextIsLogin() {
-        onView(withId(R.id.logButton)).check(matches(withText("Log in")));
+        onView(ViewMatchers.withId(R.id.logButton)).check(matches(withText("Log in")));
     }
 
     @Test
