@@ -1,13 +1,14 @@
 package ch.epfl.polychef.recipe;
 
-import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.utils.Preconditions;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public final class Rating implements Serializable {
-    private double ratingSum;
-    private Map<Integer, Double> allRatings;
+    private int ratingSum;
+    private Map<Integer, Integer> allRatings;
 
     /**
      * Constructs a new empty rating.
@@ -22,12 +23,12 @@ public final class Rating implements Serializable {
      * @param userID the ID of the user, a positive integer
      * @param rate the rate given by the user, between 0 and 5
      */
-    public void addRate(int userID, double rate){
+    public void addRate(int userID, int rate){
         Preconditions.checkArgument(0 <= rate && rate <= 5, "A rate's value should be between 0 and 5");
         Preconditions.checkArgument(userID >= 0, "UserID should be positive");
 
         if(allRatings.containsKey(userID)) {
-            double oldRate = allRatings.get(userID);
+            int oldRate = allRatings.get(userID);
             allRatings.put(userID, rate);  //allRatings.replace(userID, rate);  //TODO: Need min Sdk version 26 -> Would be much cleaner
             ratingSum = ratingSum - oldRate + rate;
         }
@@ -42,11 +43,19 @@ public final class Rating implements Serializable {
      * @return the average rating
      */
     public double ratingAverage(){
-        return allRatings.size()==0 ? 0 : ratingSum / allRatings.size();
+        return allRatings.size()==0 ? 0.0 : ((double)ratingSum) / allRatings.size();
     }
 
     @Override
     public String toString(){
-        return String.format("%.2f", ratingAverage()) + "/5 stars by " + allRatings.size() + " users.\n";
+        return String.format(Locale.ENGLISH,"%.2f", ratingAverage()) + "/5 stars by " + allRatings.size() + " users.\n";
+    }
+
+    public int getRatingSum(){
+        return ratingSum;
+    }
+
+    public Map<Integer, Integer> getAllRatings(){
+        return allRatings;
     }
 }

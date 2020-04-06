@@ -36,7 +36,6 @@ public final class OfflineRecipes {
                 e.printStackTrace();
             }
         }
-        // TODO Should we make it unmodifiable or not?  --> yes (#Guillaume)
         return Collections.unmodifiableList(copiedList);
     }
 
@@ -52,7 +51,7 @@ public final class OfflineRecipes {
             .addIngredient("Baked squash, for serving, optional", 0, Ingredient.Unit.NONE)
             .addInstruction("Preheat the oven to 450 degrees F. ")
             .addInstruction("Season salmon with salt and pepper. Place salmon, skin side down, on a non-stick baking sheet or in a non-stick pan with an oven-proof handle. Bake until salmon is cooked through, about 12 to 15 minutes. Serve with the Toasted Almond Parsley Salad and squash, if desired. ")
-            .addPicturePath(R.drawable.ovenbakedsalmon)
+            .setMiniatureFromId(R.drawable.ovenbakedsalmon)
             .build();
 
     private Recipe recipe2 = new RecipeBuilder()
@@ -79,7 +78,7 @@ public final class OfflineRecipes {
             .addInstruction("In a large bowl combine the meats, eggs, Parmigiano, parsley and bread crumbs. It works well to squish the mixture with your hands. Add the onion mixture and season generously with salt and squish some more. Add the water and do 1 final really good squish. The mixture should be quite wet. Test the seasoning of the mix by making a mini hamburger size patty and cooking it. The mixture should taste really good! If it doesn't it is probably missing salt. Add more. Add more anyway. ")
             .addInstruction("Preheat the oven to 350 degrees F. ")
             .addInstruction("Shape the meat into desired size. Some people like 'em big some people like 'em small. I prefer meatballs slightly larger than a golf ball. Coat a large saute pan with olive oil and bring to a medium-high heat. Brown the meatballs on all sides. Place them on a cookie sheet and bake them in the preheated oven for about 15 minutes or until the meatballs are cooked all the way through. If using right away, add them to your big pot of marinara sauce. If not using right away, they can be frozen for later use. Serve with pasta and sauce or just eat them straight out of the pot! YUM! ")
-            .addPicturePath(R.drawable.meatballs)
+            .setMiniatureFromId(R.drawable.meatballs)
             .build();
 
     private Recipe recipe3 = new RecipeBuilder()
@@ -109,7 +108,7 @@ public final class OfflineRecipes {
             .addInstruction("Add the wine and bring to a boil, stirring to combine. Cook, stirring frequently, until reduced completely, 5 to 6 minutes. Stir in 2 tablespoons of the butter until melted, then sprinkle in the flour and stir until well combined with the vegetables. Slowly pour in the cream, then add the lemon juice, 1 teaspoon salt and a few grinds black pepper. Simmer, stirring occasionally, until the sauce is slightly thickened and no longer has a floury taste, 6 to 8 minutes. Add the pasta and cheese and toss until pasta is well coated. Transfer to a 3-quart casserole dish.")
             .addInstruction("Meanwhile, microwave the remaining 4 tablespoons butter in a small bowl until melted, about 1 minute. Stir 2 tablespoons of the melted butter and 1/2 teaspoon salt into the panko in a small bowl; set aside. Toss the remaining 2 tablespoons melted butter with the shrimp, grated garlic, 1/2 teaspoon salt and a few grinds black pepper in a medium bowl. Scatter the shrimp evenly over top of the pasta, then sprinkle with the panko mixture.")
             .addInstruction("Bake until the shrimp are opaque throughout and the topping is slightly golden, about 10 minutes. Let sit for 10 minutes before sprinkling with the parsley.")
-            .addPicturePath(R.drawable.shrimps)
+            .setMiniatureFromId(R.drawable.shrimps)
             .build();
 
     private Recipe recipe4 = new RecipeBuilder()
@@ -127,7 +126,7 @@ public final class OfflineRecipes {
             .addInstruction("Preheat the oven to 400 degrees F.")
             .addInstruction("Cut the potatoes in half or quarters and place in a bowl with the olive oil, salt, pepper, and garlic; toss until the potatoes are well coated. Transfer the potatoes to a sheet pan and spread out into 1 layer. Roast in the oven for 45 minutes to 1 hour or until browned and crisp. Flip twice with a spatula during cooking in order to ensure even browning. ")
             .addInstruction("Remove the potatoes from the oven, toss with parsley, season to taste, and serve hot. ")
-            .addPicturePath(R.drawable.potatoes)
+            .setMiniatureFromId(R.drawable.potatoes)
             .build();
 
     private Recipe recipe5 = new RecipeBuilder()
@@ -147,6 +146,6 @@ public final class OfflineRecipes {
             .addIngredient("maple syrup, warmed", 0.5, Ingredient.Unit.CUP)
             .addInstruction("In a small bowl, combine cinnamon, nutmeg, and sugar and set aside briefly.")
             .addInstruction("In a 10-inch or 12-inch skillet, melt butter over medium heat. Whisk together cinnamon mixture, eggs, milk, and vanilla and pour into a shallow container such as a pie plate. Dip bread in egg mixture. Fry slices until golden brown, then flip to cook the other side. Serve with syrup. ")
-            .addPicturePath(R.drawable.frenchtoast)
+            .setMiniatureFromId(R.drawable.frenchtoast)
             .build();
 }

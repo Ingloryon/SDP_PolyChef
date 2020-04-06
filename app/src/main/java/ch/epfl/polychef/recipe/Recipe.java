@@ -1,15 +1,21 @@
 package ch.epfl.polychef.recipe;
 
-import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.utils.Either;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public final class Recipe implements Serializable, Cloneable {
+
+    public Recipe(){
+        recipeUuid=null;
+        rating=null;
+    }
 
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
@@ -27,13 +33,9 @@ public final class Recipe implements Serializable, Cloneable {
     private final Rating rating;
 
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
-    private boolean hasPictures;
-    // TODO should we have this ?
-    private boolean hasMiniature;
-    private String miniaturePath;
-    private List<Integer> picturesNumbers;
-    private static final String DEFAULT_MINIATURE_PATH = "/src/default_miniature.png";
-    private static final List<Integer> DEFAULT_PICTURE_PATH = Arrays.asList(R.drawable.frenchtoast);
+    private Either<String, Integer> miniaturePath;
+    private List<String> picturesPath;
+    public static final int DEFAULT_MINIATURE_PATH = R.drawable.default_miniature;
 
     /**
      * Creates a new Recipe.
@@ -44,17 +46,14 @@ public final class Recipe implements Serializable, Cloneable {
      * @param estimatedPreparationTime the approximate time needed to prepare the recipe, in minutes (strictly positive)
      * @param estimatedCookingTime the approximate time needed to cook the recipe, in minutes (strictly positive)
      * @param recipeDifficulty the difficulty of the recipe
-     * @param miniaturePath path to access the miniature image, provide empty string for default miniature
-     * @param picturesNumbers path to access the pictures of the recipe, provide empty list for default picture
+     * @param miniaturePath path to access the miniature image, provide {@code Either.none()} for default miniature
+     * @param picturesPath path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, String miniaturePath, ArrayList<Integer> picturesNumbers){
-
-        this.hasMiniature = !miniaturePath.isEmpty();
-        this.hasPictures = picturesNumbers.size()!=0;
-
+    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, Either<String, Integer> miniaturePath, List<String> picturesPath){
         this.recipeUuid = UUID.randomUUID();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
+        //TODO save deepCopy of ingredients;
         this.ingredients = new ArrayList<>(ingredients);
         this.personNumber = personNumber;
         this.estimatedPreparationTime = estimatedPreparationTime;
@@ -62,10 +61,10 @@ public final class Recipe implements Serializable, Cloneable {
         this.recipeDifficulty = recipeDifficulty;
         this.rating = new Rating();
         this.miniaturePath = miniaturePath;
-        this.picturesNumbers = new ArrayList<>();
-        if(hasPictures) {
-            this.picturesNumbers.addAll(picturesNumbers);
+        if(this.miniaturePath == null) {
+            this.miniaturePath = Either.none();
         }
+        this.picturesPath = picturesPath;
     }
 
     /**
@@ -157,19 +156,19 @@ public final class Recipe implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the miniature path of the recipe.
+     * Returns if it exists the miniature path of the recipe.
      * @return the rating of the recipe
      */
-    public String getMiniaturePath() {
-        return hasMiniature ? miniaturePath : DEFAULT_MINIATURE_PATH;
+    public Either<String, Integer> getMiniaturePath() {
+        return miniaturePath != null ? miniaturePath : Either.none();
     }
 
     /**
-     * Returns the list of the pictures' numbers.
-     * @return List of picture numbers
+     * Returns the list of the pictures' path.
+     * @return List of picture path
      */
-    public List<Integer> getPicturesNumbers() {
-        return hasPictures ? Collections.unmodifiableList(picturesNumbers) : DEFAULT_PICTURE_PATH;
+    public List<String> getPicturesPath() {
+        return picturesPath != null ? Collections.unmodifiableList(picturesPath) : new ArrayList<>();
     }
 
     /**
@@ -214,7 +213,6 @@ public final class Recipe implements Serializable, Cloneable {
     public Object clone() throws CloneNotSupportedException{
         return super.clone();
     }
-
 
     // TODO: Add setters for needed attributes -> how to differentiate two parts of the class' methods : the ones for the recipe owner that is only modifiable by him (change quantities, name, photos, ect...), the ones that are public (change nb of persons, comment, ...)
     // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)

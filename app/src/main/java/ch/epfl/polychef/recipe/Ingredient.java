@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
-import ch.epfl.polychef.Preconditions;
+import ch.epfl.polychef.utils.Preconditions;
 
 /**
  * Class that represent a Recipe's ingredient.
  */
 public final class Ingredient implements Serializable {
+
+    public Ingredient(){
+    }
 
     public enum Unit {
         TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE

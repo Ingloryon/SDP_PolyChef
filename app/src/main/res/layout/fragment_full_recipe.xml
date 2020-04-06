@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fullRecipeFragment"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/fullRecipeFragment"
+    tools:context=".fragments.FullRecipeFragment">
 
     <ScrollView
         android:layout_width="0dp"
@@ -19,6 +21,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:showDividers="middle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -33,7 +36,7 @@
 
                     <TextView
                         android:id="@+id/recipeName"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
@@ -50,7 +53,7 @@
                     <RatingBar
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
-                        android:layout_height="45dp"
+                        android:layout_height="0dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:isIndicator="true"
@@ -62,18 +65,22 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
+                        android:showDividers="middle"
+                        android:divider="@drawable/empty_tall_divider"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
                         android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ratingBar">
 
                         <TextView
                             android:id="@+id/prepTime"
                             android:layout_width="190dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif-black"
                             android:textSize="18sp"
@@ -94,7 +101,7 @@
                     <TextView
                         android:id="@+id/difficulty"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
@@ -104,9 +111,9 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-                    <ImageView
-                        android:id="@+id/recipeImage"
-                        android:layout_width="600dp"
+                    <com.synnapps.carouselview.CarouselView
+                        android:id="@+id/recipeImages"
+                        android:layout_width="0dp"
                         android:layout_height="230dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="24dp"
@@ -121,21 +128,23 @@
 
                     <TextView
                         android:id="@+id/ingredients"
-                        android:layout_width="395dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="32dp"
+                        android:layout_marginEnd="8dp"
                         android:fontFamily="serif"
                         android:text="@string/Ingredients"
                         android:textColor="@android:color/background_dark"
                         android:textSize="30sp"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
+                        app:layout_constraintTop_toBottomOf="@+id/recipeImages" />
 
                     <TextView
                         android:id="@+id/ingredientsList"
-                        android:layout_width="395dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="32dp"
@@ -150,21 +159,23 @@
 
                     <TextView
                         android:id="@+id/instructions"
-                        android:layout_width="395dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="32dp"
+                        android:layout_marginEnd="8dp"
                         android:fontFamily="serif"
                         android:text="@string/Instructions"
                         android:textColor="@android:color/primary_text_light_nodisable"
                         android:textSize="30sp"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ingredientsList" />
 
                     <TextView
                         android:id="@+id/instructionsList"
-                        android:layout_width="395dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="32dp"

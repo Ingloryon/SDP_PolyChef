@@ -1,7 +1,9 @@
 package ch.epfl.polychef.recipe;
 
 import androidx.annotation.NonNull;
-import ch.epfl.polychef.Preconditions;
+
+import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +16,8 @@ public final class RecipeBuilder {
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
 
-    private String miniaturePath = "";
-    private ArrayList<Integer> picturesNumbers = new ArrayList<>();
+    private Either<String, Integer> miniaturePath = Either.none();
+    private ArrayList<String> picturesName = new ArrayList<>();
 
     /**
      * Builds a Recipe.
@@ -31,7 +33,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesNumbers);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName);
     }
 
     /**
@@ -73,6 +75,17 @@ public final class RecipeBuilder {
     }
 
     /**
+     * Add an ingredient from an exiting one.
+     * @param ingredient an Ingredient
+     * @return the recipe builder
+     */
+    public RecipeBuilder addIngredient(@NonNull Ingredient ingredient) {
+        //checks are performed in Ingredient's constructor
+        ingredients.add(new Ingredient(ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit()));
+        return this;
+    }
+
+    /**
      * Sets the number of persons the recipe is for.
      *
      * @param personNumber the number of persons, must be strictly positive
@@ -105,7 +118,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder setEstimatedCookingTime(int estimatedCookingTime) {
-        Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated time required must be strictly positive");
+        Preconditions.checkArgument(estimatedCookingTime >= 0, "The estimated time required must be positive");
 
         this.estimatedCookingTime = estimatedCookingTime;
         return this;
@@ -125,25 +138,35 @@ public final class RecipeBuilder {
     /**
      * Sets the path where to find the miniature.
      *
-     * @param miniaturePath path to find the miniature, must be non-empty and lead to a .png or .jpeg image
+     * @param miniaturePath path to find the miniature, must be non-empty
      * @return the modified builder
      */
-    public RecipeBuilder setMiniaturePath(@NonNull String miniaturePath) {
+    public RecipeBuilder setMiniatureFromPath(@NonNull String miniaturePath) {
         Preconditions.checkArgument(!miniaturePath.isEmpty(), "The miniature path must be non empty");
-        Preconditions.checkArgument(miniaturePath.endsWith(".png") || miniaturePath.endsWith(".jpeg"));
-        this.miniaturePath = miniaturePath;
+        this.miniaturePath = Either.left(miniaturePath);
+        return this;
+    }
+
+    /**
+     * Sets the id of the miniature.
+     *
+     * @param miniatureId id the local miniature
+     * @return the modified builder
+     */
+    public RecipeBuilder setMiniatureFromId(@NonNull Integer miniatureId) {
+        this.miniaturePath = Either.right(miniatureId);
         return this;
     }
 
     /**
      * Adds the path of an image of the meal.
      *
-     * @param pictureNb Integer number of an image, must be positive
+     * @param pictureName String path of an image
      * @return the modified builder
      */
-    public RecipeBuilder addPicturePath(@NonNull Integer pictureNb) {
-        Preconditions.checkArgument(pictureNb > 0, "The number of the picture must be positive");
-        this.picturesNumbers.add(pictureNb);
+    public RecipeBuilder addPicturePath(@NonNull String pictureName) {
+        Preconditions.checkArgument(pictureName != null, "Picture path should not be null");
+        this.picturesName.add(pictureName);
         return this;
     }
 }
