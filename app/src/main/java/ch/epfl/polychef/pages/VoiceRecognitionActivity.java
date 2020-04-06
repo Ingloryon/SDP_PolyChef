@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.Locale;
+
+import ch.epfl.polychef.R;
 
 public class VoiceRecognitionActivity extends AppCompatActivity {
     private TextToSpeech textToSpeech;
