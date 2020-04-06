@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.fragments;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -12,12 +12,12 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.UserStorage;
 
@@ -60,7 +61,7 @@ public class PostingRecipeFragmentTest {
     public void initActivity(){
         Intents.init();
         intentsTestRule.launchActivity(new Intent());
-        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(ViewMatchers.withId(R.id.drawer)).perform(DrawerActions.open());
         onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_recipe));
         onView(withId(R.id.drawer)).perform(DrawerActions.close());
     }

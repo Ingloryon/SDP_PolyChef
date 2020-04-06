@@ -145,36 +145,6 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         @Override
         public void onClick(View view) {
 
-            // TODO: Bug on nav to fix (in progress)
-/*
-            // To fix problem of offlineRecipe can dirtily add a if else with old case
-            //Here we know that the context is an activity
-            AppCompatActivity activity = (AppCompatActivity) mainContext;
-            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-
-            NavHostFragment hostFragment = (NavHostFragment)
-                    fragmentManager.findFragmentById(R.id.nav_host_fragment);
-
-            NavController navController = NavHostFragment.findNavController(hostFragment);
-
-            // Get the clicked recipe from the recyclerView
-            int recipePosition = recyclerView.getChildLayoutPosition(view);
-            Recipe clickedRecipe = recipeList.get(recipePosition);
-
-            // Create new Bundle containing the id of the container for the adapter
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("Recipe", clickedRecipe);
-            FullRecipeFragment recipeFragment = new FullRecipeFragment();
-            recipeFragment.setArguments(bundle);
-
-            // Set this bundle to be an arguments of the startDestination using this trick
-            navController.setGraph(R.navigation.nav_graph, bundle);
-
-            navController.navigate(R.id.fullRecipeFragment, bundle);
-
-            //fragmentManager.beginTransaction().addToBackStack(null).commit();*/
-
-
             //Here we know that the context is an activity
             AppCompatActivity activity = (AppCompatActivity) mainContext;
             FragmentManager fragMana = activity.getSupportFragmentManager();
