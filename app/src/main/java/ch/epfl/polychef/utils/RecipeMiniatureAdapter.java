@@ -15,8 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ch.epfl.polychef.CallHandler;
@@ -36,6 +34,8 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     private List<Recipe> recipeList;
     private RecyclerView recyclerview;
     private int fragmentContainerID;
+
+    private ImageStorage imageStorage = new ImageStorage();
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -85,7 +85,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
         } else {
-            new ImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
+            getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
                 @Override
                 public void onSuccess(byte[] data) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -98,6 +98,10 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
                 }
             });
         }
+    }
+
+    public ImageStorage getImageStorage() {
+        return imageStorage;
     }
 
     /**
