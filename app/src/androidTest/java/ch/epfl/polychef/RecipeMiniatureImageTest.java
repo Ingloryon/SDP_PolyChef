@@ -59,12 +59,11 @@ public class RecipeMiniatureImageTest {
             .setEstimatedCookingTime(35)
             .setEstimatedPreparationTime(40)
             .addIngredient("test", 1.0, Ingredient.Unit.CUP)
-            .setMiniatureFromPath("test_path")
             .setRecipeDifficulty(Recipe.Difficulty.EASY);
 
-    private Recipe recipe1 = recipeBuilder.setName("test1") .build();
+    private Recipe recipe1 = recipeBuilder.setName("test1").setMiniatureFromPath("test_path").build();
 
-    private Recipe recipe2 = recipeBuilder.setName("test2") .build();
+    private Recipe recipe2 = recipeBuilder.setName("test2").setMiniatureFromPath("test_path2").build();
 
     private RecipeMiniatureImageTest.FragmentTest fragment;
 
