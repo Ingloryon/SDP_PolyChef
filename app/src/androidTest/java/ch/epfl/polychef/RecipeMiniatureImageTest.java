@@ -32,7 +32,9 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -95,6 +97,7 @@ public class RecipeMiniatureImageTest {
         wait(1000);
         assertEquals(2, fragment.getRecyclerView().getAdapter().getItemCount());
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test1")))).check(matches(isDisplayed()));
+        onView(withId(R.id.miniaturesOnlineList)).perform(actionOnItemAtPosition(1, scrollTo()));
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test2")))).check(matches(not(isDisplayed())));
     }
 
