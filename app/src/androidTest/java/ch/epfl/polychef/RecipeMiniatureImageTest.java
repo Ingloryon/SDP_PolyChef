@@ -53,27 +53,18 @@ public class RecipeMiniatureImageTest {
     @Mock
     RecipeStorage recipeStorage;
 
-    private Recipe recipe1 = new RecipeBuilder()
-            .setName("test1")
+    private RecipeBuilder recipeBuilder = new RecipeBuilder()
             .addInstruction("test instruction")
             .setPersonNumber(4)
             .setEstimatedCookingTime(35)
             .setEstimatedPreparationTime(40)
             .addIngredient("test", 1.0, Ingredient.Unit.CUP)
             .setMiniatureFromPath("test_path")
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
-            .build();
+            .setRecipeDifficulty(Recipe.Difficulty.EASY);
 
-    private Recipe recipe2 = new RecipeBuilder()
-            .setName("test2")
-            .addInstruction("test instruction 2")
-            .setPersonNumber(4)
-            .setEstimatedCookingTime(35)
-            .setEstimatedPreparationTime(40)
-            .addIngredient("test", 1.0, Ingredient.Unit.CUP)
-            .setMiniatureFromPath("test_path2")
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
-            .build();
+    private Recipe recipe1 = recipeBuilder.setName("test1") .build();
+
+    private Recipe recipe2 = recipeBuilder.setName("test2") .build();
 
     private RecipeMiniatureImageTest.FragmentTest fragment;
 
@@ -113,6 +104,7 @@ public class RecipeMiniatureImageTest {
         private RecipeStorage recipeStorage;
         private int currentReadInt = 1;
         private List<Recipe> dynamicRecipeList = new ArrayList<>();
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
