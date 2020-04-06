@@ -1,7 +1,6 @@
 package ch.epfl.polychef.pages;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -110,12 +109,18 @@ public class HomePage extends ConnectedActivity {
 
                         invalidateOptionsMenu();
 
-                        int itemId = selectedItem.getItemId();
-
                         Bundle bundle = new Bundle();
                         bundle.putInt("fragmentID", R.id.nav_host_fragment);
                         bundle.putSerializable("RecipeStorage", getRecipeStorage());
 
+                        if(navController.getCurrentDestination().getId() != R.id.nav_host_fragment){
+                            // This nav prevents to return to login screen when on home
+                            navController.navigate(R.id.favouritesFragment, bundle);
+                            // This returns to home frag so the navigation system can handle
+                            HomePage.super.onBackPressed();
+                        }
+
+                        int itemId = selectedItem.getItemId();
                         navController.navigate(getFragmentId(itemId), bundle);
 
                         drawer.closeDrawer(GravityCompat.START, true);
@@ -133,4 +138,11 @@ public class HomePage extends ConnectedActivity {
     protected RecipeStorage getRecipeStorage(){
         return RecipeStorage.getInstance();
     }
+
+    // TODO: Remove if no cleaner solution to detect when on a fullRecipeFrag is found
+    /*private boolean isViewOnFullRecipeFrag(){
+        int currentIdView = navController.getCurrentDestination().getId();
+
+        return currentIdView != R.id.nav_host_fragment && currentIdView != R.id.favouritesFragment && currentIdView != R.id.subscribersFragment && currentIdView != R.id.nav_subscriptions && currentIdView != R.id.nav_recipe;
+    }*/
 }

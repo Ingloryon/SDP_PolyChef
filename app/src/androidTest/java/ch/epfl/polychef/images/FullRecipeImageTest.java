@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.images;
 
 import android.os.Bundle;
 
@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.EntryPage;

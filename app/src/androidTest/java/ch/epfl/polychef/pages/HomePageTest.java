@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import android.content.Intent;
 
@@ -13,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -28,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.UserStorage;
 
@@ -59,7 +61,7 @@ public class HomePageTest {
 
     @Test
     public void buttonTextIsLogoutAndCanClick() {
-        onView(withId(R.id.logButton)).check(matches(withText("Log out")));
+        onView(ViewMatchers.withId(R.id.logButton)).check(matches(withText("Log out")));
         onView(withId(R.id.logButton)).perform(click());
     }
 

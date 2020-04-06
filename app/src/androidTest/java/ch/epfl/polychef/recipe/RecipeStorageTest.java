@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.recipe;
 
 import androidx.core.util.Consumer;
 
@@ -20,6 +20,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;

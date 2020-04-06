@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
 import android.view.KeyEvent;
@@ -35,6 +35,9 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.CallNotifier;
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
@@ -161,7 +164,7 @@ public class OnlineMiniaturesFragmentTest {
         fakeRecipeStorage.addRecipe(testRecipe1);
         initActivity();
         wait(1000);
-        onView(withId(R.id.miniaturesOnlineList))
+        onView(ViewMatchers.withId(R.id.miniaturesOnlineList))
                 .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
         assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
