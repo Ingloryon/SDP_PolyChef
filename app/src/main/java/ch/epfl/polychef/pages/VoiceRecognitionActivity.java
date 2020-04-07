@@ -29,19 +29,23 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
 
         FloatingActionButton floatingActionButton=(FloatingActionButton) findViewById(R.id.voiceRecognitionFloatingActionButton);
         floatingActionButton.setOnClickListener((view)->{
-            Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
-            intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS,true);
-            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,1_000_000);
-            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS,1_000_000);
-            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS,1_000_000);
-            speechRecognizer.startListening(intent);
+            startListening();
         });
 
         initializeTextToSpeech();
         initializeSpeechRecognizer();
+    }
+
+    private void startListening(){
+        Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
+        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS,true);
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,new Long(1000000));
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS,new Long(1000000));
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS,new Long(1000000));
+        speechRecognizer.startListening(intent);
     }
 
     /**
@@ -68,7 +72,7 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
                 @Override
                 public void onEndOfSpeech() {
                     Toast.makeText(VoiceRecognitionActivity.this,"END OF SPEECH",Toast.LENGTH_SHORT).show();
-
+                    //startListening();
                 }
                 @Override
                 public void onError(int error) {}
@@ -82,6 +86,8 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
                 @Override
                 public void onEvent(int eventType, Bundle params) {}
             });
+        }else{
+            Toast.makeText(VoiceRecognitionActivity.this,"An Error Occurred",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -93,7 +99,7 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if(textToSpeech.getEngines().size()==0){
-                    Toast.makeText(VoiceRecognitionActivity.this ,"There is no voice recognition engine.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(VoiceRecognitionActivity.this ,"There is no voice recognition engine.",Toast.LENGTH_SHORT).show();
                     finish();
                 }else{
                     textToSpeech.setLanguage(Locale.UK);
@@ -133,6 +139,7 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+        Toast.makeText(VoiceRecognitionActivity.this ,"ShutDown VoiceRecognition",Toast.LENGTH_SHORT).show();
         textToSpeech.shutdown();
     }
 }
