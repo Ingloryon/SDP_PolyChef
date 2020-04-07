@@ -15,8 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ch.epfl.polychef.CallHandler;
@@ -30,13 +28,14 @@ import java.util.List;
 /**
  * This class is an adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView that is in the activity where the miniatures are shown.
  */
-public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> implements CallHandler<byte []> {
+public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> {
 
     private Context mainContext;
     private List<Recipe> recipeList;
     private RecyclerView recyclerview;
     private int fragmentContainerID;
-    private MiniatureViewHolder currentMinViewHolder = null;
+
+    private ImageStorage imageStorage = new ImageStorage();
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -86,9 +85,23 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
         } else {
-            currentMinViewHolder = holder;
-            new ImageStorage().getImage(miniatureMeta.getLeft(), this);
+            getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
+                @Override
+                public void onSuccess(byte[] data) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    holder.image.setImageBitmap(bmp);
+                }
+
+                @Override
+                public void onFailure() {
+                    Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+                }
+            });
         }
+    }
+
+    public ImageStorage getImageStorage() {
+        return imageStorage;
     }
 
     /**
@@ -99,19 +112,6 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     @Override
     public int getItemCount() {
         return recipeList.size();
-    }
-
-    @Override
-    public void onSuccess(byte[] data) {
-        if(currentMinViewHolder != null) {
-            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-            currentMinViewHolder.image.setImageBitmap(bmp);
-        }
-    }
-
-    @Override
-    public void onFailure() {
-        Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
     }
 
     /**
