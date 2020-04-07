@@ -4,6 +4,7 @@ connected_check_task:
     API_LEVEL: 28
     TARGET: default
     ARCH: x86
+    CC_TEST_REPORTER_ID: ENCRYPTED[7e973f25f8b13a30e647db2f1900bf7ee566828e696f9900c0588150ceb4cf435a3faf4eea8bdea997014417d46b304e]
   container:
     image: reactivecircus/android-emulator-28:latest
     kvm: true
