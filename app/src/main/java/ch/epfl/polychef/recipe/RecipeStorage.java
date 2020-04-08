@@ -31,8 +31,8 @@ public class RecipeStorage implements Serializable {
     private static RecipeStorage INSTANCE=new RecipeStorage();
 
     private static final String TAG = "Firebase";
-    private static final String DB_NAME = "recipe_test";
-    private static final String DB_ID = "id_test";
+    private static final String DB_NAME = "recipe";
+    private static final String DB_ID = "id";
     private int id;
 
     public static RecipeStorage getInstance(){
