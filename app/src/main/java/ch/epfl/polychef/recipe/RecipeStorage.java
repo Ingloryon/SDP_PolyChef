@@ -31,8 +31,8 @@ public class RecipeStorage implements Serializable {
     private static RecipeStorage INSTANCE=new RecipeStorage();
 
     private static final String TAG = "Firebase";
-    private static final String DB_NAME = "recipe";
-    private static final String DB_ID = "id";
+    private static final String DB_NAME = "recipe_test";
+    private static final String DB_ID = "id_test";
     private int id;
 
     public static RecipeStorage getInstance(){
@@ -74,7 +74,7 @@ public class RecipeStorage implements Serializable {
 
     public void readRecipeFromUUID(String uuid, CallHandler<Recipe> ch){
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
-        DatabaseReference idRef = getFirebaseDatabase().getReference("id");
+        DatabaseReference idRef = getFirebaseDatabase().getReference(DB_ID);
         //Get the last ID used in the database
         idRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -90,7 +90,7 @@ public class RecipeStorage implements Serializable {
             }
         });
         for(int i=1;i<id+1;i++) {
-            DatabaseReference myRef = getFirebaseDatabase().getReference("recipe").child(Integer.toString(i)).child("recipeUuid");
+            DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME).child(Integer.toString(i)).child("recipeUuid");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

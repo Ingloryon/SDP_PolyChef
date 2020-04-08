@@ -78,7 +78,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
                 throw new IllegalStateException();
             }
         } else {
-            throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
+            throw new IllegalArgumentException("The online miniature fragment wasn't attached properly!");
         }
     }
 

@@ -2,10 +2,6 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,14 +9,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 
@@ -31,11 +37,11 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
-    public User userToDisplay;
+    private User userToDisplay;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
-    private RecyclerView recyclerView;
+    private RecyclerView userRecyclerView;
 
     public static final int nbOfRecipesLoadedAtATime = 5;
 
@@ -51,20 +57,17 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        currentIndex = 0;
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        recyclerView = view.findViewById(R.id.UserRecipesList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        recyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, recyclerView, container.getId()));
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
+        userRecyclerView = view.findViewById(R.id.UserRecipesList);
+        userRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        userRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, userRecyclerView, container.getId()));
+        userRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if(!recyclerView.canScrollVertically(1)){
-
                     for(int i = currentIndex; i < Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size()); i++){
                         String stringUID = userToDisplay.getRecipes().get(i);
                         hostActivity.getRecipeStorage().readRecipeFromUUID(stringUID, UserProfileFragment.this);
@@ -80,6 +83,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        currentIndex = 0;
 
         userToDisplay = hostActivity.getUserStorage().getPolyChefUser();
 
@@ -107,14 +112,14 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     @Override
     public void onSuccess(Recipe data) {
         dynamicRecipeList.add(data);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        userRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void onFailure() {
     }
 
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
+    public RecyclerView getUserRecyclerView(){
+        return userRecyclerView;
     }
 }
