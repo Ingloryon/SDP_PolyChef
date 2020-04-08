@@ -1,6 +1,7 @@
 package ch.epfl.polychef;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
@@ -124,18 +125,11 @@ public class UserProfileFragmentTest {
 
         int recipeLoaded = UserProfileFragment.nbOfRecipesLoadedAtATime;
         assertEquals(Math.min(recipeLoaded, n), getTestedFragment().getUserRecyclerView().getAdapter().getItemCount());
-
+        
         for(int i = 0; i < n/recipeLoaded; ++i){
+            onView(withId(R.id.userProfileFragment)).perform(swipeUp());
             wait(1000);
 
-            int scrollTo = getTestedFragment().getUserRecyclerView().getAdapter().getItemCount() - 1;
-
-            onView(withId(R.id.UserRecipesList))
-                    .perform(RecyclerViewActions.scrollToPosition(scrollTo));
-            wait(1000);
-
-            onView(withId(R.id.UserRecipesList)).perform(swipeUp());
-            wait(1000);
         }
         assertEquals(n, getTestedFragment().getUserRecyclerView().getAdapter().getItemCount());
     }
