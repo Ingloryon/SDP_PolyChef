@@ -57,6 +57,11 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
             speechRecognizer.setRecognitionListener(new RecognitionListener() {
                 @Override
                 public void onResults(Bundle bundle) {
+                    TextView foundWordsLabel=(TextView) findViewById(R.id.foundWords);
+                    foundWordsLabel.setText(foundWordsLabel.getText()+"{|||}");
+
+                    startListening();
+
                     List<String> results=bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     processResult(results.get(0));
                 }
@@ -64,23 +69,30 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
                 @Override
                 public void onReadyForSpeech(Bundle params) {}
                 @Override
-                public void onBeginningOfSpeech() {}
+                public void onBeginningOfSpeech() {
+                    TextView foundWordsLabel=(TextView) findViewById(R.id.foundWords);
+                    foundWordsLabel.setText(foundWordsLabel.getText()+"{>>>}");
+                }
                 @Override
                 public void onRmsChanged(float rmsdB) {}
                 @Override
                 public void onBufferReceived(byte[] buffer) {}
                 @Override
                 public void onEndOfSpeech() {
-                    Toast.makeText(VoiceRecognitionActivity.this,"END OF SPEECH",Toast.LENGTH_SHORT).show();
-                    //startListening();
+                    TextView foundWordsLabel=(TextView) findViewById(R.id.foundWords);
+                    foundWordsLabel.setText(foundWordsLabel.getText()+"{<<<}");
                 }
                 @Override
-                public void onError(int error) {}
+                public void onError(int error) {
+                    TextView foundWordsLabel=(TextView) findViewById(R.id.foundWords);
+                    foundWordsLabel.setText(foundWordsLabel.getText()+"{E"+error+"}");
+                }
                 @Override
                 public void onPartialResults(Bundle partialResults) {
                     List<String> results=partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     TextView foundWordsLabel=(TextView) findViewById(R.id.foundWords);
-                    foundWordsLabel.setText(results.get(0));
+                    //foundWordsLabel.setText(results.get(0));
+                    foundWordsLabel.setText(foundWordsLabel.getText()+",-,");
                 }
 
                 @Override
