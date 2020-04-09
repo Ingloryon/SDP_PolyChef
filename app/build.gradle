@@ -96,6 +96,9 @@ android {
 
         //compile project(':pocketsphinx-android-5prealpha-release')
         implementation project(':pocketsphinx-android-5prealpha-release')
+        /*implementation project(':aars')
+        implementation project(':models')
+        implementation 'com.android.support:appcompat-v7:28.1.0'*/
     }
     tasks.withType(Test) {
         jacoco.includeNoLocationClasses = true
