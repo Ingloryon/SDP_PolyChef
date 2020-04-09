@@ -96,9 +96,10 @@
 
                             <LinearLayout
                                 android:id="@+id/listOfIngredients"
-                                android:layout_width="288dp"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:layout_marginRight="110dp"
                                 android:orientation="vertical"
                                 app:layout_constraintRight_toLeftOf="@id/buttonAddIngre"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -117,8 +118,9 @@
                                         <EditText
                                             android:id="@+id/ingredient0"
                                             style="@style/Widget.AppCompat.AutoCompleteTextView"
-                                            android:layout_width="140dp"
+                                            android:layout_width="138dp"
                                             android:layout_height="wrap_content"
+                                            android:autofillHints=""
                                             android:fontFamily="sans-serif"
                                             android:hint="@string/EnterIngr"
                                             android:inputType="textCapSentences|textMultiLine"
@@ -133,11 +135,15 @@
 
                                         <EditText
                                             android:id="@+id/quantity0"
-                                            android:layout_width="0dp"
-                                            android:layout_height="match_parent"
+                                            style="@style/Widget.AppCompat.AutoCompleteTextView"
+                                            android:layout_width="97dp"
+                                            android:layout_height="wrap_content"
                                             android:ems="10"
+                                            android:fontFamily="sans-serif"
                                             android:hint="@string/Quantity"
-                                            android:inputType="textPersonName"
+                                            android:inputType="number"
+                                            android:textAlignment="textStart"
+                                            android:textSize="18sp"
                                             app:layout_constraintLeft_toRightOf="@id/ingredient0"
                                             app:layout_constraintRight_toLeftOf="@id/unit0"
                                             app:layout_constraintTop_toTopOf="parent" />
@@ -149,6 +155,7 @@
                                             android:entries="@array/unit"
                                             android:spinnerMode="dialog"
                                             app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintLeft_toRightOf="@id/quantity0"
                                             app:layout_constraintTop_toTopOf="parent" />
                                     </androidx.constraintlayout.widget.ConstraintLayout>
 

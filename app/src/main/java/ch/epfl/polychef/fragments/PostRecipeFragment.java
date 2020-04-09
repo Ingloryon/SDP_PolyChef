@@ -117,6 +117,11 @@ public class PostRecipeFragment extends Fragment {
             }
         });
 
+        unitId.add(R.id.unit0);
+        instructionsId.add(R.id.instruction0);
+        ingredientsId.add(R.id.ingredient0);
+        quantityId.add(R.id.quantity0);
+
         unitInput = getView().findViewById(R.id.unit0);
         instructionLayout =  getView().findViewById(R.id.listOfInstructions);
         ingredientLayout = getView().findViewById(R.id.listOfIngredients);
@@ -230,7 +235,7 @@ public class PostRecipeFragment extends Fragment {
     private void getAndCheckEnteredInputs() {
         String inputName = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
         if(inputName.length() > titleMaxChar || inputName.length() < titleMinChar) {
-            errorLogs.add("Title: too long or too short. Need to be between " + titleMinChar + " and " + titleMaxChar + " characters.");
+            errorLogs.add("Title: should be a string between " + titleMinChar + " and " + titleMaxChar + " characters.");
         } else {
             wrongInputs.put("Title", true);
             name = inputName;
@@ -249,7 +254,7 @@ public class PostRecipeFragment extends Fragment {
             wrongInputs.put("Person Number", true);  // TODO: Use replace when set SDK min24
             personNumber = Integer.parseInt(persNb);
         } else {
-            errorLogs.add("Person number: should be a number between 0 and " + maxPersNb + ".");
+            errorLogs.add("Number of Person: should be a number between 0 and " + maxPersNb + ".");
         }
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
@@ -436,46 +441,50 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void getAndCheckInstructions(){
-        String instruction = ((EditText) getView().findViewById(R.id.instruction0)).getText().toString();
-        if(instruction.length()==0){
-            errorLogs.add("Instructions: the first instruction shouldn't be empty");
-        }else {
-            recipeInstructions.add(instruction);
-            for (int i = 1; i < numberOfInstruction; i++) {
-                String instruction1 = ((EditText) getView().findViewById(instructionsId.get(i-1))).getText().toString();
-                if (instruction1.length() == 0) {
-                }else{
-                    recipeInstructions.add(instruction1);
-                }
+        recipeInstructions.clear();
+        for (int i = 0; i < numberOfInstruction; i++) {
+            String instruction1 = ((EditText) getView().findViewById(instructionsId.get(i))).getText().toString();
+            if (instruction1.length() == 0) {
+            }else{
+                recipeInstructions.add(instruction1);
             }
-            wrongInputs.put("Instructions", true);
         }
+        if(recipeInstructions.size()==0){
+            errorLogs.add("Instruction: the number of instructions can't be 0");
+            return;
+        }
+        wrongInputs.put("Instructions", true);
     }
 
+
     private void getAndCheckIngredients(){
-        String ingredient = ((EditText) getView().findViewById(R.id.ingredient0)).getText().toString();
-        String quantity = ((EditText) getView().findViewById(R.id.quantity0)).getText().toString();
-        Ingredient.Unit unit = Ingredient.Unit.values()[((Spinner)getView().findViewById(R.id.unit0)).getSelectedItemPosition()];
-        if(ingredient.length()==0){
-            errorLogs.add("Ingredients: the ingredient shouldn't be empty");
-        }else if(quantity.length()==0 || !android.text.TextUtils.isDigitsOnly(quantity)){
-            errorLogs.add("Ingredient: the quantity needs to be a number");
-        }else{
-            ingredients.add(new Ingredient(ingredient, Double.parseDouble(quantity),unit));
-            for (int i = 1; i < numberOfIngredients; i++) {
-                String ingredient1 = ((EditText) getView().findViewById(ingredientsId.get(i-1))).getText().toString();
-                String quantity1 = ((EditText) getView().findViewById(quantityId.get(i-1))).getText().toString();
-                Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner)getView().findViewById(unitId.get(i-1))).getSelectedItemPosition()];
-                if(ingredient1.length()==0 || quantity1.length()==0) {
-                }else if(!android.text.TextUtils.isDigitsOnly(quantity1)){
-                    errorLogs.add("Ingredient: the quantity needs to be a number");
+        Double quantity;
+        ingredients.clear();
+        for (int i = 0; i < numberOfIngredients; i++) {
+            String ingredient1 = ((EditText) getView().findViewById(ingredientsId.get(i))).getText().toString();
+            String quantity1 = ((EditText) getView().findViewById(quantityId.get(i))).getText().toString();
+            Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner)getView().findViewById(unitId.get(i))).getSelectedItemPosition()];
+            if(ingredient1.length()==0 && quantity1.length()==0) {
+            }else if(ingredient1.length()==0 && quantity1.length()!=0){
+                errorLogs.add("Ingredient: the ingredient shouldn't be empty");
+                return;
+            }else if (ingredient1.length()!=0 && quantity1.length()==0){
+                errorLogs.add("Ingredient: the quantity needs to be a positive number");
+                return;
+            }else{
+                try{
+                    quantity=Double.parseDouble(quantity1);
+                    ingredients.add(new Ingredient(ingredient1,quantity,unit1));
+                }catch(Exception e){
+                    errorLogs.add("Ingredient: the quantity needs to be a positive number");
                     return;
-                }else{
-                    ingredients.add(new Ingredient(ingredient1,Double.parseDouble(quantity1),unit1));
                 }
             }
-            wrongInputs.put("Ingredients", true);
         }
-
+        if(ingredients.size()==0){
+            errorLogs.add("Ingredient: the number of ingredients can't be 0");
+            return;
+        }
+        wrongInputs.put("Ingredients", true);
     }
 }
