@@ -13,7 +13,7 @@ public final class RecipeInputParsing {
     //private RecipeInputParsing() {}
 
     public static boolean parseInstructions(String instructions, List<String> recipeInstructions, List<String> errorLogs) {
-        // TODO: Add more precise input checking of instructions
+        // TODO: Add more precise input sanitization of instructions : should we check for markdown / commands ? <>
         if (instructions.length()<3 || !instructions.contains("{") || !instructions.contains("}")){
             errorLogs.add("Instructions: the entered instructions should match format {a},{b},... (no spaces)");
             return false;

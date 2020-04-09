@@ -138,11 +138,4 @@ public class HomePage extends ConnectedActivity {
     protected RecipeStorage getRecipeStorage(){
         return RecipeStorage.getInstance();
     }
-
-    // TODO: Remove if no cleaner solution to detect when on a fullRecipeFrag is found
-    /*private boolean isViewOnFullRecipeFrag(){
-        int currentIdView = navController.getCurrentDestination().getId();
-
-        return currentIdView != R.id.nav_host_fragment && currentIdView != R.id.favouritesFragment && currentIdView != R.id.subscribersFragment && currentIdView != R.id.nav_subscriptions && currentIdView != R.id.nav_recipe;
-    }*/
 }
