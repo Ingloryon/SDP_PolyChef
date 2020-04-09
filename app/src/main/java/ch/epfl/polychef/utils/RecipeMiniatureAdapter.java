@@ -37,7 +37,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     private int fragmentContainerID;
     private MiniatureViewHolder currentMinViewHolder = null;
 
-    private ImageStorage imageStorage = new ImageStorage();
+    private ImageStorage imageStorage;// = new ImageStorage();
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -47,11 +47,12 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
      * @param recyclerView this is the recyclerView where the recipes will be displayed
      * @param fragmentContainerID the id of the fragment container where the miniature are displayed
      */
-    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID) {
+    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
         this.mainContext = mainContext;
         this.recipeList = recipeList;
         this.recyclerview = recyclerView;
         this.fragmentContainerID = fragmentContainerID;
+        this.imageStorage = storage;
     }
 
     /**

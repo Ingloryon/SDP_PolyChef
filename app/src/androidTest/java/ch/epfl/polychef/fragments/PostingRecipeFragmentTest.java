@@ -149,7 +149,6 @@ public class PostingRecipeFragmentTest {
     public void testOnACompleteRecipe() {
         writeRecipe("Cake","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
-        //TODO do we need mockInit ? was not there before merge
         mockInit();
         onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
     }

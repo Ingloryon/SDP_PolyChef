@@ -20,6 +20,7 @@ import java.util.List;
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
@@ -46,6 +47,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     private boolean isLoading = false;
 
     private RecipeStorage recipeStorage;
+    private ImageStorage imageStorage;
 
     public OnlineMiniaturesFragment(){
         
@@ -57,7 +59,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
 
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        onlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, container.getId()));
+        RecipeMiniatureAdapter adapter = new RecipeMiniatureAdapter(this.getActivity(),
+                dynamicRecipeList, onlineRecyclerView, container.getId(), imageStorage);
+
+        onlineRecyclerView.setAdapter(adapter);
         // Add a scroll listener when we reach the end of the list we load new recipes from database
         onlineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -82,8 +87,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         super.onAttach(context);
 
         if(context instanceof HomePage){
-            recipeStorage = ((HomePage) context).getRecipeStorage();
-            if(recipeStorage == null){
+            HomePage homePage = (HomePage) context;
+            recipeStorage = homePage.getRecipeStorage();
+            imageStorage = homePage.getImageStorage();
+            if(recipeStorage == null || imageStorage == null){
                 throw new IllegalStateException();
             }
         } else {

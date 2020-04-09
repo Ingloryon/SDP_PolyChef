@@ -56,7 +56,9 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         userRecyclerView = view.findViewById(R.id.UserRecipesList);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        userRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, userRecyclerView, container.getId()));
+        userRecyclerView.setAdapter(
+                new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, userRecyclerView,
+                        container.getId(), hostActivity.getImageStorage()));
 
         userRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

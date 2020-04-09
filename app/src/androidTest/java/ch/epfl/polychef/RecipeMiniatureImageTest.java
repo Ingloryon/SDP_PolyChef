@@ -1,62 +1,54 @@
 package ch.epfl.polychef;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Intent;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.intercepting.SingleActivityFactory;
 
+import com.google.firebase.auth.FirebaseUser;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.mockito.Mockito;
 
 import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
 import ch.epfl.polychef.image.ImageStorage;
-import ch.epfl.polychef.pages.EntryPage;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 public class RecipeMiniatureImageTest {
 
-    @Rule
-    public IntentsTestRule<EntryPage> intentsTestRule = new IntentsTestRule<>(EntryPage.class);
-
-    @Mock
-    RecipeStorage recipeStorage;
+    private String mockEmail = "mock@email.com";
+    private String mockUsername = "mockUsername";
+    private User mockUser;
 
     private RecipeBuilder recipeBuilder = new RecipeBuilder()
-            .addInstruction("test instruction")
+                .addInstruction("test instruction")
             .setPersonNumber(4)
             .setEstimatedCookingTime(35)
             .setEstimatedPreparationTime(40)
@@ -67,101 +59,50 @@ public class RecipeMiniatureImageTest {
 
     private Recipe recipe2 = recipeBuilder.setName("test2").setMiniatureFromPath("test_path2").build();
 
-    private RecipeMiniatureImageTest.FragmentTest fragment;
+    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
+            HomePage.class) {
+        @Override
+        protected HomePage create(Intent intent) {
+            HomePage activity = new RecipeMiniatureImageTest.FakeHomePage();
+            return activity;
+        }
+    };
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-        doAnswer((call) -> {
-            CallNotifier<Recipe> ch = call.getArgument(2);
-            ch.notify(recipe1);
-            ch.notify(recipe2);
-            return null;
-        }).when(recipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
+    public OnlineMiniaturesFragment getMiniatureFragment(){
+        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
+
+        NavHostFragment hostFragment = (NavHostFragment)
+                fragmentManager.findFragmentById(R.id.nav_host_fragment);
+
+        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
     }
 
-    private void setUp() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("RecipeStorage", recipeStorage);
-        bundle.putInt("fragmentID", R.id.nav_entry_fragment);
-        fragment = new RecipeMiniatureImageTest.FragmentTest();
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_entry_fragment, fragment).addToBackStack(null);
-        transaction.commit();
+    @Rule
+    public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
+            false);
+
+    @Before
+    public synchronized void initTest() {
+        mockUser = new User(mockEmail, mockUsername);
+
+        Intents.init();
+        intentsTestRule.launchActivity(new Intent());
     }
 
     @Test
     public synchronized void canShowOnlineMiniature() throws InterruptedException {
-        setUp();
         wait(1000);
-        assertEquals(2, fragment.getRecyclerView().getAdapter().getItemCount());
+        assertEquals(2, getMiniatureFragment().getRecyclerView().getAdapter().getItemCount());
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test1")))).check(matches(isDisplayed()));
         onView(withId(R.id.miniaturesOnlineList)).perform(actionOnItemAtPosition(1, scrollTo()));
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test2")))).check(matches(not(isDisplayed())));
     }
 
-    public static class FragmentTest extends OnlineMiniaturesFragment {
-        private RecyclerView onlineRecyclerView;
-        private RecipeStorage recipeStorage;
-        private int currentReadInt = 1;
-        private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
-
-            Bundle bundle = getArguments();
-            recipeStorage = (RecipeStorage) bundle.getSerializable("RecipeStorage");
-
-            int fragmentID = bundle.getInt("fragmentID");
-            onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
-            onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-            onlineRecyclerView.setAdapter(new FakeRecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, fragmentID));
-            return view;
-        }
-
-        @Override
-        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            initFirstNRecipes();
-        }
-
-        private void initFirstNRecipes() {
-            dynamicRecipeList.clear();
-            recipeStorage.getNRecipesOneByOne(nbOfRecipesLoadedAtATime, 1, this);
-            currentReadInt += nbOfRecipesLoadedAtATime;
-        }
-
-        @Override
-        public void notify(Recipe data) {
-            dynamicRecipeList.add(data);
-            onlineRecyclerView.getAdapter().notifyDataSetChanged();
-        }
-
-        @Override
-        public void onSuccess(List<Recipe> data) {
-            dynamicRecipeList.addAll(data);
-            onlineRecyclerView.getAdapter().notifyDataSetChanged();
-        }
-
-        @Override
-        public void onFailure() {
-        }
-
-        public RecyclerView getRecyclerView(){
-            return onlineRecyclerView;
-        }
-    }
-
-    public static class FakeRecipeMiniatureAdapter extends RecipeMiniatureAdapter {
-        public FakeRecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID) {
-            super(mainContext, recipeList, recyclerView, fragmentContainerID);
-        }
-
-        @Override
-        public ImageStorage getImageStorage() {
-            return new FakeImageStorage();
-        }
+    @After
+    public void finishActivity(){
+        intentsTestRule.finishActivity();
+        Intents.release();
     }
 
     private static class FakeImageStorage extends ImageStorage {
@@ -173,6 +114,43 @@ public class RecipeMiniatureImageTest {
             } else {
                 caller.onFailure();
             }
+        }
+    }
+
+    class FakeHomePage extends HomePage {
+
+        @Override
+        public UserStorage getUserStorage(){
+            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+
+            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
+
+            return mockUserStorage;
+        }
+
+        @Override
+        public RecipeStorage getRecipeStorage(){
+            RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
+
+            doAnswer((call) -> {
+                CallNotifier<Recipe> ch = call.getArgument(2);
+                ch.notify(recipe1);
+                ch.notify(recipe2);
+                return null;
+            }).when(mockRecipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
+
+            return mockRecipeStorage;
+        }
+
+        @Override
+        public ImageStorage getImageStorage() {
+            return new FakeImageStorage();
+        }
+
+        @Override
+        public FirebaseUser getUser() {
+            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+            return mockUser;
         }
     }
 }

@@ -16,6 +16,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
 
@@ -221,5 +222,9 @@ public class HomePage extends ConnectedActivity {
 
     public RecipeStorage getRecipeStorage(){
         return RecipeStorage.getInstance();
+    }
+
+    public ImageStorage getImageStorage(){
+        return new ImageStorage();
     }
 }
