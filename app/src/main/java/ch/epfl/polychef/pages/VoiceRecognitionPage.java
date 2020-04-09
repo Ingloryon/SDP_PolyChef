@@ -1,31 +1,20 @@
 package ch.epfl.polychef.pages;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
-import android.speech.tts.TextToSpeech;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
-import ch.epfl.polychef.R;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 
-public class VoiceRecognitionPage/* extends Activity implements
-        RecognitionListener*/ {
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
+import edu.cmu.pocketsphinx.SpeechRecognizer;
+
+public class VoiceRecognitionPage extends Activity implements
+        RecognitionListener {
 
     /* We only need the keyphrase to start recognition, one menu with list of choices,
    and one word that is required for method switchSearch - it will bring recognizer
@@ -33,12 +22,12 @@ public class VoiceRecognitionPage/* extends Activity implements
     private static final String KWS_SEARCH = "wakeup";
     private static final String MENU_SEARCH = "menu";
     /* Keyword we are looking for to activate recognition */
-    private static final String KEYPHRASE = "oh mighty computer";
+    private static final String KEYPHRASE = "start";
 
     /* Recognition object */
     private SpeechRecognizer recognizer;
 
-/*
+
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -52,7 +41,7 @@ public class VoiceRecognitionPage/* extends Activity implements
             @Override
             protected Exception doInBackground(Void... params) {
                 try {
-                    Assets assets = new Assets(PocketSphinxActivity.this);
+                    Assets assets = new Assets(VoiceRecognitionPage.this);
                     File assetDir = assets.syncAssets();
                     setupRecognizer(assetDir);
                 } catch (IOException e) {
@@ -98,20 +87,19 @@ public class VoiceRecognitionPage/* extends Activity implements
 
     @Override
     public void onPartialResult(Hypothesis hypothesis) {
-        if (text.equals(KEYPHRASE))
+        if (hypothesis == null)
+            return;
+
+        String text = hypothesis.getHypstr();
+
+        if (text.equals(KEYPHRASE)) {
             switchSearch(MENU_SEARCH);
         } else if (text.equals("hello")) {
             System.out.println("Hello to you too!");
         } else if (text.equals("good morning")) {
             System.out.println("Good morning to you too!");
         } else {
-            System.out.println(hypotesis.getHypstr());
-        }
-        String text = hypothesis.getHypstr();
-        if (text.equals(KEYPHRASE))
-            switchSearch(MENU_SEARCH);
-        else {
-            System.out.println(hypotesis.getHypstr());
+            System.out.println(hypothesis.getHypstr());
         }
     }
 
@@ -148,5 +136,5 @@ public class VoiceRecognitionPage/* extends Activity implements
     @Override
     public void onTimeout() {
         switchSearch(KWS_SEARCH);
-    }*/
+    }
 }
