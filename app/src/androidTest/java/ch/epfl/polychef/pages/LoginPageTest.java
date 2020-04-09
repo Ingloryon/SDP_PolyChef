@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.pages;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,10 +13,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.LoginPage;
 
 import com.google.firebase.auth.FirebaseUser;
@@ -60,7 +62,7 @@ public class LoginPageTest {
 
     @Test
     public void canClickOnGoogleButton() {
-        onView(withId(R.id.googleButton)).check(matches(isEnabled()));
+        onView(ViewMatchers.withId(R.id.googleButton)).check(matches(isEnabled()));
     }
 
     @Test

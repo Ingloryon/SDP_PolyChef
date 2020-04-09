@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.users;
 
 import androidx.test.espresso.core.internal.deps.guava.base.Function;
 

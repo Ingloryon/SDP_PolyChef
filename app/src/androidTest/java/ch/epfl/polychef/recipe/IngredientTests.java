@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.recipe;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

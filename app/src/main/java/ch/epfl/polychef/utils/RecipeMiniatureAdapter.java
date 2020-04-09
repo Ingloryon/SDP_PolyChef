@@ -37,6 +37,8 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     private int fragmentContainerID;
     private MiniatureViewHolder currentMinViewHolder = null;
 
+    private ImageStorage imageStorage = new ImageStorage();
+
     /**
      * Creates a new adapter of recipes to miniatures.
      *
@@ -85,9 +87,23 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
         } else {
-            currentMinViewHolder = holder;
-            new ImageStorage().getImage(miniatureMeta.getLeft(), this);
+            getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
+                @Override
+                public void onSuccess(byte[] data) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    holder.image.setImageBitmap(bmp);
+                }
+
+                @Override
+                public void onFailure() {
+                    Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+                }
+            });
         }
+    }
+
+    public ImageStorage getImageStorage() {
+        return imageStorage;
     }
 
     /**

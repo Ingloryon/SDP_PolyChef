@@ -40,7 +40,8 @@ public class HomePage extends ConnectedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        //getUserStorage().initializeUserFromAuthenticatedUser();
+        //TODO should we let this line or not
+        getUserStorage().initializeUserFromAuthenticatedUser();
 
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -63,6 +64,7 @@ public class HomePage extends ConnectedActivity {
 
         // Set this bundle to be an arguments of the startDestination using this trick
         navController.setGraph(R.navigation.nav_graph, bundle);
+
         setupNavigation();
     }
 
@@ -184,11 +186,17 @@ public class HomePage extends ConnectedActivity {
 
                         invalidateOptionsMenu();
 
-                        int itemId = selectedItem.getItemId();
-
                         Bundle bundle = new Bundle();
                         bundle.putInt("fragmentID", R.id.nav_host_fragment);
 
+                        if(navController.getCurrentDestination().getId() != R.id.nav_host_fragment){
+                            // This nav prevents to return to login screen when on home
+                            navController.navigate(R.id.favouritesFragment, bundle);
+                            // This returns to home frag so the navigation system can handle
+                            HomePage.super.onBackPressed();
+                        }
+
+                        int itemId = selectedItem.getItemId();
                         navController.navigate(getFragmentId(itemId), bundle);
 
                         drawer.closeDrawer(GravityCompat.START, true);
@@ -198,8 +206,10 @@ public class HomePage extends ConnectedActivity {
                 }
         );
 
+        // TODO SHOULD WE LET THIS
         setupUserProfileNavigation(navView.getHeaderView(0));
 
+        // TODO SHOULD WE LET THIS
         //Home should be checked initially
         currentItem = navView.getMenu().findItem(R.id.nav_home);
         currentItem.setChecked(true);

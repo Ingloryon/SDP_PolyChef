@@ -87,7 +87,6 @@ public class UserStorage {
 
     public void updateUserInfo() {
         if (user != null && userKey != null) {
-
             getDatabase()
                     .getReference("users/" + userKey)
                     .setValue(user);

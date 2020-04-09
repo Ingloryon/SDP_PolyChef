@@ -195,13 +195,12 @@ public class PostRecipeFragment extends Fragment {
             if(currentMiniature != null) {
                 imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getRecipeUuid().toString());
             }
-            for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i-1), postedRecipe.getRecipeUuid().toString() + "_" + i, "TODO:USER", postedRecipe.getRecipeUuid().toString());
+            for(int i = 0; i <= currentMealPictures.size(); ++i) {
+                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getRecipeUuid().toString());
             }
             hostActivity.getRecipeStorage().addRecipe(postedRecipe);
             hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
             hostActivity.getUserStorage().updateUserInfo();
-
             return true;
         }
     }
@@ -218,13 +217,13 @@ public class PostRecipeFragment extends Fragment {
         String ingre = ((EditText) getView().findViewById(R.id.ingredientsList)).getText().toString();
         String pattern = "\\{[ ]*[A-Za-z0-9]*[ ]*,[ ]*[0-9]*[ ]*,[ ]*[A-Za-z0-9]*[ ]*\\}";
         if (RecipeInputParsing.parseIngredients(ingre, pattern, ingredients, errorLogs)) {
-            wrongInputs.put("Ingredients", true); // TODO: Use replace when set SDK min24
+            wrongInputs.replace("Ingredients", true);
         }
 
         EditText instructionsInput = getView().findViewById(R.id.instructionsList);
         String instructions = instructionsInput.getText().toString();
         if (RecipeInputParsing.parseInstructions(instructions, recipeInstructions, errorLogs)) {
-            wrongInputs.put("Instructions", true); // TODO: Use replace when set SDK min24
+            wrongInputs.replace("Instructions", true);
         }
 
         EditText personNb = getView().findViewById(R.id.personNbInput);
@@ -233,7 +232,7 @@ public class PostRecipeFragment extends Fragment {
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
         if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= maxPersNb){
-            wrongInputs.put("Person Number", true);  // TODO: Use replace when set SDK min24
+            wrongInputs.replace("Person Number", true);
             personNumber = Integer.parseInt(persNb);
         } else {
             errorLogs.add("Person number: should be a number between 0 and " + maxPersNb + ".");
@@ -253,7 +252,7 @@ public class PostRecipeFragment extends Fragment {
 
     private int getAndCheckTime(String input, String message){
         if (input.length()!=0 && android.text.TextUtils.isDigitsOnly(input)) {
-            wrongInputs.put(message, true);  // TODO: Use replace when set SDK min24
+            wrongInputs.replace(message, true);
             return Integer.parseInt(input);
         } else {
             errorLogs.add(message+": should be a positive number.");
