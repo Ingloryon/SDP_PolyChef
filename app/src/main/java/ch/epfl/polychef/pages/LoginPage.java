@@ -22,7 +22,7 @@ import ch.epfl.polychef.recipe.Recipe;
 
 import ch.epfl.polychef.R;
 
-public class LoginPage extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity{
 
     SignInButton googleButton;
 

@@ -54,4 +54,10 @@ public class EntryPage extends AppCompatActivity {
         Intent intent = new Intent(this, LoginPage.class);
         startActivity(intent);
     }
+
+    /** Called when the user taps the voiceRec button. */
+    public void voiceRec(View view) {
+        Intent intent = new Intent(this, VoiceRecognitionActivity.class);
+        startActivity(intent);
+    }
 }
