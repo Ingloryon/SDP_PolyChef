@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':pocketsphinx-android-5prealpha-release'
 rootProject.name='PolyChef'
