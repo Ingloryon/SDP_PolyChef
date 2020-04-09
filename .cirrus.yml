@@ -31,5 +31,6 @@ connected_check_task:
   report_codeclimate_script:
     # Report test coverage to Code Climate
     - export JACOCO_SOURCE_PATH=app/src/main/java/
+    - ls ./app/build/reports/jacoco/jacocoTestReport/
     - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
     - ./cc-test-reporter upload-coverage
