@@ -10,6 +10,9 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
@@ -22,7 +25,7 @@ public class VoiceRecognitionPage extends Activity implements
     private static final String KWS_SEARCH = "wakeup";
     private static final String MENU_SEARCH = "menu";
     /* Keyword we are looking for to activate recognition */
-    private static final String KEYPHRASE = "start";
+    private static final String KEYPHRASE = "activate";//"ok poly chef";
 
     /* Recognition object */
     private SpeechRecognizer recognizer;
@@ -51,6 +54,7 @@ public class VoiceRecognitionPage extends Activity implements
             }
             @Override
             protected void onPostExecute(Exception result) {
+                Log.d("vr","onPostExecute");
                 if (result != null) {
                     System.out.println(result.getMessage());
                 } else {
@@ -78,6 +82,7 @@ public class VoiceRecognitionPage extends Activity implements
 
     @Override
     public void onStop() {
+        Log.d("vr","onStop");
         super.onStop();
         if (recognizer != null) {
             recognizer.cancel();
@@ -92,21 +97,24 @@ public class VoiceRecognitionPage extends Activity implements
 
         String text = hypothesis.getHypstr();
 
+        Log.d("vr","onPartialResult: "+text);
+
         if (text.equals(KEYPHRASE)) {
             switchSearch(MENU_SEARCH);
-        } else if (text.equals("hello")) {
-            System.out.println("Hello to you too!");
-        } else if (text.equals("good morning")) {
-            System.out.println("Good morning to you too!");
+            Log.d("vr","MENU");
+        } else if (text.equals("next")) {
+            Log.d("vr","NEXT");
+        } else if (text.equals("previous")) {
+            Log.d("vr","PREVIOUS");
         } else {
-            System.out.println(hypothesis.getHypstr());
+            Log.d("vr","->"+text);
         }
     }
 
     @Override
     public void onResult(Hypothesis hypothesis) {
         if (hypothesis != null) {
-            System.out.println(hypothesis.getHypstr());
+            Log.d("vr","onResult found : "+hypothesis.getHypstr());
         }
     }
 
@@ -116,25 +124,32 @@ public class VoiceRecognitionPage extends Activity implements
 
     @Override
     public void onEndOfSpeech() {
-        if (!recognizer.getSearchName().equals(KWS_SEARCH))
-            switchSearch(KWS_SEARCH);
+        Log.d("vr","onEndOfSpeech mode:"+recognizer.getSearchName());
+        switchSearch(recognizer.getSearchName());
+        //don't do this, it has no sens
+        /*if (!recognizer.getSearchName().equals(KWS_SEARCH))
+            switchSearch(KWS_SEARCH);*/
     }
 
     private void switchSearch(String searchName) {
+        Log.d("vr","switchSearch to "+searchName);
         recognizer.stop();
-        if (searchName.equals(KWS_SEARCH))
-            recognizer.startListening(searchName);
+        recognizer.startListening(searchName);
+        /*if (searchName.equals(KWS_SEARCH))
+            recognizer.startListening(KWS_SEARCH);
         else
-            recognizer.startListening(searchName, 10000);
+            recognizer.startListening(searchName, 100_000);*/
     }
 
     @Override
     public void onError(Exception error) {
+        Log.d("vr","onError: "+error.getMessage());
         System.out.println(error.getMessage());
     }
 
     @Override
     public void onTimeout() {
+        Log.d("vr","onTimeout");
         switchSearch(KWS_SEARCH);
     }
 }

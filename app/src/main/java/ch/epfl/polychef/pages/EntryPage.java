@@ -57,7 +57,7 @@ public class EntryPage extends AppCompatActivity {
 
     /** Called when the user taps the voiceRec button. */
     public void voiceRec(View view) {
-        Intent intent = new Intent(this, PocketSphinxActivity.class);
+        Intent intent = new Intent(this, VoiceRecognitionPage.class);
         startActivity(intent);
     }
 }
