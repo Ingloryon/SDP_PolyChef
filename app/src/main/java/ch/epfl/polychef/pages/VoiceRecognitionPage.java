@@ -24,7 +24,7 @@ public class VoiceRecognitionPage extends Activity implements
     private static final String KWS_SEARCH = "wakeup";
     private static final String MENU_SEARCH = "menu";
     /* Keyword we are looking for to activate recognition */
-    private static final String KEYPHRASE = "ok poly chef";//"ok poly chef";
+    private static final String KEYPHRASE = "poly chef";
 
     /* Recognition object */
     private SpeechRecognizer recognizer;
@@ -81,7 +81,6 @@ public class VoiceRecognitionPage extends Activity implements
 
     @Override
     public void onStop() {
-        Log.d("vr","onStop");
         super.onStop();
         if (recognizer != null) {
             recognizer.cancel();
@@ -98,13 +97,6 @@ public class VoiceRecognitionPage extends Activity implements
 
         if (text.equals(KEYPHRASE)) {
             switchSearch(MENU_SEARCH);
-            Log.d("vr","MENU");
-        } else if (text.equals("next")) {
-            Log.d("vr","NEXT");
-        } else if (text.equals("previous")) {
-            Log.d("vr","PREVIOUS");
-        } else {
-            Log.d("vr","->"+text);
         }
     }
 
@@ -121,14 +113,12 @@ public class VoiceRecognitionPage extends Activity implements
 
     @Override
     public void onEndOfSpeech() {
-        //don't do this, it has no sens
         if (!recognizer.getSearchName().equals(KWS_SEARCH)) {
             switchSearch(KWS_SEARCH);
         }
     }
 
     private void switchSearch(String searchName) {
-        Log.d("vr","switchSearch to "+searchName);
         recognizer.stop();
 
         if (searchName.equals(KWS_SEARCH))
@@ -139,7 +129,6 @@ public class VoiceRecognitionPage extends Activity implements
 
     @Override
     public void onError(Exception error) {
-        Log.d("vr","onError: "+error.getMessage());
         System.out.println(error.getMessage());
     }
 

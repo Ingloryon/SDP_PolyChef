@@ -17,8 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".pages.VoiceRecognitionActivity" />
-        <activity android:name=".pages.PocketSphinxActivity" />
         <activity android:name=".pages.VoiceRecognitionPage" />
         <activity android:name=".fragments.PostRecipeFragment" />
         <activity android:name=".pages.LoginPage" />
