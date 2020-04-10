@@ -2,4 +2,4 @@
 
 grammar mymenu;
 
-public <smart> = (previous | next);
+public <item> = (previous | next | repeat);

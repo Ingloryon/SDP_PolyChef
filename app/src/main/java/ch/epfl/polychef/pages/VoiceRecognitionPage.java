@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
@@ -25,7 +24,7 @@ public class VoiceRecognitionPage extends Activity implements
     private static final String KWS_SEARCH = "wakeup";
     private static final String MENU_SEARCH = "menu";
     /* Keyword we are looking for to activate recognition */
-    private static final String KEYPHRASE = "activate";//"ok poly chef";
+    private static final String KEYPHRASE = "ok poly chef";//"ok poly chef";
 
     /* Recognition object */
     private SpeechRecognizer recognizer;
@@ -97,8 +96,6 @@ public class VoiceRecognitionPage extends Activity implements
 
         String text = hypothesis.getHypstr();
 
-        Log.d("vr","onPartialResult: "+text);
-
         if (text.equals(KEYPHRASE)) {
             switchSearch(MENU_SEARCH);
             Log.d("vr","MENU");
@@ -124,21 +121,20 @@ public class VoiceRecognitionPage extends Activity implements
 
     @Override
     public void onEndOfSpeech() {
-        Log.d("vr","onEndOfSpeech mode:"+recognizer.getSearchName());
-        switchSearch(recognizer.getSearchName());
         //don't do this, it has no sens
-        /*if (!recognizer.getSearchName().equals(KWS_SEARCH))
-            switchSearch(KWS_SEARCH);*/
+        if (!recognizer.getSearchName().equals(KWS_SEARCH)) {
+            switchSearch(KWS_SEARCH);
+        }
     }
 
     private void switchSearch(String searchName) {
         Log.d("vr","switchSearch to "+searchName);
         recognizer.stop();
-        recognizer.startListening(searchName);
-        /*if (searchName.equals(KWS_SEARCH))
+
+        if (searchName.equals(KWS_SEARCH))
             recognizer.startListening(KWS_SEARCH);
         else
-            recognizer.startListening(searchName, 100_000);*/
+            recognizer.startListening(searchName, 10000);
     }
 
     @Override
