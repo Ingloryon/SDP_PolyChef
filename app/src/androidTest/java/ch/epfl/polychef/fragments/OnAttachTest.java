@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.fragments;
 
 import android.content.Context;
 
@@ -7,9 +7,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Test;
 
-import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
-import ch.epfl.polychef.fragments.PostRecipeFragment;
-import ch.epfl.polychef.fragments.UserProfileFragment;
 import ch.epfl.polychef.pages.EntryPage;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
