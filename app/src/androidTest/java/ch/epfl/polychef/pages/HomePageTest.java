@@ -116,7 +116,7 @@ public class HomePageTest {
 
     @Test
     public synchronized void backButtonTest() throws InterruptedException {
-        int n = 6;
+        int repetition = 6;
         List<Integer> menuItems = new ArrayList<>(5);
         menuItems.add(R.id.nav_home);
         menuItems.add(R.id.nav_recipe);
@@ -124,8 +124,8 @@ public class HomePageTest {
         menuItems.add(R.id.nav_subscribers);
         menuItems.add(R.id.nav_subscriptions);
 
-        List<Integer> sequence = new ArrayList<>(n * 6);
-        for(int i = 0; i < n; ++i){
+        List<Integer> sequence = new ArrayList<>(repetition * 6);
+        for(int i = 0; i < repetition; ++i){
             sequence.addAll(menuItems);
             sequence.add(R.id.drawerProfileImage);
         }
@@ -144,7 +144,6 @@ public class HomePageTest {
 
             assertTrue(isTheOnlyOneChecked(id, menuItems, menu));
         }
-
 
         for(int i = sequence.size() - 1; i >= 0; --i){
             assertTrue(isTheOnlyOneChecked(sequence.get(i), menuItems, menu));
