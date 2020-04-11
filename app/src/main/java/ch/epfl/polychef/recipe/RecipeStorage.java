@@ -16,11 +16,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
-import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Preconditions;
 
 /**
@@ -74,51 +72,37 @@ public class RecipeStorage implements Serializable {
 
     public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
-        updateId();
-        for(int i=1;i<id+1;i++) {
-            DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME).child(Integer.toString(i)).child("recipeUuid");
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    String value = dataSnapshot.getValue(String.class);
-                    if (uuid.equals(value)) {
-                        getRecipeInDataBaseFromReference(myRef.getParent(), ch);
+        getFirebaseDatabase()
+                .getReference(DB_NAME)
+                .orderByChild("recipeUuid")
+                .equalTo(uuid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getChildrenCount() == 1){
+                            for(DataSnapshot child: dataSnapshot.getChildren()){
+                                getRecipeFromSnapshot(child, ch);
+                            }
+                        } else {
+                            ch.onFailure();
+                        }
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    ch.onFailure();
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });
-        }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        ch.onFailure();
+                    }
+                });
     }
 
-    /**
-     * Update the id value of the class from the database.
-     */
-    public void updateId(){
-        DatabaseReference idRef = getFirebaseDatabase().getReference(DB_ID);
-        //Get the last ID used in the database
-        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value
-                id=dataSnapshot.getValue(Integer.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
+    public void getRecipeFromSnapshot(DataSnapshot snapshot, CallHandler<Recipe> ch){
+        Recipe recipe = snapshot.getValue(Recipe.class);
+        if (recipe == null) {
+            ch.onFailure();
+        } else {
+            ch.onSuccess(recipe);
+        }
     }
 
     public void getRecipeInDataBaseFromReference(DatabaseReference ref, CallHandler<Recipe> ch){
@@ -126,12 +110,7 @@ public class RecipeStorage implements Serializable {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Recipe recipe = dataSnapshot.getValue(Recipe.class);
-                if (recipe == null) {
-                    ch.onFailure();
-                } else {
-                    ch.onSuccess(recipe);
-                }
+                getRecipeFromSnapshot(dataSnapshot, ch);
             }
 
             @Override
