@@ -41,7 +41,6 @@ public class HomePage extends ConnectedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        //TODO should we let this line or not
         getUserStorage().initializeUserFromAuthenticatedUser();
 
         // Attaching the layout to the toolbar object
@@ -114,8 +113,8 @@ public class HomePage extends ConnectedActivity {
 
         int destination = navController.getCurrentDestination().getId();
 
-        if(destination == R.id.userProfileFragment ||
-                destination == R.id.fullRecipeFragment) {
+        if(destination == R.id.userProfileFragment
+                || destination == R.id.fullRecipeFragment) {
 
             currentItem = null;
         } else {
@@ -207,10 +206,8 @@ public class HomePage extends ConnectedActivity {
                 }
         );
 
-        // TODO SHOULD WE LET THIS
         setupUserProfileNavigation(navView.getHeaderView(0));
 
-        // TODO SHOULD WE LET THIS
         //Home should be checked initially
         currentItem = navView.getMenu().findItem(R.id.nav_home);
         currentItem.setChecked(true);

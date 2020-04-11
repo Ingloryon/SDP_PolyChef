@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.images;
 
 import android.content.Intent;
 
@@ -16,6 +16,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.CallNotifier;
+import ch.epfl.polychef.R;
+import ch.epfl.polychef.fragments.FragmentTestUtils;
 import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
@@ -46,6 +50,7 @@ public class RecipeMiniatureImageTest {
     private String mockEmail = "mock@email.com";
     private String mockUsername = "mockUsername";
     private User mockUser;
+    private FragmentTestUtils fragUtils = new FragmentTestUtils();
 
     private RecipeBuilder recipeBuilder = new RecipeBuilder()
                 .addInstruction("test instruction")
@@ -68,14 +73,14 @@ public class RecipeMiniatureImageTest {
         }
     };
 
-    public OnlineMiniaturesFragment getMiniatureFragment(){
-        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
-
-        NavHostFragment hostFragment = (NavHostFragment)
-                fragmentManager.findFragmentById(R.id.nav_host_fragment);
-
-        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
-    }
+//    public OnlineMiniaturesFragment getMiniatureFragment(){
+//        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
+//
+//        NavHostFragment hostFragment = (NavHostFragment)
+//                fragmentManager.findFragmentById(R.id.nav_host_fragment);
+//
+//        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
+//    }
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -92,7 +97,7 @@ public class RecipeMiniatureImageTest {
     @Test
     public synchronized void canShowOnlineMiniature() throws InterruptedException {
         wait(1000);
-        assertEquals(2, getMiniatureFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test1")))).check(matches(isDisplayed()));
         onView(withId(R.id.miniaturesOnlineList)).perform(actionOnItemAtPosition(1, scrollTo()));
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test2")))).check(matches(not(isDisplayed())));

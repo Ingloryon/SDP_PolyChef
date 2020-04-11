@@ -67,8 +67,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
                 if(!recyclerView.canScrollVertically(1)){
                     for(int i = currentIndex; i < Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size()); i++){
-                        String stringUID = userToDisplay.getRecipes().get(i);
-                        hostActivity.getRecipeStorage().readRecipeFromUUID(stringUID, UserProfileFragment.this);
+                        String stringUuid = userToDisplay.getRecipes().get(i);
+                        hostActivity.getRecipeStorage().readRecipeFromUuid(stringUuid, UserProfileFragment.this);
                     }
 
                     currentIndex = Math.min(nbOfRecipesLoadedAtATime + currentIndex, userToDisplay.getRecipes().size());
@@ -90,8 +90,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
         for(int i = 0; i < Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size()); i++){
-            String stringUID = userToDisplay.getRecipes().get(i);
-            hostActivity.getRecipeStorage().readRecipeFromUUID(stringUID, this);
+            String stringUuid = userToDisplay.getRecipes().get(i);
+            hostActivity.getRecipeStorage().readRecipeFromUuid(stringUuid, this);
         }
         currentIndex += Math.min(nbOfRecipesLoadedAtATime, userToDisplay.getRecipes().size());
     }

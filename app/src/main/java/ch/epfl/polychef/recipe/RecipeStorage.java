@@ -72,11 +72,41 @@ public class RecipeStorage implements Serializable {
         });
     }
 
-    public void readRecipeFromUUID(String uuid, CallHandler<Recipe> ch){
+    public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
+        updateId();
+        for(int i=1;i<id+1;i++) {
+            DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME).child(Integer.toString(i)).child("recipeUuid");
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    String value = dataSnapshot.getValue(String.class);
+                    if (uuid.equals(value)) {
+                        getRecipeInDataBaseFromReference(myRef.getParent(), ch);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    ch.onFailure();
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        }
+    }
+
+    /**
+     * Update the id value of the class from the database
+     */
+    public void updateId(){
         DatabaseReference idRef = getFirebaseDatabase().getReference(DB_ID);
         //Get the last ID used in the database
         idRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value
@@ -89,42 +119,28 @@ public class RecipeStorage implements Serializable {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-        for(int i=1;i<id+1;i++) {
-            DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME).child(Integer.toString(i)).child("recipeUuid");
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    String value = dataSnapshot.getValue(String.class);
-                    if (uuid.equals(value)) {
-                        myRef.getParent().addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
-                                if (value == null) {
-                                    ch.onFailure();
-                                } else {
-                                    ch.onSuccess(recipe);
-                                }
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError error) {
-                                ch.onFailure();
-                                // Failed to read value
-                                Log.w(TAG, "Failed to read value.", error.toException());
-                            }
-                        });
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError error) {
+    }
+
+    public void getRecipeInDataBaseFromReference(DatabaseReference ref, CallHandler<Recipe> ch){
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                if (recipe == null) {
                     ch.onFailure();
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
+                } else {
+                    ch.onSuccess(recipe);
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                ch.onFailure();
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
     }
 
     /**
@@ -137,26 +153,7 @@ public class RecipeStorage implements Serializable {
         Preconditions.checkArgument(id > 0, "Id should be positive");
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
         DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME).child(Integer.toString(id));
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Recipe value = dataSnapshot.getValue(Recipe.class);
-                if (value == null) {
-                    ch.onFailure();
-                } else {
-                    ch.onSuccess(value);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                ch.onFailure();
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
+        getRecipeInDataBaseFromReference(myRef, ch);
     }
 
     /**
@@ -173,6 +170,7 @@ public class RecipeStorage implements Serializable {
                 + "be positive");
         Preconditions.checkArgument(caller != null, "Call handler should not be null");
         getNRecipeQuery(numberOfRecipes, fromId).addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -207,6 +205,7 @@ public class RecipeStorage implements Serializable {
                 + "be positive");
         Preconditions.checkArgument(caller != null, "Call handler should not be null");
         getNRecipeQuery(numberOfRecipes, fromId).addChildEventListener(new ChildEventListener() {
+
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String prevChildKey) {
                 caller.notify(dataSnapshot.getValue(Recipe.class));

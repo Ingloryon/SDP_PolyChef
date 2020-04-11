@@ -1,12 +1,10 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -21,7 +19,8 @@ import org.mockito.Mockito;
 
 import java.util.Random;
 
-import ch.epfl.polychef.fragments.UserProfileFragment;
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
@@ -47,6 +46,8 @@ public class UserProfileFragmentTest {
     private String mockUsername = "mockUsername";
     private User mockUser;
 
+    private FragmentTestUtils fragUtils = new FragmentTestUtils();
+
     private RecipeBuilder builder = new RecipeBuilder()
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .addInstruction("test1instruction")
@@ -64,13 +65,13 @@ public class UserProfileFragmentTest {
         }
     };
 
-    public UserProfileFragment getTestedFragment(){
-        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
-
-        NavHostFragment hostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment);
-
-        return (UserProfileFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
-    }
+//    public UserProfileFragment getTestedFragment(){
+//        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
+//
+//        NavHostFragment hostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment);
+//
+//        return (UserProfileFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
+//    }
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -100,7 +101,7 @@ public class UserProfileFragmentTest {
     @Test
     public void nothingIsDisplayedWhenUserHasNoRecipe() {
         startTest();
-        assertEquals(0, getTestedFragment().getUserRecyclerView().getAdapter().getItemCount());
+        assertEquals(0, ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -116,22 +117,22 @@ public class UserProfileFragmentTest {
     public synchronized void testUserRecipes(int min, int max) throws InterruptedException {
         Random rnd = new Random();
 
-        int n = rnd.nextInt(max - min) + min;   //min inclusive, max exclusive
-        for(int i = 0; i < n; ++i){
+        int nbr = rnd.nextInt(max - min) + min;   //min inclusive, max exclusive
+        for(int i = 0; i < nbr; ++i){
             mockUser.addRecipe("Recipe " + i);
         }
 
         startTest();
 
         int recipeLoaded = UserProfileFragment.nbOfRecipesLoadedAtATime;
-        assertEquals(Math.min(recipeLoaded, n), getTestedFragment().getUserRecyclerView().getAdapter().getItemCount());
+        assertEquals(Math.min(recipeLoaded, nbr), ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
         
-        for(int i = 0; i < n/recipeLoaded; ++i){
+        for(int i = 0; i < nbr/recipeLoaded; ++i){
             onView(withId(R.id.userProfileFragment)).perform(swipeUp());
             wait(1000);
 
         }
-        assertEquals(n, getTestedFragment().getUserRecyclerView().getAdapter().getItemCount());
+        assertEquals(nbr, ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
     }
 
     @After
@@ -156,13 +157,13 @@ public class UserProfileFragmentTest {
             RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
             doAnswer(invocation -> {
 
-                String UUID = invocation.getArgument(0);
+                String uuid = invocation.getArgument(0);
                 CallHandler<Recipe> caller = invocation.getArgument(1);
 
-                caller.onSuccess(builder.setName(UUID).build());
+                caller.onSuccess(builder.setName(uuid).build());
 
                 return null;
-            }).when(mockRecipeStorage).readRecipeFromUUID(any(String.class), any(CallHandler.class));
+            }).when(mockRecipeStorage).readRecipeFromUuid(any(String.class), any(CallHandler.class));
             return mockRecipeStorage;
         }
 

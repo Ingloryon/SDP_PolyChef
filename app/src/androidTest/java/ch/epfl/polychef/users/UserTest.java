@@ -94,17 +94,17 @@ public class UserTest {
     @Test
     public void canAddRecipes() {
 
-        String stringUids[] = new String[] {UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()};
+        String[] stringUuids = new String[] {UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()};
         User fakeUser = new User();
-        fakeUser.addRecipe(stringUids[0]);
-        fakeUser.addRecipe(stringUids[1]);
-        fakeUser.addRecipe(stringUids[2]);
-        fakeUser.addRecipe(stringUids[3]);
+        fakeUser.addRecipe(stringUuids[0]);
+        fakeUser.addRecipe(stringUuids[1]);
+        fakeUser.addRecipe(stringUuids[2]);
+        fakeUser.addRecipe(stringUuids[3]);
 
-        assertEquals(stringUids[0], fakeUser.getRecipes().get(0));
-        assertEquals(stringUids[1], fakeUser.getRecipes().get(1));
-        assertEquals(stringUids[2], fakeUser.getRecipes().get(2));
-        assertEquals(stringUids[3], fakeUser.getRecipes().get(3));
+        assertEquals(stringUuids[0], fakeUser.getRecipes().get(0));
+        assertEquals(stringUuids[1], fakeUser.getRecipes().get(1));
+        assertEquals(stringUuids[2], fakeUser.getRecipes().get(2));
+        assertEquals(stringUuids[3], fakeUser.getRecipes().get(3));
     }
 
     @Test

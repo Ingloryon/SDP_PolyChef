@@ -62,6 +62,8 @@ public class OnlineMiniaturesFragmentTest {
     private RecipeStorage fakeRecipeStorage = Mockito.mock(RecipeStorage.class,CALLS_REAL_METHODS );
     private List<Recipe> recipesInDatabase = new ArrayList<>();
 
+    private FragmentTestUtils fragUtils = new FragmentTestUtils();
+
     private Recipe testRecipe1 = new RecipeBuilder().setName("test1")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .addInstruction("test1instruction").setPersonNumber(4)
@@ -117,7 +119,7 @@ public class OnlineMiniaturesFragmentTest {
     public synchronized void databaseEmptyAddNothingToView() throws InterruptedException {
         initActivity();
         wait(1000);
-        assertEquals(0, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(0, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -134,7 +136,7 @@ public class OnlineMiniaturesFragmentTest {
 
         initActivity();
         wait(1000);
-        assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -144,7 +146,7 @@ public class OnlineMiniaturesFragmentTest {
         }
         initActivity();
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -156,7 +158,7 @@ public class OnlineMiniaturesFragmentTest {
 
         initActivity();
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -165,9 +167,9 @@ public class OnlineMiniaturesFragmentTest {
         initActivity();
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList))
-                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+                .perform(RecyclerViewActions.scrollToPosition(((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
-        assertEquals(1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -179,12 +181,12 @@ public class OnlineMiniaturesFragmentTest {
         initActivity();
         wait(1000);
         onView(withId(R.id.miniaturesOnlineList))
-                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+                .perform(RecyclerViewActions.scrollToPosition(((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
         //TODO:fix the exception
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -197,21 +199,21 @@ public class OnlineMiniaturesFragmentTest {
         initActivity();
         wait(1000);
         onView(withId(R.id.miniaturesOnlineList))
-                .perform(RecyclerViewActions.scrollToPosition(getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount() - 1));
+                .perform(RecyclerViewActions.scrollToPosition(((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, getMiniaturesFragment().getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
-    public OnlineMiniaturesFragment getMiniaturesFragment(){
-        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
-
-        NavHostFragment hostFragment = (NavHostFragment)
-                fragmentManager.findFragmentById(R.id.nav_host_fragment);
-
-        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
-    }
+//    public OnlineMiniaturesFragment getMiniaturesFragment(){
+//        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
+//
+//        NavHostFragment hostFragment = (NavHostFragment)
+//                fragmentManager.findFragmentById(R.id.nav_host_fragment);
+//
+//        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
+//    }
 
     private class FakeHomePage extends HomePage {
 
