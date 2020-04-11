@@ -100,7 +100,7 @@ public class RecipeStorage implements Serializable {
     }
 
     /**
-     * Update the id value of the class from the database
+     * Update the id value of the class from the database.
      */
     public void updateId(){
         DatabaseReference idRef = getFirebaseDatabase().getReference(DB_ID);
