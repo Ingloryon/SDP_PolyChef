@@ -76,8 +76,8 @@ public class HomePage extends ConnectedActivity {
     }
 
     public void updateDrawerInfo(View parentView) {
-        ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getUserStorage().getAuthenticatedUserEmail());
-        ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getUserStorage().getAuthenticatedUserName());
+        ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getUserStorage().getAuthenticatedUser().getEmail());
+        ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getUserStorage().getAuthenticatedUser().getDisplayName());
     }
 
     public void setupUserProfileNavigation(View parentView){

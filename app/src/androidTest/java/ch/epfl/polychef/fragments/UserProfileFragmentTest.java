@@ -65,14 +65,6 @@ public class UserProfileFragmentTest {
         }
     };
 
-//    public UserProfileFragment getTestedFragment(){
-//        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
-//
-//        NavHostFragment hostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment);
-//
-//        return (UserProfileFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
-//    }
-
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             true);
@@ -126,7 +118,7 @@ public class UserProfileFragmentTest {
 
         int recipeLoaded = UserProfileFragment.nbOfRecipesLoadedAtATime;
         assertEquals(Math.min(recipeLoaded, nbr), ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
-        
+
         for(int i = 0; i < nbr/recipeLoaded; ++i){
             onView(withId(R.id.userProfileFragment)).perform(swipeUp());
             wait(1000);

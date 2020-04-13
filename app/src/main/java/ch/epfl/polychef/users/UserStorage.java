@@ -95,11 +95,11 @@ public class UserStorage {
         }
     }
 
-    public String getAuthenticatedUserEmail() {
+    private String getAuthenticatedUserEmail() {
         return getAuthenticatedUser().getEmail();
     }
 
-    public String getAuthenticatedUserName() {
+    private String getAuthenticatedUserName() {
         return getAuthenticatedUser().getDisplayName();
     }
 
