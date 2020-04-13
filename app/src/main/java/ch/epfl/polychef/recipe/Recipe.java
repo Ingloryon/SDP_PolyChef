@@ -21,7 +21,7 @@ public final class Recipe implements Serializable, Cloneable {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
 
-    private final UUID recipeUuid;
+    private final String recipeUuid;
     private String name;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
@@ -50,7 +50,8 @@ public final class Recipe implements Serializable, Cloneable {
      * @param picturesPath path to access the pictures of the recipe, provide empty list for default picture
      */
     protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, Either<String, Integer> miniaturePath, List<String> picturesPath){
-        this.recipeUuid = UUID.randomUUID();
+
+        this.recipeUuid = UUID.randomUUID().toString();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
         //TODO save deepCopy of ingredients;
@@ -175,14 +176,14 @@ public final class Recipe implements Serializable, Cloneable {
      * Returns the String representation of the unique id of the recipe.
      * @return string of recipe's unique id
      */
-    public UUID getUuid(){
+    public String getRecipeUuid(){
         return recipeUuid;
     }
 
     @Override
     public boolean equals(Object otherRecipe){
         if ( otherRecipe instanceof Recipe ){
-            return ((Recipe) otherRecipe).getUuid().equals(this.recipeUuid) ;
+            return ((Recipe) otherRecipe).getRecipeUuid().equals(this.recipeUuid) ;
         }
         return false;
     }

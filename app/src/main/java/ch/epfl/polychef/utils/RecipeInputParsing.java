@@ -31,7 +31,6 @@ public final class RecipeInputParsing {
 
     public static boolean parseIngredients(String toMatch, String pattern, List<Ingredient> ingredients, List<String> errorLogs) {
         List<String> allMatches = new ArrayList<>();
-
         Matcher mat = Pattern.compile(pattern)
                 .matcher(toMatch);
         while (mat.find()) {

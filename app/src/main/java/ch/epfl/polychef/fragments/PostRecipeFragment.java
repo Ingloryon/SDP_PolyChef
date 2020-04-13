@@ -1,6 +1,7 @@
 package ch.epfl.polychef.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.RecipeInputParsing;
 
 public class PostRecipeFragment extends Fragment {
@@ -73,10 +75,23 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
+    private HomePage hostActivity;
+
     /**
      * Required empty public constructor.
      */
     public PostRecipeFragment() {
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+        } else {
+            throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
+        }
     }
 
     @Override
@@ -178,12 +193,14 @@ public class PostRecipeFragment extends Fragment {
             return false;
         } else {
             if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getRecipeUuid());
             }
             for(int i = 0; i < currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getUuid().toString());
+                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getRecipeUuid());
             }
-            RecipeStorage.getInstance().addRecipe(postedRecipe);
+            hostActivity.getRecipeStorage().addRecipe(postedRecipe);
+            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
+            hostActivity.getUserStorage().updateUserInfo();
             return true;
         }
     }
@@ -246,18 +263,18 @@ public class PostRecipeFragment extends Fragment {
     private boolean checkForIllegalInputs(RecipeBuilder rb) {
 
         try {
-        rb.setName(name)
-                .setEstimatedCookingTime(estimatedCookingTime)
-                .setPersonNumber(personNumber)
-                .setEstimatedPreparationTime(estimatedPreparationTime)
-                .setRecipeDifficulty(recipeDifficulty);
-        for (int i = 0; i < recipeInstructions.size(); i++) {
-            rb.addInstruction(recipeInstructions.get(i));
-        }
-        for (int i = 0; i < ingredients.size(); i++) {
-            rb.addIngredient(ingredients.get(i));
-        }
-        rb.build();
+            rb.setName(name)
+                    .setEstimatedCookingTime(estimatedCookingTime)
+                    .setPersonNumber(personNumber)
+                    .setEstimatedPreparationTime(estimatedPreparationTime)
+                    .setRecipeDifficulty(recipeDifficulty);
+            for (int i = 0; i < recipeInstructions.size(); i++) {
+                rb.addInstruction(recipeInstructions.get(i));
+            }
+            for (int i = 0; i < ingredients.size(); i++) {
+                rb.addIngredient(ingredients.get(i));
+            }
+            rb.build();
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
@@ -340,5 +357,13 @@ public class PostRecipeFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    protected RecipeStorage getRecipeStorage() {
+        return RecipeStorage.getInstance();
+    }
+
+    protected UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 }

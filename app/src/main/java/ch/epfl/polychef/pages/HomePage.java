@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -14,11 +16,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
 
 import com.google.android.material.navigation.NavigationView;
 
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class HomePage extends ConnectedActivity {
@@ -26,6 +30,7 @@ public class HomePage extends ConnectedActivity {
     private DrawerLayout drawer;
 
     private NavController navController;
+    private NavigationView navView;
     private MenuItem currentItem;
 
     public static final String LOG_OUT = "Log out";
@@ -51,15 +56,39 @@ public class HomePage extends ConnectedActivity {
 
         navController = NavHostFragment.findNavController(hostFragment);
 
+        navView = findViewById(R.id.navigationView);
+
         // Create new Bundle containing the id of the container for the adapter
         Bundle bundle = new Bundle();
         bundle.putInt("fragmentID", R.id.nav_host_fragment);
 
-        bundle.putSerializable("RecipeStorage", getRecipeStorage());
         // Set this bundle to be an arguments of the startDestination using this trick
         navController.setGraph(R.navigation.nav_graph, bundle);
 
         setupNavigation();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        updateDrawerInfo(navView.getHeaderView(0));
+    }
+
+    public void updateDrawerInfo(View parentView) {
+        ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getUserStorage().getAuthenticatedUser().getEmail());
+        ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getUserStorage().getAuthenticatedUser().getDisplayName());
+    }
+
+    public void setupUserProfileNavigation(View parentView){
+        ImageView profileImage = parentView.findViewById(R.id.drawerProfileImage);
+
+        profileImage.setOnClickListener((view) -> {
+            setCurrentItemChecked(false);
+            currentItem = null;
+            navController.navigate(R.id.userProfileFragment);
+            drawer.closeDrawer(GravityCompat.START, true);
+        });
     }
 
     @Override
@@ -74,6 +103,37 @@ public class HomePage extends ConnectedActivity {
                 signOut();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        setCurrentItemChecked(false);
+
+        int destination = navController.getCurrentDestination().getId();
+
+        if(destination == R.id.userProfileFragment
+                || destination == R.id.fullRecipeFragment) {
+
+            currentItem = null;
+        } else {
+            changeItem(navView.getMenu().findItem(getMenuItem(destination)));
+        }
+
+        drawer.closeDrawer(GravityCompat.START, true);
+    }
+
+    public void changeItem(MenuItem newItem){
+        setCurrentItemChecked(false);
+        currentItem = newItem;
+        setCurrentItemChecked(true);
+    }
+
+    public void setCurrentItemChecked(Boolean bool){
+        if(currentItem != null) {
+            currentItem.setChecked(bool);
+        }
     }
 
     private int getFragmentId(int itemId) {
@@ -93,25 +153,41 @@ public class HomePage extends ConnectedActivity {
         }
     }
 
+    private int getMenuItem(int fragmentId){
+        switch(fragmentId){
+            case R.id.onlineMiniaturesFragment:
+                return R.id.nav_home;
+
+            case R.id.favouritesFragment:
+                return R.id.nav_fav;
+
+            case R.id.subscribersFragment:
+                return R.id.nav_subscribers;
+
+            case R.id.subscriptionsFragment:
+                return R.id.nav_subscriptions;
+
+            case R.id.postRecipeFragment:
+                return R.id.nav_recipe;
+
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
     private void setupNavigation(){
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(
+
+        navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem selectedItem) {
 
-                        if (currentItem != null) {
-                            currentItem.setChecked(false);
-                        }
-
-                        selectedItem.setChecked(true);
-                        currentItem = selectedItem;
+                        changeItem(selectedItem);
 
                         invalidateOptionsMenu();
 
                         Bundle bundle = new Bundle();
                         bundle.putInt("fragmentID", R.id.nav_host_fragment);
-                        bundle.putSerializable("RecipeStorage", getRecipeStorage());
 
                         if(navController.getCurrentDestination().getId() != R.id.nav_host_fragment){
                             // This nav prevents to return to login screen when on home
@@ -129,13 +205,23 @@ public class HomePage extends ConnectedActivity {
                     }
                 }
         );
+
+        setupUserProfileNavigation(navView.getHeaderView(0));
+
+        //Home should be checked initially
+        currentItem = navView.getMenu().findItem(R.id.nav_home);
+        currentItem.setChecked(true);
     }
 
-    protected UserStorage getUserStorage(){
+    public UserStorage getUserStorage(){
         return UserStorage.getInstance();
     }
 
-    protected RecipeStorage getRecipeStorage(){
+    public RecipeStorage getRecipeStorage(){
         return RecipeStorage.getInstance();
+    }
+
+    public ImageStorage getImageStorage(){
+        return new ImageStorage();
     }
 }

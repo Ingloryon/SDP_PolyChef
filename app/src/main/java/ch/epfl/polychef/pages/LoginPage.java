@@ -21,6 +21,7 @@ import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.users.UserStorage;
 
 public class LoginPage extends AppCompatActivity {
 
@@ -69,6 +70,7 @@ public class LoginPage extends AppCompatActivity {
     }
 
     public void startNextActivity() {
+        UserStorage.getInstance().initializeUserFromAuthenticatedUser();
         startActivity(new Intent(this, HomePage.class));
     }
 }
