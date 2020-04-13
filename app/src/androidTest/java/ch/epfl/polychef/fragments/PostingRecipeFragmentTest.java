@@ -232,6 +232,7 @@ public class PostingRecipeFragmentTest {
         public UserStorage getUserStorage() {
             mockUser = Mockito.mock(User.class);
             mockUserStorage = Mockito.mock(UserStorage.class);
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
             when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
             doNothing().when(mockUser).addRecipe(any(String.class));
             return mockUserStorage;

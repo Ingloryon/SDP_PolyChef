@@ -73,15 +73,6 @@ public class RecipeMiniatureImageTest {
         }
     };
 
-//    public OnlineMiniaturesFragment getMiniatureFragment(){
-//        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
-//
-//        NavHostFragment hostFragment = (NavHostFragment)
-//                fragmentManager.findFragmentById(R.id.nav_host_fragment);
-//
-//        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
-//    }
-
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             false);
@@ -127,7 +118,7 @@ public class RecipeMiniatureImageTest {
         @Override
         public UserStorage getUserStorage(){
             UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
-
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
             when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
 
             return mockUserStorage;

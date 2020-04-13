@@ -47,7 +47,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         super.onCreate(savedInstanceState);
     }
 
-    //TODO add getNRecipesFromUuid and add an isLoading variation
+    //TODO add an isLoading variation
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

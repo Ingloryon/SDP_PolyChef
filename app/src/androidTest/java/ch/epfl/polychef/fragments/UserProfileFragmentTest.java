@@ -138,7 +138,7 @@ public class UserProfileFragmentTest {
         @Override
         public UserStorage getUserStorage(){
             UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
-
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
             when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
 
             return mockUserStorage;

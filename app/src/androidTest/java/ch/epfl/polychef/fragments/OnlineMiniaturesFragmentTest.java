@@ -206,15 +206,6 @@ public class OnlineMiniaturesFragmentTest {
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
-//    public OnlineMiniaturesFragment getMiniaturesFragment(){
-//        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
-//
-//        NavHostFragment hostFragment = (NavHostFragment)
-//                fragmentManager.findFragmentById(R.id.nav_host_fragment);
-//
-//        return (OnlineMiniaturesFragment) hostFragment.getChildFragmentManager().getFragments().get(0);
-//    }
-
     private class FakeHomePage extends HomePage {
 
         @Override
@@ -225,7 +216,9 @@ public class OnlineMiniaturesFragmentTest {
 
         @Override
         public UserStorage getUserStorage(){
-            return Mockito.mock(UserStorage.class);
+            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+            return mockUserStorage;
         }
 
         @Override
