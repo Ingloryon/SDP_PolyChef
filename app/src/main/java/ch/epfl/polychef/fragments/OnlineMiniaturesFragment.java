@@ -22,6 +22,7 @@ import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
@@ -48,6 +49,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
 
     private RecipeStorage recipeStorage;
     private ImageStorage imageStorage;
+    private UserStorage userStorage;
 
     public OnlineMiniaturesFragment(){
         
@@ -60,7 +62,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         RecipeMiniatureAdapter adapter = new RecipeMiniatureAdapter(this.getActivity(),
-                dynamicRecipeList, onlineRecyclerView, container.getId(), imageStorage);
+                dynamicRecipeList, onlineRecyclerView, container.getId(), imageStorage, userStorage);
 
         onlineRecyclerView.setAdapter(adapter);
         // Add a scroll listener when we reach the end of the list we load new recipes from database
@@ -90,7 +92,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
             HomePage homePage = (HomePage) context;
             recipeStorage = homePage.getRecipeStorage();
             imageStorage = homePage.getImageStorage();
-            if(recipeStorage == null || imageStorage == null){
+            userStorage = homePage.getUserStorage();
+            if(recipeStorage == null || imageStorage == null || userStorage == null){
                 throw new IllegalStateException();
             }
         } else {

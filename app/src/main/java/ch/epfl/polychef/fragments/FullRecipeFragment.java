@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.synnapps.carouselview.CarouselView;
 
@@ -20,6 +22,8 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.FavouritesUtils;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
+    private ToggleButton favouriteButton;
 
     /**
      * Required empty public constructor.
@@ -49,6 +54,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         if(bundle != null){
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");
         }
+        displayFavouriteButton(view);
         displayRecipeName(view);
         displayImage(view);
         displayRating(view);
@@ -58,6 +64,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         displayIngredients(view);
 
         return view;
+    }
+
+    private void displayFavouriteButton(View view) {
+        favouriteButton = view.findViewById(R.id.favouriteButton);
+        FavouritesUtils.setFavouriteButton(getActivity(), getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
     }
 
     /**
@@ -168,5 +179,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
 
     public ImageStorage getImageStorage() {
         return new ImageStorage();
+    }
+
+    public UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 }
