@@ -94,7 +94,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
             recipeStorage = homePage.getRecipeStorage();
             imageStorage = homePage.getImageStorage();
             userStorage = homePage.getUserStorage();
-            Preconditions.checkArgument(recipeStorage == null || imageStorage == null || userStorage == null);
+            Preconditions.checkArgument(recipeStorage != null && imageStorage != null && userStorage != null);
         } else {
             throw new IllegalArgumentException("The online miniature fragment wasn't attached properly!");
         }
