@@ -1,6 +1,7 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.FavouritesUtils;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
@@ -105,6 +107,34 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
     }
 
     private boolean addNextRecipes() {
+        if(isNetConnected()) {
+            return getNextOnlineFavourites();
+        } else {
+            return getNextOfflineFavourites();
+        }
+    }
+
+    private boolean getNextOfflineFavourites() {
+        List<Recipe> favouritesList = FavouritesUtils.getOfflineFavourites(getActivity());
+        if(indexFavourites + nbOfRecipesLoadedAtATime <= favouritesList.size()) {
+            for(int i = indexFavourites; i < indexFavourites + nbOfRecipesLoadedAtATime; ++i) {
+                dynamicRecipeList.add(favouritesList.get(i));
+                favouriteRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+            indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
+            return true;
+        } else if(indexFavourites < favouritesList.size()) {
+            for(int i = indexFavourites; i < favouritesList.size(); ++i) {
+                dynamicRecipeList.add(favouritesList.get(i));
+                favouriteRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+            indexFavourites = favouritesList.size();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getNextOnlineFavourites() {
         List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
         if(indexFavourites + nbOfRecipesLoadedAtATime <= favouritesList.size()) {
             for(int i = indexFavourites; i < indexFavourites + nbOfRecipesLoadedAtATime; ++i) {
@@ -133,5 +163,10 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
     public void onFailure() {
         isLoading = false;
         Log.w(TAG, "No Recipe found");
+    }
+
+    private boolean isNetConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 }
