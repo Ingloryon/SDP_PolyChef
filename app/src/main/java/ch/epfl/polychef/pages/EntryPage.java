@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
 import ch.epfl.polychef.R;
 
@@ -45,8 +47,14 @@ public class EntryPage extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        goHomeIfConnected();
         logButton.setText(LOG_IN);
+    }
+
+    protected void goHomeIfConnected() {
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            startActivity(new Intent(this, HomePage.class));
+        }
     }
 
     /** Called when the user taps the log button. */
