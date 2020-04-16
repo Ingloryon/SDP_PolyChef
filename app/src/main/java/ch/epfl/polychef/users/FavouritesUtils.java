@@ -18,8 +18,8 @@ import ch.epfl.polychef.recipe.Recipe;
 
 public class FavouritesUtils {
 
-    private final static Gson gson = new Gson();
-    private final static String favouriteKey = "favourites";
+    private static final Gson gson = new Gson();
+    private static final String favouriteKey = "favourites";
 
     /**
      * Set a toggle button to act as a favourite button for a recipe.
@@ -31,7 +31,7 @@ public class FavouritesUtils {
      */
     public static void setFavouriteButton(Context context, UserStorage userStorage, ToggleButton button, Recipe recipe) {
         if (userStorage != null && userStorage.getPolyChefUser() != null) {
-            List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
+            List<String> favouritesList = userStorage.getPolyChefUser().getFavourites(); // TODO take offline favourite if no connection
             button.setVisibility(View.VISIBLE);
             if (favouritesList.contains(recipe.getRecipeUuid())) {
                 button.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_yellow));
@@ -74,16 +74,16 @@ public class FavouritesUtils {
      */
     public static List<Recipe> getOfflineFavourites(Context context) {
         SharedPreferences sharedPref = getSharedPreferences(context);
-        String recipes_json = sharedPref.getString(favouriteKey, "");
-        return recipes_json.isEmpty() ? new ArrayList<>() : gson.fromJson(recipes_json, new TypeToken<List<Recipe>>() {
+        String recipesJson = sharedPref.getString(favouriteKey, "");
+        return recipesJson.isEmpty() ? new ArrayList<>() : gson.fromJson(recipesJson, new TypeToken<List<Recipe>>() {
         }.getType());
     }
 
     private static void putFavouriteList(Context context, List<Recipe> recipes) {
         SharedPreferences sharedPref = getSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPref.edit();
-        String recipes_json = gson.toJson(recipes);
-        editor.putString(favouriteKey, recipes_json);
+        String recipesJson = gson.toJson(recipes);
+        editor.putString(favouriteKey, recipesJson);
         editor.apply();
     }
 

@@ -25,6 +25,7 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.FavouritesUtils;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 
@@ -87,12 +88,10 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
 
         if(context instanceof HomePage){
             HomePage homePage = (HomePage) context;
-            recipeStorage = homePage.getRecipeStorage();
             imageStorage = homePage.getImageStorage();
             userStorage = homePage.getUserStorage();
-            if(recipeStorage == null || imageStorage == null || userStorage == null){
-                throw new IllegalStateException();
-            }
+            recipeStorage = homePage.getRecipeStorage();
+            Preconditions.checkArgument(recipeStorage == null || imageStorage == null || userStorage == null);
         } else {
             throw new IllegalArgumentException("The favourite miniature fragment wasn't attached properly!");
         }
@@ -123,7 +122,8 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
             }
             indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
             return true;
-        } else if(indexFavourites < favouritesList.size()) {
+        }
+        if(indexFavourites < favouritesList.size()) {
             for(int i = indexFavourites; i < favouritesList.size(); ++i) {
                 dynamicRecipeList.add(favouritesList.get(i));
                 favouriteRecyclerView.getAdapter().notifyDataSetChanged();
@@ -142,7 +142,8 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
             }
             indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
             return true;
-        } else if(indexFavourites < favouritesList.size()) {
+        }
+        if(indexFavourites < favouritesList.size()) {
             for(int i = indexFavourites; i < favouritesList.size(); ++i) {
                 recipeStorage.readRecipeFromUuid(favouritesList.get(i), this);
             }

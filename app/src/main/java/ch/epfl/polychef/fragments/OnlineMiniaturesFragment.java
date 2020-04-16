@@ -23,6 +23,7 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
@@ -93,9 +94,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
             recipeStorage = homePage.getRecipeStorage();
             imageStorage = homePage.getImageStorage();
             userStorage = homePage.getUserStorage();
-            if(recipeStorage == null || imageStorage == null || userStorage == null){
-                throw new IllegalStateException();
-            }
+            Preconditions.checkArgument(recipeStorage == null || imageStorage == null || userStorage == null);
         } else {
             throw new IllegalArgumentException("The online miniature fragment wasn't attached properly!");
         }
