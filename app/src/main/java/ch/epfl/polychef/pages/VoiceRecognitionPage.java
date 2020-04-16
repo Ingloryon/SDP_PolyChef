@@ -9,13 +9,13 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
-public class VoiceRecognitionPage extends Activity implements
+//public class VoiceRecognitionPage extends Activity implements RecognitionListener {
+public class VoiceRecognitionPage implements
         RecognitionListener {
 
     /* We only need the keyphrase to start recognition, one menu with list of choices,
@@ -28,22 +28,20 @@ public class VoiceRecognitionPage extends Activity implements
 
     /* Recognition object */
     private SpeechRecognizer recognizer;
+    private Activity activity;
 
-
-    @Override
-    public void onCreate(Bundle state) {
-        super.onCreate(state);
-        runRecognizerSetup();
+    VoiceRecognitionPage(Activity activity){
+        this.activity=activity;
     }
 
-    private void runRecognizerSetup() {
+    public void start(){
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         new AsyncTask<Void, Void, Exception>() {
             @Override
             protected Exception doInBackground(Void... params) {
                 try {
-                    Assets assets = new Assets(VoiceRecognitionPage.this);
+                    Assets assets = new Assets(activity);
                     File assetDir = assets.syncAssets();
                     setupRecognizer(assetDir);
                 } catch (IOException e) {
@@ -79,9 +77,9 @@ public class VoiceRecognitionPage extends Activity implements
         recognizer.addGrammarSearch(MENU_SEARCH, menuGrammar);
     }
 
-    @Override
+    //@Override
     public void onStop() {
-        super.onStop();
+        //super.onStop();
         if (recognizer != null) {
             recognizer.cancel();
             recognizer.shutdown();
