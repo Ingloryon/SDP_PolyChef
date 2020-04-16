@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
@@ -53,9 +55,6 @@ public class PostRecipeFragment extends Fragment {
     private int numberOfIngredients = 1;
     private String name;
     private List<Integer> instructionsId = new ArrayList<>();
-    private List<Integer> ingredientsId = new ArrayList<>();
-    private List<Integer> quantityId = new ArrayList<>();
-    private List<Integer> unitId = new ArrayList<>();
     private List<String> recipeInstructions = new ArrayList<>();
     private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
@@ -65,10 +64,7 @@ public class PostRecipeFragment extends Fragment {
     private Recipe postedRecipe;
     private LinearLayout instructionLayout;
     private LinearLayout ingredientLayout;
-    private LinearLayout oneIngredient;
     private EditText instructionText;
-    private EditText ingredientText;
-    private EditText quantity;
     private Button addIngredientButton;
     private Button addInstructionButton;
     private Button postButton;
@@ -88,7 +84,6 @@ public class PostRecipeFragment extends Fragment {
     private List<String> errorLogs = new ArrayList<>();
 
     private Spinner difficultyInput;
-    private Spinner unitInput;
 
     /**
      * Required empty public constructor.
@@ -117,18 +112,14 @@ public class PostRecipeFragment extends Fragment {
             }
         });
 
-        unitId.add(R.id.unit0);
-        instructionsId.add(R.id.instruction0);
-        ingredientsId.add(R.id.ingredient0);
-        quantityId.add(R.id.quantity0);
 
-        unitInput = getView().findViewById(R.id.unit0);
-        instructionLayout =  getView().findViewById(R.id.listOfInstructions);
+
+        instructionLayout = getView().findViewById(R.id.listOfInstructions);
         ingredientLayout = getView().findViewById(R.id.listOfIngredients);
-        oneIngredient = getView().findViewById(R.id.oneIngredient);
         instructionText = getView().findViewById(R.id.instruction0);
-        ingredientText = getView().findViewById(R.id.ingredient0);
-        quantity = getView().findViewById(R.id.quantity0);
+        instructionsId.add(instructionText.getId());
+
+
         addInstructionButton = getView().findViewById(R.id.buttonAddInstr);
         addInstructionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,11 +250,11 @@ public class PostRecipeFragment extends Fragment {
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
-        estimatedPreparationTime = getAndCheckTime(prep,"Preparation Time");
+        estimatedPreparationTime = getAndCheckTime(prep,getString(R.string.EnterPrepTime));
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
-        estimatedCookingTime = getAndCheckTime(cook,"Cooking Time");
+        estimatedCookingTime = getAndCheckTime(cook,getString(R.string.EnterCookTime));
 
         recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
         wrongInputs.put("Difficulty", true);
@@ -397,46 +388,12 @@ public class PostRecipeFragment extends Fragment {
         if(numberOfIngredients>maxIngredients-1){
             //TODO: print a message when trying to add too many ingredients
         }else {
-            final ViewGroup.LayoutParams oneIngredientLayoutParams = oneIngredient.getLayoutParams();
-            final ViewGroup.LayoutParams unitLayoutParams = unitInput.getLayoutParams();
-
             numberOfIngredients++;
 
-            LinearLayout linearLayout = new LinearLayout(getActivity());
-            int id = View.generateViewId();
-            linearLayout.setId(id);
-            linearLayout.setLayoutParams(oneIngredientLayoutParams);
+            ConstraintLayout newIngredient = (ConstraintLayout) LayoutInflater.from(getContext()).inflate(R.layout.ingredient_field, null);
+            ((TextView) newIngredient.getChildAt(0)).setHint("Ingredient " + numberOfIngredients);
 
-            final Spinner unit = new Spinner(getActivity());
-            unit.setLayoutParams(unitLayoutParams);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                    R.array.unit, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            unit.setAdapter(adapter);
-            id = View.generateViewId();
-            unitId.add(id);
-            unit.setId(id);
-
-            final EditText ingredient = new EditText(getActivity());
-            ingredient.setWidth(ingredientText.getWidth());
-            ingredient.setHint("Ingredient " + numberOfIngredients);
-            id = View.generateViewId();
-            ingredientsId.add(id);
-            ingredient.setId(id);
-
-            final EditText quantity = new EditText(getActivity());
-            //TODO:find a better way to set width
-            quantity.setWidth(255);
-            quantity.setHint("Quantity");
-            id = View.generateViewId();
-            quantityId.add(id);
-            quantity.setId(id);
-
-            linearLayout.addView(ingredient);
-            linearLayout.addView(quantity);
-            linearLayout.addView(unit);
-
-            ingredientLayout.addView(linearLayout);
+            ingredientLayout.addView(newIngredient);
         }
     }
 
@@ -461,9 +418,12 @@ public class PostRecipeFragment extends Fragment {
         Double quantity;
         ingredients.clear();
         for (int i = 0; i < numberOfIngredients; i++) {
-            String ingredient1 = ((EditText) getView().findViewById(ingredientsId.get(i))).getText().toString();
-            String quantity1 = ((EditText) getView().findViewById(quantityId.get(i))).getText().toString();
-            Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner)getView().findViewById(unitId.get(i))).getSelectedItemPosition()];
+            ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(i);
+
+            String ingredient1 = ((TextView) currentIngredient.getChildAt(0)).getText().toString();
+            String quantity1 = ((TextView) currentIngredient.getChildAt(1)).getText().toString();
+            Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner)currentIngredient.getChildAt(2)).getSelectedItemPosition()];
+
             if(ingredient1.length()==0 && quantity1.length()==0) {
             }else if(ingredient1.length()==0 && quantity1.length()!=0){
                 errorLogs.add("Ingredient: the ingredient shouldn't be empty");
