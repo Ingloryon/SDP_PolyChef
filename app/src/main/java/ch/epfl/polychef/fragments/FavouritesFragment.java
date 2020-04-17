@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
@@ -23,7 +24,7 @@ import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.users.FavouritesUtils;
+import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
@@ -85,16 +86,12 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
-        if(context instanceof HomePage){
-            HomePage homePage = (HomePage) context;
-            imageStorage = homePage.getImageStorage();
-            userStorage = homePage.getUserStorage();
-            recipeStorage = homePage.getRecipeStorage();
-            Preconditions.checkArgument(recipeStorage != null && imageStorage != null && userStorage != null);
-        } else {
-            throw new IllegalArgumentException("The favourite miniature fragment wasn't attached properly!");
-        }
+        Preconditions.checkArgument(context instanceof HomePage, "The favourite miniature fragment wasn't attached properly!");
+        HomePage homePage = (HomePage) context;
+        imageStorage = homePage.getImageStorage();
+        userStorage = homePage.getUserStorage();
+        recipeStorage = homePage.getRecipeStorage();
+        Preconditions.checkArgument(imageStorage != null && recipeStorage != null && userStorage != null);
     }
 
     @Override
@@ -107,51 +104,35 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
 
     private boolean addNextRecipes() {
         if(isNetConnected()) {
-            return getNextOnlineFavourites();
+            return getGenericFavourites(userStorage.getPolyChefUser().getFavourites(), this::setFavouriteOnline);
         } else {
-            return getNextOfflineFavourites();
+            return getGenericFavourites(FavouritesUtils.getInstance().getOfflineFavourites(), this::setFavouriteOffline);
         }
     }
 
-    private boolean getNextOfflineFavourites() {
-        List<Recipe> favouritesList = FavouritesUtils.getOfflineFavourites(getActivity());
+    private <T> boolean getGenericFavourites(List<T> favouritesList, BiConsumer<Integer, List<T>> func) {
         if(indexFavourites + nbOfRecipesLoadedAtATime <= favouritesList.size()) {
-            setFavouriteOffline(indexFavourites, indexFavourites + nbOfRecipesLoadedAtATime, favouritesList);
+            func.accept(indexFavourites + nbOfRecipesLoadedAtATime, favouritesList);
             indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
             return true;
         }
         if(indexFavourites < favouritesList.size()) {
-            setFavouriteOffline(indexFavourites, favouritesList.size(), favouritesList);
+            func.accept(favouritesList.size(), favouritesList);
             indexFavourites = favouritesList.size();
             return true;
         }
         return false;
     }
 
-    private void setFavouriteOffline(int start, int end, List<Recipe> favouritesList) {
-        for(int i = start; i < end; ++i) {
+    private void setFavouriteOffline(int end, List<Recipe> favouritesList) {
+        for(int i = indexFavourites; i < end; ++i) {
             dynamicRecipeList.add(favouritesList.get(i));
             favouriteRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
-    private boolean getNextOnlineFavourites() {
-        List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
-        if(indexFavourites + nbOfRecipesLoadedAtATime <= favouritesList.size()) {
-            setFavouriteOnline(indexFavourites, indexFavourites + nbOfRecipesLoadedAtATime, favouritesList);
-            indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
-            return true;
-        }
-        if(indexFavourites < favouritesList.size()) {
-            setFavouriteOnline(indexFavourites, favouritesList.size(), favouritesList);
-            indexFavourites = favouritesList.size();
-            return true;
-        }
-        return false;
-    }
-
-    private void setFavouriteOnline(int start, int end, List<String> favouritesList) {
-        for(int i = start; i < end; ++i) {
+    private void setFavouriteOnline(int end, List<String> favouritesList) {
+        for(int i = indexFavourites; i < end; ++i) {
             recipeStorage.readRecipeFromUuid(favouritesList.get(i), this);
         }
     }

@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -22,7 +21,7 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.users.FavouritesUtils;
+import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 
@@ -68,7 +67,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
 
     private void displayFavouriteButton(View view) {
         favouriteButton = view.findViewById(R.id.favouriteButton);
-        FavouritesUtils.setFavouriteButton(getActivity(), getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
+        FavouritesUtils.getInstance().setFavouriteButton(getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
     }
 
     /**

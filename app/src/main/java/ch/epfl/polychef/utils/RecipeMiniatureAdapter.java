@@ -23,7 +23,6 @@ import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.users.FavouritesUtils;
 import ch.epfl.polychef.users.UserStorage;
 
 import java.util.HashMap;
@@ -104,7 +103,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         Recipe recipe = recipeList.get(position);
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
-        FavouritesUtils.setFavouriteButton(mainContext, userStorage, holder.favouriteButton, recipe);
+        FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
         if(images.containsKey(recipe.getRecipeUuid())) {
             holder.image.setImageBitmap(images.get(recipe.getRecipeUuid()));
         } else {
