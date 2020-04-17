@@ -250,14 +250,16 @@ public class PostRecipeFragment extends Fragment {
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
-        estimatedPreparationTime = getAndCheckTime(prep,getString(R.string.EnterPrepTime));
+        estimatedPreparationTime = getAndCheckTime(prep,"Preparation Time");
 
         EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
-        estimatedCookingTime = getAndCheckTime(cook,getString(R.string.EnterCookTime));
+        estimatedCookingTime = getAndCheckTime(cook,"Cooking Time");
 
         recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
         wrongInputs.put("Difficulty", true);
+
+        Log.w(tag,wrongInputs.toString());
     }
 
     private int getAndCheckTime(String input, String message){

@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -167,25 +167,101 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/post_recipe_spacing" />
 
-            <TextView
-                android:id="@+id/cookingInfoTitle"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/post_recipe_margin"
-                android:fontFamily="sans-serif-black"
-                android:text="@string/CookingInfoTitle"
-                android:textAlignment="textStart"
-                android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/verticalSpace" />
+                android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/cookingInfo"
-                layout="@layout/cooking_info"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-black"
+                        android:text="@string/EnterPersonNb"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/personNbInput"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="textPersonName" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/post_recipe_margin"
-                android:layout_marginEnd="@dimen/post_recipe_margin" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="24dp"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-black"
+                        android:text="@string/EnterPrepTime"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/prepTimeInput"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="textPersonName" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="49dp"
+                        android:fontFamily="sans-serif-black"
+                        android:text="@string/EnterCookTime"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/cookTimeInput"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Space
                 android:layout_width="match_parent"
@@ -195,7 +271,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/post_recipe_margin"
-                android:layout_marginEnd="@dimen/post_recipe_margin">
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/post_recipe_margin"
+                android:layout_marginBottom="8dp">
 
                 <TextView
                     android:id="@+id/recipeDifficulty"
@@ -215,11 +293,11 @@
                     style="?android:attr/spinnerDropDownItemStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:entries="@array/difficulty_array"
                     android:fontFamily="sans-serif"
                     android:prompt="@string/difficulty_prompt"
                     android:spinnerMode="dialog"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:entries="@array/difficulty_array"
                     app:layout_constraintStart_toEndOf="@+id/recipeDifficulty"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -333,6 +411,7 @@
                 android:layout_marginStart="@dimen/post_recipe_margin"
                 android:layout_marginTop="@dimen/post_recipe_margin"
                 android:layout_marginEnd="@dimen/post_recipe_margin"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="sans-serif-black"
                 android:textAlignment="textStart"
                 android:textSize="12sp"
