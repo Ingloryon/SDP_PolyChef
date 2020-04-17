@@ -65,17 +65,17 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
-                        android:showDividers="middle"
-                        android:divider="@drawable/empty_tall_divider"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
+                        android:divider="@drawable/empty_tall_divider"
                         android:orientation="horizontal"
+                        android:showDividers="middle"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ratingBar">
+                        app:layout_constraintTop_toBottomOf="@+id/voiceRecognitionSwitch">
 
                         <TextView
                             android:id="@+id/prepTime"
@@ -187,6 +187,17 @@
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/instructions" />
+
+                    <Switch
+                        android:id="@+id/voiceRecognitionSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:checked="false"
+                        android:text="@string/VoiceRecognitionSwitch"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

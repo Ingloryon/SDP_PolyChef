@@ -31,6 +31,8 @@
     <string name="EnterPrepTime">Preparation time:</string>
     <string name="EnterCookTime">Cooking time:</string>
     <string name="PostRecipe">Post your Recipe !</string>
+    <string name="VoiceRecognitionSwitch">Voice Recognition</string>
+
 
     <string name="difficulty_prompt">Select difficulty...</string>
     <string-array name="difficulty_array">

@@ -6,10 +6,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RatingBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +21,7 @@ import com.synnapps.carouselview.CarouselView;
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.utils.Either;
@@ -30,6 +34,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
+    private VoiceRecognizer voiceRecognizer;
 
     /**
      * Required empty public constructor.
@@ -56,6 +61,20 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         displayDifficulty(view);
         displayInstructions(view);
         displayIngredients(view);
+
+        voiceRecognizer=new VoiceRecognizer();
+
+        Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
+        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    voiceRecognizer.start(getActivity());
+                }else{
+                    voiceRecognizer.onStop();
+                }
+            }
+        });
 
         return view;
     }
@@ -169,4 +188,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
     public ImageStorage getImageStorage() {
         return new ImageStorage();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        voiceRecognizer.onStop();
+    }
+
 }

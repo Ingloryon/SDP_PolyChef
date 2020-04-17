@@ -1,7 +1,8 @@
-package ch.epfl.polychef.pages;
+package ch.epfl.polychef.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Observable;
 
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
@@ -15,8 +16,7 @@ import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
 //public class VoiceRecognitionPage extends Activity implements RecognitionListener {
-public class VoiceRecognitionPage implements
-        RecognitionListener {
+public class VoiceRecognizer extends Observable implements RecognitionListener {
 
     /* We only need the keyphrase to start recognition, one menu with list of choices,
    and one word that is required for method switchSearch - it will bring recognizer
@@ -28,13 +28,12 @@ public class VoiceRecognitionPage implements
 
     /* Recognition object */
     private SpeechRecognizer recognizer;
-    private Activity activity;
 
-    VoiceRecognitionPage(Activity activity){
-        this.activity=activity;
+    public VoiceRecognizer(){
+        super();
     }
 
-    public void start(){
+    public void start(Activity activity){
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         new AsyncTask<Void, Void, Exception>() {
@@ -79,7 +78,7 @@ public class VoiceRecognitionPage implements
 
     //@Override
     public void onStop() {
-        //super.onStop();
+        Log.d("vr","onStop");
         if (recognizer != null) {
             recognizer.cancel();
             recognizer.shutdown();
@@ -100,8 +99,10 @@ public class VoiceRecognitionPage implements
 
     @Override
     public void onResult(Hypothesis hypothesis) {
-        if (hypothesis != null) {
-            Log.d("vr","onResult found : "+hypothesis.getHypstr());
+        Log.d("vr","onResult found : "+hypothesis.getHypstr());
+
+        if (hypothesis != null && !hypothesis.getHypstr().equals(KEYPHRASE)) {
+            super.notifyObservers(hypothesis.getHypstr());
         }
     }
 
