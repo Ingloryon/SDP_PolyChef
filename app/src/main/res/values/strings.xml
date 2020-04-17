@@ -8,6 +8,8 @@
     <string name="google">Google</string>
     <string name="log_in">Log In</string>
     <string name="log_out">Log Out</string>
+    <string name="VoiceRecognitionSwitch">Voice Recognition</string>
+
 
     <string name="Username">Username</string>
     <string name="Email">Email</string>
@@ -31,8 +33,6 @@
     <string name="EnterPrepTime">Preparation time:</string>
     <string name="EnterCookTime">Cooking time:</string>
     <string name="PostRecipe">Post your Recipe !</string>
-    <string name="VoiceRecognitionSwitch">Voice Recognition</string>
-
 
     <string name="difficulty_prompt">Select difficulty...</string>
     <string-array name="difficulty_array">
@@ -52,10 +52,8 @@
     <string name="Search">Search</string>
 
 
-    <string name="kws_caption">To start demonstration say \"start\".</string>
-    <string name="menu_caption">Say \"digits\", \"forecast\" or \"phones\" to choose the grammar, language model or phonetic decoder example.</string>
-    <string name="digits_caption">To try recognition of digits: say something like \"one two three four five\".</string>
-    <string name="forecast_caption">To try recognition of a weather forecast like \"sunny spells on Wednesday\".</string>
-    <string name="phone_caption">To try phonetic recognition say anything.</string>
+    <string name="commandPrevious">previous</string>
+    <string name="commandNext">next</string>
+    <string name="commandRepeat">repeat</string>
 
 </resources>

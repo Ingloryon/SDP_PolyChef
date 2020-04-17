@@ -2,8 +2,8 @@ package ch.epfl.polychef.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
 
+import ch.epfl.polychef.CallNotifier;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -16,7 +16,7 @@ import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
 //public class VoiceRecognitionPage extends Activity implements RecognitionListener {
-public class VoiceRecognizer extends Observable implements RecognitionListener {
+public class VoiceRecognizer implements RecognitionListener {
 
     /* We only need the keyphrase to start recognition, one menu with list of choices,
    and one word that is required for method switchSearch - it will bring recognizer
@@ -29,8 +29,10 @@ public class VoiceRecognizer extends Observable implements RecognitionListener {
     /* Recognition object */
     private SpeechRecognizer recognizer;
 
-    public VoiceRecognizer(){
-        super();
+    private CallNotifier<String> callNotifier;
+
+    public VoiceRecognizer(CallNotifier<String> callNotifier){
+        this.callNotifier=callNotifier;
     }
 
     public void start(Activity activity){
@@ -102,7 +104,7 @@ public class VoiceRecognizer extends Observable implements RecognitionListener {
         Log.d("vr","onResult found : "+hypothesis.getHypstr());
 
         if (hypothesis != null && !hypothesis.getHypstr().equals(KEYPHRASE)) {
-            super.notifyObservers(hypothesis.getHypstr());
+            callNotifier.notify(hypothesis.getHypstr());
         }
     }
 

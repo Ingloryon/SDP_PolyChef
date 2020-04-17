@@ -19,22 +19,25 @@ import android.widget.Toast;
 import com.synnapps.carouselview.CarouselView;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.VoiceSynthesizer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> {
+public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
     private Recipe currentRecipe;
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
     private VoiceRecognizer voiceRecognizer;
+    private VoiceSynthesizer voiceSynthesizer;
 
     /**
      * Required empty public constructor.
@@ -62,7 +65,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         displayInstructions(view);
         displayIngredients(view);
 
-        voiceRecognizer=new VoiceRecognizer();
+        voiceRecognizer=new VoiceRecognizer(this);
+        voiceSynthesizer=new VoiceSynthesizer(getActivity());
 
         Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
         onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -181,6 +185,19 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
     }
 
     @Override
+    public void notify(String data) {
+        Log.d("vr","received:"+data);
+
+        if(data.equals(getResources().getString(R.string.commandPrevious))){
+
+        }else if(data.equals(getResources().getString(R.string.commandNext))){
+
+        }else if(data.equals(getResources().getString(R.string.commandRepeat))){
+
+        }
+    }
+
+    @Override
     public void onFailure() {
         Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
     }
@@ -194,5 +211,4 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         super.onStop();
         voiceRecognizer.onStop();
     }
-
 }
