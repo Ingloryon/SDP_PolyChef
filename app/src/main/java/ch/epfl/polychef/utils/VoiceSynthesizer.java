@@ -16,6 +16,14 @@ public class VoiceSynthesizer {
     }
 
     /**
+     * Speaks out the message with a synthetic voice
+     * @param message the text to speak out
+     */
+    public void speak(String message){
+        textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,null,null);
+    }
+
+    /**
      * initialize the object TextToSpeech
      */
     private void initializeTextToSpeech() {
@@ -26,24 +34,15 @@ public class VoiceSynthesizer {
                     throw new UnsupportedOperationException("There is no voice recognition engine.");
                 }else{
                     textToSpeech.setLanguage(Locale.UK);
-                    speak("Ready to start.");
                 }
             }
         });
     }
 
     /**
-     * Speaks out the message with a synthetic voice
-     * @param message the text to speak out
-     */
-    private void speak(String message){
-        textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,null,null);
-    }
-
-    /**
      *  Shutdown the textToSpeech object when the activity is on pause
      */
-    protected void onPause(){
+    public void onStop(){
         textToSpeech.shutdown();
     }
 }

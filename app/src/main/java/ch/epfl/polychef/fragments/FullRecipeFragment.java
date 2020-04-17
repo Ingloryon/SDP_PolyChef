@@ -39,6 +39,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
 
+    private int indexOfInstruction=-1;
+
     /**
      * Required empty public constructor.
      */
@@ -66,7 +68,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         displayIngredients(view);
 
         voiceRecognizer=new VoiceRecognizer(this);
-        voiceSynthesizer=new VoiceSynthesizer(getActivity());
+        try {
+            voiceSynthesizer = new VoiceSynthesizer(getActivity());
+        }catch(UnsupportedOperationException e){
+            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+        }
 
         Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
         onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -187,13 +193,20 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     @Override
     public void notify(String data) {
         Log.d("vr","received:"+data);
+        List<String> allInstructions = currentRecipe.getRecipeInstructions();
 
-        if(data.equals(getResources().getString(R.string.commandPrevious))){
-
+        if(indexOfInstruction==-1){
+            indexOfInstruction=0;
+        }else if(data.equals(getResources().getString(R.string.commandPrevious))){
+            indexOfInstruction=Math.max(indexOfInstruction-1,0);
         }else if(data.equals(getResources().getString(R.string.commandNext))){
+            indexOfInstruction=Math.min(indexOfInstruction+1,allInstructions.size());
+        }//else is "repeat"-> do not change index
 
-        }else if(data.equals(getResources().getString(R.string.commandRepeat))){
-
+        if(indexOfInstruction==allInstructions.size()){
+            voiceSynthesizer.speak("Congratulations you reached the end");
+        }else{
+            voiceSynthesizer.speak(allInstructions.get(indexOfInstruction));
         }
     }
 
@@ -210,5 +223,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     public void onStop() {
         super.onStop();
         voiceRecognizer.onStop();
+        voiceSynthesizer.onStop();
     }
 }
