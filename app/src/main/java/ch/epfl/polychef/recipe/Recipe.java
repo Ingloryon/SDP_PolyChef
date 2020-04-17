@@ -23,6 +23,7 @@ public final class Recipe implements Serializable, Cloneable {
 
     private final String recipeUuid;
     private String name;
+    private String date;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
 
@@ -66,6 +67,7 @@ public final class Recipe implements Serializable, Cloneable {
             this.miniaturePath = Either.none();
         }
         this.picturesPath = picturesPath;
+        this.date = RecipeStorage.getInstance().getCurrentDate();
     }
 
     /**
@@ -170,6 +172,14 @@ public final class Recipe implements Serializable, Cloneable {
      */
     public List<String> getPicturesPath() {
         return picturesPath != null ? Collections.unmodifiableList(picturesPath) : new ArrayList<>();
+    }
+
+    /**
+     * Returns the date the recipe was created at.
+     * @return the date
+     */
+    public String getDate() {
+        return date;
     }
 
     /**
