@@ -81,7 +81,6 @@ public class UserStorage {
         if(snap.exists()){
             user = snap.getValue(User.class);
             userKey = snap.getKey();
-            Log.w("TEST12345", "IT was called");
             FavouritesUtils.getInstance().setOfflineFavourites(user);
         } else {
             //TODO: Find good exception to throw

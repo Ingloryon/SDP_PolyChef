@@ -44,6 +44,8 @@ public class FavouritesUtils {
      * @param recipe      the recipe to add to favourite on click
      */
     public void setFavouriteButton(UserStorage userStorage, ToggleButton button, Recipe recipe) {
+        Preconditions.checkArgument(recipe != null, "The recipe can not be null");
+        Preconditions.checkArgument(button != null, "The button can not be null");
         if (userStorage != null && userStorage.getPolyChefUser() != null) {
             List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
             button.setVisibility(View.VISIBLE);
