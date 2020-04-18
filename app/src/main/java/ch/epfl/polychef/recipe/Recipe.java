@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public final class Recipe implements Serializable, Cloneable {
+public final class Recipe implements Serializable, Cloneable, Comparable<Recipe> {
 
     public Recipe(){
         recipeUuid=null;
@@ -196,6 +196,19 @@ public final class Recipe implements Serializable, Cloneable {
             return ((Recipe) otherRecipe).getRecipeUuid().equals(this.recipeUuid) ;
         }
         return false;
+    }
+
+    /**
+     * Compare two recipes based on their date
+     *
+     * @param other recipe we compare to
+     * @return 1 if {@code this} recipe is older that the {@code other},
+     *  -1 if {@code this} recipe is newer that the {@code other} and
+     *  0 if the were posted at the same time
+     */
+    @Override
+    public int compareTo(Recipe other) {
+        return - getDate().compareTo(other.getDate());
     }
 
     @Override
