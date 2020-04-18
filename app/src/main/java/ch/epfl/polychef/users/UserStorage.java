@@ -78,6 +78,7 @@ public class UserStorage {
 
         if(snap.exists()){
             user = snap.getValue(User.class);
+            user.removeNullFromLists();
             userKey = snap.getKey();
         } else {
             //TODO: Find good exception to throw
@@ -91,7 +92,7 @@ public class UserStorage {
                     .getReference("users/" + userKey)
                     .setValue(user);
         } else {
-            throw new IllegalStateException("The user have not been initialized");
+            throw new IllegalStateException("The user has not been initialized");
         }
     }
 
