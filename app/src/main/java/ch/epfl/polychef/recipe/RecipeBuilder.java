@@ -9,6 +9,7 @@ import java.util.List;
 
 public final class RecipeBuilder {
     private String name = "";
+    private String author = "";
     private List<String> recipeInstructions = new ArrayList<>();
     private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
@@ -33,7 +34,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author);
     }
 
     /**
@@ -167,6 +168,12 @@ public final class RecipeBuilder {
     public RecipeBuilder addPicturePath(@NonNull String pictureName) {
         Preconditions.checkArgument(pictureName != null, "Picture path should not be null");
         this.picturesName.add(pictureName);
+        return this;
+    }
+
+    public RecipeBuilder addAuthor(@NonNull String author) {
+        Preconditions.checkArgument(author != null, "Author should not be null");
+        this.author = author;
         return this;
     }
 }

@@ -289,7 +289,7 @@ public class PostRecipeFragment extends Fragment {
             rb.addPicturePath(uuidPath + i);
         }
 
-        postedRecipe = rb.build();
+        postedRecipe = rb.addAuthor(hostActivity.getUserStorage().getPolyChefUser().getEmail()).build();
         return true;
     }
 

@@ -24,6 +24,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     private final String recipeUuid;
     private String name;
     private String date;
+    private String author;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
 
@@ -50,7 +51,9 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      * @param miniaturePath path to access the miniature image, provide {@code Either.none()} for default miniature
      * @param picturesPath path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, Either<String, Integer> miniaturePath, List<String> picturesPath){
+    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients,
+                     int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty,
+                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author){
 
         this.recipeUuid = UUID.randomUUID().toString();
         this.name = name;
@@ -68,6 +71,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         }
         this.picturesPath = picturesPath;
         this.date = RecipeStorage.getInstance().getCurrentDate();
+        this.author = author;
     }
 
     /**
@@ -180,6 +184,14 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     public String getDate() {
         return date;
+    }
+
+    /**
+     * Returns the author of this recipe
+     * @return the author
+     */
+    public String getAuthor() {
+        return author;
     }
 
     /**
