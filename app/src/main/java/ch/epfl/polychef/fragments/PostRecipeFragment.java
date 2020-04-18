@@ -193,10 +193,10 @@ public class PostRecipeFragment extends Fragment {
             return false;
         } else {
             if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getRecipeUuid());
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, getUserEmail(), postedRecipe.getRecipeUuid());
             }
             for(int i = 0; i < currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getRecipeUuid());
+                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), getUserEmail(), postedRecipe.getRecipeUuid());
             }
             hostActivity.getRecipeStorage().addRecipe(postedRecipe);
             hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
@@ -289,7 +289,7 @@ public class PostRecipeFragment extends Fragment {
             rb.addPicturePath(uuidPath + i);
         }
 
-        postedRecipe = rb.addAuthor(hostActivity.getUserStorage().getPolyChefUser().getEmail()).build();
+        postedRecipe = rb.addAuthor(getUserEmail()).build();
         return true;
     }
 
@@ -357,6 +357,10 @@ public class PostRecipeFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    private String getUserEmail(){
+        return hostActivity.getUserStorage().getPolyChefUser().getEmail();
     }
 
     protected RecipeStorage getRecipeStorage() {
