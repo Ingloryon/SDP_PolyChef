@@ -149,16 +149,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         getNextRecipes();
     }
 
-    private synchronized void initDate(){
-        try{
-            //To make sure a newly posted recipe will would still be displayed
-            wait(1001);
-        } catch (InterruptedException interrupt) {
-
-        } finally {
-            currentOldest = recipeStorage.getCurrentDate();
-            currentNewest = recipeStorage.getCurrentDate();
-        }
+    private void initDate(){
+        currentOldest = recipeStorage.getCurrentDate();
+        currentNewest = recipeStorage.getCurrentDate();
     }
 
     private void getNextRecipes(){
@@ -206,8 +199,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         onlineRecyclerView.getAdapter().notifyDataSetChanged();
         isLoading = false;
     }
-
-
 
     @Override
     public void onFailure() {

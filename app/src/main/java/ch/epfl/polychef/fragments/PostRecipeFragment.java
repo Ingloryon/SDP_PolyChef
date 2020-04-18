@@ -175,11 +175,15 @@ public class PostRecipeFragment extends Fragment {
      * Otherwise it will update the View to display to wrong inputs.
      * @param view the current view
      */
-    public void setPostButton(View view) {
+    public synchronized void setPostButton(View view) {
         getAndCheckEnteredInputs();
         if(!buildRecipeAndPostToFirebase()){
             printWrongInputsToUser();
         }else{
+            try{
+                wait(1001); //To make sure this new recipe will be displayed on the homepage
+            } catch (InterruptedException interrupt) { }
+
             Intent intent = new Intent(getActivity(), HomePage.class);
             startActivity(intent);
         }
