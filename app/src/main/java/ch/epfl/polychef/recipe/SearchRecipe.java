@@ -52,7 +52,7 @@ public class SearchRecipe {
     }
 
     private void searchRecipe(String query, BiFunction<String, Recipe, Boolean> comparator, CallHandler<List<Recipe>> caller) {
-        DatabaseReference nameRef = getDatabase().getReference("recipe");
+        DatabaseReference nameRef = getDatabase().getReference(RecipeStorage.DB_NAME);
         nameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

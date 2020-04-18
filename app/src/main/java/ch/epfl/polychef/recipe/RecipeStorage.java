@@ -28,7 +28,7 @@ public class RecipeStorage implements Serializable {
     private static RecipeStorage INSTANCE=new RecipeStorage();
 
     private static final String TAG = "Firebase";
-    private static final String DB_NAME = "recipes";
+    public static final String DB_NAME = "recipes";
     private static final String DB_ID = "id";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
 
@@ -46,6 +46,7 @@ public class RecipeStorage implements Serializable {
         Date date = new Date();
         return formatter.format(date);
     }
+
 
     private RecipeStorage(){
     }
@@ -85,11 +86,14 @@ public class RecipeStorage implements Serializable {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         if(dataSnapshot.getChildrenCount() == 1){
+
                             for(DataSnapshot child: dataSnapshot.getChildren()){
                                 getSingleRecipeFromSnapshot(child, ch);
                             }
                         } else {
+
                             ch.onFailure();
                         }
                     }
@@ -101,6 +105,48 @@ public class RecipeStorage implements Serializable {
                 });
     }
 
+    public void getNRecipes(int n, String startDate, String endDate, boolean newest, CallHandler<List<Recipe>> caller){
+        Preconditions.checkArgument(endDate != null);
+        Preconditions.checkArgument(n > 0, "Number of recipe to get should "
+                + "be positive");
+        Preconditions.checkArgument(caller != null, "Call handler should not be null");
+
+        Query query = getFirebaseDatabase().getReference(DB_NAME)
+                .orderByChild("date").startAt(startDate).endAt(endDate);
+
+        if(newest){
+            query = query.limitToFirst(n);
+        } else {
+            query = query.limitToLast(n);
+        }
+
+        listenerForListOfRecipes(query, caller);
+    }
+
+    public void getAllRecipesByUser(String userEmail, CallHandler<List<Recipe>> caller){
+        Preconditions.checkArgument(userEmail != null);
+        Preconditions.checkArgument(caller != null, "Call handler should not be null");
+
+        Query query = getFirebaseDatabase().getReference(DB_NAME)
+                .orderByChild("author").equalTo(userEmail);
+
+        listenerForListOfRecipes(query, caller);
+    }
+
+    public void listenerForListOfRecipes(Query query, CallHandler<List<Recipe>> ch){
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getManyRecipeFromSnapshot(dataSnapshot, ch);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                ch.onFailure();
+            }
+        });
+    }
+
     public void getSingleRecipeFromSnapshot(DataSnapshot snapshot, CallHandler<Recipe> ch){
         Recipe recipe = snapshot.getValue(Recipe.class);
         if (recipe == null) {
@@ -110,45 +156,19 @@ public class RecipeStorage implements Serializable {
         }
     }
 
-    public void getNRecipes(int n, String startDate, String endDate, boolean newest, CallHandler<List<Recipe>> caller){
-        Preconditions.checkArgument(endDate != null);
-        Preconditions.checkArgument(n > 0, "Number of recipe to get should "
-                + "be positive");
-        Preconditions.checkArgument(caller != null, "Call handler should not be null");
+    public void getManyRecipeFromSnapshot(DataSnapshot dataSnapshot, CallHandler<List<Recipe>> ch){
+        if(dataSnapshot.getChildrenCount() == 0){
+            ch.onFailure();
 
-        DatabaseReference myRef = getFirebaseDatabase().getReference(DB_NAME);
-
-        Query query = myRef.orderByChild("date").startAt(startDate).endAt(endDate);
-
-        if(newest){
-            query = query.limitToFirst(n);
         } else {
-            query = query.limitToLast(n);
+            List<Recipe> recipes = new ArrayList<>();
+            for(DataSnapshot child : dataSnapshot.getChildren()){
+                recipes.add(child.getValue(Recipe.class));
+            }
+
+            ch.onSuccess(recipes);
         }
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildrenCount() == 0){
-                    caller.onFailure();
-
-                } else {
-                    List<Recipe> recipes = new ArrayList<>();
-                    for(DataSnapshot child : dataSnapshot.getChildren()){
-                        recipes.add(child.getValue(Recipe.class));
-                    }
-
-                    caller.onSuccess(recipes);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                caller.onFailure();
-            }
-        });
     }
-
 
     /**
      * Get the current instance of the {@code FirebaseDatabase}.
