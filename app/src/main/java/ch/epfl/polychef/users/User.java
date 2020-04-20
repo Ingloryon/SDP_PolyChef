@@ -1,13 +1,20 @@
 package ch.epfl.polychef.users;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
-public class User {
+import ch.epfl.polychef.recipe.Recipe;
+
+//TODO remove serializable
+public class User implements Serializable {
 
     private String email;
     private String username;
@@ -78,6 +85,7 @@ public class User {
         return "User: \n"
                 + "Email=" + email + ",\n"
                 + "username=" + username + ",\n"
+                + "recipes=" + recipes + ",\n"
                 + "favourites=" + favourites + ",\n"
                 + "subscribers=" + subscribers + ",\n"
                 + "subscriptions=" + subscriptions;

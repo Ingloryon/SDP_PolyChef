@@ -22,20 +22,22 @@ import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.utils.Either;
 
 import java.util.List;
 
 /**
  * This class is an adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView that is in the activity where the miniatures are shown.
  */
-public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> {
+public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> implements CallHandler<byte []> {
 
     private Context mainContext;
     private List<Recipe> recipeList;
     private RecyclerView recyclerview;
     private int fragmentContainerID;
+    private MiniatureViewHolder currentMinViewHolder = null;
 
-    private ImageStorage imageStorage = new ImageStorage();
+    private ImageStorage imageStorage;// = new ImageStorage();
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -45,11 +47,12 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
      * @param recyclerView this is the recyclerView where the recipes will be displayed
      * @param fragmentContainerID the id of the fragment container where the miniature are displayed
      */
-    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID) {
+    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
         this.mainContext = mainContext;
         this.recipeList = recipeList;
         this.recyclerview = recyclerView;
         this.fragmentContainerID = fragmentContainerID;
+        this.imageStorage = storage;
     }
 
     /**
@@ -112,6 +115,19 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     @Override
     public int getItemCount() {
         return recipeList.size();
+    }
+
+    @Override
+    public void onSuccess(byte[] data) {
+        if(currentMinViewHolder != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+            currentMinViewHolder.image.setImageBitmap(bmp);
+        }
+    }
+
+    @Override
+    public void onFailure() {
+        Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
     }
 
     /**
