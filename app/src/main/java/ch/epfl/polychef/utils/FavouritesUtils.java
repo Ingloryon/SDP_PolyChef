@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
+import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
@@ -108,23 +109,9 @@ public class FavouritesUtils {
     public void setOfflineFavourites(User user) {
         Preconditions.checkArgument(user != null, "User can not be null");
         List<String> favouritesList = user.getFavourites();
-        List<Recipe> newOfflineRecipes = new ArrayList<>();
+        MultipleCallHandler<Recipe> multipleCallHandler = new MultipleCallHandler<>(favouritesList.size(), this::putFavouriteList);
         for (int i = 0; i < favouritesList.size(); ++i) {
-            final boolean isLast = i == favouritesList.size() - 1;
-            getRecipeStorage().readRecipeFromUuid(favouritesList.get(i), new CallHandler<Recipe>() {
-                @Override
-                public void onSuccess(Recipe data) {
-                    newOfflineRecipes.add(data);
-                    if (isLast) {
-                        putFavouriteList(newOfflineRecipes);
-                    }
-                }
-
-                @Override
-                public void onFailure() {
-                    Log.e(TAG, "Error could not charge recipe");
-                }
-            });
+            getRecipeStorage().readRecipeFromUuid(favouritesList.get(i), multipleCallHandler);
         }
     }
 

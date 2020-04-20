@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
@@ -33,7 +34,7 @@ import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavouritesFragment extends Fragment implements CallHandler<Recipe> {
+public class FavouritesFragment extends Fragment {
 
     private static final String TAG = "FavouritesFragment";
     private RecyclerView favouriteRecyclerView;
@@ -133,22 +134,14 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
     }
 
     private void setFavouriteOnline(int end, List<String> favouritesList) {
+        MultipleCallHandler<Recipe> multipleCallHandler = new MultipleCallHandler<>(end - indexFavourites, (newFavourites) -> {
+            isLoading = false;
+            dynamicRecipeList.addAll(newFavourites);
+            favouriteRecyclerView.getAdapter().notifyDataSetChanged();
+        });
         for(int i = indexFavourites; i < end; ++i) {
-            recipeStorage.readRecipeFromUuid(favouritesList.get(i), this);
+            recipeStorage.readRecipeFromUuid(favouritesList.get(i), multipleCallHandler);
         }
-    }
-
-    @Override
-    public void onSuccess(Recipe data) {
-        isLoading = false;
-        dynamicRecipeList.add(data);
-        favouriteRecyclerView.getAdapter().notifyDataSetChanged();
-    }
-
-    @Override
-    public void onFailure() {
-        isLoading = false;
-        Log.w(TAG, "No Recipe found");
     }
 
     public boolean isOnline() {
