@@ -56,6 +56,15 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
+     * Change the recipes displayed by the recycler view
+     * @param newRecipes
+     */
+    public void changeList(List<Recipe> newRecipes){
+        this.recipeList = newRecipes;
+        notifyDataSetChanged();
+    }
+
+    /**
      * This method create a new MiniatureViewHolder which contains the view which contains the information of the layout of one miniature and make that view listen to user clicks on him.
      *
      * @param parent   not used here but needed since it's an overridden method

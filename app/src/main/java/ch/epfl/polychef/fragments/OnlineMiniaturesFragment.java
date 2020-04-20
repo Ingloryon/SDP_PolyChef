@@ -29,7 +29,7 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.SearchRecipe;
 
-public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<Recipe>, CallHandler<List<Recipe>> {
+public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Recipe>> {
 
     private static final String TAG = "OnlineMiniaturesFrag";
     private RecyclerView onlineRecyclerView;
@@ -39,7 +39,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     private SearchView searchView;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
-    private List<Recipe> backup = new ArrayList<>();
+    private List<Recipe> searchRecipeList = new ArrayList<>();
 
     private String currentOldest;
     private String currentNewest;
@@ -113,9 +113,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
             public boolean onQueryTextSubmit(String query) {
                 isSearching = true;
                 searchView.clearFocus();
-                backup.clear();
-                backup.addAll(dynamicRecipeList);
-                dynamicRecipeList.clear();
+                ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(searchRecipeList);
                 SearchRecipe.getInstance().searchForRecipe(query, OnlineMiniaturesFragment.this);
                 return true;
             }
@@ -128,17 +126,16 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-
-                dynamicRecipeList.clear();
-                dynamicRecipeList.addAll(backup);
-                backup.clear();
-
+                searchRecipeList.clear();
+                ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(dynamicRecipeList);
                 onlineRecyclerView.getAdapter().notifyDataSetChanged();
                 isSearching = false;
                 return false;
             }
         });
-        initFirstNRecipes();
+        if(dynamicRecipeList.isEmpty()) {
+            initFirstNRecipes();
+        }
     }
 
     private void initFirstNRecipes() {
@@ -163,18 +160,11 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     }
 
     @Override
-    public void notify(Recipe data) {
-        dynamicRecipeList.add(data);
-        onlineRecyclerView.getAdapter().notifyDataSetChanged();
-        isLoading = false;
-    }
-
-    @Override
     public void onSuccess(List<Recipe> data){
 
         if(isSearching){
-            dynamicRecipeList.addAll(data);
-            dynamicRecipeList.sort(Recipe::compareTo);
+            searchRecipeList.addAll(data);
+            searchRecipeList.sort(Recipe::compareTo);
             onlineRecyclerView.getAdapter().notifyDataSetChanged();
             return;
         }
