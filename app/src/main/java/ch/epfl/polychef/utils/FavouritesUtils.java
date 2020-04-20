@@ -99,6 +99,7 @@ public class FavouritesUtils {
      * @param user    the user
      */
     public void setOfflineFavourites(User user) {
+        Preconditions.checkArgument(user != null, "User can not be null");
         List<String> favouritesList = user.getFavourites();
         List<Recipe> newOfflineRecipes = new ArrayList<>();
         for (int i = 0; i < favouritesList.size(); ++i) {

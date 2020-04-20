@@ -75,8 +75,8 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
                     if(isLoading){
                         return;
                     }
-                    addNextRecipes();
                     isLoading = true;
+                    addNextRecipes();
                 }
             }
         });
@@ -103,7 +103,7 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
     }
 
     private boolean addNextRecipes() {
-        if(isNetConnected()) {
+        if(isOnline()) {
             return getGenericFavourites(userStorage.getPolyChefUser().getFavourites(), this::setFavouriteOnline);
         } else {
             return getGenericFavourites(FavouritesUtils.getInstance().getOfflineFavourites(), this::setFavouriteOffline);
@@ -111,7 +111,7 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
     }
 
     private <T> boolean getGenericFavourites(List<T> favouritesList, BiConsumer<Integer, List<T>> func) {
-        if(indexFavourites + nbOfRecipesLoadedAtATime <= favouritesList.size()) {
+        if(indexFavourites + nbOfRecipesLoadedAtATime < favouritesList.size()) {
             func.accept(indexFavourites + nbOfRecipesLoadedAtATime, favouritesList);
             indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
             return true;
@@ -129,6 +129,7 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
             dynamicRecipeList.add(favouritesList.get(i));
             favouriteRecyclerView.getAdapter().notifyDataSetChanged();
         }
+        isLoading = false;
     }
 
     private void setFavouriteOnline(int end, List<String> favouritesList) {
@@ -150,8 +151,12 @@ public class FavouritesFragment extends Fragment implements CallHandler<Recipe> 
         Log.w(TAG, "No Recipe found");
     }
 
-    private boolean isNetConnected() {
+    public boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public RecyclerView getRecyclerView() {
+        return favouriteRecyclerView;
     }
 }
