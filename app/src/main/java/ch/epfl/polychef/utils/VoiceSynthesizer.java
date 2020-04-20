@@ -16,7 +16,7 @@ public class VoiceSynthesizer {
     }
 
     /**
-     * Speaks out the message with a synthetic voice
+     * Speaks out the message with a synthetic voice.
      * @param message the text to speak out
      */
     public void speak(String message){
@@ -24,7 +24,7 @@ public class VoiceSynthesizer {
     }
 
     /**
-     * initialize the object TextToSpeech
+     * initialize the object TextToSpeech.
      */
     private void initializeTextToSpeech() {
         textToSpeech= new TextToSpeech(activity, new TextToSpeech.OnInitListener() {
@@ -40,7 +40,7 @@ public class VoiceSynthesizer {
     }
 
     /**
-     * Shutdown the textToSpeech object when the activity is on pause
+     * Shutdown the textToSpeech object when the activity is on pause.
      */
     public void onStop(){
         textToSpeech.shutdown();
