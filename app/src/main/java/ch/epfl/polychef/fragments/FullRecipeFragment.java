@@ -74,6 +74,12 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
+        setupSwitch(view);
+
+        return view;
+    }
+
+    private void setupSwitch(View view) {
         Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
         onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -85,8 +91,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                 }
             }
         });
-
-        return view;
     }
 
     /**

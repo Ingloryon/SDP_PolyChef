@@ -15,18 +15,14 @@ import android.util.Log;
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
-//public class VoiceRecognitionPage extends Activity implements RecognitionListener {
 public class VoiceRecognizer implements RecognitionListener {
 
-    /* We only need the keyphrase to start recognition, one menu with list of choices,
-   and one word that is required for method switchSearch - it will bring recognizer
-   back to listening for the keyphrase*/
-    private static final String KWS_SEARCH = "wakeup";
-    private static final String MENU_SEARCH = "menu";
-    /* Keyword we are looking for to activate recognition */
+    private static final String KWS_SEARCH = "wakeup";//keyword to start recognition
+    private static final String MENU_SEARCH = "menu";//name of the recognition set of words
+    // Keyword we are looking for to activate recognition
     private static final String KEYPHRASE = "poly chef";
 
-    /* Recognition object */
+    //Recognition object
     private SpeechRecognizer recognizer;
 
     private CallNotifier<String> callNotifier;
@@ -39,6 +35,7 @@ public class VoiceRecognizer implements RecognitionListener {
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         new AsyncTask<Void, Void, Exception>() {
+
             @Override
             protected Exception doInBackground(Void... params) {
                 try {
@@ -50,6 +47,7 @@ public class VoiceRecognizer implements RecognitionListener {
                 }
                 return null;
             }
+
             @Override
             protected void onPostExecute(Exception result) {
                 Log.d("vr","onPostExecute");
@@ -66,9 +64,6 @@ public class VoiceRecognizer implements RecognitionListener {
         recognizer = SpeechRecognizerSetup.defaultSetup()
                 .setAcousticModel(new File(assetsDir, "en-us-ptm"))
                 .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
-                // Disable this line if you don't want recognizer to save raw
-                // audio files to app's storage
-                //.setRawLogDir(assetsDir)
                 .getRecognizer();
         recognizer.addListener(this);
         // Create keyword-activation search.
@@ -89,8 +84,9 @@ public class VoiceRecognizer implements RecognitionListener {
 
     @Override
     public void onPartialResult(Hypothesis hypothesis) {
-        if (hypothesis == null)
+        if (hypothesis == null) {
             return;
+        }
 
         String text = hypothesis.getHypstr();
 
@@ -122,10 +118,11 @@ public class VoiceRecognizer implements RecognitionListener {
     private void switchSearch(String searchName) {
         recognizer.stop();
 
-        if (searchName.equals(KWS_SEARCH))
+        if (searchName.equals(KWS_SEARCH)) {
             recognizer.startListening(KWS_SEARCH);
-        else
+        }else {
             recognizer.startListening(searchName, 10000);
+        }
     }
 
     @Override
