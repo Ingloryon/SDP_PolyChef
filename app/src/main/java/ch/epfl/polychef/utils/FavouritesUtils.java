@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import androidx.core.content.ContextCompat;
@@ -56,28 +57,30 @@ public class FavouritesUtils {
                 button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_grey));
                 button.setChecked(false);
             }
-            button.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                List<Recipe> recipes = getOfflineFavourites();
-                if (isChecked) {
-                    button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_yellow));
-                    userStorage.getPolyChefUser().addFavourite(recipe.getRecipeUuid());
-                    userStorage.updateUserInfo();
-                    if (!recipes.contains(recipe)) {
-                        recipes.add(recipe);
-                        putFavouriteList(recipes);
-                    }
-                } else {
-                    button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_grey));
-                    userStorage.getPolyChefUser().removeFavourite(recipe.getRecipeUuid());
-                    userStorage.updateUserInfo();
-                    if (recipes.contains(recipe)) {
-                        recipes.remove(recipe);
-                        putFavouriteList(recipes);
-                    }
-                }
-            });
+            button.setOnCheckedChangeListener((buttonView, isChecked) -> onClickToggleButton(isChecked, userStorage, button, recipe));
         } else {
             button.setVisibility(View.GONE);
+        }
+    }
+
+    public void onClickToggleButton(boolean isChecked, UserStorage userStorage, ToggleButton button, Recipe recipe) {
+        List<Recipe> recipes = getOfflineFavourites();
+        if (isChecked) {
+            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_yellow));
+            userStorage.getPolyChefUser().addFavourite(recipe.getRecipeUuid());
+            userStorage.updateUserInfo();
+            if (!recipes.contains(recipe)) {
+                recipes.add(recipe);
+                putFavouriteList(recipes);
+            }
+        } else {
+            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_grey));
+            userStorage.getPolyChefUser().removeFavourite(recipe.getRecipeUuid());
+            userStorage.updateUserInfo();
+            if (recipes.contains(recipe)) {
+                recipes.remove(recipe);
+                putFavouriteList(recipes);
+            }
         }
     }
 

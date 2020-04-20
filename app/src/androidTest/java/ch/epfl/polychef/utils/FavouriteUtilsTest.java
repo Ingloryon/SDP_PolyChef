@@ -221,7 +221,7 @@ public class FavouriteUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> FavouritesUtils.getInstance().setOfflineFavourites(null));
     }
 
-    private void setSharedPref(List<Recipe> recipes) {
+    public static void setSharedPref(List<Recipe> recipes) {
         SharedPreferences sharedPreferences = GlobalApplication.getAppContext().getSharedPreferences("FavouriteList", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();

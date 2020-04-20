@@ -41,6 +41,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.FavouriteUtilsTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static org.hamcrest.core.Is.is;
@@ -126,7 +127,7 @@ public class FavouritesFragmentTest {
     @Test
     public void emptyFavouritesOfflineShowNoRecipe() {
         fakeFavouriteFragment.isOnline = false;
-        setSharedPref(new ArrayList<>());
+        FavouriteUtilsTest.setSharedPref(new ArrayList<>());
         setup();
         assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(0));
     }
@@ -151,7 +152,7 @@ public class FavouritesFragmentTest {
     public void oneFavouriteCanBeShownOffline() {
         fakeFavouriteFragment.isOnline = false;
         Recipe recipe = getRecipe("test");
-        setSharedPref(Collections.singletonList(recipe));
+        FavouriteUtilsTest.setSharedPref(Collections.singletonList(recipe));
         setup();
         assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(1));
     }
@@ -163,7 +164,7 @@ public class FavouritesFragmentTest {
         for(int i = 0; i < 13; ++i) {
             recipesInFavourite.add(getRecipe("test"+i));
         }
-        setSharedPref(recipesInFavourite);
+        FavouriteUtilsTest.setSharedPref(recipesInFavourite);
         setup();
         assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(5));
         onView(ViewMatchers.withId(R.id.miniaturesFavouriteList))
@@ -176,15 +177,6 @@ public class FavouritesFragmentTest {
                 .perform(ViewActions.swipeUp());
         wait(1000);
         assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(13));
-    }
-
-    private void setSharedPref(List<Recipe> recipes) {
-        SharedPreferences sharedPreferences = GlobalApplication.getAppContext().getSharedPreferences("FavouriteList", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String recipesJson = gson.toJson(recipes);
-        editor.putString("favourites", recipesJson);
-        editor.apply();
     }
 
     private class FakeHomePage extends HomePage {
