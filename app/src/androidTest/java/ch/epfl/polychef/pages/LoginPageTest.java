@@ -121,7 +121,6 @@ public class LoginPageTest {
         @Override
         public void startNextActivity() {
             //Shouldn't start Homepage when testing the LoginPage
-            //startActivity(new Intent(this, fakeHomePage.getActivityClassToIntercept()));
         }
     }
 }

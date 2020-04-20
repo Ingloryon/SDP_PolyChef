@@ -26,8 +26,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -40,6 +44,9 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class PostingRecipeFragmentTest {
@@ -52,6 +59,10 @@ public class PostingRecipeFragmentTest {
             return activity;
         }
     };
+
+    private RecipeStorage mockRecipeStorage;
+    private UserStorage mockUserStorage;
+    private User mockUser;
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -138,6 +149,7 @@ public class PostingRecipeFragmentTest {
     public void testOnACompleteRecipe() {
         writeRecipe("Cake","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
         Espresso.closeSoftKeyboard();
+        mockInit();
         onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
     }
 
@@ -198,6 +210,12 @@ public class PostingRecipeFragmentTest {
         (onView(withId(R.id.errorLogs))).check(matches(withText(expected)));
     }
 
+    private void mockInit() {
+
+        doNothing().when(mockRecipeStorage).addRecipe(any(Recipe.class));
+        doNothing().when(mockRecipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
+    }
+
     private class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
@@ -205,8 +223,19 @@ public class PostingRecipeFragmentTest {
         }
 
         @Override
-        protected UserStorage getUserStorage(){
-            return Mockito.mock(UserStorage.class);
+        public RecipeStorage getRecipeStorage() {
+            mockRecipeStorage = Mockito.mock(RecipeStorage.class);
+            return mockRecipeStorage;
+        }
+
+        @Override
+        public UserStorage getUserStorage() {
+            mockUser = Mockito.mock(User.class);
+            mockUserStorage = Mockito.mock(UserStorage.class);
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
+            doNothing().when(mockUser).addRecipe(any(String.class));
+            return mockUserStorage;
         }
     }
 }

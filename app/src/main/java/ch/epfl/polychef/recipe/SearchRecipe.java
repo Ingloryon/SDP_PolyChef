@@ -37,7 +37,7 @@ public class SearchRecipe {
      * @param caller     the caller to call onSuccess and onFailure
      */
     public void searchRecipeByIngredient(String ingredient, CallHandler<List<Recipe>> caller) {
-        // TODO this is just an example we should be able to apply more filter later
+        // this is just an example we should be able to apply more filter later
         searchRecipe(ingredient, this::compareIngredient, caller);
     }
 

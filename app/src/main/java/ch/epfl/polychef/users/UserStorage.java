@@ -1,5 +1,7 @@
 package ch.epfl.polychef.users;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -103,6 +105,10 @@ public class UserStorage {
 
     public FirebaseUser getAuthenticatedUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public User getPolyChefUser() {
+        return user;
     }
 
     /**

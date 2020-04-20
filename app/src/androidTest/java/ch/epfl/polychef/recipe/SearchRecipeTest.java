@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.recipe;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

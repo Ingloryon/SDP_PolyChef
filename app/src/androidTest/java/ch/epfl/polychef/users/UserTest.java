@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import ch.epfl.polychef.users.User;
 
@@ -93,11 +94,17 @@ public class UserTest {
     @Test
     public void canAddRecipes() {
 
-        addAndAssert(
-                Arrays.asList("Recipe_1", "Recipe_2", "Recipe_3", "Recipe_4"),
-                User::addRecipe,
-                User::getRecipes
-        );
+        String[] stringUuids = new String[] {UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString()};
+        User fakeUser = new User();
+        fakeUser.addRecipe(stringUuids[0]);
+        fakeUser.addRecipe(stringUuids[1]);
+        fakeUser.addRecipe(stringUuids[2]);
+        fakeUser.addRecipe(stringUuids[3]);
+
+        assertEquals(stringUuids[0], fakeUser.getRecipes().get(0));
+        assertEquals(stringUuids[1], fakeUser.getRecipes().get(1));
+        assertEquals(stringUuids[2], fakeUser.getRecipes().get(2));
+        assertEquals(stringUuids[3], fakeUser.getRecipes().get(3));
     }
 
     @Test
@@ -152,7 +159,7 @@ public class UserTest {
     public void equalsChecksEachFields(){
 
         User doppelganger = mockUser();
-        doppelganger.addRecipe("Recipe");
+        doppelganger.addRecipe(UUID.randomUUID().toString());
         assertNotEquals(alice, doppelganger);
         assertNotEquals(doppelganger, alice);
 
