@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
@@ -48,40 +49,43 @@ public class FavouritesUtils {
         Preconditions.checkArgument(recipe != null, "The recipe can not be null");
         Preconditions.checkArgument(button != null, "The button can not be null");
         if (userStorage != null && userStorage.getPolyChefUser() != null) {
-            setButton(userStorage, button, recipe);
+            List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
+            button.setVisibility(View.VISIBLE);
+            button.setChecked(favouritesList.contains(recipe.getRecipeUuid()));
+            setButton(button);
+            button.setOnCheckedChangeListener((buttonView, isChecked) -> onClickToggleButton(userStorage, button, recipe));
         } else {
             button.setVisibility(View.GONE);
         }
     }
 
-    private void setButton(UserStorage userStorage, ToggleButton button, Recipe recipe) {
-        List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
-        button.setVisibility(View.VISIBLE);
-        if (favouritesList.contains(recipe.getRecipeUuid())) {
-            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_yellow));
-            button.setChecked(true);
-        } else {
-            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_grey));
-            button.setChecked(false);
-        }
-        button.setOnCheckedChangeListener((buttonView, isChecked) -> onClickToggleButton(isChecked, userStorage, button, recipe));
+    private void onClickToggleButton(UserStorage userStorage, ToggleButton button, Recipe recipe) {
+        setButton(button);
+        setOrRemoveRecipe(userStorage, recipe, button.isChecked());
     }
 
-    private void onClickToggleButton(boolean isChecked, UserStorage userStorage, ToggleButton button, Recipe recipe) {
-        List<Recipe> recipes = getOfflineFavourites();
-        if (isChecked) {
+    private void setButton(ToggleButton button) {
+        if(button.isChecked()) {
             button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_yellow));
-            userStorage.getPolyChefUser().addFavourite(recipe.getRecipeUuid());
-            userStorage.updateUserInfo();
-            recipes.add(recipe);
-            putFavouriteList(recipes);
         } else {
             button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_grey));
-            userStorage.getPolyChefUser().removeFavourite(recipe.getRecipeUuid());
-            userStorage.updateUserInfo();
-            recipes.remove(recipe);
-            putFavouriteList(recipes);
         }
+    }
+
+    private void setOrRemoveRecipe(UserStorage userStorage, Recipe recipe, boolean shouldAdd) {
+        List<Recipe> recipes = getOfflineFavourites();
+        if(shouldAdd) {
+            userStorage.getPolyChefUser().addFavourite(recipe.getRecipeUuid());
+        } else {
+            userStorage.getPolyChefUser().removeFavourite(recipe.getRecipeUuid());
+        }
+        userStorage.updateUserInfo();
+        if(shouldAdd) {
+            recipes.add(recipe);
+        } else {
+            recipes.remove(recipe);
+        }
+        putFavouriteList(recipes);
     }
 
     /**
