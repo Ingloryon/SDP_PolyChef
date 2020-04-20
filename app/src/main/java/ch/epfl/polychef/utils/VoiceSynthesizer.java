@@ -40,7 +40,7 @@ public class VoiceSynthesizer {
     }
 
     /**
-     *  Shutdown the textToSpeech object when the activity is on pause
+     * Shutdown the textToSpeech object when the activity is on pause
      */
     public void onStop(){
         textToSpeech.shutdown();
