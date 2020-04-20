@@ -1,5 +1,7 @@
 package ch.epfl.polychef.pages;
 
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,10 +38,12 @@ public class HomePage extends ConnectedActivity {
     public static final String LOG_OUT = "Log out";
     private static final String TAG = "HomePage-TAG";
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getUserStorage().initializeUserFromAuthenticatedUser();
 
