@@ -7,22 +7,22 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class MultipleCallHandler<T> implements CallHandler<T> {
-    private final List<T> data;
+    private final List<T> dataList;
     private final Consumer<List<T>> doOnLast;
     private int currentIndex = 0;
     private final int numberData;
 
     public MultipleCallHandler(int numberData, Consumer<List<T>> doOnLast) {
         this.numberData = numberData;
-        this.data = new ArrayList<>(numberData);
+        this.dataList = new ArrayList<>(numberData);
         this.doOnLast = doOnLast;
     }
 
-    public void onSuccess(T d) {
-        data.add(d);
+    public void onSuccess(T data) {
+        dataList.add(data);
         ++currentIndex;
         if(numberData == currentIndex) {
-            doOnLast.accept(data);
+            doOnLast.accept(dataList);
         }
     }
 
