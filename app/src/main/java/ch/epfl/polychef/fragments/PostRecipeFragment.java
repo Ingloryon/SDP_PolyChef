@@ -22,7 +22,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
@@ -41,17 +40,16 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.UserStorage;
-import ch.epfl.polychef.utils.RecipeInputParsing;
 
 public class PostRecipeFragment extends Fragment {
     private final String tag = "PostRecipeFragment";
-    private final int miniatureFactor = 1;
-    private final int mealPicturesFactor = 10;
-    private final int titleMaxChar = 80;
-    private final int titleMinChar = 3;
-    private final int maxPersNb = 100;
-    private final int maxInstructions = 20;
-    private final int maxIngredients = 20;
+    private final int MINIATURE_FACTOR = 1;
+    private final int MEAL_PICTURES_FACTOR = 10;
+    private final int TITLE_MAX_CHAR = 80;
+    private final int TITLE_MIN_CHAR = 3;
+    private final int MAX_PERSON_NUMBER = 100;
+    private final int MAX_INSTRUCTIONS = 20;
+    private final int MAX_INGREDIENTS = 20;
     private int numberOfInstruction = 1;
     private int numberOfIngredients = 1;
     private String name;
@@ -158,13 +156,13 @@ public class PostRecipeFragment extends Fragment {
         addMiniature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPictureDialog(miniatureFactor);
+                addPictureDialog(MINIATURE_FACTOR);
             }
         });
         addPictures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPictureDialog(mealPicturesFactor);
+                addPictureDialog(MEAL_PICTURES_FACTOR);
             }
         });
 
@@ -178,8 +176,8 @@ public class PostRecipeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode / mealPicturesFactor > 0) {
-            Uri uri = imageHandler.handleActivityResult(requestCode / mealPicturesFactor, resultCode, data);
+        if(requestCode / MEAL_PICTURES_FACTOR > 0) {
+            Uri uri = imageHandler.handleActivityResult(requestCode / MEAL_PICTURES_FACTOR, resultCode, data);
             if(uri != null) {
                 currentMealPictures.add(uri);
                 mealPicturesText.setText(currentMealPictures.size() + " to upload");
@@ -241,8 +239,8 @@ public class PostRecipeFragment extends Fragment {
 
     private void getAndCheckEnteredInputs() {
         String inputName = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
-        if(inputName.length() > titleMaxChar || inputName.length() < titleMinChar) {
-            errorLogs.add("Title: should be a string between " + titleMinChar + " and " + titleMaxChar + " characters.");
+        if(inputName.length() > TITLE_MAX_CHAR || inputName.length() < TITLE_MIN_CHAR) {
+            errorLogs.add("Title: should be a string between " + TITLE_MIN_CHAR + " and " + TITLE_MAX_CHAR + " characters.");
         } else {
             wrongInputs.put("Title", true);
             name = inputName;
@@ -257,11 +255,11 @@ public class PostRecipeFragment extends Fragment {
 
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
-        if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= maxPersNb){
+        if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= MAX_PERSON_NUMBER){
             wrongInputs.replace("Person Number", true);
             personNumber = Integer.parseInt(persNb);
         } else {
-            errorLogs.add("Number of Person: should be a number between 0 and " + maxPersNb + ".");
+            errorLogs.add("Number of Person: should be a number between 0 and " + MAX_PERSON_NUMBER + ".");
         }
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
@@ -387,7 +385,7 @@ public class PostRecipeFragment extends Fragment {
 
     private void setAddInstructionButton(View view) {
         //TODO: add message when trying to add to many instructions
-        if(numberOfInstruction<maxInstructions){
+        if(numberOfInstruction< MAX_INSTRUCTIONS){
             final ViewGroup.LayoutParams lparams = instructionText.getLayoutParams();
             final EditText textView = new EditText(getActivity());
             textView.setLayoutParams(lparams);
@@ -402,7 +400,7 @@ public class PostRecipeFragment extends Fragment {
 
     private void setAddIngredientButton(View view) {
         //TODO: print a message when trying to add too many ingredients
-        if(numberOfIngredients<maxIngredients){
+        if(numberOfIngredients< MAX_INGREDIENTS){
             numberOfIngredients++;
 
             ConstraintLayout newIngredient = (ConstraintLayout) LayoutInflater.from(getContext()).inflate(R.layout.ingredient_field, null);
