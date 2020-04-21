@@ -32,7 +32,7 @@
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="@string/Quantity"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:textAlignment="textStart"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

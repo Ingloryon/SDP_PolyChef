@@ -448,13 +448,8 @@ public class PostRecipeFragment extends Fragment {
                 errorLogs.add("Ingredient: the quantity needs to be a positive number");
                 return;
             } else if (ingredient1.length() != 0 && quantity1.length() != 0){
-                try {
-                    quantity = Double.parseDouble(quantity1);
-                    ingredients.add(new Ingredient(ingredient1, quantity, unit1));
-                } catch (Exception e) {
-                    errorLogs.add("Ingredient: the quantity needs to be a positive number");
-                    return;
-                }
+                quantity = Double.parseDouble(quantity1);
+                ingredients.add(new Ingredient(ingredient1, quantity, unit1));
             }
         }
         if (ingredients.size() == 0) {
