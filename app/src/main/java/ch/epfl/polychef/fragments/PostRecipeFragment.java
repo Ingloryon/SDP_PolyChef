@@ -419,8 +419,7 @@ public class PostRecipeFragment extends Fragment {
         recipeInstructions.clear();
         for (int i = 0; i < numberOfInstruction; i++) {
             String instruction1 = ((EditText) getView().findViewById(instructionsId.get(i))).getText().toString();
-            if (instruction1.length() == 0) {
-            }else{
+            if (instruction1.length() != 0) {
                 recipeInstructions.add(instruction1);
             }
         }
@@ -442,14 +441,13 @@ public class PostRecipeFragment extends Fragment {
             String quantity1 = ((TextView) currentIngredient.getChildAt(1)).getText().toString();
             Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner) currentIngredient.getChildAt(2)).getSelectedItemPosition()];
 
-            if (ingredient1.length() == 0 && quantity1.length() == 0) {
-            } else if (ingredient1.length() == 0 && quantity1.length() != 0) {
+            if (ingredient1.length() == 0 && quantity1.length() != 0) {
                 errorLogs.add("Ingredient: the ingredient shouldn't be empty");
                 return;
             } else if (ingredient1.length() != 0 && quantity1.length() == 0) {
                 errorLogs.add("Ingredient: the quantity needs to be a positive number");
                 return;
-            } else {
+            } else if (ingredient1.length() != 0 && quantity1.length() != 0){
                 try {
                     quantity = Double.parseDouble(quantity1);
                     ingredients.add(new Ingredient(ingredient1, quantity, unit1));
