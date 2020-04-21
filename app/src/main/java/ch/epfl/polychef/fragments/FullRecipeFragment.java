@@ -142,7 +142,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         }
         // Remove the last line return since there is no more ingredients to display
         strBuilder.deleteCharAt(strBuilder.length() - 1);
-        TextView ingredients = view.findViewById(R.id.ingredientsList);
+        TextView ingredients = view.findViewById(R.id.ingredient0);
         ingredients.setText(strBuilder.toString());
     }
 
@@ -161,7 +161,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         }
         // Remove the last line return since there is no more instructions to display
         strBuilder.deleteCharAt(strBuilder.length() - 1);
-        TextView instructions = view.findViewById(R.id.instructionsList);
+        TextView instructions = view.findViewById(R.id.instruction0);
         instructions.setText(strBuilder.toString());
     }
 
