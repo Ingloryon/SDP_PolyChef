@@ -194,7 +194,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -207,7 +207,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
-                    android:gravity="center"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -228,7 +227,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -238,8 +237,8 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
@@ -258,8 +257,9 @@
                         android:id="@+id/cookTimeInput"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -412,9 +412,9 @@
                 android:layout_marginTop="@dimen/post_recipe_margin"
                 android:layout_marginEnd="@dimen/post_recipe_margin"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="sans-serif-black"
+                android:fontFamily="sans-serif-medium"
                 android:textAlignment="textStart"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
