@@ -42,14 +42,14 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.UserStorage;
 
 public class PostRecipeFragment extends Fragment {
-    private final String tag = "PostRecipeFragment";
-    private final int MINIATURE_FACTOR = 1;
-    private final int MEAL_PICTURES_FACTOR = 10;
-    private final int TITLE_MAX_CHAR = 80;
-    private final int TITLE_MIN_CHAR = 3;
-    private final int MAX_PERSON_NUMBER = 100;
-    private final int MAX_INSTRUCTIONS = 20;
-    private final int MAX_INGREDIENTS = 20;
+    private static final String TAG = "PostRecipeFragment";
+    private static final int MINIATURE_FACTOR = 1;
+    private static final int MEAL_PICTURES_FACTOR = 10;
+    private static final int TITLE_MAX_CHAR = 80;
+    private static final int TITLE_MIN_CHAR = 3;
+    private static final int MAX_PERSON_NUMBER = 100;
+    private static final int MAX_INSTRUCTIONS = 20;
+    private static final int MAX_INGREDIENTS = 20;
     private int numberOfInstruction = 1;
     private int numberOfIngredients = 1;
     private String name;
