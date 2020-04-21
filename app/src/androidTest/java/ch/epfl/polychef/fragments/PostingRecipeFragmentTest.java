@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.fragments;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -12,6 +12,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -25,8 +26,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import ch.epfl.polychef.fragments.PostRecipeFragment;
+import ch.epfl.polychef.CallNotifier;
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -39,6 +44,9 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class PostingRecipeFragmentTest {
@@ -52,6 +60,10 @@ public class PostingRecipeFragmentTest {
         }
     };
 
+    private RecipeStorage mockRecipeStorage;
+    private UserStorage mockUserStorage;
+    private User mockUser;
+
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             true);
@@ -60,7 +72,7 @@ public class PostingRecipeFragmentTest {
     public void initActivity(){
         Intents.init();
         intentsTestRule.launchActivity(new Intent());
-        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(ViewMatchers.withId(R.id.drawer)).perform(DrawerActions.open());
         onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_recipe));
         onView(withId(R.id.drawer)).perform(DrawerActions.close());
     }
@@ -123,6 +135,7 @@ public class PostingRecipeFragmentTest {
         addIngredient();
         addInstruction();
         Espresso.closeSoftKeyboard();
+        mockInit();
         onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
     }
 
@@ -192,6 +205,12 @@ public class PostingRecipeFragmentTest {
         (onView(withId(R.id.errorLogs))).check(matches(withText(expected)));
     }
 
+    private void mockInit() {
+
+        doNothing().when(mockRecipeStorage).addRecipe(any(Recipe.class));
+        doNothing().when(mockRecipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
+    }
+
     private class FakeHomePage extends HomePage {
         @Override
         public FirebaseUser getUser() {
@@ -199,8 +218,19 @@ public class PostingRecipeFragmentTest {
         }
 
         @Override
-        protected UserStorage getUserStorage(){
-            return Mockito.mock(UserStorage.class);
+        public RecipeStorage getRecipeStorage() {
+            mockRecipeStorage = Mockito.mock(RecipeStorage.class);
+            return mockRecipeStorage;
+        }
+
+        @Override
+        public UserStorage getUserStorage() {
+            mockUser = Mockito.mock(User.class);
+            mockUserStorage = Mockito.mock(UserStorage.class);
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
+            doNothing().when(mockUser).addRecipe(any(String.class));
+            return mockUserStorage;
         }
     }
 }

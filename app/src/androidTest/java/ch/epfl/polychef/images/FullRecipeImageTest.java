@@ -1,11 +1,13 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.images;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.synnapps.carouselview.CarouselView;
 
@@ -13,9 +15,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.EntryPage;
+import ch.epfl.polychef.pages.EntryPageTest;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
@@ -35,8 +40,18 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class FullRecipeImageTest {
 
+    private SingleActivityFactory<EntryPage> fakeEntryPage = new SingleActivityFactory<EntryPage>(
+            EntryPage.class) {
+        @Override
+        protected EntryPage create(Intent intent) {
+            EntryPage activity = new EntryPageTest.FakeEntryPage();
+            return activity;
+        }
+    };
+
     @Rule
-    public IntentsTestRule<EntryPage> intentsTestRule = new IntentsTestRule<>(EntryPage.class);
+    public ActivityTestRule<EntryPage> intentsTestRule = new ActivityTestRule<>(fakeEntryPage, false,
+            true);
 
     private void setUp(String path) {
         Recipe recipe = new RecipeBuilder()

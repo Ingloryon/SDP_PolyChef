@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.images;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.EntryPage;

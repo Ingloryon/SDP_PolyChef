@@ -1,4 +1,6 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.recipe;
+
+import android.util.Log;
 
 import androidx.core.util.Consumer;
 
@@ -20,16 +22,20 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.CallHandlerChecker;
 import ch.epfl.polychef.utils.CallNotifierChecker;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -262,5 +268,38 @@ public class RecipeStorageTest {
         when(databaseRecipeReference.orderByKey()).thenReturn(databaseRecipeReference);
         when(databaseRecipeReference.startAt(""+start)).thenReturn(databaseRecipeReference);
         when(databaseRecipeReference.endAt(""+end)).thenReturn(query);
+    }
+
+    @Test
+    public synchronized void canReadARecipeFromUUid() throws InterruptedException {
+
+        Recipe recipe = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
+        String recipeUuid = recipe.getRecipeUuid();
+
+        when(databaseRecipeReference.orderByChild("recipeUuid")).thenReturn(query);
+        when(query.equalTo(any(String.class))).thenAnswer((call) -> {
+            assertEquals(call.getArgument(0), recipeUuid);
+            return query;
+        });
+
+        doAnswer((call) -> {
+            ValueEventListener listener = call.getArgument(0);
+            listener.onDataChange(dataSnapshot);
+            return null;
+        }).when(query).addListenerForSingleValueEvent(any());
+
+        when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);
+
+        List<DataSnapshot> children = new ArrayList<>(1);
+        children.add(dataSnapshot);
+        when(dataSnapshot.getChildren()).thenReturn(children);
+
+        when(dataSnapshot.getValue(Recipe.class)).thenReturn(recipe);
+
+        CallHandlerChecker<Recipe> fakeCallHandler = new CallHandlerChecker<>(recipe, true);
+
+        fakeRecipeStorage.readRecipeFromUuid(recipe.getRecipeUuid(), fakeCallHandler);
+        wait(1000);
+        fakeCallHandler.assertWasCalled();
     }
 }

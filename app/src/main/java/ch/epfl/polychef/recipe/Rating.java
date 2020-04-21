@@ -29,7 +29,7 @@ public final class Rating implements Serializable {
 
         if(allRatings.containsKey(userID)) {
             int oldRate = allRatings.get(userID);
-            allRatings.put(userID, rate);  //allRatings.replace(userID, rate);  //TODO: Need min Sdk version 26 -> Would be much cleaner
+            allRatings.replace(userID, rate);
             ratingSum = ratingSum - oldRate + rate;
         }
         else {

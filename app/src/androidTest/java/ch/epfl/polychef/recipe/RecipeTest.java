@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.recipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,9 +126,6 @@ public class RecipeTest {
         Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.add(new Ingredient("Steaks", 1000d, Ingredient.Unit.GRAM)));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png"));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.set(0, "/src/evilChanger.png"));
-
-        //TODO: to implement
-        //Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.get(0).setQuantity(50));
     }
 
     @Test

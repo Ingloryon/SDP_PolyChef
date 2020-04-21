@@ -1,4 +1,4 @@
-package ch.epfl.polychef;
+package ch.epfl.polychef.images;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;

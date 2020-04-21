@@ -1,6 +1,7 @@
 package ch.epfl.polychef.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.RecipeInputParsing;
 
 public class PostRecipeFragment extends Fragment {
@@ -85,10 +87,23 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
+    private HomePage hostActivity;
+
     /**
      * Required empty public constructor.
      */
     public PostRecipeFragment() {
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+        } else {
+            throw new IllegalArgumentException("The user profile fragment wasn't attached properly!");
+        }
     }
 
     @Override
@@ -213,12 +228,14 @@ public class PostRecipeFragment extends Fragment {
             return false;
         } else {
             if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getUuid().toString());
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getRecipeUuid());
             }
             for(int i = 0; i < currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getUuid().toString());
+                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getRecipeUuid());
             }
-            RecipeStorage.getInstance().addRecipe(postedRecipe);
+            hostActivity.getRecipeStorage().addRecipe(postedRecipe);
+            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
+            hostActivity.getUserStorage().updateUserInfo();
             return true;
         }
     }
@@ -242,7 +259,7 @@ public class PostRecipeFragment extends Fragment {
         // checks are applied in order so parseInt is always valid
         // we only check persNb <= max since positiveness will already be check by builder
         if (persNb.length()!=0 && android.text.TextUtils.isDigitsOnly(persNb) && Integer.parseInt(persNb) <= maxPersNb){
-            wrongInputs.put("Person Number", true);  // TODO: Use replace when set SDK min24
+            wrongInputs.replace("Person Number", true);
             personNumber = Integer.parseInt(persNb);
         } else {
             errorLogs.add("Number of Person: should be a number between 0 and " + maxPersNb + ".");
@@ -264,7 +281,7 @@ public class PostRecipeFragment extends Fragment {
 
     private int getAndCheckTime(String input, String message){
         if (input.length()!=0 && android.text.TextUtils.isDigitsOnly(input)) {
-            wrongInputs.put(message, true);  // TODO: Use replace when set SDK min24
+            wrongInputs.replace(message, true);
             return Integer.parseInt(input);
         } else {
             errorLogs.add(message+": should be a positive number.");
@@ -275,18 +292,18 @@ public class PostRecipeFragment extends Fragment {
     private boolean checkForIllegalInputs(RecipeBuilder rb) {
 
         try {
-        rb.setName(name)
-                .setEstimatedCookingTime(estimatedCookingTime)
-                .setPersonNumber(personNumber)
-                .setEstimatedPreparationTime(estimatedPreparationTime)
-                .setRecipeDifficulty(recipeDifficulty);
-        for (int i = 0; i < recipeInstructions.size(); i++) {
-            rb.addInstruction(recipeInstructions.get(i));
-        }
-        for (int i = 0; i < ingredients.size(); i++) {
-            rb.addIngredient(ingredients.get(i));
-        }
-        rb.build();
+            rb.setName(name)
+                    .setEstimatedCookingTime(estimatedCookingTime)
+                    .setPersonNumber(personNumber)
+                    .setEstimatedPreparationTime(estimatedPreparationTime)
+                    .setRecipeDifficulty(recipeDifficulty);
+            for (int i = 0; i < recipeInstructions.size(); i++) {
+                rb.addInstruction(recipeInstructions.get(i));
+            }
+            for (int i = 0; i < ingredients.size(); i++) {
+                rb.addIngredient(ingredients.get(i));
+            }
+            rb.build();
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
@@ -416,7 +433,7 @@ public class PostRecipeFragment extends Fragment {
     }
 
 
-    private void getAndCheckIngredients(){
+    private void getAndCheckIngredients() {
         Double quantity;
         ingredients.clear();
         for (int i = 0; i < numberOfIngredients; i++) {
@@ -424,29 +441,36 @@ public class PostRecipeFragment extends Fragment {
 
             String ingredient1 = ((TextView) currentIngredient.getChildAt(0)).getText().toString();
             String quantity1 = ((TextView) currentIngredient.getChildAt(1)).getText().toString();
-            Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner)currentIngredient.getChildAt(2)).getSelectedItemPosition()];
+            Ingredient.Unit unit1 = Ingredient.Unit.values()[((Spinner) currentIngredient.getChildAt(2)).getSelectedItemPosition()];
 
-            if(ingredient1.length()==0 && quantity1.length()==0) {
-            }else if(ingredient1.length()==0 && quantity1.length()!=0){
+            if (ingredient1.length() == 0 && quantity1.length() == 0) {
+            } else if (ingredient1.length() == 0 && quantity1.length() != 0) {
                 errorLogs.add("Ingredient: the ingredient shouldn't be empty");
                 return;
-            }else if (ingredient1.length()!=0 && quantity1.length()==0){
+            } else if (ingredient1.length() != 0 && quantity1.length() == 0) {
                 errorLogs.add("Ingredient: the quantity needs to be a positive number");
                 return;
-            }else{
-                try{
-                    quantity=Double.parseDouble(quantity1);
-                    ingredients.add(new Ingredient(ingredient1,quantity,unit1));
-                }catch(Exception e){
+            } else {
+                try {
+                    quantity = Double.parseDouble(quantity1);
+                    ingredients.add(new Ingredient(ingredient1, quantity, unit1));
+                } catch (Exception e) {
                     errorLogs.add("Ingredient: the quantity needs to be a positive number");
                     return;
                 }
             }
         }
-        if(ingredients.size()==0){
+        if (ingredients.size() == 0) {
             errorLogs.add("Ingredient: the number of ingredients can't be 0");
             return;
         }
         wrongInputs.put("Ingredients", true);
+    }
+
+    protected RecipeStorage getRecipeStorage() {
+        return RecipeStorage.getInstance();
+    }
+    protected UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 }

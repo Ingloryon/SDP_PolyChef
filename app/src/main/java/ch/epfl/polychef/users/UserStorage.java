@@ -1,5 +1,7 @@
 package ch.epfl.polychef.users;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,6 +11,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import ch.epfl.polychef.utils.FavouritesUtils;
 
 public class UserStorage {
 
@@ -77,6 +81,7 @@ public class UserStorage {
         if(snap.exists()){
             user = snap.getValue(User.class);
             userKey = snap.getKey();
+            FavouritesUtils.getInstance().setOfflineFavourites(user);
         } else {
             //TODO: Find good exception to throw
             throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");
@@ -103,6 +108,10 @@ public class UserStorage {
 
     public FirebaseUser getAuthenticatedUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public User getPolyChefUser() {
+        return user;
     }
 
     /**

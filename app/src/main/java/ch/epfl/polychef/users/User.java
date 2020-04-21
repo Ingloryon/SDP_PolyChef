@@ -1,13 +1,21 @@
 package ch.epfl.polychef.users;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
-public class User {
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.utils.Preconditions;
+
+//TODO remove serializable
+public class User implements Serializable {
 
     private String email;
     private String username;
@@ -64,6 +72,11 @@ public class User {
         favourites.add(recipe);
     }
 
+    public void removeFavourite(String recipe) {
+        Preconditions.checkArgument(favourites.contains(recipe), "Can not remove recipe from favourite if it was not in favourite before");
+        favourites.remove(recipe);
+    }
+
     public void addSubscription(String user) {
         subscriptions.add(user);
     }
@@ -78,6 +91,7 @@ public class User {
         return "User: \n"
                 + "Email=" + email + ",\n"
                 + "username=" + username + ",\n"
+                + "recipes=" + recipes + ",\n"
                 + "favourites=" + favourites + ",\n"
                 + "subscribers=" + subscribers + ",\n"
                 + "subscriptions=" + subscriptions;

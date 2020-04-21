@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,14 @@ import java.util.List;
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.Preconditions;
+import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
+import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.ConnectedActivity;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.Recipe;
@@ -40,6 +49,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     private boolean isLoading = false;
 
     private RecipeStorage recipeStorage;
+    private ImageStorage imageStorage;
+    private UserStorage userStorage;
 
     public OnlineMiniaturesFragment(){
         
@@ -49,13 +60,12 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_miniatures_online, container, false);
 
-        Bundle bundle = getArguments();
-        recipeStorage = (RecipeStorage) bundle.getSerializable("RecipeStorage");
-
-        int fragmentID = bundle.getInt("fragmentID");
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        onlineRecyclerView.setAdapter(new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, onlineRecyclerView, fragmentID));
+        RecipeMiniatureAdapter adapter = new RecipeMiniatureAdapter(this.getActivity(),
+                dynamicRecipeList, onlineRecyclerView, container.getId(), imageStorage, userStorage);
+
+        onlineRecyclerView.setAdapter(adapter);
         // Add a scroll listener when we reach the end of the list we load new recipes from database
         onlineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -73,6 +83,21 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
             }
         });
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            HomePage homePage = (HomePage) context;
+            recipeStorage = homePage.getRecipeStorage();
+            imageStorage = homePage.getImageStorage();
+            userStorage = homePage.getUserStorage();
+            Preconditions.checkArgument(recipeStorage != null && imageStorage != null && userStorage != null);
+        } else {
+            throw new IllegalArgumentException("The online miniature fragment wasn't attached properly!");
+        }
     }
 
     @Override
