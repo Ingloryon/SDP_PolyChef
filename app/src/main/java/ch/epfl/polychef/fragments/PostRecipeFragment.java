@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -275,8 +274,6 @@ public class PostRecipeFragment extends Fragment {
 
         recipeDifficulty = Recipe.Difficulty.values()[difficultyInput.getSelectedItemPosition()];
         wrongInputs.put("Difficulty", true);
-
-        Log.w(tag,wrongInputs.toString());
     }
 
     private int getAndCheckTime(String input, String message){
