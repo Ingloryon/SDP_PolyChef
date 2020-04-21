@@ -389,9 +389,8 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void setAddInstructionButton(View view) {
-        if(numberOfInstruction>maxInstructions-1){
-            //TODO: add message when trying to add to many instructions
-        }else {
+        //TODO: add message when trying to add to many instructions
+        if(numberOfInstruction<maxInstructions){
             final ViewGroup.LayoutParams lparams = instructionText.getLayoutParams();
             final EditText textView = new EditText(getActivity());
             textView.setLayoutParams(lparams);
@@ -403,10 +402,10 @@ public class PostRecipeFragment extends Fragment {
             instructionLayout.addView(textView);
         }
     }
+
     private void setAddIngredientButton(View view) {
-        if(numberOfIngredients>maxIngredients-1){
-            //TODO: print a message when trying to add too many ingredients
-        }else {
+        //TODO: print a message when trying to add too many ingredients
+        if(numberOfIngredients<maxIngredients){
             numberOfIngredients++;
 
             ConstraintLayout newIngredient = (ConstraintLayout) LayoutInflater.from(getContext()).inflate(R.layout.ingredient_field, null);
@@ -470,6 +469,7 @@ public class PostRecipeFragment extends Fragment {
     protected RecipeStorage getRecipeStorage() {
         return RecipeStorage.getInstance();
     }
+
     protected UserStorage getUserStorage() {
         return UserStorage.getInstance();
     }

@@ -89,20 +89,20 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
-        checkErrorLog("There are errors in the given inputs :" +
-                "\nCooking Time: should be a positive number." +
-                "\nIngredient: the number of ingredients can't be 0" +
-                "\nInstruction: the number of instructions can't be 0" +
-                "\nNumber of Person: should be a number between 0 and 100." +
-                "\nPreparation Time: should be a positive number." +
-                "\nTitle: should be a string between 3 and 80 characters.");
+        checkErrorLog("There are errors in the given inputs :"
+                + "\nCooking Time: should be a positive number."
+                + "\nIngredient: the number of ingredients can't be 0"
+                + "\nInstruction: the number of instructions can't be 0"
+                + "\nNumber of Person: should be a number between 0 and 100."
+                + "\nPreparation Time: should be a positive number."
+                + "\nTitle: should be a string between 3 and 80 characters.");
     }
 
     @Test
     public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
         writeRecipe("","a", "1","a","10","10", "10");
-        checkErrorLog("There are errors in the given inputs :" +
-                "\nTitle: should be a string between 3 and 80 characters.");
+        checkErrorLog("There are errors in the given inputs :"
+                + "\nTitle: should be a string between 3 and 80 characters.");
     }
 
     @Test
