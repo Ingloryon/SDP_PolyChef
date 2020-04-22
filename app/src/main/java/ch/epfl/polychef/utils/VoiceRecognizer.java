@@ -73,9 +73,7 @@ public class VoiceRecognizer implements RecognitionListener {
         recognizer.addGrammarSearch(MENU_SEARCH, menuGrammar);
     }
 
-    //@Override
     public void onStop() {
-        Log.d("vr","onStop");
         if (recognizer != null) {
             recognizer.cancel();
             recognizer.shutdown();

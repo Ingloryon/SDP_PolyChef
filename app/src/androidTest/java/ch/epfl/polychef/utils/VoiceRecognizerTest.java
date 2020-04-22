@@ -1,12 +1,25 @@
 package ch.epfl.polychef.utils;
 
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import android.app.Activity;
 
-import org.junit.runner.RunWith;
+import org.junit.Test;
+import org.mockito.Mockito;
 
-@RunWith(AndroidJUnit4.class)
+import ch.epfl.polychef.CallNotifier;
+
 public class VoiceRecognizerTest {
+
+    CallNotifier<String> mockCallNotifier= Mockito.mock(CallNotifier.class);
+
+    Activity mockActivity= Mockito.mock(Activity.class);
+
+    @Test
+    public void VoiceRecognizerStartAndStopWithoutErrorTest(){
+        VoiceRecognizer vr=new VoiceRecognizer(mockCallNotifier);
+        vr.start(mockActivity);
+        vr.onStop();
+    }
 
 
 
