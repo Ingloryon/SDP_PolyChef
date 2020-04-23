@@ -91,63 +91,49 @@ public class PostingRecipeFragmentTest {
     public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
         checkErrorLog("There are errors in the given inputs :"
                 + "\nCooking Time: should be a positive number."
-                + "\nIngredients: There should be 3 arguments entered as {a,b,c}"
-                + "\nInstructions: the entered instructions should match format {a},{b},... (no spaces)"
-                + "\nPerson number: should be a number between 0 and 100."
+                + "\nIngredient: the number of ingredients can't be 0"
+                + "\nInstruction: the number of instructions can't be 0"
+                + "\nNumber of Person: should be a number between 0 and 100."
                 + "\nPreparation Time: should be a positive number."
-                + "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
+                + "\nTitle: should be a string between 3 and 80 characters.");
     }
 
     @Test
     public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
-        writeRecipe("","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
+        writeRecipe("","a", "1","a","10","10", "10");
         checkErrorLog("There are errors in the given inputs :"
-                + "\nTitle: too long or too short. Need to be between 3 and 80 characters.");
-    }
-
-    @Test
-    public void nullUnitInIngredientDisplaysErrorLogs() {
-        writeRecipe("Cake","{a,1,null},{a,1}","{a},{b}","10","10", "10");
-        checkErrorLog("There are errors in the given inputs :"
-                + "\nIngredients: The entered unit is not part of the possible units "
-                + "[TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE].");
-        }
-
-    @Test
-    public void noSeparatorInIngredientDisplaysErrorLogs() {
-        writeRecipe("Cake","{a}","{a},{b}","10","10", "10");
-        checkErrorLog("There are errors in the given inputs :"
-                + "\nIngredients: There should be 3 arguments entered as {a,b,c}");
-    }
-
-    @Test
-    public void negativeQuantityDisplaysErrorLogs() {
-        writeRecipe("Cake","{a,-1,gram}","{a},{b}","10","10", "10");
-        checkErrorLog("There are errors in the given inputs :"
-                + "\nIngredients: There should be 3 arguments entered as {a,b,c}");
+                + "\nTitle: should be a string between 3 and 80 characters.");
     }
 
     @Test
     public void zeroPersonNumberDisplaysErrorLogs() {
-        writeRecipe("Cake","{a,10,gram}","{a},{b}","0","10", "10");
+        writeRecipe("Cake","a", "1","a","0","10", "10");
         checkErrorLog("There are errors in the given inputs :\nPerson number:  The number of persons must be strictly positive");
     }
 
     @Test
     public void zeroPrepTimeDisplaysErrorLogs() {
-        writeRecipe("Cake","{a,10,gram}","{a},{b}","10","0", "0");
+        writeRecipe("Cake","a", "1","a","10","0", "0");
         checkErrorLog("There are errors in the given inputs :\nPreparation time:  The estimated time required must be strictly positive");
     }
 
     @Test
     public void invalidIngredientsAreRejectedAndPrintErrorLog() {
-        writeRecipe("Cake","{,10,gram}","{a},{b}","10","10", "10");
-        checkErrorLog("There are errors in the given inputs :\nIngredients:  The ingredient's name must be non empty");
+        writeRecipe("Cake","","1","a","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :\nIngredient: the ingredient shouldn't be empty");
+    }
+
+    @Test
+    public void invalidQuantityIsRejectedAndPrintErrorLog() {
+        writeRecipe("Cake","a","","a","10","10", "10");
+        checkErrorLog("There are errors in the given inputs :\nIngredient: the quantity needs to be a positive number");
     }
 
     @Test
     public void testOnACompleteRecipe() {
-        writeRecipe("Cake","{a,1,gram},{b,2,cup}","{a},{b}","10","10", "10");
+        writeRecipe("Cake","a", "1","a","10","10", "10");
+        addIngredient();
+        addInstruction();
         Espresso.closeSoftKeyboard();
         mockInit();
         onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
@@ -193,13 +179,22 @@ public class PostingRecipeFragmentTest {
         onView(withText("Choose from Gallery")).perform(click());
     }
 
-    private void writeRecipe(String name, String ingre, String instru, String personNb, String prep, String cook){
+    private void writeRecipe(String name, String ingre, String quantity, String instru, String personNb, String prep, String cook){
         onView(withId(R.id.nameInput)).perform(scrollTo(), typeText(name));
-        onView(withId(R.id.ingredientsList)).perform(scrollTo(), typeText(ingre));
-        onView(withId(R.id.instructionsList)).perform(scrollTo(), typeText(instru));
+        onView(withId(R.id.ingredient0)).perform(scrollTo(), typeText(ingre));
+        onView(withId(R.id.quantity0)).perform(scrollTo(), typeText(quantity));
+        onView(withId(R.id.instruction0)).perform(scrollTo(), typeText(instru));
         onView(withId(R.id.personNbInput)).perform(scrollTo(), typeText(personNb));
         onView(withId(R.id.prepTimeInput)).perform(scrollTo(), typeText(prep));
-        onView(withId(R.id.cookTimeInput)).perform(typeText(cook));
+        onView(withId(R.id.cookTimeInput)).perform(scrollTo(), typeText(cook));
+    }
+
+    private void addInstruction(){
+        onView(withId(R.id.buttonAddInstr)).perform(scrollTo(), click());
+    }
+
+    private void addIngredient(){
+        onView(withId(R.id.buttonAddIngre)).perform(scrollTo(), click());
     }
 
     private void checkErrorLog(String expected){

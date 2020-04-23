@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,14 +23,16 @@ import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.users.UserStorage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is an adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView that is in the activity where the miniatures are shown.
  */
-public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> implements CallHandler<byte []> {
+public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniatureAdapter.MiniatureViewHolder> {
 
     private Context mainContext;
     private List<Recipe> recipeList;
@@ -38,6 +41,9 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     private MiniatureViewHolder currentMinViewHolder = null;
 
     private ImageStorage imageStorage;// = new ImageStorage();
+    private UserStorage userStorage;
+
+    private Map<String, Bitmap> images;
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -48,11 +54,26 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
      * @param fragmentContainerID the id of the fragment container where the miniature are displayed
      */
     public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
+        this(mainContext, recipeList, recyclerView, fragmentContainerID, storage, null);
+    }
+
+    /**
+     * Creates a new adapter of recipes to miniatures.
+     *
+     * @param mainContext  the context where the adapter will operate i.e the activity where the recyclerView is
+     * @param recipeList   the list of all the recipes that will be displayed inside the recyclerView
+     * @param recyclerView this is the recyclerView where the recipes will be displayed
+     * @param fragmentContainerID the id of the fragment container where the miniature are displayed
+     * @param userStorage the user storage to get the list of favorites from
+     */
+    public RecipeMiniatureAdapter(Context mainContext, List<Recipe> recipeList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage, UserStorage userStorage) {
         this.mainContext = mainContext;
         this.recipeList = recipeList;
         this.recyclerview = recyclerView;
         this.fragmentContainerID = fragmentContainerID;
         this.imageStorage = storage;
+        this.userStorage = userStorage;
+        this.images = new HashMap<>();
     }
 
     /**
@@ -82,17 +103,30 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         Recipe recipe = recipeList.get(position);
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
+        FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
+        if(images.containsKey(recipe.getRecipeUuid())) {
+            holder.image.setImageBitmap(images.get(recipe.getRecipeUuid()));
+        } else {
+            getImageFor(holder, recipe);
+        }
+
+    }
+
+    private void getImageFor(MiniatureViewHolder holder, Recipe recipe) {
         Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
             holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
+            images.put(recipe.getRecipeUuid(), BitmapFactory.decodeResource(mainContext.getResources(), Recipe.DEFAULT_MINIATURE_PATH));
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
+            images.put(recipe.getRecipeUuid(), BitmapFactory.decodeResource(mainContext.getResources(), miniatureMeta.getRight()));
         } else {
             getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
                 @Override
                 public void onSuccess(byte[] data) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                     holder.image.setImageBitmap(bmp);
+                    images.put(recipe.getRecipeUuid(), bmp);
                 }
 
                 @Override
@@ -118,16 +152,8 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     @Override
-    public void onSuccess(byte[] data) {
-        if(currentMinViewHolder != null) {
-            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-            currentMinViewHolder.image.setImageBitmap(bmp);
-        }
-    }
-
-    @Override
-    public void onFailure() {
-        Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+    public int getItemViewType(int position) {
+        return position;
     }
 
     /**
@@ -138,12 +164,14 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         TextView recipeTitle;
         ImageView image;
         RatingBar ratingBar;
+        ToggleButton favouriteButton;
 
         public MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById(R.id.recipeNameMiniature);
             ratingBar = itemView.findViewById(R.id.miniatureRatingBar);
             image = itemView.findViewById(R.id.miniatureRecipeImage);
+            favouriteButton = itemView.findViewById(R.id.favouriteButton);
         }
     }
 

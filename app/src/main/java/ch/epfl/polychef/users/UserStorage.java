@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.epfl.polychef.utils.FavouritesUtils;
+
 public class UserStorage {
 
     private static UserStorage INSTANCE=new UserStorage();
@@ -79,6 +81,7 @@ public class UserStorage {
         if(snap.exists()){
             user = snap.getValue(User.class);
             userKey = snap.getKey();
+            FavouritesUtils.getInstance().setOfflineFavourites(user);
         } else {
             //TODO: Find good exception to throw
             throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");

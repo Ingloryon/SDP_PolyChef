@@ -15,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.synnapps.carouselview.CarouselView;
 
@@ -25,6 +26,8 @@ import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.utils.FavouritesUtils;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
@@ -36,10 +39,12 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
+    private ToggleButton favouriteButton;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
 
     private int indexOfInstruction=-1;
+
 
     /**
      * Required empty public constructor.
@@ -59,6 +64,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         if(bundle != null){
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");
         }
+        displayFavouriteButton(view);
         displayRecipeName(view);
         displayImage(view);
         displayRating(view);
@@ -77,6 +83,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         setupSwitch(view);
 
         return view;
+    }
+
+    private void displayFavouriteButton(View view) {
+        favouriteButton = view.findViewById(R.id.favouriteButton);
+        FavouritesUtils.getInstance().setFavouriteButton(getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
     }
 
     private void setupSwitch(View view) {
@@ -165,7 +176,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
         // Remove the last line return since there is no more ingredients to display
         strBuilder.deleteCharAt(strBuilder.length() - 1);
-        TextView ingredients = view.findViewById(R.id.ingredientsList);
+        TextView ingredients = view.findViewById(R.id.ingredient0);
         ingredients.setText(strBuilder.toString());
     }
 
@@ -184,7 +195,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
         // Remove the last line return since there is no more instructions to display
         strBuilder.deleteCharAt(strBuilder.length() - 1);
-        TextView instructions = view.findViewById(R.id.instructionsList);
+        TextView instructions = view.findViewById(R.id.instruction0);
         instructions.setText(strBuilder.toString());
     }
 
@@ -221,6 +232,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     public ImageStorage getImageStorage() {
         return new ImageStorage();
+    }
+
+    public UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 
     @Override

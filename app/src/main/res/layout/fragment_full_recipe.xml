@@ -46,9 +46,20 @@
                         android:textColor="@android:color/background_dark"
                         android:textSize="36sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/favouriteButton" />
+
+                    <ToggleButton
+                        android:id="@+id/favouriteButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textOn=""
+                        android:textOff=""/>
 
                     <RatingBar
                         android:id="@+id/ratingBar"
@@ -143,7 +154,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/recipeImages" />
 
                     <TextView
-                        android:id="@+id/ingredientsList"
+                        android:id="@+id/ingredient0"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -171,10 +182,10 @@
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ingredientsList" />
+                        app:layout_constraintTop_toBottomOf="@+id/ingredient0" />
 
                     <TextView
-                        android:id="@+id/instructionsList"
+                        android:id="@+id/instruction0"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
