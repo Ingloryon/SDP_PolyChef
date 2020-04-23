@@ -11,8 +11,7 @@ public class VoiceSynthesizer {
 
     public VoiceSynthesizer(Activity activity) {
         this.activity=activity;
-
-        initializeTextToSpeech();
+        this.textToSpeech = new TextToSpeech(activity, getInitListerner(this.textToSpeech));
     }
 
     /**
@@ -24,19 +23,21 @@ public class VoiceSynthesizer {
     }
 
     /**
-     * initialize the object TextToSpeech.
+     * gets the TextToSpeechListener redefintion
+     * this format is used so it allows to mock the textToSpeech attribute (add constructor that takes it as attribute)
      */
-    private void initializeTextToSpeech() {
-        textToSpeech= new TextToSpeech(activity, new TextToSpeech.OnInitListener() {
+    private TextToSpeech.OnInitListener getInitListerner(TextToSpeech txtToSpeech) {
+
+        return new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(textToSpeech.getEngines().size()==0){
+                if(txtToSpeech.getEngines().size()==0){
                     throw new UnsupportedOperationException("There is no voice recognition engine.");
                 }else{
-                    textToSpeech.setLanguage(Locale.UK);
+                    txtToSpeech.setLanguage(Locale.UK);
                 }
             }
-        });
+        };
     }
 
     /**
