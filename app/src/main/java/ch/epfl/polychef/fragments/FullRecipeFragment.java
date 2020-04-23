@@ -207,7 +207,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     @Override
     public void notify(String data) {
-        Log.d("vr","received:"+data);
+        Log.d("vr","received:"+data); //TODO: remove me
         List<String> allInstructions = currentRecipe.getRecipeInstructions();
 
         if(indexOfInstruction==-1){
