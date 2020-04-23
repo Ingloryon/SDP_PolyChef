@@ -36,6 +36,7 @@ import java.util.List;
 
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
     private Recipe currentRecipe;
+    private static final String TAG = "FullRecipeFragment";
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
@@ -207,7 +208,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     @Override
     public void notify(String data) {
-        Log.d("vr","received:"+data); //TODO: remove me
         List<String> allInstructions = currentRecipe.getRecipeInstructions();
 
         if(indexOfInstruction==-1){
@@ -216,7 +216,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             indexOfInstruction=Math.max(indexOfInstruction-1,0);
         }else if(data.equals(getResources().getString(R.string.commandNext))){
             indexOfInstruction=Math.min(indexOfInstruction+1,allInstructions.size());
-        }//else is "repeat"-> do not change index
+        }
 
         if(indexOfInstruction==allInstructions.size()){
             voiceSynthesizer.speak("Congratulations you reached the end");
