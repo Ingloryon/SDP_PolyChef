@@ -11,6 +11,7 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
@@ -95,8 +96,6 @@ public class VoiceRecognizer implements RecognitionListener {
 
     @Override
     public void onResult(Hypothesis hypothesis) {
-        Log.d("vr","onResult found : "+hypothesis.getHypstr());
-
         if (hypothesis != null && !hypothesis.getHypstr().equals(KEYPHRASE)) {
             callNotifier.notify(hypothesis.getHypstr());
         }
@@ -113,7 +112,7 @@ public class VoiceRecognizer implements RecognitionListener {
         }
     }
 
-    private void switchSearch(String searchName) {
+    protected void switchSearch(String searchName) {
         recognizer.stop();
 
         if (searchName.equals(KWS_SEARCH)) {
@@ -125,12 +124,10 @@ public class VoiceRecognizer implements RecognitionListener {
 
     @Override
     public void onError(Exception error) {
-        System.out.println(error.getMessage());
     }
 
     @Override
     public void onTimeout() {
-        Log.d("vr","onTimeout");
         switchSearch(KWS_SEARCH);
     }
 }

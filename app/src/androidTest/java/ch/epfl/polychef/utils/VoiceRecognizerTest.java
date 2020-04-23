@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.polychef.CallNotifier;
@@ -37,5 +38,48 @@ public class VoiceRecognizerTest {
             e.printStackTrace();
         }
         vr.onStop();
+    }
+
+    @Test
+    public void voiceRecognizerDoNothingOnError() {
+        VoiceRecognizer vr=new VoiceRecognizer(mockCallNotifier);
+        vr.onError(null);
+    }
+
+
+    @Test
+    public void voiceRecognizerSwitchSearchOnTimeOut(){
+        ArrayList<String> arl=new ArrayList<>();
+        arl.add("wakeup");
+        CallNotifierChecker<String> callNotifierChecker=new CallNotifierChecker<>(arl,true);
+        MockVoiceRecognizer vr=new MockVoiceRecognizer(callNotifierChecker);
+        vr.activeCheckMode(true);
+        vr.onTimeout();
+        vr.onStop();
+        callNotifierChecker.assertWasCalled(1);
+    }
+
+    class MockVoiceRecognizer extends VoiceRecognizer{
+
+        private boolean doesCheck=false;
+        private CallNotifier<String> callNotifier;
+
+        public MockVoiceRecognizer(CallNotifier<String> callNotifier) {
+            super(callNotifier);
+            this.callNotifier=callNotifier;
+        }
+
+        public void activeCheckMode(boolean active){
+            doesCheck=active;
+        }
+
+        @Override
+        protected void switchSearch(String searchName){
+            if(doesCheck){
+                callNotifier.notify(searchName);
+            }else{
+                super.switchSearch(searchName);
+            }
+        }
     }
 }
