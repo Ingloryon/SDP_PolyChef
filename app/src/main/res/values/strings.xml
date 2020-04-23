@@ -8,6 +8,8 @@
     <string name="google">Google</string>
     <string name="log_in">Log In</string>
     <string name="log_out">Log Out</string>
+    <string name="VoiceRecognitionSwitch">Voice Recognition</string>
+
 
     <string name="Username">Username</string>
     <string name="Email">Email</string>
@@ -49,9 +51,16 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="searchMessage">Search for a recipe</string>
     <string name="Search">Search</string>
+
     <string name="plus">+</string>
     <string name="hintInstr">Instruction 1</string>
-    <string name="EnterIngredient">Ingrdient 1</string>
+    <string name="EnterIngredient">Ingredient 1</string>
     <string name="EnterIngr">Ingredient 1</string>
     <string name="Quantity">Quantity</string>
+
+
+    <string name="commandPrevious">previous</string>
+    <string name="commandNext">next</string>
+    <string name="commandRepeat">repeat</string>
+
 </resources>
