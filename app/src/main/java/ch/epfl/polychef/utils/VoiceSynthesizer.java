@@ -1,3 +1,4 @@
+
 package ch.epfl.polychef.utils;
 
 import android.app.Activity;
@@ -11,7 +12,8 @@ public class VoiceSynthesizer {
 
     public VoiceSynthesizer(Activity activity) {
         this.activity=activity;
-        this.textToSpeech = new TextToSpeech(activity, getInitListerner(this.textToSpeech));
+
+        initializeTextToSpeech();
     }
 
     /**
@@ -23,21 +25,19 @@ public class VoiceSynthesizer {
     }
 
     /**
-     * gets the TextToSpeechListener redefintion
-     * this format is used so it allows to mock the textToSpeech attribute (add constructor that takes it as attribute)
+     * initialize the object TextToSpeech.
      */
-    private TextToSpeech.OnInitListener getInitListerner(TextToSpeech txtToSpeech) {
-
-        return new TextToSpeech.OnInitListener() {
+    private void initializeTextToSpeech() {
+        textToSpeech= new TextToSpeech(activity, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(txtToSpeech.getEngines().size()==0){
+                if(textToSpeech.getEngines().size()==0){
                     throw new UnsupportedOperationException("There is no voice recognition engine.");
                 }else{
-                    txtToSpeech.setLanguage(Locale.UK);
+                    textToSpeech.setLanguage(Locale.UK);
                 }
             }
-        };
+        });
     }
 
     /**
