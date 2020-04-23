@@ -1,12 +1,10 @@
 package ch.epfl.polychef.utils;
 
 
-import android.Manifest;
 import android.app.Activity;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,9 +27,8 @@ import static org.mockito.Mockito.when;
 public class VoiceRecognizerTest {
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO);
-    @Rule
     public IntentsTestRule<EntryPage> intentsTestRule = new IntentsTestRule<>(EntryPage.class);
+
 
     CallNotifier<String> mockCallNotifier= Mockito.mock(CallNotifier.class);
 
