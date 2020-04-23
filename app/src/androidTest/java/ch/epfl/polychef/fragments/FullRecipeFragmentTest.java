@@ -75,11 +75,11 @@ public class FullRecipeFragmentTest {
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
         Fragment fragment= fragmentManager.getFragments().get(0);
-        FullRecipeFragment f = (FullRecipeFragment) fragment;
-        f.notify("next");
-        f.notify("next");
-        f.notify("previous");
-        f.notify("next");
-        f.notify("next");
+        FullRecipeFragment fullRecipeFragment = (FullRecipeFragment) fragment;
+        fullRecipeFragment.notify("next");
+        fullRecipeFragment.notify("next");
+        fullRecipeFragment.notify("previous");
+        fullRecipeFragment.notify("next");
+        fullRecipeFragment.notify("next");
     }
 }

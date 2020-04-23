@@ -75,6 +75,12 @@ public class VoiceRecognizerTest {
     }
 
     @Test
+    public void voiceRecognizerDoNothingOnBeginningOfSpeech(){
+        VoiceRecognizer vr=new VoiceRecognizer(mockCallNotifier);
+        vr.onBeginningOfSpeech();
+    }
+
+    @Test
     public void voiceRecognizerSwitchSearchOnTimeOut(){
         ArrayList<String> arl=new ArrayList<>();
         arl.add("wakeup");
