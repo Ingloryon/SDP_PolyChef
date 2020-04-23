@@ -16,6 +16,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
@@ -129,11 +133,13 @@ public class RecipeMiniatureImageTest {
             RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
 
             doAnswer((call) -> {
-                CallNotifier<Recipe> ch = call.getArgument(2);
-                ch.notify(recipe1);
-                ch.notify(recipe2);
+                CallHandler<List<Recipe>> ch = call.getArgument(4);
+                List<Recipe> results = new ArrayList<>();
+                results.add(recipe1);
+                results.add(recipe2);
+                ch.onSuccess(results);
                 return null;
-            }).when(mockRecipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
+            }).when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
 
             return mockRecipeStorage;
         }

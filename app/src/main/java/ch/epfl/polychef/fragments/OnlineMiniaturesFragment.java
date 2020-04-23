@@ -161,6 +161,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
     @Override
     public void onSuccess(List<Recipe> data){
+        Log.e("LAUNCHED ?",  "-------------------------------------------------------------------------------------------------------------------");
 
         if(isSearching){
             searchRecipeList.addAll(data);
