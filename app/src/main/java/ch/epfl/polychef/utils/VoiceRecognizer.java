@@ -10,8 +10,6 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
@@ -51,14 +49,15 @@ public class VoiceRecognizer implements RecognitionListener {
 
             @Override
             protected void onPostExecute(Exception result) {
-                Log.d("vr","onPostExecute");
-                if (result != null) {
-                    System.out.println(result.getMessage());
-                } else {
+                if (result == null) {
                     switchSearch(KWS_SEARCH);
                 }
             }
         }.execute();
+    }
+
+    protected void setRecognizer(SpeechRecognizer recognizer){
+        this.recognizer=recognizer;
     }
 
     private void setupRecognizer(File assetsDir) throws IOException {
@@ -130,4 +129,9 @@ public class VoiceRecognizer implements RecognitionListener {
     public void onTimeout() {
         switchSearch(KWS_SEARCH);
     }
+
+    public SpeechRecognizer getRecognizer(){
+        return recognizer;
+    }
+
 }
