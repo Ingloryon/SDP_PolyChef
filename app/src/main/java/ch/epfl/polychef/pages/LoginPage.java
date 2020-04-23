@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,15 +16,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-
-import ch.epfl.polychef.recipe.OfflineRecipes;
-import ch.epfl.polychef.recipe.Recipe;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.users.UserStorage;
 
-public class LoginPage extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity{
 
     SignInButton googleButton;
 

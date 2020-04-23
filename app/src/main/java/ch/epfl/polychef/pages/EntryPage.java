@@ -66,4 +66,5 @@ public class EntryPage extends AppCompatActivity {
         Intent intent = new Intent(this, LoginPage.class);
         startActivity(intent);
     }
+
 }

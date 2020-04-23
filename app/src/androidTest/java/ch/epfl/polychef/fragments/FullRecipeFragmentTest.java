@@ -2,6 +2,9 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -9,6 +12,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -50,5 +54,32 @@ public class FullRecipeFragmentTest {
         onView(withId(R.id.fullRecipeFragment)).check(doesNotExist());
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.fullRecipeFragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void switchIsDisplayedCorrectly(){
+        onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.voiceRecognitionSwitch)).check(matches(isDisplayed()));
+        onView(withId(R.id.voiceRecognitionSwitch)).check(matches(withText("Voice Recognition")));
+    }
+
+    @Test
+    public void clickOnSwitch(){
+        onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.voiceRecognitionSwitch)).perform(click());
+        onView(withId(R.id.voiceRecognitionSwitch)).perform(click());
+    }
+
+    @Test
+    public void notifyTest(){
+        onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        FragmentManager fragmentManager = intentsTestRule.getActivity().getSupportFragmentManager();
+        Fragment fragment= fragmentManager.getFragments().get(0);
+        FullRecipeFragment fullRecipeFragment = (FullRecipeFragment) fragment;
+        fullRecipeFragment.notify("next");
+        fullRecipeFragment.notify("next");
+        fullRecipeFragment.notify("previous");
+        fullRecipeFragment.notify("next");
+        fullRecipeFragment.notify("next");
     }
 }

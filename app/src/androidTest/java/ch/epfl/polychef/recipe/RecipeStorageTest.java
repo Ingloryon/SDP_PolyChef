@@ -1,7 +1,5 @@
 package ch.epfl.polychef.recipe;
 
-import android.util.Log;
-
 import androidx.core.util.Consumer;
 
 import com.google.firebase.database.ChildEventListener;
@@ -24,9 +22,6 @@ import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
-import ch.epfl.polychef.recipe.OfflineRecipes;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.CallHandlerChecker;
 import ch.epfl.polychef.utils.CallNotifierChecker;
 
@@ -35,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

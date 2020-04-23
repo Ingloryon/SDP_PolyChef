@@ -6,10 +6,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RatingBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -17,23 +20,32 @@ import android.widget.ToggleButton;
 import com.synnapps.carouselview.CarouselView;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.VoiceSynthesizer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> {
+public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
     private Recipe currentRecipe;
+    private static final String TAG = "FullRecipeFragment";
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
     private ToggleButton favouriteButton;
+    private VoiceRecognizer voiceRecognizer;
+    private VoiceSynthesizer voiceSynthesizer;
+
+    private int indexOfInstruction=-1;
+
 
     /**
      * Required empty public constructor.
@@ -62,12 +74,35 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
         displayInstructions(view);
         displayIngredients(view);
 
+        voiceRecognizer=new VoiceRecognizer(this);
+        try {
+            voiceSynthesizer = new VoiceSynthesizer(getActivity());
+        }catch(UnsupportedOperationException e){
+            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+
+        setupSwitch(view);
+
         return view;
     }
 
     private void displayFavouriteButton(View view) {
         favouriteButton = view.findViewById(R.id.favouriteButton);
         FavouritesUtils.getInstance().setFavouriteButton(getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
+    }
+
+    private void setupSwitch(View view) {
+        Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
+        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    voiceRecognizer.start(getActivity());
+                }else{
+                    voiceRecognizer.onStop();
+                }
+            }
+        });
     }
 
     /**
@@ -172,6 +207,25 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
     }
 
     @Override
+    public void notify(String data) {
+        List<String> allInstructions = currentRecipe.getRecipeInstructions();
+
+        if(indexOfInstruction==-1){
+            indexOfInstruction=0;
+        }else if(data.equals(getResources().getString(R.string.commandPrevious))){
+            indexOfInstruction=Math.max(indexOfInstruction-1,0);
+        }else if(data.equals(getResources().getString(R.string.commandNext))){
+            indexOfInstruction=Math.min(indexOfInstruction+1,allInstructions.size());
+        }
+
+        if(indexOfInstruction==allInstructions.size()){
+            voiceSynthesizer.speak("Congratulations you reached the end");
+        }else{
+            voiceSynthesizer.speak(allInstructions.get(indexOfInstruction));
+        }
+    }
+
+    @Override
     public void onFailure() {
         Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
     }
@@ -182,5 +236,12 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]> 
 
     public UserStorage getUserStorage() {
         return UserStorage.getInstance();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        voiceRecognizer.onStop();
+        voiceSynthesizer.onStop();
     }
 }
