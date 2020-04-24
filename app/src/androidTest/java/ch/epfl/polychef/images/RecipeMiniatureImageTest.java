@@ -47,6 +47,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -132,18 +133,15 @@ public class RecipeMiniatureImageTest {
         @Override
         public RecipeStorage getRecipeStorage(){
             RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
-            Log.e("TAGTAG", "The mockrRecipeStorage is " + mockRecipeStorage + " in the test ==================================");
 
             doAnswer((call) -> {
-                Log.e("TAGTAG", "getNrecipes is called ==================================");
-
                 CallHandler<List<Recipe>> ch = call.getArgument(4);
                 List<Recipe> results = new ArrayList<>();
                 results.add(recipe1);
                 results.add(recipe2);
                 ch.onSuccess(results);
                 return null;
-            }).when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
+            }).when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), isNull(), any(Boolean.class), any(CallHandler.class));
 
             return mockRecipeStorage;
         }
