@@ -13,6 +13,7 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
+
 public class VoiceRecognizer implements RecognitionListener {
 
     private static final String KWS_SEARCH = "wakeup";//keyword to start recognition

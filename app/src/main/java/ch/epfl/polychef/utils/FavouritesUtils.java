@@ -2,6 +2,7 @@ package ch.epfl.polychef.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import android.view.View;
 import android.widget.ToggleButton;
 

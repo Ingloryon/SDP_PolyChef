@@ -279,34 +279,6 @@ public class RecipeStorageTest {
         fakeCallHandler.assertWasCalled();
     }
 
-//    private void prepareAsyncCallAdd(Consumer<ValueEventListener> func) {
-//        doAnswer((call) -> {
-//            func.accept(call.getArgument(0));
-//            return null;
-//        }).when(databaseIdReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
-//    }
-//
-//    private void prepareAsyncCallRead(Consumer<ValueEventListener> func) {
-//        doAnswer((call) -> {
-//            func.accept(call.getArgument(0));
-//            return null;
-//        }).when(databaseIdRecipeReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
-//    }
-
-    private void prepareAsyncNCall(Consumer<ValueEventListener> func) {
-        doAnswer((call) -> {
-            func.accept(call.getArgument(0));
-            return null;
-        }).when(query).addValueEventListener(any(ValueEventListener.class));
-    }
-
-    private void prepareAsyncNCallChild(Consumer<ChildEventListener> func) {
-        doAnswer((call) -> {
-            func.accept(call.getArgument(0));
-            return null;
-        }).when(query).addChildEventListener(any(ChildEventListener.class));
-    }
-
     private void prepareNRecipesFor(int start, int end) {
         when(databaseRecipeReference.orderByKey()).thenReturn(databaseRecipeReference);
         when(databaseRecipeReference.startAt(""+start)).thenReturn(databaseRecipeReference);
