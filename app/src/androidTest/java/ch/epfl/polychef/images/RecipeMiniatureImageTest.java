@@ -60,11 +60,13 @@ public class RecipeMiniatureImageTest {
             .setEstimatedCookingTime(35)
             .setEstimatedPreparationTime(40)
             .addIngredient("test", 1.0, Ingredient.Unit.CUP)
-            .setRecipeDifficulty(Recipe.Difficulty.EASY);
+            .setRecipeDifficulty(Recipe.Difficulty.EASY)
+            .setDate("20/05/01 12:00:00")
+            .setAuthor("testAuthor");
 
-    private Recipe recipe1 = recipeBuilder.setName("test1").setAuthor("testAuthor").setMiniatureFromPath("test_path").build();
+    private Recipe recipe1 = recipeBuilder.setName("test1").setMiniatureFromPath("test_path").build();
 
-    private Recipe recipe2 = recipeBuilder.setName("test2").setAuthor("testAuthor").setMiniatureFromPath("test_path2").build();
+    private Recipe recipe2 = recipeBuilder.setName("test2").setMiniatureFromPath("test_path2").build();
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {

@@ -101,8 +101,8 @@ public class OnlineMiniaturesFragmentTest {
 
         recipesInDatabase = new ArrayList<Recipe>();
         currentReadIndex = 0;
-        currentOlderDate = "01/05/20 11:59:59";
-        currentYoungerDate = "01/05/20 12:00:01";
+        currentOlderDate = "2020/05/01 11:59:59";
+        currentYoungerDate = "2020/05/01 12:00:01";
 
         initializeMockRecipeStorage();
     }
