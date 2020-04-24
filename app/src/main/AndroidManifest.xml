@@ -4,10 +4,14 @@
     package="ch.epfl.polychef"
     tools:ignore="GoogleAppIndexingWarning">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-feature android:name="android.hardware.camera"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
+        android:name="ch.epfl.polychef.GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".fragments.PostRecipeFragment"></activity>
+        <activity android:name=".fragments.PostRecipeFragment" />
         <activity android:name=".pages.LoginPage" />
         <activity android:name=".pages.HomePage" />
         <activity android:name=".pages.EntryPage">

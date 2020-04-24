@@ -41,6 +41,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
@@ -95,9 +96,9 @@ public class RecipeMiniatureImageTest {
     public synchronized void canShowOnlineMiniature() throws InterruptedException {
         wait(2000);
         assertEquals(2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
-        onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test1")))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withChild(withText("test1"))))).check(matches(isDisplayed()));
         onView(withId(R.id.miniaturesOnlineList)).perform(actionOnItemAtPosition(1, scrollTo()));
-        onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test2")))).check(matches(not(isDisplayed())));
+        onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withChild(withText("test2"))))).check(matches(not(isDisplayed())));
     }
 
 

@@ -1,8 +1,9 @@
 package ch.epfl.polychef.pages;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,24 +16,22 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-
-import ch.epfl.polychef.recipe.OfflineRecipes;
-import ch.epfl.polychef.recipe.Recipe;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.users.UserStorage;
 
-public class LoginPage extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity{
 
     SignInButton googleButton;
 
     private static final int RC_SIGN_IN = 123;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         googleButton = findViewById(R.id.googleButton);
         googleButton.setOnClickListener(new View.OnClickListener(){

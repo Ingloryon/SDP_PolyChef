@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
 public class User implements Serializable {
@@ -78,6 +79,11 @@ public class User implements Serializable {
 
     public void addFavourite(String recipe){
         favourites.add(recipe);
+    }
+
+    public void removeFavourite(String recipe) {
+        Preconditions.checkArgument(favourites.contains(recipe), "Can not remove recipe from favourite if it was not in favourite before");
+        favourites.remove(recipe);
     }
 
     public void addSubscription(String user) {

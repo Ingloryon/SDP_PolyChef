@@ -41,7 +41,7 @@ public class RecipeStorage implements Serializable  {
      * @return the current date
      */
     public String getCurrentDate(){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
         Date date = new Date();
         return formatter.format(date);
     }
