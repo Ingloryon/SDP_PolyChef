@@ -293,7 +293,7 @@ public class PostRecipeFragment extends Fragment {
             rb.addPicturePath(uuidPath + i);
         }
 
-        postedRecipe = rb.addAuthor(getUserEmail()).build();
+        postedRecipe = rb.setAuthor(getUserEmail()).build();
         return true;
     }
 

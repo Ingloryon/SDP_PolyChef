@@ -23,13 +23,12 @@ import ch.epfl.polychef.utils.Preconditions;
 /**
  * Uploader and downloader of {@code Recipe} from the storage.
  */
-public class RecipeStorage implements Serializable {
+public class RecipeStorage implements Serializable  {
 
     private static RecipeStorage INSTANCE=new RecipeStorage();
 
-    private static final String TAG = "Firebase";
+    private static final String TAG = "RecipeStorage";
     public static final String DB_NAME = "recipes";
-    private static final String DB_ID = "id";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
 
     public static RecipeStorage getInstance(){
@@ -59,24 +58,27 @@ public class RecipeStorage implements Serializable {
     public void addRecipe(Recipe recipe) {
         Preconditions.checkArgument(recipe != null);
 
-        DatabaseReference idRef = getFirebaseDatabase().getReference(DB_ID);
-        //Get the last ID used in the database
-        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value
-                getFirebaseDatabase().getReference(DB_NAME).push().setValue(recipe);
-            }
+        getFirebaseDatabase().getReference(DB_NAME).push().setValue(recipe);
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
+//        DatabaseReference idRef = getFirebaseDatabase().getReference(DB_NAME);
+//        //Get the last ID used in the database
+//        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value
+//                getFirebaseDatabase().getReference(DB_NAME).push().setValue(recipe);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                Log.w(TAG, "Failed to read value.", error.toException());
+//            }
+//        });
     }
 
     public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
+        Preconditions.checkArgument(uuid != null, "Uuid should not be null");
         Preconditions.checkArgument(ch != null, "Call handler should not be null");
 
         getFirebaseDatabase()
@@ -86,14 +88,15 @@ public class RecipeStorage implements Serializable {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        long nbChildren = dataSnapshot.getChildrenCount();
 
-                        if(dataSnapshot.getChildrenCount() == 1){
+                        if(nbChildren == 1){
 
                             for(DataSnapshot child: dataSnapshot.getChildren()){
                                 getSingleRecipeFromSnapshot(child, ch);
                             }
                         } else {
-
+                            Log.e(TAG, nbChildren + " recipes with uuid " + uuid);
                             ch.onFailure();
                         }
                     }
@@ -105,11 +108,22 @@ public class RecipeStorage implements Serializable {
                 });
     }
 
+    /**
+     * Get {@code n} recipes posted during the given date interval
+     *
+     * @param n number of recipes to get
+     * @param startDate oldest recipe to get
+     * @param endDate most recent recipe to get
+     * @param newest whether we want recent recipes or older recipes
+     * @param caller the caller of this method
+     */
     public void getNRecipes(int n, String startDate, String endDate, boolean newest, CallHandler<List<Recipe>> caller){
-        Preconditions.checkArgument(endDate != null);
         Preconditions.checkArgument(n > 0, "Number of recipe to get should "
                 + "be positive");
+        Preconditions.checkArgument(startDate != null);
+        Preconditions.checkArgument(endDate != null);
         Preconditions.checkArgument(caller != null, "Call handler should not be null");
+        Preconditions.checkArgument(startDate.compareTo(endDate) < 0);
 
         Query query = getFirebaseDatabase().getReference(DB_NAME)
                 .orderByChild("date").startAt(startDate).endAt(endDate);
@@ -123,7 +137,8 @@ public class RecipeStorage implements Serializable {
         listenerForListOfRecipes(query, caller);
     }
 
-    public void getAllRecipesByUser(String userEmail, CallHandler<List<Recipe>> caller){
+    //TODO Is it ok to pull all the recipes of a user? Or do we want to get them N by N as we scroll?
+    /*public void getAllRecipesByUser(String userEmail, CallHandler<List<Recipe>> caller){
         Preconditions.checkArgument(userEmail != null);
         Preconditions.checkArgument(caller != null, "Call handler should not be null");
 
@@ -131,7 +146,7 @@ public class RecipeStorage implements Serializable {
                 .orderByChild("author").equalTo(userEmail);
 
         listenerForListOfRecipes(query, caller);
-    }
+    }*/
 
     public void listenerForListOfRecipes(Query query, CallHandler<List<Recipe>> ch){
         query.addListenerForSingleValueEvent(new ValueEventListener() {

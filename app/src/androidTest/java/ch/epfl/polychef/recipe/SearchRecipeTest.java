@@ -52,7 +52,7 @@ public class SearchRecipeTest {
 
         when(mockSearchRecipe.getDatabase()).thenReturn(mockDataBase);
 
-        when(mockDataBase.getReference("recipe")).thenReturn(mockDatabaseReference);
+        when(mockDataBase.getReference(RecipeStorage.DB_NAME)).thenReturn(mockDatabaseReference);
 
         doAnswer((call) -> {
             givenValueEventListener=  call.getArgument(0);
@@ -188,18 +188,18 @@ public class SearchRecipeTest {
         recipe0=new RecipeBuilder().setName("123456").setEstimatedPreparationTime(1000)
                 .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
                 .setPersonNumber(6).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
-                .setEstimatedCookingTime(1000).addInstruction("Yay")
+                .setEstimatedCookingTime(1000).addInstruction("Yay").setAuthor("testAuthor")
                 .build();
         recipe1=new RecipeBuilder().setEstimatedCookingTime(1000).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
                 .setName("34").setPersonNumber(6).addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
                 .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
-                .addInstruction("Yay").setEstimatedPreparationTime(1000).build();
+                .addInstruction("Yay").setEstimatedPreparationTime(1000).setAuthor("testAuthor").build();
 
 
         recipe2=new RecipeBuilder().setName("43-aBcD").addInstruction("Yay")
                 .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
                 .setPersonNumber(6).setEstimatedPreparationTime(1000).setEstimatedCookingTime(1000)
-                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).build();
+                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).setAuthor("testAuthor").build();
 
         when(mockDataSnapshotWithRecipe0.getValue(Recipe.class)).thenReturn(recipe0);
         when(mockDataSnapshotWithRecipe1.getValue(Recipe.class)).thenReturn(recipe1);

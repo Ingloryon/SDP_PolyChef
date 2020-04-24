@@ -1,6 +1,7 @@
 package ch.epfl.polychef.images;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
@@ -64,9 +65,9 @@ public class RecipeMiniatureImageTest {
             .addIngredient("test", 1.0, Ingredient.Unit.CUP)
             .setRecipeDifficulty(Recipe.Difficulty.EASY);
 
-    private Recipe recipe1 = recipeBuilder.setName("test1").setMiniatureFromPath("test_path").build();
+    private Recipe recipe1 = recipeBuilder.setName("test1").setAuthor("testAuthor").setMiniatureFromPath("test_path").build();
 
-    private Recipe recipe2 = recipeBuilder.setName("test2").setMiniatureFromPath("test_path2").build();
+    private Recipe recipe2 = recipeBuilder.setName("test2").setAuthor("testAuthor").setMiniatureFromPath("test_path2").build();
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
@@ -91,7 +92,7 @@ public class RecipeMiniatureImageTest {
 
     @Test
     public synchronized void canShowOnlineMiniature() throws InterruptedException {
-        wait(1000);
+        wait(2000);
         assertEquals(2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withText("test1")))).check(matches(isDisplayed()));
         onView(withId(R.id.miniaturesOnlineList)).perform(actionOnItemAtPosition(1, scrollTo()));
@@ -131,8 +132,11 @@ public class RecipeMiniatureImageTest {
         @Override
         public RecipeStorage getRecipeStorage(){
             RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
+            Log.e("TAGTAG", "The mockrRecipeStorage is " + mockRecipeStorage + " in the test ==================================");
 
             doAnswer((call) -> {
+                Log.e("TAGTAG", "getNrecipes is called ==================================");
+
                 CallHandler<List<Recipe>> ch = call.getArgument(4);
                 List<Recipe> results = new ArrayList<>();
                 results.add(recipe1);

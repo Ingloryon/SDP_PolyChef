@@ -41,6 +41,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe1 = new RecipeBuilder()
             .setName("Oven-Baked Salmon")
+            .setAuthor("The Polychef Team")
             .setRecipeDifficulty(Recipe.Difficulty.HARD)
             .setEstimatedCookingTime(15)
             .setPersonNumber(4)
@@ -56,6 +57,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe2 = new RecipeBuilder()
             .setName("Excellent MeatBalls")
+            .setAuthor("The Polychef Team")
             .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE)
             .setEstimatedCookingTime(43)
             .setPersonNumber(4)
@@ -83,6 +85,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe3 = new RecipeBuilder()
             .setName("Shrimp Scampi Tetrazzini")
+            .setAuthor("The Polychef Team")
             .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
             .setEstimatedCookingTime(20)
             .setPersonNumber(6)
@@ -113,6 +116,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe4 = new RecipeBuilder()
             .setName("Garlic Roasted Potatoes")
+            .setAuthor("The Polychef Team")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setEstimatedCookingTime(60)
             .setPersonNumber(8)
@@ -131,6 +135,7 @@ public final class OfflineRecipes {
 
     private Recipe recipe5 = new RecipeBuilder()
             .setName("French toast")
+            .setAuthor("The Polychef Team")
             .setRecipeDifficulty(Recipe.Difficulty.VERY_EASY)
             .setEstimatedCookingTime(10)
             .setPersonNumber(4)

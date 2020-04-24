@@ -33,6 +33,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated preparation time must be set");
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
+        Preconditions.checkArgument(!author.isEmpty(), "The author must be set");
 
         return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author);
     }
@@ -171,8 +172,14 @@ public final class RecipeBuilder {
         return this;
     }
 
-    public RecipeBuilder addAuthor(@NonNull String author) {
-        Preconditions.checkArgument(author != null, "Author should not be null");
+    /**
+     * Set the author of the recipe.
+     *
+     * @param author author of the recipe, must be non empty
+     * @return the modified builder
+     */
+    public RecipeBuilder setAuthor(@NonNull String author) {
+        Preconditions.checkArgument(!author.isEmpty(), "The author must be non empty");
         this.author = author;
         return this;
     }

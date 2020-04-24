@@ -220,13 +220,16 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     @Override
     public int compareTo(Recipe other) {
+        Preconditions.checkArgument(other != null, "Cannot compare to a null recipe");
         return - getDate().compareTo(other.getDate());
     }
 
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
-        str.append("\nRecipe name: " + name + "\n\nRecipe instructions:");
+        str.append("\nRecipe name: " + name + "\n");
+        str.append("\nRecipe author: " + author + "\n");
+        str.append("\nRecipe instructions:");
         for(int i = 0 ; i < recipeInstructions.size() ; ++i){
             str.append("\n" + (i+1) + "- " + recipeInstructions.get(i));
         }

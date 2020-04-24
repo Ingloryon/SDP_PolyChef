@@ -152,7 +152,7 @@ public class UserProfileFragmentTest {
                 String uuid = invocation.getArgument(0);
                 CallHandler<Recipe> caller = invocation.getArgument(1);
 
-                caller.onSuccess(builder.setName(uuid).build());
+                caller.onSuccess(builder.setName(uuid).setAuthor(mockEmail).build());
 
                 return null;
             }).when(mockRecipeStorage).readRecipeFromUuid(any(String.class), any(CallHandler.class));

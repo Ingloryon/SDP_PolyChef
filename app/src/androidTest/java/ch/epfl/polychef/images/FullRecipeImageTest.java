@@ -43,6 +43,7 @@ public class FullRecipeImageTest {
     private void setUp(String path) {
         Recipe recipe = new RecipeBuilder()
                 .setName("test")
+                .setAuthor("testAuthor")
                 .addInstruction("test instruction")
                 .setPersonNumber(4)
                 .setEstimatedCookingTime(35)

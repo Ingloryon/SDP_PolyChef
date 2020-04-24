@@ -152,6 +152,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     }
 
     private void getNextRecipes(){
+        Log.e("TAGTAG", "The mockrRecipeStorage is " + recipeStorage + " in the fragment ==================================");
         recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, recipeStorage.OLDEST_RECIPE, currentOldest, false, this);
     }
 
