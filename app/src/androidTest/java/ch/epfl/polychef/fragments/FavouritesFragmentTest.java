@@ -108,7 +108,7 @@ public class FavouritesFragmentTest {
     }
 
     private Recipe getRecipe(String name) {
-        return new RecipeBuilder().setName(name)
+        return new RecipeBuilder().setName(name).setAuthor("testAuthor")
                 .setRecipeDifficulty(Recipe.Difficulty.EASY)
                 .addInstruction("test1instruction").setPersonNumber(4)
                 .setEstimatedCookingTime(30).setEstimatedPreparationTime(30)

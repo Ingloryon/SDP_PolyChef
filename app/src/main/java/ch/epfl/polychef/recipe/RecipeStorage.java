@@ -59,22 +59,6 @@ public class RecipeStorage implements Serializable  {
         Preconditions.checkArgument(recipe != null);
 
         getFirebaseDatabase().getReference(DB_NAME).push().setValue(recipe);
-
-//        DatabaseReference idRef = getFirebaseDatabase().getReference(DB_NAME);
-//        //Get the last ID used in the database
-//        idRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value
-//                getFirebaseDatabase().getReference(DB_NAME).push().setValue(recipe);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Log.w(TAG, "Failed to read value.", error.toException());
-//            }
-//        });
     }
 
     public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
