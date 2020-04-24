@@ -130,6 +130,8 @@ public class RecipeMiniatureImageTest {
         public RecipeStorage getRecipeStorage(){
             RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
 
+            when(mockRecipeStorage.getCurrentDate()).thenReturn(RecipeStorage.OLDEST_RECIPE);
+
             doAnswer((call) -> {
                 CallHandler<List<Recipe>> ch = call.getArgument(4);
                 List<Recipe> results = new ArrayList<>();
@@ -137,7 +139,7 @@ public class RecipeMiniatureImageTest {
                 results.add(recipe2);
                 ch.onSuccess(results);
                 return null;
-            }).when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), isNull(), any(Boolean.class), any(CallHandler.class));
+            }).when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
 
             return mockRecipeStorage;
         }
