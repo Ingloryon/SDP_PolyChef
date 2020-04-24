@@ -5,12 +5,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import ch.epfl.polychef.utils.Either;
-import ch.epfl.polychef.utils.Preconditions;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.Preconditions;
 
 
 public final class RecipeBuilder {
@@ -61,7 +61,8 @@ public final class RecipeBuilder {
     }
 
     /**
-     * Set the date of the Recipe
+     * Set the date of the Recipe.
+     *
      * @param date date of the recipe, must be not null
      * @return
      */
@@ -105,6 +106,7 @@ public final class RecipeBuilder {
 
     /**
      * Add an ingredient from an exiting one.
+     *
      * @param ingredient an Ingredient
      * @return the recipe builder
      */

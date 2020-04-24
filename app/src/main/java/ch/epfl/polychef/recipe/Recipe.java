@@ -1,14 +1,14 @@
 package ch.epfl.polychef.recipe;
 
-import ch.epfl.polychef.utils.Preconditions;
-import ch.epfl.polychef.R;
-import ch.epfl.polychef.utils.Either;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import ch.epfl.polychef.R;
+import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.Preconditions;
 
 public final class Recipe implements Serializable, Cloneable, Comparable<Recipe> {
 
@@ -191,7 +191,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     }
 
     /**
-     * Returns the author of this recipe
+     * Returns the author of this recipe.
      * @return the author
      */
     public String getAuthor() {
@@ -215,12 +215,12 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     }
 
     /**
-     * Compare two recipes based on their date
+     * Compare two recipes based on their date.
      *
      * @param other recipe we compare to
      * @return 1 if {@code this} recipe is older that the {@code other},
-     *  -1 if {@code this} recipe is newer that the {@code other} and
-     *  0 if the were posted at the same time
+     *         -1 if {@code this} recipe is newer that the {@code other} and
+ *              0 if the were posted at the same time
      */
     @Override
     public int compareTo(Recipe other) {

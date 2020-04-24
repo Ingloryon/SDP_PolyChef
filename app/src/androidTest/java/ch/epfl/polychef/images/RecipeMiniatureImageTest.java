@@ -1,10 +1,7 @@
 package ch.epfl.polychef.images;
 
 import android.content.Intent;
-import android.util.Log;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -17,12 +14,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.FragmentTestUtils;
 import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;

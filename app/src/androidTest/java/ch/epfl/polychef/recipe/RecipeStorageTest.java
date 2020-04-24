@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RecipeStorageTest {
@@ -59,20 +57,16 @@ public class RecipeStorageTest {
 
     private String oldDate = "2020/02/21 13:00:00";
     private String recentDate = "2020/02/23 13:00:00";
-
-
-    private void callOnDataChange(){
+    
+    private void mockResponse(boolean mockSuccess){
         doAnswer((call) -> {
             ValueEventListener listener = call.getArgument(0);
-            listener.onDataChange(dataSnapshot);
-            return null;
-        }).when(query).addListenerForSingleValueEvent(any());
-    }
-
-    private void callOnCancel(){
-        doAnswer((call) -> {
-            ValueEventListener listener = call.getArgument(0);
-            listener.onCancelled(databaseError);
+            
+            if(mockSuccess){
+                listener.onDataChange(dataSnapshot);
+            } else {
+                listener.onCancelled(databaseError);
+            }
             return null;
         }).when(query).addListenerForSingleValueEvent(any());
     }
@@ -116,7 +110,7 @@ public class RecipeStorageTest {
             return query;
         });
 
-        callOnDataChange();
+        mockResponse(true);
 
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);
 
@@ -143,7 +137,7 @@ public class RecipeStorageTest {
             return query;
         });
 
-        callOnDataChange();
+        mockResponse(true);
 
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 0);
 
@@ -164,7 +158,7 @@ public class RecipeStorageTest {
             return query;
         });
 
-        callOnDataChange();
+        mockResponse(true);
 
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 2);
 
@@ -190,7 +184,7 @@ public class RecipeStorageTest {
             return query;
         });
 
-        callOnCancel();
+        mockResponse(false);
 
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);
 
@@ -209,25 +203,24 @@ public class RecipeStorageTest {
     public void nullThrowsExceptions() {
         String mockString = "mockString";
         CallHandler mockCallHandler = mock(CallHandler.class);
-        Boolean mockBoolean = true;
         RecipeStorage recipeStorage = RecipeStorage.getInstance();
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.addRecipe(null));
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipeFromUuid(null, mockCallHandler));
         assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipeFromUuid(mockString, null));
         assertThrows(IllegalArgumentException.class,
-                () -> recipeStorage.getNRecipes(0, mockString, mockString, mockBoolean, mockCallHandler));
+                () -> recipeStorage.getNRecipes(0, mockString, mockString, true, mockCallHandler));
         assertThrows(IllegalArgumentException.class,
-                () -> recipeStorage.getNRecipes(-1, mockString, mockString, mockBoolean, mockCallHandler));
+                () -> recipeStorage.getNRecipes(-1, mockString, mockString, true, mockCallHandler));
         assertThrows(IllegalArgumentException.class,
-                () -> recipeStorage.getNRecipes(5, null, mockString, mockBoolean, mockCallHandler));
+                () -> recipeStorage.getNRecipes(5, null, mockString, true, mockCallHandler));
         assertThrows(IllegalArgumentException.class,
-                () -> recipeStorage.getNRecipes(5, mockString, null, mockBoolean, mockCallHandler));
+                () -> recipeStorage.getNRecipes(5, mockString, null, true, mockCallHandler));
         assertThrows(IllegalArgumentException.class,
-                () -> recipeStorage.getNRecipes(5, mockString, mockString, mockBoolean, null));
+                () -> recipeStorage.getNRecipes(5, mockString, mockString, true, null));
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> recipeStorage.getNRecipes(5, recentDate, oldDate, mockBoolean, mockCallHandler));
+                () -> recipeStorage.getNRecipes(5, recentDate, oldDate, true, mockCallHandler));
     }
 
     @Test
@@ -235,7 +228,7 @@ public class RecipeStorageTest {
 
         initGetNRecipe();
 
-        callOnDataChange();
+        mockResponse(true);
 
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 2);
 
@@ -261,7 +254,7 @@ public class RecipeStorageTest {
 
         initGetNRecipe();
 
-        callOnDataChange();
+        mockResponse(true);
 
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 0);
 
@@ -277,7 +270,7 @@ public class RecipeStorageTest {
 
         initGetNRecipe();
 
-        callOnCancel();
+        mockResponse(false);
 
         CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(null, false);
         recipeStorage.getNRecipes(5, oldDate, recentDate, false, fakeCallHandler);
@@ -285,158 +278,6 @@ public class RecipeStorageTest {
         wait(1000);
         fakeCallHandler.assertWasCalled();
     }
-//
-//    @Test
-//    public void canAddRecipe() {
-//        prepareAsyncCallAdd((listener) -> listener.onDataChange(dataSnapshot));
-//        when(dataSnapshot.getValue(Integer.class)).thenReturn(2);
-//        when(databaseRecipeReference.child(Integer.toString(3))).thenReturn(databaseIdRecipeReference);
-//        Recipe recipe = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
-//        recipeStorage.addRecipe(recipe);
-//        verify(databaseIdReference).setValue(3);
-//        verify(databaseIdRecipeReference).setValue(recipe);
-//    }
-//
-//    @Test
-//    public void cannotAddRecipeWhenCancelled() {
-//        when(databaseError.toException()).thenReturn(mock(DatabaseException.class));
-//        prepareAsyncCallAdd((listener) -> listener.onCancelled(databaseError));
-//        Recipe recipe = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
-//        recipeStorage.addRecipe(recipe);
-//        verify(databaseError).toException();
-//    }
-
-//    @Test
-//    public synchronized void canReadARecipe() throws InterruptedException {
-//        when(databaseRecipeReference.child(Integer.toString(2))).thenReturn(databaseIdRecipeReference);
-//        prepareAsyncCallRead((listener) -> listener.onDataChange(dataSnapshot));
-//        Recipe recipe = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
-//        when(dataSnapshot.getValue(Recipe.class)).thenReturn(recipe);
-//        CallHandlerChecker<Recipe> fakeCallHandler = new CallHandlerChecker<>(recipe, true);
-//        recipeStorage.readRecipe(2, fakeCallHandler);
-//        wait(1000);
-//        fakeCallHandler.assertWasCalled();
-//    }
-//
-//    @Test
-//    public synchronized void cannotReadRecipeWhenNull() throws InterruptedException {
-//        when(databaseRecipeReference.child(Integer.toString(4))).thenReturn(databaseIdRecipeReference);
-//        prepareAsyncCallRead((listener) -> listener.onDataChange(dataSnapshot));
-//        when(dataSnapshot.getValue(Recipe.class)).thenReturn(null);
-//        CallHandlerChecker<Recipe> fakeCallHandler = new CallHandlerChecker<>(null, false);
-//        recipeStorage.readRecipe(4, fakeCallHandler);
-//        wait(1000);
-//        fakeCallHandler.assertWasCalled();
-//    }
-//
-//    @Test
-//    public synchronized void cannotReadRecipeOnCancelled() throws InterruptedException {
-//        when(databaseError.toException()).thenReturn(mock(DatabaseException.class));
-//        when(databaseRecipeReference.child(Integer.toString(4))).thenReturn(databaseIdRecipeReference);
-//        prepareAsyncCallRead((listener) -> listener.onCancelled(databaseError));
-//        CallHandlerChecker<Recipe> fakeCallHandler = new CallHandlerChecker<>(null, false);
-//        recipeStorage.readRecipe(4, fakeCallHandler);
-//        wait(1000);
-//        fakeCallHandler.assertWasCalled();
-//    }
-
-//    @Test
-//    public synchronized void canGetNRecipes() throws InterruptedException {
-//        prepareNRecipesFor(2, 6);
-//        prepareAsyncNCall((listener) -> listener.onDataChange(dataSnapshot));
-//        Recipe recipe1 = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
-//        Recipe recipe2 = OfflineRecipes.getInstance().getOfflineRecipes().get(1);
-//        List<Recipe> recipes = new ArrayList<>();
-//        recipes.add(recipe1);
-//        recipes.add(recipe2);
-//        DataSnapshot d1 = mock(DataSnapshot.class);
-//        DataSnapshot d2 = mock(DataSnapshot.class);
-//        List<DataSnapshot> dataSnapshots = new ArrayList<>();
-//        dataSnapshots.add(d1);
-//        dataSnapshots.add(d2);
-//        when(d1.getValue(Recipe.class)).thenReturn(recipe1);
-//        when(d2.getValue(Recipe.class)).thenReturn(recipe2);
-//        when(dataSnapshot.getChildren()).thenReturn(dataSnapshots);
-//        when(dataSnapshot.getValue()).thenReturn(new Object());
-//        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(recipes, true);
-//        recipeStorage.getNRecipes(5, 2, fakeCallHandler);
-//        wait(1000);
-//        fakeCallHandler.assertWasCalled();
-//    }
-//
-//    @Test
-//    public synchronized void cannotGetNRecipesWhenNull() throws InterruptedException {
-//        prepareNRecipesFor(1, 3);
-//        prepareAsyncNCall((listener) -> listener.onDataChange(dataSnapshot));
-//        when(dataSnapshot.getValue(Recipe.class)).thenReturn(null);
-//        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(null, false);
-//        recipeStorage.getNRecipes(3, 1, fakeCallHandler);
-//        wait(1000);
-//        fakeCallHandler.assertWasCalled();
-//    }
-
-//    @Test
-//    public synchronized void cannotReadNRecipesOnCancelled() throws InterruptedException {
-//        when(databaseError.toException()).thenReturn(mock(DatabaseException.class));
-//        prepareNRecipesFor(2, 5);
-//        prepareAsyncNCall((listener) -> listener.onCancelled(databaseError));
-//        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(null, false);
-//        recipeStorage.getNRecipes(4, 2, fakeCallHandler);
-//        wait(1000);
-//        fakeCallHandler.assertWasCalled();
-//    }
-//
-//    @Test
-//    public synchronized void canGetNRecipesOneByOne() throws InterruptedException {
-//        prepareNRecipesFor(4, 5);
-//        prepareAsyncNCallChild((listener) -> {
-//            listener.onChildAdded(dataSnapshot, null);
-//            listener.onChildAdded(dataSnapshot2, null);
-//        });
-//        Recipe recipe1 = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
-//        Recipe recipe2 = OfflineRecipes.getInstance().getOfflineRecipes().get(1);
-//        List<Recipe> recipes = new ArrayList<>();
-//        recipes.add(recipe1);
-//        recipes.add(recipe2);
-//        when(dataSnapshot.getValue(Recipe.class)).thenReturn(recipe1);
-//        when(dataSnapshot2.getValue(Recipe.class)).thenReturn(recipe2);
-//        CallNotifierChecker<Recipe> fakeCallNotifier = new CallNotifierChecker<>(recipes, true);
-//        recipeStorage.getNRecipesOneByOne(2, 4, fakeCallNotifier);
-//        wait(1000);
-//        fakeCallNotifier.assertWasCalled(2);
-//    }
-
-//    @Test
-//    public synchronized void canGetNRecipesOneByOneWhenChanged() throws InterruptedException {
-//        when(databaseRecipeReference.orderByKey()).thenReturn(databaseRecipeReference);
-//        prepareNRecipesFor(2, 3);
-//        prepareAsyncNCallChild((listener) -> {
-//            listener.onChildChanged(dataSnapshot, null);
-//            listener.onChildChanged(dataSnapshot2, null);
-//        });
-//        Recipe recipe1 = OfflineRecipes.getInstance().getOfflineRecipes().get(0);
-//        Recipe recipe2 = OfflineRecipes.getInstance().getOfflineRecipes().get(1);
-//        List<Recipe> recipes = new ArrayList<>();
-//        recipes.add(recipe1);
-//        recipes.add(recipe2);
-//        when(dataSnapshot.getValue(Recipe.class)).thenReturn(recipe1);
-//        when(dataSnapshot2.getValue(Recipe.class)).thenReturn(recipe2);
-//        CallNotifierChecker<Recipe> fakeCallNotifier = new CallNotifierChecker<>(recipes, true);
-//        recipeStorage.getNRecipesOneByOne(2, 2, fakeCallNotifier);
-//        wait(1000);
-//        fakeCallNotifier.assertWasCalled(2);
-//    }
-//
-//    @Test
-//    public synchronized void cannotReadNRecipesOneByOneOnCancelled() throws InterruptedException {
-//        when(databaseError.toException()).thenReturn(mock(DatabaseException.class));
-//        prepareNRecipesFor(2, 5);
-//        prepareAsyncNCallChild((listener) -> listener.onCancelled(databaseError));
-//        CallNotifierChecker<Recipe> fakeCallNotifier = new CallNotifierChecker<>(null, false);
-//        recipeStorage.getNRecipesOneByOne(4, 2, fakeCallNotifier);
-//        wait(1000);
-//        fakeCallNotifier.assertWasCalled(1);
-//    }
 
 //    private void prepareAsyncCallAdd(Consumer<ValueEventListener> func) {
 //        doAnswer((call) -> {

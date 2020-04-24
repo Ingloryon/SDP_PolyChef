@@ -3,8 +3,6 @@ package ch.epfl.polychef.recipe;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-import ch.epfl.polychef.recipe.Ingredient;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

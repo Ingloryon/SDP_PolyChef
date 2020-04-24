@@ -2,9 +2,7 @@ package ch.epfl.polychef.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import androidx.core.content.ContextCompat;
@@ -14,9 +12,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
-import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;

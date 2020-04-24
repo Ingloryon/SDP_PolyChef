@@ -15,21 +15,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.recipe.SearchRecipe;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
-import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.SearchRecipe;
 
 public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Recipe>> {
 
@@ -154,7 +152,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     }
 
     private void getNextRecipes(){
-        Log.e("TAGTAG", "The mockrRecipeStorage is " + recipeStorage + " in the fragment ==================================");
         recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, recipeStorage.OLDEST_RECIPE, currentOldest, false, this);
     }
 

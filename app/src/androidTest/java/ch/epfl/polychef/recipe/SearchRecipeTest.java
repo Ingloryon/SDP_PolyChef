@@ -14,10 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeBuilder;
-import ch.epfl.polychef.recipe.SearchRecipe;
 import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static org.mockito.ArgumentMatchers.any;

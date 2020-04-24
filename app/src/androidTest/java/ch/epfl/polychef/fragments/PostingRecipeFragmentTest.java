@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;

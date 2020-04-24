@@ -1,19 +1,16 @@
 package ch.epfl.polychef.recipe;
 
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeBuilder;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 
 public class RecipeTest {
 
@@ -188,8 +185,8 @@ public class RecipeTest {
         Recipe recipe = setStandardRecipe().build();
 
         String startingString = "\n" + "Recipe name: Chicken fried\n" + "\n" +
-                "Recipe author: testUser@polychef.ch\n" + "\n" +
-                "Recipe instructions:\n" +
+                "Recipe author: testUser@polychef.ch\n" + "\n"
+                + "Recipe instructions:\n" +
                 "1- Start by the beginning\n" +
                 "2- Then keep going\n" +
                 "3- Now it ends\n" +

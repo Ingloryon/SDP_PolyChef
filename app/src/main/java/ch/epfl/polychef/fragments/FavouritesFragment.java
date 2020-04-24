@@ -3,7 +3,6 @@ package ch.epfl.polychef.fragments;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 

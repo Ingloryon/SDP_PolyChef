@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import ch.epfl.polychef.users.User;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

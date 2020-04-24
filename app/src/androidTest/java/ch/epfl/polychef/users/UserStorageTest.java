@@ -19,9 +19,6 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.polychef.users.User;
-import ch.epfl.polychef.users.UserStorage;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

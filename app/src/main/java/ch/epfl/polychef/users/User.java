@@ -1,21 +1,14 @@
 package ch.epfl.polychef.users;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
-import ch.epfl.polychef.R;
-import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable

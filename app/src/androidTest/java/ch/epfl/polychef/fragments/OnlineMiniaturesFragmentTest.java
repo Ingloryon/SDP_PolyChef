@@ -2,13 +2,10 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SearchView;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
@@ -16,10 +13,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
-
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,16 +26,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
@@ -52,18 +42,17 @@ import ch.epfl.polychef.recipe.SearchRecipe;
 import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
-
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.AdditionalMatchers.or;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 public class OnlineMiniaturesFragmentTest {
-
 
     private RecipeStorage fakeRecipeStorage = Mockito.mock(RecipeStorage.class,CALLS_REAL_METHODS );
     private List<Recipe> recipesInDatabase = new ArrayList<>();
@@ -73,7 +62,7 @@ public class OnlineMiniaturesFragmentTest {
 
     private FragmentTestUtils fragUtils = new FragmentTestUtils();
 
-    private RecipeBuilder testRecipe1 = new RecipeBuilder().setName("test1")
+    private RecipeBuilder testRecipeBuilder = new RecipeBuilder().setName("test1")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .addInstruction("test1instruction").setPersonNumber(4)
             .setEstimatedCookingTime(30).setEstimatedPreparationTime(30)
@@ -118,38 +107,26 @@ public class OnlineMiniaturesFragmentTest {
         initializeMockRecipeStorage();
     }
 
-    public void addNewOlderRecipe(RecipeBuilder builder){
-        decreaseByOneSecond();
-        fakeRecipeStorage.addRecipe(testRecipe1.setDate(currentOlderDate).build());
-    }
-    public void addNewYoungerRecipe(RecipeBuilder builder){
-        increaseByOneSecond();
-        fakeRecipeStorage.addRecipe(testRecipe1.setDate(currentYoungerDate).build());
+    public void addNewOlderRecipe(){
+        currentOlderDate = changeDateByNSeconds(currentOlderDate, -1);
+        fakeRecipeStorage.addRecipe(testRecipeBuilder.setDate(currentOlderDate).build());
     }
 
-    public void decreaseByOneSecond() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = null;
+    public void addNewYoungerRecipe(){
+        currentYoungerDate = changeDateByNSeconds(currentYoungerDate, 1);
+        fakeRecipeStorage.addRecipe(testRecipeBuilder.setDate(currentYoungerDate).build());
+    }
+
+    public String changeDateByNSeconds(String dateStr, int nSeconds){
+        SimpleDateFormat formatter = new SimpleDateFormat(RecipeStorage.RECIPE_DATE_FORMAT);
+        Date date = new Date();
         try {
-            date = formatter.parse(currentOlderDate);
-
-            date.setSeconds(date.getSeconds() - 1);
+            date = formatter.parse(dateStr);
+            date.setSeconds(date.getSeconds() + nSeconds);
         }catch (ParseException e){
             e.printStackTrace();
         }
-        currentOlderDate = formatter.format(date);
-    }
-
-    public void increaseByOneSecond() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = null;
-        try {
-            date = formatter.parse(currentYoungerDate);
-            date.setSeconds(date.getSeconds() + 1);
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-        currentYoungerDate = formatter.format(date);
+        return formatter.format(date);
     }
 
     public void initActivity() {
@@ -178,7 +155,7 @@ public class OnlineMiniaturesFragmentTest {
 
     @Test
     public synchronized void oneElementIsDisplayedOnActivityLoadIfDatabaseContainsOne() throws InterruptedException {
-        addNewOlderRecipe(testRecipe1);
+        addNewOlderRecipe();
 
         initActivity();
         wait(1000);
@@ -188,7 +165,7 @@ public class OnlineMiniaturesFragmentTest {
     @Test
     public synchronized void maxElementAreLoadedOnActivityStart() throws InterruptedException {
         for(int i = 0; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
-            addNewOlderRecipe(testRecipe1);
+            addNewOlderRecipe();
         }
         initActivity();
         wait(1000);
@@ -198,9 +175,9 @@ public class OnlineMiniaturesFragmentTest {
     @Test
     public synchronized void maxElementAreLoadedOnActivityStartAndNoMore() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
-            addNewOlderRecipe(testRecipe1);
+            addNewOlderRecipe();
         }
-        addNewOlderRecipe(testRecipe1);
+        addNewOlderRecipe();
 
         initActivity();
         wait(1000);
@@ -209,7 +186,7 @@ public class OnlineMiniaturesFragmentTest {
 
     @Test
     public synchronized void scrollingDownWithDatabaseSmallerThanMaxLoadedAtATimeShouldAddNothingToTheMiniaturesList() throws InterruptedException {
-        addNewOlderRecipe(testRecipe1);
+        addNewOlderRecipe();
         initActivity();
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList))
@@ -220,7 +197,7 @@ public class OnlineMiniaturesFragmentTest {
 
     @Test
     public synchronized void scrollingUpWithDatabaseSmallerThanMaxLoadedAtATimeShouldAddNothingToTheMiniaturesList() throws InterruptedException {
-        addNewOlderRecipe(testRecipe1);
+        addNewOlderRecipe();
         initActivity();
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeDown());
@@ -232,9 +209,9 @@ public class OnlineMiniaturesFragmentTest {
     @Test
     public synchronized void scrollingDownDownLoadANewRecipe() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
-            addNewOlderRecipe(testRecipe1);
+            addNewOlderRecipe();
         }
-        addNewOlderRecipe(testRecipe1);
+        addNewOlderRecipe();
         initActivity();
         wait(1000);
         onView(withId(R.id.miniaturesOnlineList))
@@ -249,9 +226,9 @@ public class OnlineMiniaturesFragmentTest {
     @Test
     public synchronized void scrollingUpDownLoadANewRecipe() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
-            addNewOlderRecipe(testRecipe1);
+            addNewOlderRecipe();
         }
-        addNewYoungerRecipe(testRecipe1);
+        addNewYoungerRecipe();
         initActivity();
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeDown());
@@ -262,10 +239,10 @@ public class OnlineMiniaturesFragmentTest {
     @Test
     public synchronized void scrollingDownLoadANewRecipeOnceButNotMore() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
-            addNewOlderRecipe(testRecipe1);
-            addNewOlderRecipe(testRecipe1);
+            addNewOlderRecipe();
+            addNewOlderRecipe();
         }
-        addNewOlderRecipe(testRecipe1);
+        addNewOlderRecipe();
         initActivity();
         wait(1000);
         onView(withId(R.id.miniaturesOnlineList))
@@ -279,10 +256,10 @@ public class OnlineMiniaturesFragmentTest {
     @Test
     public synchronized void scrollingUpLoadANewRecipeOnceButNotMore() throws InterruptedException {
         for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
-            addNewOlderRecipe(testRecipe1);
-            addNewYoungerRecipe(testRecipe1);
+            addNewOlderRecipe();
+            addNewYoungerRecipe();
         }
-        addNewYoungerRecipe(testRecipe1);
+        addNewYoungerRecipe();
         initActivity();
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeDown());

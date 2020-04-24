@@ -3,19 +3,12 @@ package ch.epfl.polychef.pages;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import com.firebase.ui.auth.AuthUI;
-
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasPackage;
-import static org.junit.Assert.assertNull;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +18,9 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
-import ch.epfl.polychef.pages.LoginPage;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static org.junit.Assert.assertNull;
 
 @RunWith(AndroidJUnit4.class)
 public class RealLoginPageTest {

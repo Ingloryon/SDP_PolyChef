@@ -1,5 +1,8 @@
 package ch.epfl.polychef.utils;
 
+import android.app.Activity;
+import android.os.AsyncTask;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -7,12 +10,8 @@ import ch.epfl.polychef.CallNotifier;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
-
-import android.app.Activity;
-import android.os.AsyncTask;
-
-import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
+import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
 public class VoiceRecognizer implements RecognitionListener {
 

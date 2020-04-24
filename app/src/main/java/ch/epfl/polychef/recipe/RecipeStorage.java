@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -30,18 +29,19 @@ public class RecipeStorage implements Serializable  {
     private static final String TAG = "RecipeStorage";
     public static final String DB_NAME = "recipes";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
+    public static final String RECIPE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 
     public static RecipeStorage getInstance(){
         return INSTANCE;
     }
 
     /**
-     * Create a string for the current date
+     * Create a string for the current date.
      *
      * @return the current date
      */
     public String getCurrentDate(){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        SimpleDateFormat formatter = new SimpleDateFormat(RECIPE_DATE_FORMAT);
         Date date = new Date();
         return formatter.format(date);
     }
@@ -93,16 +93,16 @@ public class RecipeStorage implements Serializable  {
     }
 
     /**
-     * Get {@code n} recipes posted during the given date interval
+     * Get {@code n} recipes posted during the given date interval.
      *
-     * @param n number of recipes to get
+     * @param nbRecipes number of recipes to get
      * @param startDate oldest recipe to get
      * @param endDate most recent recipe to get
      * @param newest whether we want recent recipes or older recipes
      * @param caller the caller of this method
      */
-    public void getNRecipes(int n, String startDate, String endDate, boolean newest, CallHandler<List<Recipe>> caller){
-        Preconditions.checkArgument(n > 0, "Number of recipe to get should "
+    public void getNRecipes(int nbRecipes, String startDate, String endDate, boolean newest, CallHandler<List<Recipe>> caller){
+        Preconditions.checkArgument(nbRecipes > 0, "Number of recipe to get should "
                 + "be positive");
         Preconditions.checkArgument(startDate != null);
         Preconditions.checkArgument(endDate != null);
@@ -113,9 +113,9 @@ public class RecipeStorage implements Serializable  {
                 .orderByChild("date").startAt(startDate).endAt(endDate);
 
         if(newest){
-            query = query.limitToFirst(n);
+            query = query.limitToFirst(nbRecipes);
         } else {
-            query = query.limitToLast(n);
+            query = query.limitToLast(nbRecipes);
         }
 
         listenerForListOfRecipes(query, caller);

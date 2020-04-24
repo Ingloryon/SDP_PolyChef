@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +21,6 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
@@ -32,6 +30,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     public UserProfileFragment() {
         // Required empty public constructor
     }
+
     private static final String TAG = "UserProfileFragment";
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
     private User userToDisplay;

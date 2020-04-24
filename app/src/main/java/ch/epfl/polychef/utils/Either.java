@@ -7,8 +7,6 @@ import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
-import ch.epfl.polychef.utils.Preconditions;
-
 /**
  * Class that represent either {@code left}, {@code right} or is {@code none}.
  * <p>This class does not use java's {@code Optional} internally because it is intended to be uploaded to Firebase and Optionals cannot be serialized</p>

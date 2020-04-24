@@ -2,8 +2,6 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;

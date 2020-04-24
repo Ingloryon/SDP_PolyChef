@@ -1,12 +1,12 @@
 package ch.epfl.polychef.image;
 
-import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.utils.Preconditions;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.utils.Preconditions;
 
 /**
  * Uploader and downloader of image from the Firebase Storage.

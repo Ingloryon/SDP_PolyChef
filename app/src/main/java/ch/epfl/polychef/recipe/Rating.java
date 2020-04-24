@@ -1,10 +1,11 @@
 package ch.epfl.polychef.recipe;
 
-import ch.epfl.polychef.utils.Preconditions;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import ch.epfl.polychef.utils.Preconditions;
 
 public final class Rating implements Serializable {
     private int ratingSum;

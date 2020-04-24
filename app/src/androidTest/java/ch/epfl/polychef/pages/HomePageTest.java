@@ -2,24 +2,11 @@ package ch.epfl.polychef.pages;
 
 import android.content.Intent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.pressBack;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
-import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
-import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
 import androidx.test.espresso.contrib.NavigationViewActions;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -33,20 +20,26 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
+import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
