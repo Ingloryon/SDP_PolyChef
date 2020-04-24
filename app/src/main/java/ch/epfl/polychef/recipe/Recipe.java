@@ -53,7 +53,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients,
                      int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty,
-                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author){
+                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date){
 
         this.recipeUuid = UUID.randomUUID().toString();
         this.name = name;
@@ -70,7 +70,11 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
             this.miniaturePath = Either.none();
         }
         this.picturesPath = picturesPath;
-        this.date = RecipeStorage.getInstance().getCurrentDate();
+        if(date == null) {
+            this.date = RecipeStorage.getInstance().getCurrentDate();
+        }else{
+            this.date = date;
+        }
         this.author = author;
     }
 
