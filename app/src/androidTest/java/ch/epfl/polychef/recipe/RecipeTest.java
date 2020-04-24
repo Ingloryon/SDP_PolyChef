@@ -185,8 +185,8 @@ public class RecipeTest {
         Recipe recipe = setStandardRecipe().build();
 
         String startingString = "\n" + "Recipe name: Chicken fried\n" + "\n" +
-                "Recipe author: testUser@polychef.ch\n" + "\n"
-                + "Recipe instructions:\n" +
+                "Recipe author: testUser@polychef.ch\n" + "\n" +
+                "Recipe instructions:\n" +
                 "1- Start by the beginning\n" +
                 "2- Then keep going\n" +
                 "3- Now it ends\n" +

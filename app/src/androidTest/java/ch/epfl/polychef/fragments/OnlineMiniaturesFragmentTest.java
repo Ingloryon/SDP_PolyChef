@@ -117,12 +117,12 @@ public class OnlineMiniaturesFragmentTest {
         fakeRecipeStorage.addRecipe(testRecipeBuilder.setDate(currentYoungerDate).build());
     }
 
-    public String changeDateByNSeconds(String dateStr, int nSeconds){
+    public String changeDateByNSeconds(String dateStr, int nbSeconds){
         SimpleDateFormat formatter = new SimpleDateFormat(RecipeStorage.RECIPE_DATE_FORMAT);
         Date date = new Date();
         try {
             date = formatter.parse(dateStr);
-            date.setSeconds(date.getSeconds() + nSeconds);
+            date.setSeconds(date.getSeconds() + nbSeconds);
         }catch (ParseException e){
             e.printStackTrace();
         }
