@@ -77,7 +77,7 @@ public class OnlineMiniaturesFragmentTest {
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .addInstruction("test1instruction").setPersonNumber(4)
             .setEstimatedCookingTime(30).setEstimatedPreparationTime(30)
-            .addIngredient("test1", 1.0, Ingredient.Unit.CUP);
+            .addIngredient("test1", 1.0, Ingredient.Unit.CUP).setAuthor("test");
 
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
@@ -333,7 +333,7 @@ public class OnlineMiniaturesFragmentTest {
                 currentReadIndex += Math.min(recipesInDatabase.size() - currentReadIndex, currentReadIndex + numberOfRecipes);
             }
             return null;
-        }).when(fakeRecipeStorage).getNRecipes(any(Integer.class), any(String.class), or(any(String.class), isNull()), any(Boolean.class), any(CallHandler.class));
+        }).when(fakeRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
 
     }
 
