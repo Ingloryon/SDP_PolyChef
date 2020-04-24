@@ -1,13 +1,23 @@
 package ch.epfl.polychef.recipe;
 
+import android.icu.text.SimpleDateFormat;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.Preconditions;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public final class RecipeBuilder {
+
+    private static final String TAG = "RecipeBuilder";
+
+    private String date;
     private String name = "";
     private String author = "";
     private List<String> recipeInstructions = new ArrayList<>();
@@ -34,7 +44,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date);
     }
 
     /**
@@ -46,6 +56,23 @@ public final class RecipeBuilder {
     public RecipeBuilder setName(@NonNull String name) {
         Preconditions.checkArgument(!name.isEmpty(), "The name must be non empty");
         this.name = name;
+        return this;
+    }
+
+    /**
+     * Set the date of the Recipe
+     * @param date date of the recipe, must be not null
+     * @return
+     */
+    public RecipeBuilder setDate(@NonNull String date){
+        Preconditions.checkArgument(!date.isEmpty(), "The date can't be empty");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        try{
+            formatter.parse(date);
+        }catch(ParseException e){
+            Log.e(TAG, "The date you wrote is not in the correct format");
+        }
+        this.date = date;
         return this;
     }
 

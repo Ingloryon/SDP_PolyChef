@@ -293,6 +293,8 @@ public class PostRecipeFragment extends Fragment {
             rb.addPicturePath(uuidPath + i);
         }
 
+        rb.setDate(getRecipeStorage().getCurrentDate());
+
         postedRecipe = rb.addAuthor(getUserEmail()).build();
         return true;
     }
