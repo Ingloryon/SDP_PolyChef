@@ -156,7 +156,7 @@ public class FavouritesFragmentTest {
     }
 
     @Test
-    public void moreRecipesChargeOnlyFiveOfflineAndAddMoreOnScroll() {
+    public synchronized void moreRecipesChargeOnlyFiveOfflineAndAddMoreOnScroll() throws InterruptedException {
         fakeFavouriteFragment.isOnline = false;
         List<Recipe> recipesInFavourite = new ArrayList<>();
         for(int i = 0; i < 13; ++i) {
@@ -169,6 +169,7 @@ public class FavouritesFragmentTest {
                 .perform(RecyclerViewActions.scrollToPosition(4))
                 .perform(ViewActions.swipeUp());
         assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(10));
+        wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesFavouriteList))
                 .perform(RecyclerViewActions.scrollToPosition(9))
                 .perform(ViewActions.swipeUp());
