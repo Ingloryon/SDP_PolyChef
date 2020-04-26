@@ -207,11 +207,16 @@ public class PostRecipeFragment extends Fragment {
      * Otherwise it will update the View to display to wrong inputs.
      * @param view the current view
      */
-    public void setPostButton(View view) {
+    public synchronized void setPostButton(View view) {
         getAndCheckEnteredInputs();
         if(!buildRecipeAndPostToFirebase()){
             printWrongInputsToUser();
         }else{
+            try{
+                wait(5);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
             Intent intent = new Intent(getActivity(), HomePage.class);
             startActivity(intent);
         }
@@ -225,14 +230,15 @@ public class PostRecipeFragment extends Fragment {
             return false;
         } else {
             if(currentMiniature != null) {
-                imageHandler.uploadFromUri(currentMiniature, miniatureName, "TODO:USER", postedRecipe.getRecipeUuid());
+                imageHandler.uploadFromUri(currentMiniature, miniatureName, getUserEmail(), postedRecipe.getRecipeUuid());
             }
             for(int i = 0; i < currentMealPictures.size(); ++i) {
-                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), "TODO:USER", postedRecipe.getRecipeUuid());
+                imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), getUserEmail(), postedRecipe.getRecipeUuid());
             }
             hostActivity.getRecipeStorage().addRecipe(postedRecipe);
             hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
             hostActivity.getUserStorage().updateUserInfo();
+
             return true;
         }
     }
@@ -313,7 +319,7 @@ public class PostRecipeFragment extends Fragment {
             rb.addPicturePath(uuidPath + i);
         }
 
-        postedRecipe = rb.build();
+        postedRecipe = rb.setAuthor(getUserEmail()).build();
         return true;
     }
 
@@ -452,6 +458,10 @@ public class PostRecipeFragment extends Fragment {
             return;
         }
         wrongInputs.put("Ingredients", true);
+    }
+
+    public String getUserEmail(){
+        return hostActivity.getUserStorage().getPolyChefUser().getEmail();
     }
 
     protected RecipeStorage getRecipeStorage() {

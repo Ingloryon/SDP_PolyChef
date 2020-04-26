@@ -1,7 +1,5 @@
 package ch.epfl.polychef.image;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.epfl.polychef.utils.Preconditions;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A handler for getting image both through the camera and the gallery and upload them to firebase.

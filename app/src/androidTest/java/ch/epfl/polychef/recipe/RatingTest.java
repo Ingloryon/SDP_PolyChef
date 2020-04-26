@@ -1,15 +1,13 @@
 package ch.epfl.polychef.recipe;
 
-import ch.epfl.polychef.recipe.Rating;
-
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RatingTest {

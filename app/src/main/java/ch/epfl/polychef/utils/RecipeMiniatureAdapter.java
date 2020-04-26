@@ -18,16 +18,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.fragments.FullRecipeFragment;
-import ch.epfl.polychef.R;
-import ch.epfl.polychef.image.ImageStorage;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.users.UserStorage;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.R;
+import ch.epfl.polychef.fragments.FullRecipeFragment;
+import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.UserStorage;
 
 /**
  * This class is an adapter that take a list of recipes and update the fields of each miniature inside the miniature list in the recyclerView that is in the activity where the miniatures are shown.
@@ -74,6 +74,16 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         this.imageStorage = storage;
         this.userStorage = userStorage;
         this.images = new HashMap<>();
+    }
+
+    /**
+     * Change the recipes displayed by the recycler view.
+     *
+     * @param newRecipes the new recipes
+     */
+    public void changeList(List<Recipe> newRecipes){
+        this.recipeList = newRecipes;
+        notifyDataSetChanged();
     }
 
     /**

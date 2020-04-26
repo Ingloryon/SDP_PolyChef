@@ -1,14 +1,25 @@
 package ch.epfl.polychef.recipe;
 
+import android.icu.text.SimpleDateFormat;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
-import ch.epfl.polychef.utils.Either;
-import ch.epfl.polychef.utils.Preconditions;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.Preconditions;
+
+
 public final class RecipeBuilder {
+
+    private static final String TAG = "RecipeBuilder";
+
+    private String date;
     private String name = "";
+    private String author = "";
     private List<String> recipeInstructions = new ArrayList<>();
     private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
@@ -32,8 +43,9 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated preparation time must be set");
         Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
+        Preconditions.checkArgument(!author.isEmpty(), "The author must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date);
     }
 
     /**
@@ -45,6 +57,24 @@ public final class RecipeBuilder {
     public RecipeBuilder setName(@NonNull String name) {
         Preconditions.checkArgument(!name.isEmpty(), "The name must be non empty");
         this.name = name;
+        return this;
+    }
+
+    /**
+     * Set the date of the Recipe.
+     *
+     * @param date date of the recipe, must be not null
+     * @return
+     */
+    public RecipeBuilder setDate(@NonNull String date){
+        Preconditions.checkArgument(!date.isEmpty(), "The date can't be empty");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        try{
+            formatter.parse(date);
+        }catch(ParseException e){
+            Log.e(TAG, "The date you wrote is not in the correct format");
+        }
+        this.date = date;
         return this;
     }
 
@@ -76,6 +106,7 @@ public final class RecipeBuilder {
 
     /**
      * Add an ingredient from an exiting one.
+     *
      * @param ingredient an Ingredient
      * @return the recipe builder
      */
@@ -167,6 +198,18 @@ public final class RecipeBuilder {
     public RecipeBuilder addPicturePath(@NonNull String pictureName) {
         Preconditions.checkArgument(pictureName != null, "Picture path should not be null");
         this.picturesName.add(pictureName);
+        return this;
+    }
+
+    /**
+     * Set the author of the recipe.
+     *
+     * @param author author of the recipe, must be non empty
+     * @return the modified builder
+     */
+    public RecipeBuilder setAuthor(@NonNull String author) {
+        Preconditions.checkArgument(!author.isEmpty(), "The author must be non empty");
+        this.author = author;
         return this;
     }
 }

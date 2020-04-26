@@ -1,17 +1,14 @@
 package ch.epfl.polychef.users;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
-import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
@@ -38,6 +35,11 @@ public class User implements Serializable {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
+    }
+
+    public void removeNullFromLists(){
+        recipes.removeAll(Collections.singleton(null));
+        //TODO remove from others as well?
     }
 
     public String getEmail() {

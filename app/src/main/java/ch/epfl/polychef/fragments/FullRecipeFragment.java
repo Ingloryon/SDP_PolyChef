@@ -3,10 +3,6 @@ package ch.epfl.polychef.fragments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.fragment.app.Fragment;
+
 import com.synnapps.carouselview.CarouselView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
@@ -26,13 +27,12 @@ import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.utils.FavouritesUtils;
+
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.FavouritesUtils;
+import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
     private Recipe currentRecipe;

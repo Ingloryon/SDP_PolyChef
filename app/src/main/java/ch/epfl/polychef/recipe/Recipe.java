@@ -1,16 +1,16 @@
 package ch.epfl.polychef.recipe;
 
-import ch.epfl.polychef.utils.Preconditions;
-import ch.epfl.polychef.R;
-import ch.epfl.polychef.utils.Either;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public final class Recipe implements Serializable, Cloneable {
+import ch.epfl.polychef.R;
+import ch.epfl.polychef.utils.Either;
+import ch.epfl.polychef.utils.Preconditions;
+
+public final class Recipe implements Serializable, Cloneable, Comparable<Recipe> {
 
     public Recipe(){
         recipeUuid=null;
@@ -23,6 +23,8 @@ public final class Recipe implements Serializable, Cloneable {
 
     private final String recipeUuid;
     private String name;
+    private String date;
+    private String author;
     private List<String> recipeInstructions;
     private List<Ingredient> ingredients;
 
@@ -49,7 +51,9 @@ public final class Recipe implements Serializable, Cloneable {
      * @param miniaturePath path to access the miniature image, provide {@code Either.none()} for default miniature
      * @param picturesPath path to access the pictures of the recipe, provide empty list for default picture
      */
-    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients, int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty, Either<String, Integer> miniaturePath, List<String> picturesPath){
+    protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients,
+                     int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty,
+                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date){
 
         this.recipeUuid = UUID.randomUUID().toString();
         this.name = name;
@@ -66,6 +70,12 @@ public final class Recipe implements Serializable, Cloneable {
             this.miniaturePath = Either.none();
         }
         this.picturesPath = picturesPath;
+        if(date == null) {
+            this.date = RecipeStorage.getInstance().getCurrentDate();
+        }else{
+            this.date = date;
+        }
+        this.author = author;
     }
 
     /**
@@ -173,6 +183,22 @@ public final class Recipe implements Serializable, Cloneable {
     }
 
     /**
+     * Returns the date the recipe was created at.
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * Returns the author of this recipe.
+     * @return the author
+     */
+    public String getAuthor() {
+        return author;
+    }
+
+    /**
      * Returns the String representation of the unique id of the recipe.
      * @return string of recipe's unique id
      */
@@ -188,10 +214,26 @@ public final class Recipe implements Serializable, Cloneable {
         return false;
     }
 
+    /**
+     * Compare two recipes based on their date.
+     *
+     * @param other recipe we compare to
+     * @return 1 if {@code this} recipe is older that the {@code other},
+     *         -1 if {@code this} recipe is newer that the {@code other} and
+ *              0 if the were posted at the same time
+     */
+    @Override
+    public int compareTo(Recipe other) {
+        Preconditions.checkArgument(other != null, "Cannot compare to a null recipe");
+        return - getDate().compareTo(other.getDate());
+    }
+
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
-        str.append("\nRecipe name: " + name + "\n\nRecipe instructions:");
+        str.append("\nRecipe name: " + name + "\n");
+        str.append("\nRecipe author: " + author + "\n");
+        str.append("\nRecipe instructions:");
         for(int i = 0 ; i < recipeInstructions.size() ; ++i){
             str.append("\n" + (i+1) + "- " + recipeInstructions.get(i));
         }

@@ -9,20 +9,9 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import com.google.firebase.storage.UploadTask;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -30,6 +19,16 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.EntryPage;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 
 public class ImageHandlerTest {

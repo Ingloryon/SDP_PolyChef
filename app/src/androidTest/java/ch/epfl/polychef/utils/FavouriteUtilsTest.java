@@ -57,6 +57,7 @@ public class FavouriteUtilsTest {
     private Recipe getRecipe(String name) {
         return new RecipeBuilder()
                 .setName(name)
+                .setAuthor("testAuthor")
                 .addInstruction("test instruction")
                 .setPersonNumber(4)
                 .setEstimatedCookingTime(35)

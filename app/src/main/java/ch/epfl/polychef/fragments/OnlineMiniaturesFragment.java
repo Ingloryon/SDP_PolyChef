@@ -16,37 +16,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
+
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.recipe.SearchRecipe;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
-import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.users.ConnectedActivity;
-import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
-import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.SearchRecipe;
 
-public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<Recipe>, CallHandler<List<Recipe>> {
+public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Recipe>> {
 
     private static final String TAG = "OnlineMiniaturesFrag";
     private RecyclerView onlineRecyclerView;
+    private static final int UP = -1;
+    private static final int DOWN = 1;
 
     private SearchView searchView;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
+    private List<Recipe> searchRecipeList = new ArrayList<>();
 
-    private int currentReadInt = 1;
+    private String currentOldest;
+    private String currentNewest;
 
     public static final int nbOfRecipesLoadedAtATime = 5;
 
     private boolean isLoading = false;
+    private boolean isSearching = false;
 
     private RecipeStorage recipeStorage;
     private ImageStorage imageStorage;
@@ -72,13 +74,16 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if(!recyclerView.canScrollVertically(1)){
-                    if(isLoading){
-                        return;
-                    }
-                    recipeStorage.getNRecipesOneByOne(nbOfRecipesLoadedAtATime, currentReadInt, OnlineMiniaturesFragment.this);
-                    currentReadInt += nbOfRecipesLoadedAtATime;
+
+                if(!isLoading && !isSearching){
                     isLoading = true;
+                    if(!recyclerView.canScrollVertically(DOWN)){
+                        getNextRecipes();
+                    } else if(!recyclerView.canScrollVertically(UP)){
+                        getPreviousRecipes();
+                    } else {
+                        isLoading = false;
+                    }
                 }
             }
         });
@@ -107,8 +112,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                isSearching = true;
                 searchView.clearFocus();
-                dynamicRecipeList.clear();
+                ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(searchRecipeList);
                 SearchRecipe.getInstance().searchForRecipe(query, OnlineMiniaturesFragment.this);
                 return true;
             }
@@ -121,33 +127,68 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                initFirstNRecipes();
+                searchRecipeList.clear();
+                ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(dynamicRecipeList);
+                onlineRecyclerView.getAdapter().notifyDataSetChanged();
+                isSearching = false;
                 return false;
             }
         });
-        initFirstNRecipes();
+        if(dynamicRecipeList.isEmpty()) {
+            initFirstNRecipes();
+        }
     }
 
     private void initFirstNRecipes() {
-        // For now when we enter the page we load the offline recipes first
-        // add a certain number of recipes at this end of the actual list
+        isLoading = true;
         dynamicRecipeList.clear();
-        recipeStorage.getNRecipesOneByOne(nbOfRecipesLoadedAtATime, 1, this);
-        currentReadInt += nbOfRecipesLoadedAtATime;
+
+        initDate();
+        getNextRecipes();
+    }
+
+    private void initDate(){
+        currentOldest = recipeStorage.getCurrentDate();
+        currentNewest = recipeStorage.getCurrentDate();
+    }
+
+    private void getNextRecipes(){
+        recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, recipeStorage.OLDEST_RECIPE, currentOldest, false, this);
+    }
+
+    private void getPreviousRecipes(){
+        recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, currentNewest, recipeStorage.getCurrentDate(), true, this);
     }
 
     @Override
-    public void notify(Recipe data) {
-        isLoading = false;
-        dynamicRecipeList.add(data);
-        onlineRecyclerView.getAdapter().notifyDataSetChanged();
-    }
+    public void onSuccess(List<Recipe> data){
 
-    @Override
-    public void onSuccess(List<Recipe> data) {
-        isLoading = false;
-        dynamicRecipeList.addAll(data);
+        if(isSearching){
+            searchRecipeList.addAll(data);
+            searchRecipeList.sort(Recipe::compareTo);
+            onlineRecyclerView.getAdapter().notifyDataSetChanged();
+            return;
+        }
+
+        //Filter to avoid duplicates at the "edges"
+        List<Recipe> newRecipes = data.stream()
+                .filter((recipe) -> !recipe.getDate().equals(currentOldest)
+                        && !recipe.getDate().equals(currentNewest))
+                .collect(Collectors.toList());
+
+        dynamicRecipeList.addAll(newRecipes);
+        dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
+
+        int size = dynamicRecipeList.size();
+        if(size != 0){
+            currentNewest = dynamicRecipeList.get(0).getDate();
+            currentOldest = dynamicRecipeList.get(size - 1).getDate();
+        } else {
+            Log.w(TAG, "The list of recipes is empty despite adding some new recipes");
+        }
+
         onlineRecyclerView.getAdapter().notifyDataSetChanged();
+        isLoading = false;
     }
 
     @Override
@@ -159,5 +200,4 @@ public class OnlineMiniaturesFragment extends Fragment implements CallNotifier<R
     public RecyclerView getRecyclerView(){
         return onlineRecyclerView;
     }
-
 }

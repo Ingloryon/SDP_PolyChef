@@ -1,8 +1,6 @@
 package ch.epfl.polychef.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,7 +14,6 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
@@ -108,7 +104,9 @@ public class FavouritesFragmentTest {
     }
 
     private Recipe getRecipe(String name) {
-        return new RecipeBuilder().setName(name)
+      
+        return new RecipeBuilder().setName(name).setAuthor("testAuthor")
+
                 .setRecipeDifficulty(Recipe.Difficulty.EASY)
                 .addInstruction("test1instruction").setPersonNumber(4)
                 .setEstimatedCookingTime(30).setEstimatedPreparationTime(30)
@@ -158,7 +156,7 @@ public class FavouritesFragmentTest {
     }
 
     @Test
-    public void moreRecipesChargeOnlyFiveOfflineAndAddMoreOnScroll() {
+    public synchronized void moreRecipesChargeOnlyFiveOfflineAndAddMoreOnScroll() throws InterruptedException {
         fakeFavouriteFragment.isOnline = false;
         List<Recipe> recipesInFavourite = new ArrayList<>();
         for(int i = 0; i < 13; ++i) {
@@ -170,10 +168,11 @@ public class FavouritesFragmentTest {
         onView(ViewMatchers.withId(R.id.miniaturesFavouriteList))
                 .perform(RecyclerViewActions.scrollToPosition(4))
                 .perform(ViewActions.swipeUp());
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(10));
+        wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesFavouriteList))
                 .perform(RecyclerViewActions.scrollToPosition(9))
                 .perform(ViewActions.swipeUp());
+        wait(1000);
         assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(13));
     }
 

@@ -7,13 +7,14 @@ import com.google.android.gms.common.util.BiConsumer;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
-import ch.epfl.polychef.users.User;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -153,6 +154,30 @@ public class UserTest {
         assertNotEquals(new User("bob", "inQuarantine"), alice);
 
         assertEquals(alice, alice);
+    }
+
+    @Test
+    public void removeNullRecipesCorrectly(){
+        User user = mockUser();
+        int nbNulls = 12;
+        int nbRecipes = 45;
+        ArrayList<Integer> nulls = new ArrayList<>(nbNulls);
+        Random rnd=new Random();
+
+        for(int i = 0 ; i < nbNulls ; ++i){
+            nulls.add(rnd.nextInt(nbRecipes));
+        }
+
+
+        for(int i = 0; i < nbRecipes; ++i){
+            if(nulls.contains(i)){
+                user.addRecipe(null);
+            } else {
+                user.addRecipe("Recipe");
+            }
+        }
+        user.removeNullFromLists();
+        assertFalse(user.getRecipes().contains(null));
     }
 
     @Test

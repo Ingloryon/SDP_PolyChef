@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
 
 public class EntryPage extends AppCompatActivity {
 

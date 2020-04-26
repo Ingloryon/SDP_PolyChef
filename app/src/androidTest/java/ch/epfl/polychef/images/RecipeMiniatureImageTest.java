@@ -2,8 +2,6 @@ package ch.epfl.polychef.images;
 
 import android.content.Intent;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -16,8 +14,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.FragmentTestUtils;
 import ch.epfl.polychef.fragments.OnlineMiniaturesFragment;
@@ -43,6 +43,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -59,7 +60,9 @@ public class RecipeMiniatureImageTest {
             .setEstimatedCookingTime(35)
             .setEstimatedPreparationTime(40)
             .addIngredient("test", 1.0, Ingredient.Unit.CUP)
-            .setRecipeDifficulty(Recipe.Difficulty.EASY);
+            .setRecipeDifficulty(Recipe.Difficulty.EASY)
+            .setDate("20/05/01 12:00:00")
+            .setAuthor("testAuthor");
 
     private Recipe recipe1 = recipeBuilder.setName("test1").setMiniatureFromPath("test_path").build();
 
@@ -88,7 +91,7 @@ public class RecipeMiniatureImageTest {
 
     @Test
     public synchronized void canShowOnlineMiniature() throws InterruptedException {
-        wait(1000);
+        wait(2000);
         assertEquals(2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withChild(withText("test1"))))).check(matches(isDisplayed()));
         onView(withId(R.id.miniaturesOnlineList)).perform(actionOnItemAtPosition(1, scrollTo()));
@@ -129,12 +132,16 @@ public class RecipeMiniatureImageTest {
         public RecipeStorage getRecipeStorage(){
             RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
 
+            when(mockRecipeStorage.getCurrentDate()).thenReturn(RecipeStorage.OLDEST_RECIPE);
+
             doAnswer((call) -> {
-                CallNotifier<Recipe> ch = call.getArgument(2);
-                ch.notify(recipe1);
-                ch.notify(recipe2);
+                CallHandler<List<Recipe>> ch = call.getArgument(4);
+                List<Recipe> results = new ArrayList<>();
+                results.add(recipe1);
+                results.add(recipe2);
+                ch.onSuccess(results);
                 return null;
-            }).when(mockRecipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
+            }).when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
 
             return mockRecipeStorage;
         }

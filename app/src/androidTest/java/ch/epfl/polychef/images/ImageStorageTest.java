@@ -6,18 +6,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
-import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

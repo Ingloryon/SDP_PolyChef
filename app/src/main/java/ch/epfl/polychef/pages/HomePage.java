@@ -17,14 +17,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.navigation.NavigationView;
+
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
-
-import com.google.android.material.navigation.NavigationView;
-
-import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class HomePage extends ConnectedActivity {

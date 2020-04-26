@@ -2,8 +2,6 @@ package ch.epfl.polychef.utils;
 
 import org.junit.Test;
 
-import ch.epfl.polychef.utils.Either;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -1,18 +1,16 @@
 package ch.epfl.polychef.recipe;
 
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeBuilder;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 
 public class RecipeTest {
 
@@ -30,6 +28,9 @@ public class RecipeTest {
         // setter rejects empty names
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setName(""));
         rb.setName("Chicken fried");
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setAuthor(""));
+        rb.setAuthor("testUser@polychef.ch");
 
         // rejects when no instructions added
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
@@ -76,6 +77,7 @@ public class RecipeTest {
     public void builderArgumentsAreSetCorrectlyInRecipe() {
         RecipeBuilder rb = new RecipeBuilder();
         rb.setName("Chicken fried");
+        rb.setAuthor("testUser@polychef.ch");
         rb.addInstruction("Start by the beginning");
         rb.addIngredient("Carrots", 300d, Ingredient.Unit.NONE);
         rb.setPersonNumber(4);
@@ -95,6 +97,7 @@ public class RecipeTest {
         recipe.getRating();
 
         assertEquals(recipe.getName(), "Chicken fried");
+        assertEquals(recipe.getAuthor(), "testUser@polychef.ch");
         assertEquals(recipe.getRecipeInstructions(), Collections.unmodifiableList(instruc));
         assertEquals(recipe.getIngredients().get(0), Collections.unmodifiableList(ingre).get(0));
         assertEquals(recipe.getPersonNumber(), 4);
@@ -111,6 +114,8 @@ public class RecipeTest {
 
         assertEquals(recipe2.getMiniaturePath().getLeft(), "miniature2");
         assertEquals(recipe2.getPicturesPath(), Arrays.asList("pic_15"));
+
+        assertNotNull(recipe2.getDate());
     }
 
     @Test
@@ -147,6 +152,24 @@ public class RecipeTest {
     }
 
     @Test
+    public synchronized void compareToComparesCorrectly() throws InterruptedException {
+        Recipe oldest = setStandardRecipe().build();
+        wait(1001);
+        Recipe newest = setStandardRecipe().build();
+
+        assertTrue(newest.compareTo(oldest) < 0);
+        assertTrue(oldest.compareTo(newest) > 0);
+        assertTrue(newest.compareTo(newest) == 0);
+        assertTrue(oldest.compareTo(oldest) == 0);
+    }
+
+    @Test
+    public void compareThrowsExceptionOnNullInput(){
+        Recipe recipe = setStandardRecipe().build();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> recipe.compareTo(null));
+    }
+
+    @Test
     public void equalsOnlyReturnsTrueWhenUuidIdentical() {
         Recipe recipe1 = setStandardRecipe().build();
         Recipe recipe2 = setStandardRecipe().build();
@@ -162,6 +185,7 @@ public class RecipeTest {
         Recipe recipe = setStandardRecipe().build();
 
         String startingString = "\n" + "Recipe name: Chicken fried\n" + "\n" +
+                "Recipe author: testUser@polychef.ch\n" + "\n" +
                 "Recipe instructions:\n" +
                 "1- Start by the beginning\n" +
                 "2- Then keep going\n" +
@@ -191,6 +215,7 @@ public class RecipeTest {
     public static RecipeBuilder setStandardRecipe(){
         RecipeBuilder rb1 = new RecipeBuilder();
         rb1.setName("Chicken fried");
+        rb1.setAuthor("testUser@polychef.ch");
         rb1.addInstruction("Start by the beginning");
         rb1.addInstruction("Then keep going");
         rb1.addInstruction("Now it ends");

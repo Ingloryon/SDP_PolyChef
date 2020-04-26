@@ -2,8 +2,6 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
@@ -152,7 +150,7 @@ public class UserProfileFragmentTest {
                 String uuid = invocation.getArgument(0);
                 CallHandler<Recipe> caller = invocation.getArgument(1);
 
-                caller.onSuccess(builder.setName(uuid).build());
+                caller.onSuccess(builder.setName(uuid).setAuthor(mockEmail).build());
 
                 return null;
             }).when(mockRecipeStorage).readRecipeFromUuid(any(String.class), any(CallHandler.class));

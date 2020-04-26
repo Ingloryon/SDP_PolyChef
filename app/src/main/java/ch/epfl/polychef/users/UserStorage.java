@@ -1,7 +1,5 @@
 package ch.epfl.polychef.users;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,6 +78,7 @@ public class UserStorage {
 
         if(snap.exists()){
             user = snap.getValue(User.class);
+            user.removeNullFromLists();
             userKey = snap.getKey();
             FavouritesUtils.getInstance().setOfflineFavourites(user);
         } else {
@@ -94,7 +93,7 @@ public class UserStorage {
                     .getReference("users/" + userKey)
                     .setValue(user);
         } else {
-            throw new IllegalStateException("The user have not been initialized");
+            throw new IllegalStateException("The user has not been initialized");
         }
     }
 

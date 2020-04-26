@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import ch.epfl.polychef.CallNotifier;
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
@@ -208,7 +208,7 @@ public class PostingRecipeFragmentTest {
     private void mockInit() {
 
         doNothing().when(mockRecipeStorage).addRecipe(any(Recipe.class));
-        doNothing().when(mockRecipeStorage).getNRecipesOneByOne(any(Integer.class), any(Integer.class), any(CallNotifier.class));
+        doNothing().when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
     }
 
     private class FakeHomePage extends HomePage {

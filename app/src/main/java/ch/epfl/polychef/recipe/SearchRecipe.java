@@ -12,7 +12,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,7 @@ public class SearchRecipe {
     }
 
     private void searchRecipe(String query, BiFunction<String, Recipe, Boolean> comparator, CallHandler<List<Recipe>> caller) {
-        DatabaseReference nameRef = getDatabase().getReference("recipe");
+        DatabaseReference nameRef = getDatabase().getReference(RecipeStorage.DB_NAME);
         nameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

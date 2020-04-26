@@ -2,8 +2,6 @@ package ch.epfl.polychef.utils;
 
 import org.junit.Test;
 
-import ch.epfl.polychef.utils.Preconditions;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PreconditionsTest {
