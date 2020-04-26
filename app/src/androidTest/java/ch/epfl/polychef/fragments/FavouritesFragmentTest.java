@@ -168,11 +168,11 @@ public class FavouritesFragmentTest {
         onView(ViewMatchers.withId(R.id.miniaturesFavouriteList))
                 .perform(RecyclerViewActions.scrollToPosition(4))
                 .perform(ViewActions.swipeUp());
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(10));
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesFavouriteList))
                 .perform(RecyclerViewActions.scrollToPosition(9))
                 .perform(ViewActions.swipeUp());
+        wait(1000);
         assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(13));
     }
 
