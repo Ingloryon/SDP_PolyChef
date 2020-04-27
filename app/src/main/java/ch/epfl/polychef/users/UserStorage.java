@@ -1,5 +1,7 @@
 package ch.epfl.polychef.users;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -10,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.utils.FavouritesUtils;
 
 public class UserStorage {
@@ -111,6 +114,34 @@ public class UserStorage {
 
     public User getPolyChefUser() {
         return user;
+    }
+
+    public void getUserByEmail(String email, CallHandler<User> caller) {
+        getDatabase()
+                .getReference("users")
+                .orderByChild("email")
+                .equalTo(email)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getChildrenCount() == 1) {
+                            for(DataSnapshot child: dataSnapshot.getChildren()){
+                                if(child.exists()){
+                                    caller.onSuccess(child.getValue(User.class));
+                                } else {
+                                    caller.onFailure();
+                                }
+                            }
+                        } else {
+                            caller.onFailure();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        caller.onFailure();
+                    }
+                });
     }
 
     /**
