@@ -74,6 +74,16 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/recipeName" />
 
+                    <TextView
+                        android:id="@+id/authorUsername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+                        android:autoLink="web"
+                        android:text="@string/author_name" />
+
                     <LinearLayout
                         android:id="@+id/linearLayout"
                         android:layout_width="0dp"
@@ -208,7 +218,7 @@
                         android:checked="false"
                         android:text="@string/VoiceRecognitionSwitch"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+                        app:layout_constraintTop_toBottomOf="@+id/authorUsername" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
