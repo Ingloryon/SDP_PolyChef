@@ -49,7 +49,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private ToggleButton favouriteButton;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
-    private Button postButton;
 
     private int indexOfInstruction=-1;
 
@@ -97,7 +96,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        postButton = getView().findViewById(R.id.buttonRate);
+        Button postButton = getView().findViewById(R.id.buttonRate);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,8 +108,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                 bundle.putInt("fragmentID", R.id.nav_host_fragment);
 
                 act.onBackPressed();
-
-                //navController.navigate(R.id.onlineMiniaturesFragment, bundle);
                 navController.navigate(R.id.rateRecipeFragment, bundle);
             }
         });

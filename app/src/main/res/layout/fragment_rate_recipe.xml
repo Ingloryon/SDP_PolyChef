@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonAddInstr"
+                    android:id="@+id/buttonSendRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
