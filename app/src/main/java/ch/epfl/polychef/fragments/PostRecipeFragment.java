@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -229,6 +230,7 @@ public class PostRecipeFragment extends Fragment {
         if (wrongInputs.values().contains(false) || !checkForIllegalInputs(recipeBuilder)) {
             return false;
         } else {
+            postedRecipe=recipeBuilder.build();
             if(currentMiniature != null) {
                 imageHandler.uploadFromUri(currentMiniature, miniatureName, getUserEmail(), postedRecipe.getRecipeUuid());
             }
@@ -304,22 +306,20 @@ public class PostRecipeFragment extends Fragment {
             for (int i = 0; i < ingredients.size(); i++) {
                 rb.addIngredient(ingredients.get(i));
             }
-            rb.build();
+            if(currentMiniature != null) {
+                rb.setMiniatureFromPath(miniatureName);
+            }
+            String uuidPath = miniatureName + "_";
+            for(int i = 1; i <= currentMealPictures.size(); ++i) {
+                rb.addPicturePath(uuidPath + i);
+            }
+            rb.setAuthor(getUserEmail()).build();
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
             return false;
         }
 
-        if(currentMiniature != null) {
-            rb.setMiniatureFromPath(miniatureName);
-        }
-        String uuidPath = miniatureName + "_";
-        for(int i = 1; i <= currentMealPictures.size(); ++i) {
-            rb.addPicturePath(uuidPath + i);
-        }
-
-        postedRecipe = rb.setAuthor(getUserEmail()).build();
         return true;
     }
 
@@ -335,6 +335,12 @@ public class PostRecipeFragment extends Fragment {
             rb.setEstimatedPreparationTime(estimatedPreparationTime);
         }  catch (IllegalArgumentException e){
             errorLogs.add("Preparation time: " + e.toString().substring(35));
+        }
+
+        try{
+            rb.setAuthor(getUserEmail());
+        } catch (IllegalArgumentException e){
+            errorLogs.add("User: " + e.toString().substring(35));
         }
         // All the other exceptions cannot be raised, they are checked while parsing
     }
