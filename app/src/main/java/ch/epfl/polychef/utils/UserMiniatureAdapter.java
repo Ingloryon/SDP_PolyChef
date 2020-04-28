@@ -2,6 +2,7 @@ package ch.epfl.polychef.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.fragments.UserProfileFragment;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
@@ -82,22 +86,18 @@ public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdap
         @Override
         public void onClick(View view) {
 
-//            //Here we know that the context is an activity
-//            AppCompatActivity activity = (AppCompatActivity) mainContext;
-//            FragmentManager fragMana = activity.getSupportFragmentManager();
-//
-//            // Get the clicked recipe from the recyclerView
-//            int recipePosition = recyclerView.getChildLayoutPosition(view);
-//            Recipe clickedRecipe = recipeList.get(recipePosition);
-//
-//            //Create new Bundle to store recipe object inside the recipe fragment that will be open after
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("Recipe", clickedRecipe);
-//
-//            FullRecipeFragment recipeFragment = new FullRecipeFragment();
-//            recipeFragment.setArguments(bundle);
-//
-//            fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
+            //Here we know that the context is an activity
+            AppCompatActivity activity = (AppCompatActivity) mainContext;
+            FragmentManager fragMana = activity.getSupportFragmentManager();
+
+            // Get the clicked user from the recyclerView
+            int userPosition = recyclerView.getChildLayoutPosition(view);
+            User clickedUser = userList.get(userPosition);
+
+            UserProfileFragment userProfileFragment = new UserProfileFragment(clickedUser);
+            userProfileFragment.setArguments(new Bundle());
+
+            fragMana.beginTransaction().replace(fragmentContainerID, userProfileFragment).addToBackStack(null).commit();
         }
     }
 }

@@ -28,7 +28,10 @@ import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 public class UserProfileFragment extends Fragment implements CallHandler<Recipe> {
 
     public UserProfileFragment() {
-        // Required empty public constructor
+    }
+
+    public UserProfileFragment(User user) {
+        this.userToDisplay = user;
     }
 
     private static final String TAG = "UserProfileFragment";
@@ -82,7 +85,9 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         currentIndex = 0;
 
-        userToDisplay = hostActivity.getUserStorage().getPolyChefUser();
+        if (userToDisplay == null) {
+            userToDisplay = hostActivity.getUserStorage().getPolyChefUser();
+        }
 
         ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
