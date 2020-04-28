@@ -1,11 +1,13 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RatingBar;
 import android.widget.Switch;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.synnapps.carouselview.CarouselView;
@@ -24,6 +28,7 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
@@ -31,7 +36,6 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.FavouritesUtils;
-import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
@@ -43,6 +47,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private ToggleButton favouriteButton;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
+    private Button postButton;
 
     private int indexOfInstruction=-1;
 
@@ -84,6 +89,21 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         setupSwitch(view);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        postButton = getView().findViewById(R.id.buttonRate);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent intent = new Intent(getActivity(), RateRecipeFragment.class);
+                //startActivity(intent);
+            }
+        });
+
     }
 
     private void displayFavouriteButton(View view) {
