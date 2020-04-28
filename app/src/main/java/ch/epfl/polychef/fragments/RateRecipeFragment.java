@@ -27,6 +27,7 @@ public class RateRecipeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_rate_recipe, container, false);
     }
 
+    //TODO: Afficher dans error log les potentielles exceptions levées par Rate (si a deja voté par exemple) -> affiche egalement la note donnée
 
 
 }
