@@ -55,12 +55,12 @@ public class RateRecipeFragment extends Fragment {
 
     private void checkAndSendRate(){
         Spinner spinner = getView().findViewById(R.id.RateChoices);
-        int star_nb = spinner.getSelectedItemPosition() -1 ; //TODO: Verifier si index commence à 0 ou 1
+        int starNb = spinner.getSelectedItemPosition() -1 ; //TODO: Verifier si index commence à 0 ou 1
 
         int userID = 0 ; //TODO: get "userID" from ConnectedUser
 
         try {
-           recipe.getRating().addRate(userID, star_nb);
+           recipe.getRating().addRate(userID, starNb);
 
         } catch (IllegalArgumentException e){
             //TODO: Afficher dans error log les potentielles exceptions levées par Rate (si a deja voté par exemple) -> affiche egalement la note donnée
