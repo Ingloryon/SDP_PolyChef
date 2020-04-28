@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 
 import com.synnapps.carouselview.CarouselView;
 
@@ -99,8 +101,15 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(getActivity(), RateRecipeFragment.class);
-                //startActivity(intent);
+                HomePage act = (HomePage) getActivity();
+                NavController navController = act.getNavController();
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("fragmentID", R.id.nav_host_fragment);
+
+                act.onBackPressed();
+
+                navController.navigate(R.id.favouritesFragment, bundle);
             }
         });
 

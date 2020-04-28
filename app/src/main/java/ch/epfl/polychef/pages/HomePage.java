@@ -226,4 +226,8 @@ public class HomePage extends ConnectedActivity {
     public ImageStorage getImageStorage(){
         return new ImageStorage();
     }
+
+    public NavController getNavController() {
+        return navController;
+    }
 }
