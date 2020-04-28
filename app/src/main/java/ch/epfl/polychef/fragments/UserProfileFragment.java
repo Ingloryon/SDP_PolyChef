@@ -98,11 +98,13 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
             toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if(isChecked) {
                     hostActivity.getUserStorage().getPolyChefUser().addSubscription(userToDisplay.getEmail());
-                    hostActivity.getUserStorage().updateUserInfo(); // TODO add current user to subscribers of userToDisplay
+                    userToDisplay.addSubscriber(hostActivity.getUserStorage().getPolyChefUser().getEmail());
                 } else {
                     hostActivity.getUserStorage().getPolyChefUser().removeSubscription(userToDisplay.getEmail());
-                    hostActivity.getUserStorage().updateUserInfo(); // TODO remove current user to subscribers of userToDisplay
+                    userToDisplay.removeSubscriber(hostActivity.getUserStorage().getPolyChefUser().getEmail());
                 }
+                hostActivity.getUserStorage().updateUserInfo();
+                hostActivity.getUserStorage().updateUserInfo(userToDisplay);
             });
         }
 

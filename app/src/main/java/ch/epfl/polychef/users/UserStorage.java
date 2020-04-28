@@ -100,6 +100,16 @@ public class UserStorage {
         }
     }
 
+    public void updateUserInfo(User other) {
+        if (other != null) {
+            getDatabase()
+                    .getReference("users/" + other.getKey())
+                    .setValue(other);
+        } else {
+            throw new IllegalStateException("The user has not been initialized");
+        }
+    }
+
     private String getAuthenticatedUserEmail() {
         return getAuthenticatedUser().getEmail();
     }
@@ -127,7 +137,9 @@ public class UserStorage {
                         if(dataSnapshot.getChildrenCount() == 1) {
                             for(DataSnapshot child: dataSnapshot.getChildren()){
                                 if(child.exists()){
-                                    caller.onSuccess(child.getValue(User.class));
+                                    User user = child.getValue(User.class);
+                                    user.setKey(child.getKey());
+                                    caller.onSuccess(user);
                                 } else {
                                     caller.onFailure();
                                 }
