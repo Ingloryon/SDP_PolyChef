@@ -17,7 +17,8 @@ public class RateRecipeFragment extends Fragment {
     /**
      * Required empty public constructor.
      */
-    public RateRecipeFragment() {}
+    public RateRecipeFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
