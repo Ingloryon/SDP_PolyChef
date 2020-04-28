@@ -65,6 +65,16 @@
                 app:layout_constraintStart_toEndOf="@+id/usersImage"
                 app:layout_constraintTop_toBottomOf="@+id/UsernameDisplay" />
 
+            <ToggleButton
+                android:id="@+id/subscribeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textOn="@string/subscribed"
+                android:textOff="@string/subscribe"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -83,8 +83,18 @@ public class User implements Serializable {
         subscriptions.add(user);
     }
 
+    public void removeSubscription(String email) {
+        Preconditions.checkArgument(subscriptions.contains(email), "Can not remove from subscriptions");
+        subscriptions.remove(email);
+    }
+
     public void addSubscriber(String user) {
         subscribers.add(user);
+    }
+
+    public void removeSubscriber(String email) {
+        Preconditions.checkArgument(subscribers.contains(email), "Can not remove from subscribers");
+        subscribers.remove(email);
     }
 
     @NonNull

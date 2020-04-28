@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +43,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
     private RecyclerView userRecyclerView;
 
+    private ToggleButton toggleButton;
+
     public static final int nbOfRecipesLoadedAtATime = 5;
     private boolean isLoading = false;
     private int waitingFor;
@@ -76,6 +79,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
                 }
             }
         });
+        toggleButton = view.findViewById(R.id.subscribeButton);
         return view;
     }
 
@@ -86,7 +90,20 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         currentIndex = 0;
 
         if (userToDisplay == null) {
+            toggleButton.setVisibility(View.GONE);
             userToDisplay = hostActivity.getUserStorage().getPolyChefUser();
+        } else {
+            toggleButton.setChecked(hostActivity.getUserStorage().getPolyChefUser().getSubscriptions().contains(userToDisplay.getEmail()));
+            toggleButton.setVisibility(View.VISIBLE);
+            toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if(isChecked) {
+                    hostActivity.getUserStorage().getPolyChefUser().addSubscription(userToDisplay.getEmail());
+                    hostActivity.getUserStorage().updateUserInfo(); // TODO add current user to subscribers of userToDisplay
+                } else {
+                    hostActivity.getUserStorage().getPolyChefUser().removeSubscription(userToDisplay.getEmail());
+                    hostActivity.getUserStorage().updateUserInfo(); // TODO remove current user to subscribers of userToDisplay
+                }
+            });
         }
 
         ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
