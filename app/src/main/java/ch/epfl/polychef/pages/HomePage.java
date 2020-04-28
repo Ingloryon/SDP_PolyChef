@@ -116,7 +116,7 @@ public class HomePage extends ConnectedActivity {
         int destination = navController.getCurrentDestination().getId();
 
         if(destination == R.id.userProfileFragment
-                || destination == R.id.fullRecipeFragment) {
+                || destination == R.id.fullRecipeFragment || destination == R.id.rateRecipeFragment) {
 
             currentItem = null;
         } else {
