@@ -89,7 +89,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         currentIndex = 0;
 
-        if (userToDisplay == null) {
+        if (userToDisplay == null || userToDisplay.equals(hostActivity.getUserStorage().getPolyChefUser())) {
             toggleButton.setVisibility(View.GONE);
             userToDisplay = hostActivity.getUserStorage().getPolyChefUser();
         } else {
