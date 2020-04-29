@@ -8,6 +8,10 @@ import ch.epfl.polychef.users.User;
  * A simple {@link Fragment} subclass.
  */
 public class SubscribersFragment extends UserListFragment {
+
+    /**
+     * Create a new {@code SubscribersFragment}.
+     */
     public SubscribersFragment() {
         super(User::getSubscribers, R.layout.fragment_subscribers);
     }

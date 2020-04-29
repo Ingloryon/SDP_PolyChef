@@ -50,6 +50,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     private int indexOfInstruction=-1;
 
+    private int containerId;
+
 
     /**
      * Required empty public constructor.
@@ -88,6 +90,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         setupSwitch(view);
 
+        containerId = container.getId();
+
         return view;
     }
 
@@ -97,14 +101,15 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             @Override
             public void onSuccess(User data) {
                 authorName.setText(data.getUsername());
-                authorName.setOnClickListener(v -> { // TODO change this transaction to fix new fragment
+                authorName.setOnClickListener(v -> {
                     AppCompatActivity activity = (AppCompatActivity) getContext();
                     FragmentManager fragMana = activity.getSupportFragmentManager();
 
                     UserProfileFragment userProfileFragment = new UserProfileFragment(data);
                     userProfileFragment.setArguments(new Bundle());
 
-                    fragMana.beginTransaction().replace(R.id.fullRecipeFragment, userProfileFragment).addToBackStack(null).commit();
+
+                    fragMana.beginTransaction().replace(containerId, userProfileFragment).addToBackStack(null).commit();
                 });
             }
 

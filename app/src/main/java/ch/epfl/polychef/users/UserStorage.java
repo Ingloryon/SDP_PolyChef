@@ -17,20 +17,20 @@ import ch.epfl.polychef.utils.FavouritesUtils;
 
 public class UserStorage {
 
-    private static UserStorage INSTANCE=new UserStorage();
+    private static UserStorage INSTANCE = new UserStorage();
 
-    private User user=null;
-    private String userKey=null;
+    private User user = null;
+    private String userKey = null;
 
-    public static UserStorage getInstance(){
+    public static UserStorage getInstance() {
         return INSTANCE;
     }
 
-    private UserStorage(){
+    private UserStorage() {
     }
 
     public void initializeUserFromAuthenticatedUser() {
-        String email=getAuthenticatedUserEmail();
+        String email = getAuthenticatedUserEmail();
 
         getDatabase()
                 .getReference("users")
@@ -42,11 +42,11 @@ public class UserStorage {
 
                         long childrenCount = dataSnapshot.getChildrenCount();
 
-                        if(childrenCount == 0) {
+                        if (childrenCount == 0) {
                             initializeNewUser(email);
 
-                        } else if(childrenCount == 1) {
-                            for(DataSnapshot child: dataSnapshot.getChildren()){
+                        } else if (childrenCount == 1) {
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
                                 initializeExistingUser(child);
                             }
 
@@ -77,9 +77,9 @@ public class UserStorage {
         userKey = ref.getKey();
     }
 
-    private void initializeExistingUser(DataSnapshot snap){
+    private void initializeExistingUser(DataSnapshot snap) {
 
-        if(snap.exists()){
+        if (snap.exists()) {
             user = snap.getValue(User.class);
             user.removeNullFromLists();
             userKey = snap.getKey();
@@ -100,6 +100,15 @@ public class UserStorage {
         }
     }
 
+    /**
+     * Update another {@code User}, even if this is not the connected user.
+     * <p>
+     * Warning: this method assume that {@link User#getKey()} will not return null <br>
+     * (see {@link #getUserByEmail(String email, CallHandler caller)})
+     * </p>
+     *
+     * @param other the other user
+     */
     public void updateUserInfo(User other) {
         if (other != null) {
             getDatabase()
@@ -126,17 +135,20 @@ public class UserStorage {
         return user;
     }
 
+    /**
+     * Get a {@code User} from an email.
+     *
+     * @param email  the email of the user
+     * @param caller the caller to call on success and failure
+     */
     public void getUserByEmail(String email, CallHandler<User> caller) {
-        getDatabase()
-                .getReference("users")
-                .orderByChild("email")
-                .equalTo(email)
+        getDatabase().getReference("users").orderByChild("email").equalTo(email)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getChildrenCount() == 1) {
-                            for(DataSnapshot child: dataSnapshot.getChildren()){
-                                if(child.exists()){
+                        if (dataSnapshot.getChildrenCount() == 1) {
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                if (child.exists()) {
                                     User user = child.getValue(User.class);
                                     user.setKey(child.getKey());
                                     caller.onSuccess(user);
