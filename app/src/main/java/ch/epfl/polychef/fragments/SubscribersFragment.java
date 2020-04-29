@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.users.User;
+
 /**
  * A simple {@link Fragment} subclass.
  */

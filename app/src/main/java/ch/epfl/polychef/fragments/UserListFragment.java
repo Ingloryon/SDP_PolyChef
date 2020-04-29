@@ -25,6 +25,9 @@ import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.UserMiniatureAdapter;
 
+/**
+ * Represent a fragment with a list of {@code User} to show the miniature.
+ */
 public class UserListFragment extends Fragment {
 
     private RecyclerView usersRecyclerView;
@@ -36,9 +39,6 @@ public class UserListFragment extends Fragment {
     private final Function<User, List<String>> userListFunction;
     private final int fragmentId;
 
-    /**
-     * Required empty public constructor.
-     */
     public UserListFragment(Function<User, List<String>> userListFunction, int fragmentId) {
         this.userListFunction = userListFunction;
         this.fragmentId = fragmentId;
@@ -79,5 +79,9 @@ public class UserListFragment extends Fragment {
         for(String userUuid: userListFunction.apply(userStorage.getPolyChefUser())) {
             userStorage.getUserByEmail(userUuid, multipleCallHandler);
         }
+    }
+
+    public RecyclerView getRecyclerView() {
+        return usersRecyclerView;
     }
 }
