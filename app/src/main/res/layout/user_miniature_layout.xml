@@ -21,8 +21,10 @@
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"/>
+            android:fontFamily="sans-serif-medium"
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/profilePicture"
