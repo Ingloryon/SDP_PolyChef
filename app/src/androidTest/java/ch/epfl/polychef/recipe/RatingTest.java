@@ -6,9 +6,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
 
 public class RatingTest {
 
@@ -75,12 +79,12 @@ public class RatingTest {
         Rating rating = new Rating();
 
         Random rnd=new Random();
-        int nb=16;
-        HashMap<Integer,Integer> userToRating=new HashMap<>();
+        int nb=4;//16;
+        HashMap<String,Integer> userToRating=new HashMap<>();
         for(int i=0;i<nb;++i){
             int rndNext=rnd.nextInt(6);
             rating.addRate(Integer.toString(i),rndNext);
-            userToRating.put(i,rndNext);
+            userToRating.put(Integer.toString(i),rndNext);
         }
 
         assertEquals(rating.getAllRatings(),userToRating);

@@ -37,14 +37,23 @@ public class RateRecipeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_rate_recipe, container, false);
     }
 
+    /**
+     * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}
+     * as returned, but before any saved state has been restored in to the view.
+     * This gives subclasses a chance to initialize themselves once
+     * they know their view hierarchy has been completely created.  The fragment's
+     * view hierarchy is not however attached to its parent at this point.
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * @throws NullPointerException if this.getArguments() is null or if bundle.getSerializable("RecipeToRate") is null
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
-        if(bundle != null){
-            recipe = (Recipe) bundle.getSerializable("RecipeToRate");
-        }
+
+        recipe = (Recipe) bundle.getSerializable("RecipeToRate");
 
         String text = getActivity().getString(R.string.RateText) + " \"" + recipe.getName() + "\" ?";
         TextView rateText =  getView().findViewById(R.id.RateText);
