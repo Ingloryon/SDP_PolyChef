@@ -14,18 +14,30 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import ch.epfl.polychef.CallHandler;
+
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
@@ -46,8 +58,15 @@ public class UserStorageTest {
 
     private UserStorage fakeUserStorage = Mockito.mock(UserStorage.class,CALLS_REAL_METHODS );
 
+    @Mock
+    private Query query;
+
+    @Mock
+    private DataSnapshot dataSnapshot;
+
     @Before
     public void initMockFirebaseDatabase() {
+        MockitoAnnotations.initMocks(this);
         mockDatabase = mock(FirebaseDatabase.class);
         mockUsersRef = mock(DatabaseReference.class);
         mockOnDataChangeSnapshot = mock(DataSnapshot.class);
@@ -203,6 +222,96 @@ public class UserStorageTest {
         }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
+    @Test
+    public void canUpdateUserByEmail() {
+        User user = new User();
+        user.setKey("TEST");
+        DatabaseReference mockUserRef = mock(DatabaseReference.class);
+        when(mockDatabase.getReference(eq("users/TEST"))).thenReturn(mockUserRef);
+        fakeUserStorage.updateUserInfo(user);
+        verify(mockUserRef).setValue(eq(user));
+    }
+
+    @Test
+    public void nullUserThrowsIllegal() {
+        assertThrows(IllegalStateException.class, () -> fakeUserStorage.updateUserInfo(null));
+    }
+
+    @Test
+    public void canGetUserByEmail() {
+        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);
+        User user = new User();
+        DataSnapshot dataSnapshot1 = mock(DataSnapshot.class);
+        when(dataSnapshot.getChildren()).thenReturn(Collections.singletonList(dataSnapshot1));
+        when(dataSnapshot1.exists()).thenReturn(true);
+        when(dataSnapshot1.getValue(User.class)).thenReturn(user);
+        when(dataSnapshot1.getKey()).thenReturn("TEST");
+        mockResponse(true);
+        fakeUserStorage.getUserByEmail("fake@email.com", new CallHandler<User>() {
+            @Override
+            public void onSuccess(User data) {
+                assertThat(data, equalTo(user));
+            }
+
+            @Override
+            public void onFailure() {
+                fail("Should not fail");
+            }
+        });
+    }
+
+    @Test
+    public void wrongUserFailsOnGetByEmail() {
+        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);
+        DataSnapshot dataSnapshot1 = mock(DataSnapshot.class);
+        when(dataSnapshot.getChildren()).thenReturn(Collections.singletonList(dataSnapshot1));
+        when(dataSnapshot1.exists()).thenReturn(false);
+        mockResponse(true);
+        shouldFails();
+    }
+
+    @Test
+    public void moreThanOneUserFailsEmail() {
+        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        when(dataSnapshot.getChildrenCount()).thenReturn((long) 3);
+        mockResponse(true);
+        shouldFails();
+    }
+
+    @Test
+    public void getEmailsCanFailsOnCancel() {
+        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        mockResponse(false);
+        shouldFails();
+    }
+
+    private void shouldFails() {
+        fakeUserStorage.getUserByEmail("fake@email.com", new CallHandler<User>() {
+            @Override
+            public void onSuccess(User data) {
+                fail("Should fail");
+            }
+
+            @Override
+            public void onFailure() {
+            }
+        });
+    }
+
+    private void mockResponse(boolean mockSuccess){
+        doAnswer((call) -> {
+            ValueEventListener listener = call.getArgument(0);
+
+            if(mockSuccess){
+                listener.onDataChange(dataSnapshot);
+            } else {
+                listener.onCancelled(mock(DatabaseError.class));
+            }
+            return null;
+        }).when(query).addListenerForSingleValueEvent(any());
+    }
 
     private void onDataChangeCallBack(){
         doAnswer((call) -> {
