@@ -8,10 +8,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+
+import java.util.concurrent.TimeUnit;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.EntryPage;
@@ -19,6 +21,7 @@ import ch.epfl.polychef.pages.EntryPageTest;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.pages.HomePageTest;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -26,7 +29,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -76,22 +82,16 @@ public class RateRecipeFragmentsTest {
     @Test
     public void rateButtonIsDisplayedAndDisplayCorrectText(){
         launchFakeEntryPage();
+
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonRate)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonRate)).check(matches(withText(R.string.RateButton)));
     }
 
-    /*@Test
-    public void rateSpinnerHasTheRightTexts() {
-        onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.buttonRate)).perform(click());
-        onView(withId(R.id.RateChoices)).perform(click());
-        onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString("0"))));
-    }*/
-
     @Test
     public void toastIsDisplayedIfTryToRateWhileNotLoggedIn(){
         launchFakeEntryPage();
+
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonRate)).perform(click());
         onView(withText(R.string.errorOnlineFeature))
@@ -100,5 +100,33 @@ public class RateRecipeFragmentsTest {
                 .check(matches(isDisplayed()));
     }
 
+    @Test
+    public void rateSpinnerCanBeClickedOn() {
+        launchFakeHomePage();
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.buttonRate)).perform(click());
+        onView(withId(R.id.RateChoices)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("0 star"))).perform(click());
+        onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString("0 star"))));
+    }
+
+
+    @Test
+    public void test(){
+        //FullRecipeFragment mockFullRecipeFragment= Mockito.mock(FullRecipeFragment.class);
+
+        RateRecipeFragment rrf=new RateRecipeFragment();
+
+        //mockFullRecipeFragment.
+        //onViewCreated
+
+        //navController.navigate(R.id.rateRecipeFragment, bundle);
+    }
 
 }

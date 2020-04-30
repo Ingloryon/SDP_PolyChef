@@ -100,10 +100,14 @@ public class RateRecipeFragment extends Fragment {
         }
 
 
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference(RecipeStorage.DB_NAME);
+        DatabaseReference ref=getFireDatabase().getReference(RecipeStorage.DB_NAME);
         ref.setValue(recipe);
 
         //TODO: return to Recipe or Home menu ?
         getActivity().onBackPressed();
+    }
+
+    protected FirebaseDatabase getFireDatabase(){
+        return FirebaseDatabase.getInstance();
     }
 }

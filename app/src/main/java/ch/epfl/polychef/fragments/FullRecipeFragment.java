@@ -78,6 +78,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         if(bundle != null){
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");
         }
+
         displayFavouriteButton(view);
         displayRecipeName(view);
         displayImage(view);
