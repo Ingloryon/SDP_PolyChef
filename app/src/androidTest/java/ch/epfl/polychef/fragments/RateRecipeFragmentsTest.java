@@ -65,7 +65,7 @@ public class RateRecipeFragmentsTest {
     public void rateButtonIsDisplayedAndDisplayCorrectText(){
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonRate)).check(matches(isDisplayed()));
-        onView(withId(R.id.buttonRate)).check(matches(withText(R.id.buttonRate)));
+        onView(withId(R.id.buttonRate)).check(matches(withText(R.string.RateButton)));
     }
 
     /*public void rateSpinnerHasTheRightTexts() {
