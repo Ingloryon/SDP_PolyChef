@@ -210,7 +210,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     }
 
     /**
-     * Returns the key used by the database to store the recipe
+     * Returns the key used by the database to store the recipe.
      * @return the key used by the database to store the recipe
      */
     public String getRecipeDatabaseKey(){
@@ -218,8 +218,8 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     }
 
     /**
-     * Should only be used by Firebase
-     * Sets the key used by the database to store the recipe
+     * Should only be used by Firebase.
+     * Sets the key used by the database to store the recipe.
      * @param recipeDatabaseKey the new key for the recipe
      */
     public void setRecipeDatabaseKey(String recipeDatabaseKey){
