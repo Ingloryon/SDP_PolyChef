@@ -151,7 +151,7 @@ public class RecipeStorage implements Serializable  {
         if (recipe == null) {
             ch.onFailure();
         } else {
-            recipe.setKey(snapshot.getKey());
+            recipe.setRecipeDatabaseKey(snapshot.getKey());
             ch.onSuccess(recipe);
         }
     }
@@ -164,7 +164,7 @@ public class RecipeStorage implements Serializable  {
             List<Recipe> recipes = new ArrayList<>();
             for(DataSnapshot child : dataSnapshot.getChildren()){
                 Recipe recipe = child.getValue(Recipe.class);
-                recipe.setKey(child.getKey());
+                recipe.setRecipeDatabaseKey(child.getKey());
                 recipes.add(recipe);
             }
 
