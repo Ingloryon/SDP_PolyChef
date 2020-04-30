@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,7 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.synnapps.carouselview.CarouselView;
 
@@ -24,6 +28,9 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
@@ -41,10 +48,13 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
     private ToggleButton favouriteButton;
+    private TextView authorName;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
 
     private int indexOfInstruction=-1;
+
+    private int containerId;
 
 
     /**
@@ -73,6 +83,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         displayDifficulty(view);
         displayInstructions(view);
         displayIngredients(view);
+        displayAuthorName(view);
 
         voiceRecognizer=new VoiceRecognizer(this);
         try {
@@ -83,7 +94,33 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         setupSwitch(view);
 
+        containerId = container.getId();
+
         return view;
+    }
+
+    private void displayAuthorName(View view) {
+        authorName = view.findViewById(R.id.authorUsername);
+        getUserStorage().getUserByEmail(currentRecipe.getAuthor(), new CallHandler<User>() {
+            @Override
+            public void onSuccess(User data) {
+                authorName.setText(data.getUsername());
+                authorName.setOnClickListener(v -> {
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    FragmentManager fragMana = activity.getSupportFragmentManager();
+
+                    UserProfileFragment userProfileFragment = new UserProfileFragment(data);
+                    userProfileFragment.setArguments(new Bundle());
+
+
+                    fragMana.beginTransaction().replace(containerId, userProfileFragment).addToBackStack(null).commit();
+                });
+            }
+
+            @Override
+            public void onFailure() {
+            }
+        });
     }
 
     private void displayFavouriteButton(View view) {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +29,10 @@ import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 public class UserProfileFragment extends Fragment implements CallHandler<Recipe> {
 
     public UserProfileFragment() {
-        // Required empty public constructor
+    }
+
+    public UserProfileFragment(User user) {
+        this.userToDisplay = user;
     }
 
     private static final String TAG = "UserProfileFragment";
@@ -38,6 +42,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
     private RecyclerView userRecyclerView;
+
+    private ToggleButton toggleButton;
 
     public static final int nbOfRecipesLoadedAtATime = 5;
     private boolean isLoading = false;
@@ -73,6 +79,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
                 }
             }
         });
+        toggleButton = view.findViewById(R.id.subscribeButton);
         return view;
     }
 
@@ -82,7 +89,24 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         currentIndex = 0;
 
-        userToDisplay = hostActivity.getUserStorage().getPolyChefUser();
+        if (userToDisplay == null || userToDisplay.equals(hostActivity.getUserStorage().getPolyChefUser())) {
+            toggleButton.setVisibility(View.GONE);
+            userToDisplay = hostActivity.getUserStorage().getPolyChefUser();
+        } else {
+            toggleButton.setChecked(hostActivity.getUserStorage().getPolyChefUser().getSubscriptions().contains(userToDisplay.getEmail()));
+            toggleButton.setVisibility(View.VISIBLE);
+            toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if(isChecked) {
+                    hostActivity.getUserStorage().getPolyChefUser().addSubscription(userToDisplay.getEmail());
+                    userToDisplay.addSubscriber(hostActivity.getUserStorage().getPolyChefUser().getEmail());
+                } else {
+                    hostActivity.getUserStorage().getPolyChefUser().removeSubscription(userToDisplay.getEmail());
+                    userToDisplay.removeSubscriber(hostActivity.getUserStorage().getPolyChefUser().getEmail());
+                }
+                hostActivity.getUserStorage().updateUserInfo();
+                hostActivity.getUserStorage().updateUserInfo(userToDisplay);
+            });
+        }
 
         ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());

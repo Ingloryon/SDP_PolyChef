@@ -61,18 +61,35 @@
                         android:textOn=""
                         android:textOff=""/>
 
-                    <RatingBar
-                        android:id="@+id/ratingBar"
+                    <LinearLayout
+                        android:id="@+id/rate_author"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:rating="5"
-                        android:stepSize="0.1"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/recipeName" />
+                        app:layout_constraintTop_toBottomOf="@id/recipeName">
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:rating="5"
+                            android:stepSize="0.1" />
+
+                        <TextView
+                            android:id="@+id/authorUsername"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="20dp"
+                            android:autoLink="web"
+                            android:fontFamily="sans-serif-medium"
+                            android:textSize="18sp" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
@@ -208,7 +225,7 @@
                         android:checked="false"
                         android:text="@string/VoiceRecognitionSwitch"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+                        app:layout_constraintTop_toBottomOf="@+id/rate_author" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

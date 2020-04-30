@@ -3,6 +3,8 @@ package ch.epfl.polychef.users;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +22,8 @@ public class User implements Serializable {
     private List<String> favourites;
     private List<String> subscribers;
     private List<String> subscriptions;
+
+    private String key;
 
     public User(String email, String username){
         this.email = email;
@@ -83,8 +87,28 @@ public class User implements Serializable {
         subscriptions.add(user);
     }
 
+    public void removeSubscription(String email) {
+        Preconditions.checkArgument(subscriptions.contains(email), "Can not remove from subscriptions");
+        subscriptions.remove(email);
+    }
+
     public void addSubscriber(String user) {
         subscribers.add(user);
+    }
+
+    public void removeSubscriber(String email) {
+        Preconditions.checkArgument(subscribers.contains(email), "Can not remove from subscribers");
+        subscribers.remove(email);
+    }
+
+    @Exclude
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Exclude
+    public String getKey() {
+        return this.key;
     }
 
     @NonNull

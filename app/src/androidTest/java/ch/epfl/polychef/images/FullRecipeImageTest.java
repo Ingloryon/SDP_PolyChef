@@ -24,6 +24,8 @@ import ch.epfl.polychef.pages.EntryPageTest;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
@@ -36,6 +38,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
 public class FullRecipeImageTest {
@@ -52,6 +58,8 @@ public class FullRecipeImageTest {
     @Rule
     public ActivityTestRule<EntryPage> intentsTestRule = new ActivityTestRule<>(fakeEntryPage, false,
             true);
+
+    private FragmentTest fragmentTest = new FragmentTest();
 
     private void setUp(String path) {
         Recipe recipe = new RecipeBuilder()
@@ -70,7 +78,7 @@ public class FullRecipeImageTest {
         Bundle bundle = new Bundle();
         bundle.putSerializable("Recipe", recipe);
         bundle.putInt("fragmentID", R.id.nav_entry_fragment);
-        Fragment fragment = new FragmentTest();
+        Fragment fragment = fragmentTest;
         fragment.setArguments(bundle);
         FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_entry_fragment, fragment).addToBackStack(null);
@@ -101,7 +109,25 @@ public class FullRecipeImageTest {
                 .check(matches(isDisplayed()));
     }
 
+    @Test
+    public void canOpenRecipeAndHasAuthor() {
+        doAnswer((call) -> {
+            CallHandler<User> ch = call.getArgument(1);
+            ch.onSuccess(new User("TEST", "TEST1234"));
+            return null;
+        }).when(fragmentTest.mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
+        setUp("test_2");
+        onView(withId(R.id.authorUsername)).check(matches(withText("TEST1234")));
+    }
+
     public static class FragmentTest extends FullRecipeFragment {
+
+        public UserStorage mockUserStorage = mock(UserStorage.class);
+
+        @Override
+        public UserStorage getUserStorage() {
+            return mockUserStorage;
+        }
 
         @Override
         public ImageStorage getImageStorage() {

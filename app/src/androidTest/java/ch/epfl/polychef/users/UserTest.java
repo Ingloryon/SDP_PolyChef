@@ -4,6 +4,7 @@ import androidx.test.espresso.core.internal.deps.guava.base.Function;
 
 import com.google.android.gms.common.util.BiConsumer;
 
+import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -129,6 +132,11 @@ public class UserTest {
     }
 
     @Test
+    public void canRemoveSubscribers() {
+        checkAddRemoveSub(User::addSubscription, User::removeSubscription, User::getSubscriptions);
+    }
+
+    @Test
     public void canAddSubscriptions() {
 
         addAndAssert(
@@ -136,6 +144,27 @@ public class UserTest {
                 User::addSubscription,
                 User::getSubscriptions
         );
+    }
+
+    @Test
+    public void canRemoveSubscriptions() {
+        checkAddRemoveSub(User::addSubscription, User::removeSubscription, User::getSubscriptions);
+    }
+
+    private void checkAddRemoveSub(BiConsumer<User, String> addFunc, BiConsumer<User, String> removeFunc, Function<User, List<String>> getFunc) {
+        User user = new User();
+        addFunc.accept(user, "Sub1");
+        addFunc.accept(user, "Sub2");
+        addFunc.accept(user, "Sub3");
+        removeFunc.accept(user, "Sub3");
+        assertThat(getFunc.apply(user), IsCollectionContaining.hasItems("Sub1", "Sub2"));
+    }
+
+    @Test
+    public void canSetAndGetKey() {
+        User user = new User();
+        user.setKey("TEST");
+        assertThat(user.getKey(), is("TEST"));
     }
 
     @Test

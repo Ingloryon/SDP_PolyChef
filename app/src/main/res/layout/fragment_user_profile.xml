@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/userProfileFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -55,15 +56,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:text="Email"
                 app:autoSizeMaxTextSize="100sp"
                 app:autoSizeMinTextSize="12sp"
                 app:autoSizeStepGranularity="2sp"
                 app:autoSizeTextType="uniform"
-                app:layout_constraintBottom_toBottomOf="@+id/usersImage"
                 app:layout_constraintStart_toEndOf="@+id/usersImage"
                 app:layout_constraintTop_toBottomOf="@+id/UsernameDisplay" />
+
+            <ToggleButton
+                android:id="@+id/subscribeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textOff="@string/subscribe"
+                android:textOn="@string/subscribed"
+                app:layout_constraintStart_toEndOf="@+id/usersImage"
+                app:layout_constraintTop_toBottomOf="@+id/UserEmailDisplay" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,29 +1,20 @@
 package ch.epfl.polychef.fragments;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.fragment.app.Fragment;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.users.User;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SubscriptionsFragment extends Fragment {
+public class SubscriptionsFragment extends UserListFragment {
 
     /**
-     * Required empty public constructor.
+     * Create a new {@code SubscriptionsFragment}.
      */
-    public SubscriptionsFragment() {}
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_subscriptions, container, false);
+    public SubscriptionsFragment() {
+        super(User::getSubscriptions, R.layout.fragment_subscriptions);
     }
+
 }
