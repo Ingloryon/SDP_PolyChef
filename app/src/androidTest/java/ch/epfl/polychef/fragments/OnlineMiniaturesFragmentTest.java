@@ -275,6 +275,11 @@ public class OnlineMiniaturesFragmentTest {
     @Test
     public synchronized void canOpenRecipeAndHasAuthor() throws InterruptedException {
         addNewYoungerRecipe();
+        doAnswer((call) -> {
+            CallHandler<User> ch = call.getArgument(1);
+            ch.onSuccess(new User("TEST", "TEST1234"));
+            return null;
+        }).when(mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
         initActivity();
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.authorUsername)).check(matches(withText("TEST1234")));
@@ -289,13 +294,7 @@ public class OnlineMiniaturesFragmentTest {
 
         @Override
         public UserStorage getUserStorage(){
-            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
             when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
-            doAnswer((call) -> {
-                CallHandler<User> ch = call.getArgument(1);
-                ch.onSuccess(new User("TEST", "TEST1234"));
-                return null;
-            }).when(mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
             return mockUserStorage;
         }
 
