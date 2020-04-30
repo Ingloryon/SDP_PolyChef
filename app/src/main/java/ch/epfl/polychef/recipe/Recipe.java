@@ -209,12 +209,21 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         return recipeUuid;
     }
 
+    /**
+     * Returns the key used by the database to store the recipe
+     * @return the key used by the database to store the recipe
+     */
     public String getRecipeDatabaseKey(){
         return recipeDatabaseKey;
     }
 
-    public void setRecipeDatabaseKey(String k){
-        this.recipeDatabaseKey =k;
+    /**
+     * Should only be used by Firebase
+     * Sets the key used by the database to store the recipe
+     * @param recipeDatabaseKey the new key for the recipe
+     */
+    public void setRecipeDatabaseKey(String recipeDatabaseKey){
+        this.recipeDatabaseKey =recipeDatabaseKey;
     }
 
     @Override
