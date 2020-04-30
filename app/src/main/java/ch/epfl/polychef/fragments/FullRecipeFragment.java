@@ -112,7 +112,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                     act.onBackPressed();
                     navController.navigate(R.id.rateRecipeFragment, bundle);
                 }else {
-
                     Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
                 }
             }
