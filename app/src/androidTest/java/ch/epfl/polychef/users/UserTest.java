@@ -133,12 +133,7 @@ public class UserTest {
 
     @Test
     public void canRemoveSubscribers() {
-        User user = new User();
-        user.addSubscriber("Sub1");
-        user.addSubscriber("Sub2");
-        user.addSubscriber("Sub3");
-        user.removeSubscriber("Sub3");
-        assertThat(user.getSubscribers(), IsCollectionContaining.hasItems("Sub1", "Sub2"));
+        checkAddRemoveSub(User::addSubscription, User::removeSubscription, User::getSubscriptions);
     }
 
     @Test
@@ -153,12 +148,16 @@ public class UserTest {
 
     @Test
     public void canRemoveSubscriptions() {
+        checkAddRemoveSub(User::addSubscription, User::removeSubscription, User::getSubscriptions);
+    }
+
+    private void checkAddRemoveSub(BiConsumer<User, String> addFunc, BiConsumer<User, String> removeFunc, Function<User, List<String>> getFunc) {
         User user = new User();
-        user.addSubscription("Sub1");
-        user.addSubscription("Sub2");
-        user.addSubscription("Sub3");
-        user.removeSubscription("Sub3");
-        assertThat(user.getSubscriptions(), IsCollectionContaining.hasItems("Sub1", "Sub2"));
+        addFunc.accept(user, "Sub1");
+        addFunc.accept(user, "Sub2");
+        addFunc.accept(user, "Sub3");
+        removeFunc.accept(user, "Sub3");
+        assertThat(getFunc.apply(user), IsCollectionContaining.hasItems("Sub1", "Sub2"));
     }
 
     @Test
