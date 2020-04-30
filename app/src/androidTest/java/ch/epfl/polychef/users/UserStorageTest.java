@@ -231,11 +231,11 @@ public class UserStorageTest {
         fakeUserStorage.updateUserInfo(user);
         verify(mockUserRef).setValue(eq(user));
     }
-/*
+
     @Test
     public void nullUserThrowsIllegal() {
         assertThrows(IllegalStateException.class, () -> fakeUserStorage.updateUserInfo(null));
-    }*/
+    }
 
     @Test
     public void canGetUserByEmail() {
