@@ -92,6 +92,9 @@ public class OnlineMiniaturesFragmentTest {
     @Mock
     SearchRecipe mockSearchRecipe;
 
+    @Mock
+    UserStorage mockUserStorage;
+
     @Before
     public void initMockAndStorage() {
         MockitoAnnotations.initMocks(this);
