@@ -17,8 +17,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.UserStorage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,7 +85,7 @@ public class RateRecipeFragment extends Fragment {
         /*String txt = Integer.toString(starNb);
         */
 
-        String userID = "0" ; //TODO: get "userID" from ConnectedUser -> in Simon's branch user.getKey()
+        String userID = UserStorage.getInstance().getPolyChefUser().getKey();
 
         int oldRating = recipe.getRating().addRate(userID, starNb);
 
