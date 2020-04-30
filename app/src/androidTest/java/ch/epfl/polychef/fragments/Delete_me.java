@@ -118,9 +118,7 @@ public class Delete_me {
 
     @Test
     public void checkAndsendRate(){
-        //FullRecipeFragment mockFullRecipeFragment= Mockito.mock(FullRecipeFragment.class);
-
-        RateRecipeFragment rrf=new RateRecipeFragment();
+        RateRecipeFragment rrf =new RateRecipeFragment();
 
         //mockFullRecipeFragment.
         //onViewCreated

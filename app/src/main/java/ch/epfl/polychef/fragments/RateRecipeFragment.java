@@ -17,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.UserStorage;
@@ -65,7 +64,6 @@ public class RateRecipeFragment extends Fragment {
         TextView rateText =  getView().findViewById(R.id.RateText);
         rateText.setText(text);
 
-
         postButton = getView().findViewById(R.id.buttonSendRate);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +96,7 @@ public class RateRecipeFragment extends Fragment {
             Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
 
-        DatabaseReference ref=FirebaseDatabase.getInstance().getReference(RecipeStorage.DB_NAME).child(recipe.getKey());
+        DatabaseReference ref = getFireDatabase().getReference(RecipeStorage.DB_NAME).child(recipe.getKey());
         ref.setValue(recipe);
 
         getActivity().onBackPressed();
