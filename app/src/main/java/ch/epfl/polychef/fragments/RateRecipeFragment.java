@@ -85,7 +85,8 @@ public class RateRecipeFragment extends Fragment {
         /*String txt = Integer.toString(starNb);
         */
 
-        String userID = UserStorage.getInstance().getPolyChefUser().getKey();
+        String userID = "0";
+        //Should be UserStorage.getInstance().getPolyChefUser().getKey()
 
         int oldRating = recipe.getRating().addRate(userID, starNb);
 
