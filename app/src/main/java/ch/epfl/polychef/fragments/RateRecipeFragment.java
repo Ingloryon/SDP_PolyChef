@@ -99,11 +99,14 @@ public class RateRecipeFragment extends Fragment {
             Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
 
-
         DatabaseReference ref=FirebaseDatabase.getInstance().getReference(RecipeStorage.DB_NAME).child(recipe.getKey());
         ref.setValue(recipe);
 
         //TODO: return to Recipe or Home menu ?
         getActivity().onBackPressed();
+    }
+
+    protected FirebaseDatabase getFireDatabase(){
+        return FirebaseDatabase.getInstance();
     }
 }
