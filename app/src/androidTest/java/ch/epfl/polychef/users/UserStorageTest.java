@@ -234,7 +234,7 @@ public class UserStorageTest {
 
     @Test
     public void nullUserThrowsIllegal() {
-        assertThrows(IllegalStateException.class, () -> fakeUserStorage.updateUserInfo(null));
+        assertThrows(IllegalArgumentException.class, () -> fakeUserStorage.updateUserInfo(null));
     }
 
     @Test

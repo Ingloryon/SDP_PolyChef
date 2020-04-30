@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.utils.FavouritesUtils;
+import ch.epfl.polychef.utils.Preconditions;
 
 public class UserStorage {
 
@@ -104,6 +105,7 @@ public class UserStorage {
      * @param other the other user
      */
     public void updateUserInfo(User other) {
+        Preconditions.checkArgument(other != null, "User can not be null");
         updateUserInfo(other, other.getKey());
     }
 
