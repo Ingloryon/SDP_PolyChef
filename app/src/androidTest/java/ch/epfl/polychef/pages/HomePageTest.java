@@ -161,7 +161,7 @@ public class HomePageTest {
         }
     }
 
-    class FakeHomePage extends HomePage {
+    public static class FakeHomePage extends HomePage {
 
         @Override
         public UserStorage getUserStorage(){

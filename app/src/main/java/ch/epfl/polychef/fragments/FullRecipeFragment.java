@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RatingBar;
 import android.widget.Switch;
@@ -18,6 +19,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 
 import com.synnapps.carouselview.CarouselView;
 
@@ -38,7 +42,6 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.FavouritesUtils;
-import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
@@ -99,6 +102,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         return view;
     }
 
+
     private void displayAuthorName(View view) {
         authorName = view.findViewById(R.id.authorUsername);
         getUserStorage().getUserByEmail(currentRecipe.getAuthor(), new CallHandler<User>() {
@@ -121,6 +125,35 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             public void onFailure() {
             }
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Button postButton = getView().findViewById(R.id.buttonRate);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() instanceof HomePage) {
+
+                    HomePage act = (HomePage) getActivity();
+                    NavController navController = act.getNavController();
+
+                    // TODO: Give to the RateRecipeFragment activity infos on the currently displayed Recipe (UUID)
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("fragmentID", R.id.nav_host_fragment);
+                    bundle.putString("RecipeDisplayed", currentRecipe.getRecipeUuid());
+                    bundle.putSerializable("RecipeToRate", currentRecipe);
+
+                    act.onBackPressed();
+                    navController.navigate(R.id.rateRecipeFragment, bundle);
+                }else {
+                    Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     private void displayFavouriteButton(View view) {
