@@ -13,8 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.lang.ref.Reference;
+
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,19 +90,19 @@ public class RateRecipeFragment extends Fragment {
 
         int oldRating = recipe.getRating().addRate(userID, starNb);
 
-        String alreadyRatedText = "You previously rated this recipe " + oldRating + " stars.\n";
-        String newRatingText =  "Your new rating is " + starNb +"stars.";
 
-        if(oldRating == -1) {
-            Toast.makeText(getActivity(), alreadyRatedText + newRatingText , Toast.LENGTH_LONG).show();
+        if(oldRating == -1 || oldRating==starNb) {
+            String newRatingText =  "Your rating is " + starNb +" stars.";
+            Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         } else {
+            String newRatingText =  "Your new rating is " + starNb +" stars. Your previous rating was "+oldRating;
             Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
 
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference(RecipeStorage.DB_NAME);
+        ref.setValue(recipe);
+
         //TODO: return to Recipe or Home menu ?
-        /*
-        HomePage act = (HomePage) getActivity();
-        act.onBackPressed();
-         */
+        getActivity().onBackPressed();
     }
 }

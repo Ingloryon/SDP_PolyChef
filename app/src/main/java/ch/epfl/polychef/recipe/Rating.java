@@ -23,6 +23,7 @@ public final class Rating implements Serializable {
      * Adds a rating from a user, if he already rated it changes his personal rating.
      * @param userID the ID of the user, a positive integer
      * @param rate the rate given by the user, between 0 and 5
+     * @return the rate that was overridden or -1 if there was no previous rate
      */
     public int addRate(String userID, int rate){
         Preconditions.checkArgument(0 <= rate && rate <= 5, "A rate's value should be between 0 and 5");

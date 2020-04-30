@@ -79,7 +79,7 @@ public class RatingTest {
         Rating rating = new Rating();
 
         Random rnd=new Random();
-        int nb=4;//16;
+        int nb=16;
         HashMap<String,Integer> userToRating=new HashMap<>();
         for(int i=0;i<nb;++i){
             int rndNext=rnd.nextInt(6);
