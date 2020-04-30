@@ -35,7 +35,7 @@
     <string name="EnterCookTime">Cooking time:</string>
     <string name="PostRecipe">Post your Recipe !</string>
     <string name="RateButton">Rate me !</string>
-    <string name="RateText">How many stars would you give this recipe ?</string>
+    <string name="RateText">How many stars would you give to the recipe </string>
     <string name="sendRate">Send rate</string>
 
 

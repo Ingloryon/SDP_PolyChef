@@ -1,7 +1,5 @@
 package ch.epfl.polychef.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -30,7 +28,6 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
-import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
@@ -109,6 +106,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                     // TODO: Give to the RateRecipeFragment activity infos on the currently displayed Recipe (UUID)
                     Bundle bundle = new Bundle();
                     bundle.putInt("fragmentID", R.id.nav_host_fragment);
+                    bundle.putString("RecipeDisplayed", currentRecipe.getRecipeUuid());
+                    bundle.putSerializable("RecipeToRate", currentRecipe);
 
                     act.onBackPressed();
                     navController.navigate(R.id.rateRecipeFragment, bundle);

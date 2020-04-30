@@ -15,9 +15,8 @@ public class RatingTest {
     @Test
     public void addRateRejectsInvalidInputs(){
         Rating rating = new Rating();
-        assertThrows(IllegalArgumentException.class, () -> rating.addRate(0,8));
-        assertThrows(IllegalArgumentException.class, () -> rating.addRate(0,-5));
-        assertThrows(IllegalArgumentException.class, () -> rating.addRate(-8,3));
+        assertThrows(IllegalArgumentException.class, () -> rating.addRate("0",8));
+        assertThrows(IllegalArgumentException.class, () -> rating.addRate("0",-5));
     }
 
     @Test
@@ -25,17 +24,17 @@ public class RatingTest {
         Rating rating = new Rating();
 
         assertTrue(rating.ratingAverage() == 0);
-        rating.addRate(5, 2);
-        rating.addRate(6, 2);
-        rating.addRate(7, 2);
-        rating.addRate(8, 3);
+        rating.addRate("5", 2);
+        rating.addRate("6", 2);
+        rating.addRate("7", 2);
+        rating.addRate("8", 3);
 
         assertTrue(rating.ratingAverage() == 2.25);
 
-        rating.addRate(2, 4);
+        rating.addRate("2", 4);
         assertTrue(rating.ratingAverage() == (4d*2.25d + 4d) / 5d);
 
-        rating.addRate(5, 5);
+        rating.addRate("5", 5);
         assertTrue(rating.ratingAverage() == (2d+2d+3d+4d + 5d)/5d);
     }
 
@@ -66,7 +65,7 @@ public class RatingTest {
         for(int i=0;i<nb;++i){
             int rndNext =rnd.nextInt(6);
             accumulator+=rndNext;
-            rating.addRate(i,rndNext);
+            rating.addRate(Integer.toString(i),rndNext);
         }
         return accumulator;
     }
@@ -80,7 +79,7 @@ public class RatingTest {
         HashMap<Integer,Integer> userToRating=new HashMap<>();
         for(int i=0;i<nb;++i){
             int rndNext=rnd.nextInt(6);
-            rating.addRate(i,rndNext);
+            rating.addRate(Integer.toString(i),rndNext);
             userToRating.put(i,rndNext);
         }
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +41,15 @@ public class RateRecipeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recipe = null; //TODO: get Recipe from Database using infos given by Bundle
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            recipe = (Recipe) bundle.getSerializable("RecipeToRate");
+        }
+
+        String text = getActivity().getString(R.string.RateText) + " \"" + recipe.getName() + "\" ?";
+        TextView rateText =  getView().findViewById(R.id.RateText);
+        rateText.setText(text);
+
 
         postButton = getView().findViewById(R.id.buttonSendRate);
         postButton.setOnClickListener(new View.OnClickListener() {
@@ -52,25 +61,32 @@ public class RateRecipeFragment extends Fragment {
 
     }
 
-
     private void checkAndSendRate(){
         Spinner spinner = getView().findViewById(R.id.RateChoices);
-        int starNb = spinner.getSelectedItemPosition() -1 ; //TODO: Verifier si index commence à 0 ou 1
+        // The index returned is the same as the nb of stars
+        int starNb = spinner.getSelectedItemPosition() ;
 
-        int userID = 0 ; //TODO: get "userID" from ConnectedUser
+        //TODO: remove -> the index returned = nb of stars
+        /*String txt = Integer.toString(starNb);
+        */
 
-        try {
-           recipe.getRating().addRate(userID, starNb);
+        String userID = "0" ; //TODO: get "userID" from ConnectedUser -> in Simon's branch user.getKey()
 
-        } catch (IllegalArgumentException e){
-            //TODO: Afficher dans error log les potentielles exceptions levées par Rate (si a deja voté par exemple) -> affiche egalement la note donnée
-            TextView errorLog =  getView().findViewById(R.id.errorLogs);
-            errorLog.setText(e.toString().substring(35));
-            errorLog.setVisibility(View.VISIBLE);
-            return;
+        int oldRating = recipe.getRating().addRate(userID, starNb);
+
+        String alreadyRatedText = "You previously rated this recipe " + oldRating + " stars.\n";
+        String newRatingText =  "Your new rating is " + starNb +"stars.";
+
+        if(oldRating == -1) {
+            Toast.makeText(getActivity(), alreadyRatedText + newRatingText , Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
 
         //TODO: return to Recipe or Home menu ?
-
+        /*
+        HomePage act = (HomePage) getActivity();
+        act.onBackPressed();
+         */
     }
 }
