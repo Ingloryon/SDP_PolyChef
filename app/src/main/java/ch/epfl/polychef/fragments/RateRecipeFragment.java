@@ -16,10 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.ref.Reference;
-
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 
@@ -103,7 +100,6 @@ public class RateRecipeFragment extends Fragment {
         DatabaseReference ref=getFireDatabase().getReference(RecipeStorage.DB_NAME);
         ref.setValue(recipe);
 
-        //TODO: return to Recipe or Home menu ?
         getActivity().onBackPressed();
     }
 

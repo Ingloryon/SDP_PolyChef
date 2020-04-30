@@ -141,10 +141,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                     HomePage act = (HomePage) getActivity();
                     NavController navController = act.getNavController();
 
-                    // TODO: Give to the RateRecipeFragment activity infos on the currently displayed Recipe (UUID)
                     Bundle bundle = new Bundle();
                     bundle.putInt("fragmentID", R.id.nav_host_fragment);
-                    bundle.putString("RecipeDisplayed", currentRecipe.getRecipeUuid());
                     bundle.putSerializable("RecipeToRate", currentRecipe);
 
                     act.onBackPressed();
