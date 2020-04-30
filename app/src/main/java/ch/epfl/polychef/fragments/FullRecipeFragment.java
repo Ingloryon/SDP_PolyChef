@@ -52,8 +52,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
 
-    private HomePage hostActivity;
-
     private int indexOfInstruction=-1;
 
     private int containerId;
@@ -101,16 +99,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         return view;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Preconditions.checkArgument(context instanceof HomePage, "The user profile fragment wasn't attached properly!");
-        hostActivity = (HomePage) context;
-    }
-
     private void displayAuthorName(View view) {
         authorName = view.findViewById(R.id.authorUsername);
-        hostActivity.getUserStorage().getUserByEmail(currentRecipe.getAuthor(), new CallHandler<User>() {
+        getUserStorage().getUserByEmail(currentRecipe.getAuthor(), new CallHandler<User>() {
             @Override
             public void onSuccess(User data) {
                 authorName.setText(data.getUsername());
@@ -134,7 +125,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     private void displayFavouriteButton(View view) {
         favouriteButton = view.findViewById(R.id.favouriteButton);
-        FavouritesUtils.getInstance().setFavouriteButton(hostActivity.getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
+        FavouritesUtils.getInstance().setFavouriteButton(getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
     }
 
     private void setupSwitch(View view) {
@@ -278,6 +269,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     public ImageStorage getImageStorage() {
         return new ImageStorage();
+    }
+
+    public UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 
     @Override

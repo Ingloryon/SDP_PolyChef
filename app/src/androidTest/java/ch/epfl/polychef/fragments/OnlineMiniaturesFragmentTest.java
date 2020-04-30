@@ -39,20 +39,15 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.SearchRecipe;
-import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -91,9 +86,6 @@ public class OnlineMiniaturesFragmentTest {
     FirebaseDatabase firebaseInstance;
     @Mock
     SearchRecipe mockSearchRecipe;
-
-    @Mock
-    UserStorage mockUserStorage;
 
     @Before
     public void initMockAndStorage() {
@@ -275,19 +267,6 @@ public class OnlineMiniaturesFragmentTest {
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
-    @Test
-    public synchronized void canOpenRecipeAndHasAuthor() throws InterruptedException {
-        addNewYoungerRecipe();
-        doAnswer((call) -> {
-            CallHandler<User> ch = call.getArgument(1);
-            ch.onSuccess(new User("TEST", "TEST1234"));
-            return null;
-        }).when(mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
-        initActivity();
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.authorUsername)).check(matches(withText("TEST1234")));
-    }
-
     private class FakeHomePage extends HomePage {
 
         @Override
@@ -297,6 +276,7 @@ public class OnlineMiniaturesFragmentTest {
 
         @Override
         public UserStorage getUserStorage(){
+            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
             when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
             return mockUserStorage;
         }
