@@ -30,6 +30,7 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
@@ -100,15 +101,21 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HomePage act = (HomePage) getActivity();
-                NavController navController = act.getNavController();
+                if(getActivity() instanceof HomePage) {
 
-                // TODO: Give to the RateRecipeFragment activity infos on the currently displayed Recipe (UUID)
-                Bundle bundle = new Bundle();
-                bundle.putInt("fragmentID", R.id.nav_host_fragment);
+                    HomePage act = (HomePage) getActivity();
+                    NavController navController = act.getNavController();
 
-                act.onBackPressed();
-                navController.navigate(R.id.rateRecipeFragment, bundle);
+                    // TODO: Give to the RateRecipeFragment activity infos on the currently displayed Recipe (UUID)
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("fragmentID", R.id.nav_host_fragment);
+
+                    act.onBackPressed();
+                    navController.navigate(R.id.rateRecipeFragment, bundle);
+                }else {
+
+                    Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
