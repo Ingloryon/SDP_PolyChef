@@ -91,13 +91,7 @@ public class UserStorage {
     }
 
     public void updateUserInfo() {
-        if (user != null && userKey != null) {
-            getDatabase()
-                    .getReference("users/" + userKey)
-                    .setValue(user);
-        } else {
-            throw new IllegalStateException("The user has not been initialized");
-        }
+        updateUserInfo(user, userKey);
     }
 
     /**
@@ -110,10 +104,14 @@ public class UserStorage {
      * @param other the other user
      */
     public void updateUserInfo(User other) {
-        if (other != null) {
+        updateUserInfo(other, other.getKey());
+    }
+
+    private void updateUserInfo(User userToUpdate, String userToUpdateKey) {
+        if (userToUpdate != null && userToUpdateKey != null) {
             getDatabase()
-                    .getReference("users/" + other.getKey())
-                    .setValue(other);
+                    .getReference("users/" + userToUpdateKey)
+                    .setValue(userToUpdate);
         } else {
             throw new IllegalStateException("The user has not been initialized");
         }
