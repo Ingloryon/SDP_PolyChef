@@ -34,6 +34,8 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     private Difficulty recipeDifficulty;
     private final Rating rating;
 
+    private String key;
+
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
     private Either<String, Integer> miniaturePath;
     private List<String> picturesPath;
@@ -76,6 +78,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
             this.date = date;
         }
         this.author = author;
+        this.key = "";
     }
 
     /**
@@ -204,6 +207,14 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     public String getRecipeUuid(){
         return recipeUuid;
+    }
+
+    public String getKey(){
+        return key;
+    }
+
+    public void setKey(String k){
+        this.key=k;
     }
 
     @Override
