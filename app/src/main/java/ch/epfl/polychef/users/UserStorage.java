@@ -73,9 +73,9 @@ public class UserStorage {
                 .getReference("users")
                 .push();
 
-        ref.setValue(user);
         userKey=ref.getKey();
         user.setKey(ref.getKey());
+        ref.setValue(user);
     }
 
     private void initializeExistingUser(DataSnapshot snap) {
