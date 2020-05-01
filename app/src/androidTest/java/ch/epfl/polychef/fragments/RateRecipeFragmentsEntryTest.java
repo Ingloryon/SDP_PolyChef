@@ -19,6 +19,7 @@ import ch.epfl.polychef.recipe.RecipeTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -52,6 +53,7 @@ public class RateRecipeFragmentsEntryTest {
     public void rateButtonIsDisplayedAndDisplayCorrectText(){
 
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
         onView(withId(R.id.buttonRate)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonRate)).check(matches(withText(R.string.RateButton)));
     }
@@ -60,6 +62,7 @@ public class RateRecipeFragmentsEntryTest {
     public void toastIsDisplayedIfTryToRateWhileNotLoggedIn(){
 
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
         onView(withId(R.id.buttonRate)).perform(click());
         onView(withText(R.string.errorOnlineFeature))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleEntry.getActivity()

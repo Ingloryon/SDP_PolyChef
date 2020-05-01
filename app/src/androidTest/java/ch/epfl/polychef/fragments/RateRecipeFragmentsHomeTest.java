@@ -32,6 +32,7 @@ import ch.epfl.polychef.utils.CallHandlerChecker;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -91,6 +92,7 @@ public class RateRecipeFragmentsHomeTest {
 
     private void goToRatingAndRateI(int nbStars){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
         onView(withId(R.id.buttonRate)).perform(click());
         onView(withId(R.id.RateChoices)).perform(click());
         String star= nbStars<2?" star":" stars";
