@@ -112,7 +112,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                 authorName.setText(data.getUsername());
                 authorName.setOnClickListener(v -> {
                     NavController navController = ((HomePage) getActivity()).getNavController();
-                    navController.navigate(R.id.userProfileFragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("User", data);
+                    navController.navigate(R.id.userProfileFragment, bundle);
                 });
             }
 
