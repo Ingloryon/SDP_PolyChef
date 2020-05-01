@@ -61,16 +61,6 @@
                         android:textOn=""
                         android:textOff=""/>
 
-                    <Button
-                        android:id="@+id/buttonRate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:text="@string/RateButton"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/rate_author"></Button>
-
                     <LinearLayout
 
                         android:id="@+id/rate_author"
@@ -90,29 +80,54 @@
                                 android:id="@+id/ratingBar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
                                 android:isIndicator="true"
                                 android:numStars="5"
                                 android:rating="5"
                                 android:stepSize="0.1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/divider"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <TextView
-                                android:id="@+id/authorUsername"
+                            <View
+                                android:id="@+id/divider"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:background="?android:attr/listDivider"
+                                android:visibility="invisible"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/buttonRate"
+                                app:layout_constraintStart_toEndOf="@+id/ratingBar"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0" />
+
+                            <Button
+                                android:id="@+id/buttonRate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:autoLink="web"
-                                android:fontFamily="sans-serif-medium"
-                                android:textColor="#272424"
-                                android:textSize="18sp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_weight="1"
+                                android:text="@string/RateButton"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@id/ratingBar"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/divider"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/authorUsername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:autoLink="web"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#272424"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rate_author" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
@@ -248,10 +263,10 @@
                         android:checked="false"
                         android:text="@string/VoiceRecognitionSwitch"
                         android:textColor="#272424"
-                        android:textSize="18sp"
+                        android:textSize="18dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/buttonRate" />
-                        app:layout_constraintTop_toBottomOf="@+id/RatingRow" />
+                        app:layout_constraintTop_toBottomOf="@+id/authorUsername" />
+                    app:layout_constraintTop_toBottomOf="@+id/RatingRow" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
