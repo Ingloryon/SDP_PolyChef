@@ -75,7 +75,7 @@ public class UserStorage {
 
         ref.setValue(user);
 
-        userKey = ref.getKey();
+        user.setKey(ref.getKey());
     }
 
     private void initializeExistingUser(DataSnapshot snap) {
@@ -83,7 +83,7 @@ public class UserStorage {
         if (snap.exists()) {
             user = snap.getValue(User.class);
             user.removeNullFromLists();
-            userKey = snap.getKey();
+            user.setKey(snap.getKey());
             FavouritesUtils.getInstance().setOfflineFavourites(user);
         } else {
             //TODO: Find good exception to throw

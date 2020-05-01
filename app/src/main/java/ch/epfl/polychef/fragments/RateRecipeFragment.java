@@ -2,6 +2,7 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +23,14 @@ import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.Preconditions;
+import ch.epfl.polychef.users.UserStorage;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RateRecipeFragment extends Fragment {
 
+    private static final String TAG = "RateRecipeFragment";
     private Button postButton;
     private Recipe recipe;
     private FirebaseDatabase fireDatabase;
@@ -86,8 +89,9 @@ public class RateRecipeFragment extends Fragment {
         /*String txt = Integer.toString(starNb);
         */
 
-        String userID = "0";
-        //Should be UserStorage.getInstance().getPolyChefUser().getRecipeDatabaseKey()
+        String userID = UserStorage.getInstance().getPolyChefUser().getKey();
+
+        Log.w(TAG, "userID "+userID);
 
         int oldRating = recipe.getRating().addRate(userID, starNb);
 
