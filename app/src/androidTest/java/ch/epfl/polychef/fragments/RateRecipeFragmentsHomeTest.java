@@ -91,13 +91,19 @@ public class RateRecipeFragmentsHomeTest {
             onView(withId(R.id.RateChoices)).perform(click());
             onData(allOf(is(instanceOf(String.class)), is(i+" star"))).perform(click());
             onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(i+" star"))));
-            onView(withId(R.id.buttonSendRate)).perform(click());
             if(i==0){
+                onView(withId(R.id.buttonSendRate)).perform(click());
                 onView(withText(s0))
                         .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
                                 .getWindow().getDecorView()))))
                         .check(matches(isDisplayed()));
             }else{
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                onView(withId(R.id.buttonSendRate)).perform(click());
                 onView(withText(s1))
                         .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
                                 .getWindow().getDecorView()))))
