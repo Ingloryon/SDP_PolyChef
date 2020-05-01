@@ -1,53 +1,45 @@
 package ch.epfl.polychef.image;
 
-import java.io.Serializable;
+public class ProfilePicture {
 
-public class ProfilePicture implements Serializable {
+    private String countryName;
 
-    private String userName;
-    private String userType;
+    // Image name (Without extension)
+    private String flagName;
+    private int population;
 
-    private boolean active;
-
-    public ProfilePicture(String userName, String userType)  {
-        this.userName= userName;
-        this.userType = userType;
-        this.active= true;
+    public ProfilePicture(String countryName, String flagName, int population) {
+        this.countryName= countryName;
+        this.flagName= flagName;
+        this.population= population;
     }
 
-    public ProfilePicture(String userName, String userType, boolean active)  {
-        this.userName= userName;
-        this.userType = userType;
-        this.active= active;
+    public int getPopulation() {
+        return population;
     }
 
-    public String getUserType() {
-        return userType;
+    public void setPopulation(int population) {
+        this.population = population;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public String getUserName() {
-        return userName;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public String getFlagName() {
+        return flagName;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setFlagName(String flagName) {
+        this.flagName = flagName;
     }
 
     @Override
-    public String toString() {
-        return this.userName +" ("+ this.userType+")";
+    public String toString()  {
+        return this.countryName+" (Population: "+ this.population+")";
     }
-
 }

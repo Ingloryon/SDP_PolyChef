@@ -9,18 +9,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ProfilePicture;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.utils.ProfilePictureAdapter;
 
 public class ProfilePictChoice extends Fragment {
 
     private HomePage hostActivity;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -41,21 +46,20 @@ public class ProfilePictChoice extends Fragment {
 
         ListView listView = view.findViewById(R.id.listView);
 
-        ProfilePicture tom = new ProfilePicture("Tom","admin");
-        ProfilePicture jerry = new ProfilePicture("Jerry","user");
-        ProfilePicture donald = new ProfilePicture("Donald","guest", false);
+        List<ProfilePicture> image_details = getListData();
 
-        ArrayList<ProfilePicture> users = new ArrayList<>();
-        users.add(tom);
-        users.add(jerry);
-        users.add(donald);
+        listView.setAdapter(new ProfilePictureAdapter(getContext(), image_details));
 
-        // android.R.layout.simple_list_item_1 is a constant predefined layout of Android.
-        // used to create a ListView with simple ListItem (Only one TextView).
-        ArrayAdapter<ProfilePicture> arrayAdapter
-                = new ArrayAdapter<ProfilePicture>(this, android.R.layout.simple_list_item_1 , users);
+        // When the user clicks on the ListItem
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        listView.setAdapter(arrayAdapter);
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                Object o = listView.getItemAtPosition(position);
+                ProfilePicture country = (ProfilePicture) o;
+                Toast.makeText(getActivity(), "Selected :" + " " + country, Toast.LENGTH_LONG).show();
+            }
+        });
 
         return view;
     }
@@ -65,4 +69,19 @@ public class ProfilePictChoice extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
     }
+
+    private  List<ProfilePicture> getListData() {
+        List<ProfilePicture> list = new ArrayList<ProfilePicture>();
+        ProfilePicture vietnam = new ProfilePicture("Vietnam", "vn", 98000000);
+        ProfilePicture usa = new ProfilePicture("United States", "us", 320000000);
+        ProfilePicture russia = new ProfilePicture("Russia", "ru", 142000000);
+
+
+        list.add(vietnam);
+        list.add(usa);
+        list.add(russia);
+
+        return list;
+    }
+
 }
