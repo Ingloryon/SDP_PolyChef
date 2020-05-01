@@ -11,6 +11,8 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,6 +34,7 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.RecipeTest;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -79,30 +82,64 @@ public class RateRecipeFragmentsHomeTest {
     @Test
     public void rateSpinnerCanBeClickedOn() {
 
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.buttonRate)).perform(click());
-        onView(withId(R.id.RateChoices)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("0 star"))).perform(click());
-        onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString("0 star"))));
-        
+        String s0="Your rating is 0 stars.";
+        String s1="Your new rating is 1 stars. Your previous rating was 0";
 
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for(int i =0;i<2;i++) {
+            onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+            onView(withId(R.id.buttonRate)).perform(click());
+            onView(withId(R.id.RateChoices)).perform(click());
+            onData(allOf(is(instanceOf(String.class)), is(i+" star"))).perform(click());
+            onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(i+" star"))));
+            onView(withId(R.id.buttonSendRate)).perform(click());
+            if(i==0){
+                onView(withText(s0))
+                        .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
+                                .getWindow().getDecorView()))))
+                        .check(matches(isDisplayed()));
+            }else{
+                onView(withText(s1))
+                        .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
+                                .getWindow().getDecorView()))))
+                        .check(matches(isDisplayed()));
+            }
         }
-        System.out.println("okok");
     }
 
     public static class FakeFakeHomePage extends HomePageTest.FakeHomePage {
 
+        ArrayList<Recipe> arr=new ArrayList<>();
+
+        FakeFakeHomePage(){
+            super();
+            arr.add(RecipeTest.setStandardRecipe().setDate("2020/04/01 12:00:01").build());
+        }
+
+        @Override
+        public FirebaseDatabase getFireDatabase(){
+
+            FirebaseDatabase mockFirebase=Mockito.mock(FirebaseDatabase.class);
+            DatabaseReference mockDatabaseReference=Mockito.mock(DatabaseReference.class);
+
+            when(mockFirebase.getReference(anyString())).thenReturn(mockDatabaseReference);
+            when(mockDatabaseReference.child(anyString())).thenReturn(mockDatabaseReference);
+
+            CallHandlerChecker<Recipe> callHandler=new CallHandlerChecker<Recipe>(arr.get(0),true);
+
+            doAnswer((call) -> {
+                Recipe recipe =  call.getArgument(0);
+                callHandler.onSuccess(recipe);
+
+                return null;
+            }).when(mockDatabaseReference).setValue(any(Recipe.class));
+
+            return mockFirebase;
+        }
+
         @Override
         public RecipeStorage getRecipeStorage(){
             RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
-            when(mockRecipeStorage.getCurrentDate()).thenReturn("2020/04/02 12:00:01");
-
-            ArrayList<Recipe> arr=new ArrayList<>();
-            arr.add(RecipeTest.setStandardRecipe().setDate("2020/04/01 12:00:01").build());
+            when(mockRecipeStorage.getCurrentDate()).thenCallRealMethod();
 
             doAnswer((call) -> {
                 CallHandler<List<Recipe>> ch =  call.getArgument(4);

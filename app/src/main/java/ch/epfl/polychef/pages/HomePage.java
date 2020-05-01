@@ -18,6 +18,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
@@ -221,6 +222,10 @@ public class HomePage extends ConnectedActivity {
 
     public RecipeStorage getRecipeStorage(){
         return RecipeStorage.getInstance();
+    }
+
+    public FirebaseDatabase getFireDatabase(){
+        return FirebaseDatabase.getInstance();
     }
 
     public ImageStorage getImageStorage(){

@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.utils.Preconditions;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +30,7 @@ public class RateRecipeFragment extends Fragment {
 
     private Button postButton;
     private Recipe recipe;
+    private FirebaseDatabase fireDatabase;
 
     /**
      * Required empty public constructor.
@@ -96,13 +100,22 @@ public class RateRecipeFragment extends Fragment {
             Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
 
-        DatabaseReference ref = getFireDatabase().getReference(RecipeStorage.DB_NAME).child(recipe.getRecipeDatabaseKey());
+        DatabaseReference ref = fireDatabase.getReference(RecipeStorage.DB_NAME).child(recipe.getRecipeDatabaseKey());
         ref.setValue(recipe);
 
         getActivity().onBackPressed();
     }
 
-    protected FirebaseDatabase getFireDatabase(){
-        return FirebaseDatabase.getInstance();
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            HomePage homePage = (HomePage) context;
+            fireDatabase = homePage.getFireDatabase();
+            Preconditions.checkArgument(fireDatabase != null);
+        } else {
+            throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");
+        }
     }
 }
