@@ -73,10 +73,9 @@ public class RateRecipeFragmentsHomeTest {
     @Test
     public void rateSpinnerCanBeClickedOn() {
 
-        String s0="Your rating is 0 stars.";
-        String s1="Your new rating is 1 stars. Your previous rating was 0";
 
         goToRatingAndRateI(0);
+        String s0="Your rating is 0 stars.";
         sendRateAndCheckToast(s0);
 
         goToRatingAndRateI(1);
@@ -85,17 +84,18 @@ public class RateRecipeFragmentsHomeTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        String s1="Your new rating is 1 stars. Your previous rating was 0";
         sendRateAndCheckToast(s1);
 
     }
 
-    private void goToRatingAndRateI(int i){
+    private void goToRatingAndRateI(int nbStars){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonRate)).perform(click());
         onView(withId(R.id.RateChoices)).perform(click());
-        String star= i<2?" star":" stars";
-        onData(allOf(is(instanceOf(String.class)), is(i+star))).perform(click());
-        onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(i+star))));
+        String star= nbStars<2?" star":" stars";
+        onData(allOf(is(instanceOf(String.class)), is(nbStars+star))).perform(click());
+        onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(nbStars+star))));
     }
 
     private void sendRateAndCheckToast(String expectedText){
