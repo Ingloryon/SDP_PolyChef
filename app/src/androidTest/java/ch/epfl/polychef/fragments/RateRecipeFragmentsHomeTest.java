@@ -93,7 +93,6 @@ public class RateRecipeFragmentsHomeTest {
     private void goToRatingAndRateI(int nbStars){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
-        onView(withId(R.id.buttonRate)).perform(click());
         onView(withId(R.id.RateChoices)).perform(click());
         String star= nbStars<2?" star":" stars";
         onData(allOf(is(instanceOf(String.class)), is(nbStars+star))).perform(click());
@@ -101,7 +100,7 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     private void sendRateAndCheckToast(String expectedText){
-        onView(withId(R.id.buttonSendRate)).perform(click());
+        onView(withId(R.id.buttonSendRate)).perform(scrollTo(), click());
         onView(withText(expectedText))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
                         .getWindow().getDecorView()))))
