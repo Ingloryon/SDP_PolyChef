@@ -74,7 +74,7 @@ public class UserStorage {
                 .push();
 
         ref.setValue(user);
-
+        userKey=ref.getKey();
         user.setKey(ref.getKey());
     }
 
@@ -83,6 +83,7 @@ public class UserStorage {
         if (snap.exists()) {
             user = snap.getValue(User.class);
             user.removeNullFromLists();
+            userKey = snap.getKey();
             user.setKey(snap.getKey());
             FavouritesUtils.getInstance().setOfflineFavourites(user);
         } else {
