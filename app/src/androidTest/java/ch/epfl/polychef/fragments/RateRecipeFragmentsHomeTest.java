@@ -74,12 +74,14 @@ public class RateRecipeFragmentsHomeTest {
     @Test
     public void rateSpinnerCanBeClickedOn() {
 
+        //Click on the first recipe
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        goToRatingAndRateI(0);
+        rateCurrentRecipeNStars(0);
         String s0="Your rating is 0 stars.";
         sendRateAndCheckToast(s0);
 
-        goToRatingAndRateI(1);
+        rateCurrentRecipeNStars(1);
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
@@ -90,8 +92,8 @@ public class RateRecipeFragmentsHomeTest {
 
     }
 
-    private void goToRatingAndRateI(int nbStars){
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+    private void rateCurrentRecipeNStars(int nbStars){
+
         onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
         onView(withId(R.id.RateChoices)).perform(click());
         String star= nbStars<2?" star":" stars";
