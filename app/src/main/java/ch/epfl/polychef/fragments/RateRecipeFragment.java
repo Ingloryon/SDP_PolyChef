@@ -34,6 +34,8 @@ public class RateRecipeFragment extends Fragment {
     private Button postButton;
     private Recipe recipe;
 
+    Toast mToast = Toast.makeText(getActivity(), "", Toast.LENGTH_LONG);
+
     private FirebaseDatabase fireDatabase;
     private UserStorage userStorage;
 
@@ -97,14 +99,17 @@ public class RateRecipeFragment extends Fragment {
 
         int oldRating = recipe.getRating().addRate(userID, starNb);
 
-
+        String newRatingText="";
         if(oldRating == -1 || oldRating==starNb) {
-            String newRatingText =  "Your rating is " + starNb +" stars.";
-            Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
+            newRatingText =  "Your rating is " + starNb +" stars.";
+            //Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         } else {
-            String newRatingText =  "Your new rating is " + starNb +" stars. Your previous rating was "+oldRating;
-            Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
+            newRatingText =  "Your new rating is " + starNb +" stars. Your previous rating was "+oldRating;
+            //Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
+        mToast.setText(newRatingText);
+        mToast.show();
+
 
         DatabaseReference ref = fireDatabase.getReference(RecipeStorage.DB_NAME).child(recipe.getRecipeDatabaseKey());
         ref.setValue(recipe);
