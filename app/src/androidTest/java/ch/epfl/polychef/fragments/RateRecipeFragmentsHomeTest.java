@@ -98,6 +98,11 @@ public class RateRecipeFragmentsHomeTest {
                                 .getWindow().getDecorView()))))
                         .check(matches(isDisplayed()));
             }else{
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 onView(withText(s1))
                         .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
                                 .getWindow().getDecorView()))))

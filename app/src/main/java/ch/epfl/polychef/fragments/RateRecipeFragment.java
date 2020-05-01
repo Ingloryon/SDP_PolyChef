@@ -33,7 +33,9 @@ public class RateRecipeFragment extends Fragment {
     private static final String TAG = "RateRecipeFragment";
     private Button postButton;
     private Recipe recipe;
+
     private FirebaseDatabase fireDatabase;
+    private UserStorage userStorage;
 
     /**
      * Required empty public constructor.
@@ -89,7 +91,7 @@ public class RateRecipeFragment extends Fragment {
         /*String txt = Integer.toString(starNb);
         */
 
-        String userID = UserStorage.getInstance().getPolyChefUser().getKey();
+        String userID = userStorage.getPolyChefUser().getKey();
 
         Log.w(TAG, "userID "+userID);
 
@@ -117,6 +119,7 @@ public class RateRecipeFragment extends Fragment {
         if(context instanceof HomePage){
             HomePage homePage = (HomePage) context;
             fireDatabase = homePage.getFireDatabase();
+            userStorage = homePage.getUserStorage();
             Preconditions.checkArgument(fireDatabase != null);
         } else {
             throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");

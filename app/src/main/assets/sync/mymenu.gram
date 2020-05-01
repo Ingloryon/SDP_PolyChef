@@ -1,5 +1,0 @@
-#JSGF V1.0;
-
-grammar mymenu;
-
-public <item> = (previous | next | repeat);
