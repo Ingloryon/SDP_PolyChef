@@ -1,7 +1,9 @@
 package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,12 +63,8 @@ public class HomePage extends ConnectedActivity {
 
         navView = findViewById(R.id.navigationView);
 
-        // Create new Bundle containing the id of the container for the adapter
-        Bundle bundle = new Bundle();
-        bundle.putInt("fragmentID", R.id.nav_host_fragment);
-
         // Set this bundle to be an arguments of the startDestination using this trick
-        navController.setGraph(R.navigation.nav_graph, bundle);
+        navController.setGraph(R.navigation.nav_graph);
 
         setupNavigation();
     }
@@ -117,7 +115,8 @@ public class HomePage extends ConnectedActivity {
         int destination = navController.getCurrentDestination().getId();
 
         if(destination == R.id.userProfileFragment
-                || destination == R.id.fullRecipeFragment || destination == R.id.rateRecipeFragment) {
+                || destination == R.id.fullRecipeFragment
+                || destination == R.id.rateRecipeFragment) {
 
             currentItem = null;
         } else {
@@ -189,18 +188,8 @@ public class HomePage extends ConnectedActivity {
 
                         invalidateOptionsMenu();
 
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("fragmentID", R.id.nav_host_fragment);
-
-                        if(navController.getCurrentDestination().getId() != R.id.nav_host_fragment){
-                            // This nav prevents to return to login screen when on home
-                            navController.navigate(R.id.favouritesFragment, bundle);
-                            // This returns to home frag so the navigation system can handle
-                            HomePage.super.onBackPressed();
-                        }
-
                         int itemId = selectedItem.getItemId();
-                        navController.navigate(getFragmentId(itemId), bundle);
+                        navController.navigate(getFragmentId(itemId));
 
                         drawer.closeDrawer(GravityCompat.START, true);
 
@@ -234,5 +223,10 @@ public class HomePage extends ConnectedActivity {
 
     public NavController getNavController() {
         return navController;
+    }
+
+    public Boolean isOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 }

@@ -77,7 +77,6 @@ public class FullRecipeImageTest {
                 .build();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Recipe", recipe);
-        bundle.putInt("fragmentID", R.id.nav_entry_fragment);
         Fragment fragment = fragmentTest;
         fragment.setArguments(bundle);
         FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();

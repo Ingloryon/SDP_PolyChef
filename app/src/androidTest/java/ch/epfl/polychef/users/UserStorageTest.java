@@ -74,7 +74,7 @@ public class UserStorageTest {
         mockEqualToEmail = mock(Query.class);
         mockFirebaseUser = mock(FirebaseUser.class);
 
-        when(mockDatabase.getReference("users")).thenAnswer(
+        when(mockDatabase.getReference(UserStorage.DB_NAME)).thenAnswer(
                 (call) -> {
                     return mockUsersRef;
                 }
@@ -112,14 +112,14 @@ public class UserStorageTest {
     /*@Test
     public void testUpdateUserInfo(){
 
-        when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
+        when(mockDatabase.getReference(UserStorage.DB_NAME + "/" + mockUserKey)).thenReturn(mockNewUserRef);
 
     }*/
 
     /*public void updateUserInfo() {
         if (user != null && userKey != null) {
             getDatabase()
-                    .getReference("users/" + userKey)
+                    .getReference(UserStorage.DB_NAME + "/" + userKey)
                     .setValue(user);
         } else {
             throw new IllegalStateException("The user have not been initialized");
@@ -144,7 +144,7 @@ public class UserStorageTest {
         //updateUser method mock requirements
         DatabaseReference mockNewUserRef = mock(DatabaseReference.class);
 
-        when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockNewUserRef);
+        when(mockDatabase.getReference(UserStorage.DB_NAME + "/" + mockUserKey)).thenReturn(mockNewUserRef);
 
         assertSendingBackCorrectUser(mockNewUserRef, new User(mockUserEmail, mockUserName));
 
@@ -180,7 +180,7 @@ public class UserStorageTest {
         //updateUser method mock requirements
         DatabaseReference mockOldUserRef = mock(DatabaseReference.class);
 
-        when(mockDatabase.getReference("users/" + mockUserKey)).thenReturn(mockOldUserRef);
+        when(mockDatabase.getReference(UserStorage.DB_NAME + "/" + mockUserKey)).thenReturn(mockOldUserRef);
 
         assertSendingBackCorrectUser(mockUsersRef, mockUser);
     }
@@ -227,7 +227,7 @@ public class UserStorageTest {
         User user = new User();
         user.setKey("TEST");
         DatabaseReference mockUserRef = mock(DatabaseReference.class);
-        when(mockDatabase.getReference(eq("users/TEST"))).thenReturn(mockUserRef);
+        when(mockDatabase.getReference(eq(UserStorage.DB_NAME + "/TEST"))).thenReturn(mockUserRef);
         fakeUserStorage.updateUserInfo(user);
         verify(mockUserRef).setValue(eq(user));
     }
@@ -239,7 +239,7 @@ public class UserStorageTest {
 
     @Test
     public void canGetUserByEmail() {
-        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        when(fakeUserStorage.getDatabase().getReference(UserStorage.DB_NAME).orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);
         User user = new User();
         DataSnapshot dataSnapshot1 = mock(DataSnapshot.class);
@@ -263,7 +263,7 @@ public class UserStorageTest {
 
     @Test
     public void wrongUserFailsOnGetByEmail() {
-        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        when(fakeUserStorage.getDatabase().getReference(UserStorage.DB_NAME).orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);
         DataSnapshot dataSnapshot1 = mock(DataSnapshot.class);
         when(dataSnapshot.getChildren()).thenReturn(Collections.singletonList(dataSnapshot1));
@@ -274,7 +274,7 @@ public class UserStorageTest {
 
     @Test
     public void moreThanOneUserFailsEmail() {
-        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        when(fakeUserStorage.getDatabase().getReference(UserStorage.DB_NAME).orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 3);
         mockResponse(true);
         shouldFails();
@@ -282,7 +282,7 @@ public class UserStorageTest {
 
     @Test
     public void getEmailsCanFailsOnCancel() {
-        when(fakeUserStorage.getDatabase().getReference("users").orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
+        when(fakeUserStorage.getDatabase().getReference(UserStorage.DB_NAME).orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
         mockResponse(false);
         shouldFails();
     }

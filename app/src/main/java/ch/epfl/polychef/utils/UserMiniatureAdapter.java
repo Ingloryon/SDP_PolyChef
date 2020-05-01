@@ -20,6 +20,7 @@ import java.util.List;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.UserProfileFragment;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
@@ -86,18 +87,15 @@ public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdap
         @Override
         public void onClick(View view) {
 
-            //Here we know that the context is an activity
-            AppCompatActivity activity = (AppCompatActivity) mainContext;
-            FragmentManager fragMana = activity.getSupportFragmentManager();
-
             // Get the clicked user from the recyclerView
             int userPosition = recyclerView.getChildLayoutPosition(view);
             User clickedUser = userList.get(userPosition);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("User", clickedUser);
 
-            UserProfileFragment userProfileFragment = new UserProfileFragment(clickedUser);
-            userProfileFragment.setArguments(new Bundle());
-
-            fragMana.beginTransaction().replace(fragmentContainerID, userProfileFragment).addToBackStack(null).commit();
+            ((HomePage) mainContext)
+                    .getNavController()
+                    .navigate(R.id.userProfileFragment, bundle);
         }
     }
 }

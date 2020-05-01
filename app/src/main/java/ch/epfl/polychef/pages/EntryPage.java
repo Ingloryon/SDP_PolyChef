@@ -19,6 +19,7 @@ import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
 public class EntryPage extends AppCompatActivity {
 
     private Button logButton;
+    private OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();
 
     public static final String LOG_IN = "Log in";
 
@@ -36,16 +37,16 @@ public class EntryPage extends AppCompatActivity {
 
         logButton = findViewById(R.id.logButton);
 
-        FragmentTransaction fm = getSupportFragmentManager().beginTransaction();
-        // Send the fragmentID of the fragment container to the recyclerView adapter
-        Bundle bundle = new Bundle();
-        bundle.putInt("fragmentID", R.id.nav_entry_fragment);
-        OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();
-        miniFrag.setArguments(bundle);
-        // Set the starting fragment inside the container with the miniatures
-        fm.add(R.id.nav_entry_fragment, miniFrag);
-        fm.commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.nav_entry_fragment, miniFrag)
+                .commit();
+    }
 
+    @Override
+    public void onBackPressed() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.nav_entry_fragment, miniFrag)
+                .commit();
     }
 
     @Override

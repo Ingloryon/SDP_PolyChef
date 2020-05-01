@@ -47,9 +47,9 @@ public class FavouritesFragment extends Fragment {
 
     private boolean isLoading = false;
 
+    private HomePage homePage;
     private RecipeStorage recipeStorage;
     private ImageStorage imageStorage;
-
     private UserStorage userStorage;
 
     public FavouritesFragment() {
@@ -88,7 +88,7 @@ public class FavouritesFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Preconditions.checkArgument(context instanceof HomePage, "The favourite miniature fragment wasn't attached properly!");
-        HomePage homePage = (HomePage) context;
+        homePage = (HomePage) context;
         imageStorage = homePage.getImageStorage();
         userStorage = homePage.getUserStorage();
         recipeStorage = homePage.getRecipeStorage();
@@ -145,8 +145,7 @@ public class FavouritesFragment extends Fragment {
     }
 
     public boolean isOnline() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+        return homePage.isOnline();
     }
 
     public RecyclerView getRecyclerView() {

@@ -110,14 +110,15 @@ public class HomePageTest {
     @Test
     public synchronized void backButtonTest() throws InterruptedException {
         int repetition = 6;
-        List<Integer> menuItems = new ArrayList<>(5);
+        int nbClickableElements = 6;
+        List<Integer> menuItems = new ArrayList<>(nbClickableElements - 1);
         menuItems.add(R.id.nav_home);
         menuItems.add(R.id.nav_recipe);
         menuItems.add(R.id.nav_fav);
         menuItems.add(R.id.nav_subscribers);
         menuItems.add(R.id.nav_subscriptions);
 
-        List<Integer> sequence = new ArrayList<>(repetition * 6);
+        List<Integer> sequence = new ArrayList<>(repetition * nbClickableElements);
         for(int i = 0; i < repetition; ++i){
             sequence.addAll(menuItems);
             sequence.add(R.id.drawerProfileImage);

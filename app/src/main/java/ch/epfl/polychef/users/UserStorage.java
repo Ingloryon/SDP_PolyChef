@@ -19,6 +19,7 @@ import ch.epfl.polychef.utils.Preconditions;
 public class UserStorage {
 
     private static UserStorage INSTANCE = new UserStorage();
+    public static final String DB_NAME = "users_test";
 
     private User user = null;
     private String userKey = null;
@@ -34,7 +35,7 @@ public class UserStorage {
         String email = getAuthenticatedUserEmail();
 
         getDatabase()
-                .getReference("users")
+                .getReference(UserStorage.DB_NAME)
                 .orderByChild("email")
                 .equalTo(email)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -70,7 +71,7 @@ public class UserStorage {
 
         //TODO: Add OnSuccess and OnFailure listener
         DatabaseReference ref = getDatabase()
-                .getReference("users")
+                .getReference(UserStorage.DB_NAME)
                 .push();
 
         userKey=ref.getKey();
@@ -113,7 +114,7 @@ public class UserStorage {
     private void updateUserInfo(User userToUpdate, String userToUpdateKey) {
         if (userToUpdate != null && userToUpdateKey != null) {
             getDatabase()
-                    .getReference("users/" + userToUpdateKey)
+                    .getReference(UserStorage.DB_NAME + "/" + userToUpdateKey)
                     .setValue(userToUpdate);
         } else {
             throw new IllegalStateException("The user has not been initialized");
@@ -143,7 +144,7 @@ public class UserStorage {
      * @param caller the caller to call on success and failure
      */
     public void getUserByEmail(String email, CallHandler<User> caller) {
-        getDatabase().getReference("users").orderByChild("email").equalTo(email)
+        getDatabase().getReference(UserStorage.DB_NAME).orderByChild("email").equalTo(email)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

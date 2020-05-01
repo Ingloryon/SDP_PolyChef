@@ -61,7 +61,7 @@ public class FavouritesFragmentTest {
         }
     };
 
-    private FakeFavouriteFragment fakeFavouriteFragment = new FakeFavouriteFragment();
+    private FragmentTestUtils fragUtils = new FragmentTestUtils();
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -87,15 +87,26 @@ public class FavouritesFragmentTest {
         when(mockUserStorage.getPolyChefUser()).thenReturn(mockPolyChefUser);
     }
 
+    public FakeHomePage getTestActivity() {
+        return (FakeHomePage) intentsTestRule.getActivity();
+    }
+
+    public FavouritesFragment getTestedFragment() {
+        return (FavouritesFragment) fragUtils.getTestedFragment(intentsTestRule);
+    }
+
+    Boolean isOnline = true;
+
+    private Boolean mockIsOnline(){
+        return isOnline;
+    }
+
     public synchronized void setup() {
         intentsTestRule.launchActivity(new Intent());
-        Bundle bundle = new Bundle();
-        bundle.putInt("fragmentID", R.id.nav_host_fragment);
-        Fragment fragment = fakeFavouriteFragment;
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.onlineMiniaturesFragment, fragment).addToBackStack(null);
-        transaction.commit();
+
+        getTestActivity().getNavController()
+                .navigate(R.id.favouritesFragment);
+
         try {
             wait(1000);
         } catch (InterruptedException e) {
@@ -117,22 +128,22 @@ public class FavouritesFragmentTest {
      @Test
      public void emptyFavouritesOnlineShowNoRecipe() {
         setup();
-        fakeFavouriteFragment.isOnline = true;
+        isOnline = true;
         when(mockPolyChefUser.getFavourites()).thenReturn(new ArrayList<>());
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(0));
+        assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(0));
      }
 
     @Test
     public void emptyFavouritesOfflineShowNoRecipe() {
-        fakeFavouriteFragment.isOnline = false;
+        isOnline = false;
         FavouriteUtilsTest.setSharedPref(new ArrayList<>());
         setup();
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(0));
+        assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(0));
     }
 
     @Test
     public void oneFavouriteCanBeShownOnline() {
-        fakeFavouriteFragment.isOnline = true;
+        isOnline = true;
         Map<String, Recipe> recipesInFavourite = new HashMap<>();
         Recipe recipe = getRecipe("test");
         recipesInFavourite.put(recipe.getRecipeUuid(), recipe);
@@ -143,28 +154,28 @@ public class FavouritesFragmentTest {
             return null;
         }).when(fakeRecipeStorage).readRecipeFromUuid(eq(recipe.getRecipeUuid()), any(CallHandler.class));
         setup();
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(1));
+        assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(1));
     }
 
     @Test
     public void oneFavouriteCanBeShownOffline() {
-        fakeFavouriteFragment.isOnline = false;
+        isOnline = false;
         Recipe recipe = getRecipe("test");
         FavouriteUtilsTest.setSharedPref(Collections.singletonList(recipe));
         setup();
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(1));
+        assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(1));
     }
 
     @Test
     public synchronized void moreRecipesChargeOnlyFiveOfflineAndAddMoreOnScroll() throws InterruptedException {
-        fakeFavouriteFragment.isOnline = false;
+        isOnline = false;
         List<Recipe> recipesInFavourite = new ArrayList<>();
         for(int i = 0; i < 13; ++i) {
             recipesInFavourite.add(getRecipe("test"+i));
         }
         FavouriteUtilsTest.setSharedPref(recipesInFavourite);
         setup();
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(5));
+        assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(5));
         onView(ViewMatchers.withId(R.id.miniaturesFavouriteList))
                 .perform(RecyclerViewActions.scrollToPosition(4))
                 .perform(ViewActions.swipeUp());
@@ -173,7 +184,7 @@ public class FavouritesFragmentTest {
                 .perform(RecyclerViewActions.scrollToPosition(9))
                 .perform(ViewActions.swipeUp());
         wait(1000);
-        assertThat(fakeFavouriteFragment.getRecyclerView().getAdapter().getItemCount(), is(13));
+        assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(13));
     }
 
     private class FakeHomePage extends HomePage {
@@ -193,14 +204,11 @@ public class FavouritesFragmentTest {
         public RecipeStorage getRecipeStorage(){
             return fakeRecipeStorage;
         }
-    }
-
-    public static class FakeFavouriteFragment extends FavouritesFragment {
-        public boolean isOnline = true;
 
         @Override
-        public boolean isOnline() {
-            return isOnline;
+        public Boolean isOnline(){
+            return mockIsOnline();
         }
     }
+
 }

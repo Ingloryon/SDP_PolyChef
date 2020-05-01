@@ -111,14 +111,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             public void onSuccess(User data) {
                 authorName.setText(data.getUsername());
                 authorName.setOnClickListener(v -> {
-                    AppCompatActivity activity = (AppCompatActivity) getContext();
-                    FragmentManager fragMana = activity.getSupportFragmentManager();
-
-                    UserProfileFragment userProfileFragment = new UserProfileFragment(data);
-                    userProfileFragment.setArguments(new Bundle());
-
-
-                    fragMana.beginTransaction().replace(containerId, userProfileFragment).addToBackStack(null).commit();
+                    NavController navController = ((HomePage) getActivity()).getNavController();
+                    navController.navigate(R.id.userProfileFragment);
                 });
             }
 
@@ -138,15 +132,12 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             public void onClick(View view) {
                 if(getActivity() instanceof HomePage) {
 
-                    HomePage act = (HomePage) getActivity();
-                    NavController navController = act.getNavController();
-
                     Bundle bundle = new Bundle();
-                    bundle.putInt("fragmentID", R.id.nav_host_fragment);
                     bundle.putSerializable("RecipeToRate", currentRecipe);
 
-                    act.onBackPressed();
+                    NavController navController = ((HomePage) getActivity()).getNavController();
                     navController.navigate(R.id.rateRecipeFragment, bundle);
+
                 }else {
                     Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
                 }
