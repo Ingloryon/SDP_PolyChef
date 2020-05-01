@@ -12,5 +12,4 @@
 /captures
 .externalNativeBuild
 .cxx
-/app/src/main/assets/sync/
 /pocketsphinx-android-5prealpha-release/build/
