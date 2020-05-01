@@ -1,18 +1,13 @@
 package ch.epfl.polychef.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
-import androidx.fragment.app.Fragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,15 +22,11 @@ import java.util.concurrent.TimeUnit;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.pages.EntryPage;
-import ch.epfl.polychef.pages.EntryPageTest;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.pages.HomePageTest;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.RecipeTest;
-import ch.epfl.polychef.users.User;
-import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static androidx.test.espresso.Espresso.onData;
@@ -51,10 +42,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -88,31 +76,34 @@ public class RateRecipeFragmentsHomeTest {
         String s0="Your rating is 0 stars.";
         String s1="Your new rating is 1 stars. Your previous rating was 0";
 
-        for(int i =0;i<2;i++) {
-            onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-            onView(withId(R.id.buttonRate)).perform(click());
-            onView(withId(R.id.RateChoices)).perform(click());
-            onData(allOf(is(instanceOf(String.class)), is(i+" star"))).perform(click());
-            onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(i+" star"))));
-            if(i==0){
-                onView(withId(R.id.buttonSendRate)).perform(click());
-                onView(withText(s0))
-                        .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
-                                .getWindow().getDecorView()))))
-                        .check(matches(isDisplayed()));
-            }else{
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                onView(withId(R.id.buttonSendRate)).perform(click());
-                onView(withText(s1))
-                        .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
-                                .getWindow().getDecorView()))))
-                        .check(matches(isDisplayed()));
-            }
+        goToRatingAndRateI(0);
+        sendRateAndCheckToast(s0);
+
+        goToRatingAndRateI(1);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        sendRateAndCheckToast(s1);
+
+    }
+
+    private void goToRatingAndRateI(int i){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.buttonRate)).perform(click());
+        onView(withId(R.id.RateChoices)).perform(click());
+        String star= i<2?" star":" stars";
+        onData(allOf(is(instanceOf(String.class)), is(i+star))).perform(click());
+        onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(i+star))));
+    }
+
+    private void sendRateAndCheckToast(String expectedText){
+        onView(withId(R.id.buttonSendRate)).perform(click());
+        onView(withText(expectedText))
+                .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
     }
 
     public static class FakeFakeHomePage extends HomePageTest.FakeHomePage {

@@ -30,8 +30,6 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class RateRecipeFragmentsEntryTest {
 
-    Recipe aRecipe= RecipeTest.setStandardRecipe().build();
-
     private SingleActivityFactory<EntryPage> fakeEntryPage = new SingleActivityFactory<EntryPage>(
             EntryPage.class) {
         @Override
