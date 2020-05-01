@@ -120,7 +120,7 @@ public class RateRecipeFragment extends Fragment {
             HomePage homePage = (HomePage) context;
             fireDatabase = homePage.getFireDatabase();
             userStorage = homePage.getUserStorage();
-            Preconditions.checkArgument(fireDatabase != null);
+            Preconditions.checkArgument(fireDatabase != null && userStorage!=null );
         } else {
             throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");
         }
