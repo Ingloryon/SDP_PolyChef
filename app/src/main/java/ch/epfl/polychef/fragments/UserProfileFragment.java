@@ -62,6 +62,11 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         currentIndex = 0;
+
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            userToDisplay = (User) bundle.getSerializable("User");
+        }
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         userRecyclerView = view.findViewById(R.id.UserRecipesList);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));

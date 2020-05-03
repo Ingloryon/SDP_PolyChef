@@ -26,6 +26,8 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.pages.EntryPage;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.UserStorage;
 
@@ -199,11 +201,6 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         @Override
         public void onClick(View view) {
 
-            //Here we know that the context is an activity
-            AppCompatActivity activity = (AppCompatActivity) mainContext;
-            FragmentManager fragMana = activity.getSupportFragmentManager();
-
-            // Get the clicked recipe from the recyclerView
             int recipePosition = recyclerView.getChildLayoutPosition(view);
             Recipe clickedRecipe = recipeList.get(recipePosition);
 
@@ -211,10 +208,22 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
             Bundle bundle = new Bundle();
             bundle.putSerializable("Recipe", clickedRecipe);
 
-            FullRecipeFragment recipeFragment = new FullRecipeFragment();
-            recipeFragment.setArguments(bundle);
+            if(mainContext instanceof HomePage){
+                ((HomePage) mainContext)
+                        .getNavController()
+                        .navigate(R.id.fullRecipeFragment, bundle);
+            } else if(mainContext instanceof EntryPage){
 
-            fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
+                AppCompatActivity activity = (AppCompatActivity) mainContext;
+                FragmentManager fragMana = activity.getSupportFragmentManager();
+
+                FullRecipeFragment recipeFragment = new FullRecipeFragment();
+                recipeFragment.setArguments(bundle);
+
+                fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
+            } else {
+                throw new IllegalStateException();
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -58,7 +59,9 @@ public class RecipeStorage implements Serializable  {
     public void addRecipe(Recipe recipe) {
         Preconditions.checkArgument(recipe != null);
 
-        getFirebaseDatabase().getReference(DB_NAME).push().setValue(recipe);
+        DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
+        recipe.setRecipeDatabaseKey(ref.getKey());
+        ref.setValue(recipe);
     }
 
     public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
@@ -151,6 +154,7 @@ public class RecipeStorage implements Serializable  {
         if (recipe == null) {
             ch.onFailure();
         } else {
+            recipe.setRecipeDatabaseKey(snapshot.getKey());
             ch.onSuccess(recipe);
         }
     }
@@ -162,7 +166,9 @@ public class RecipeStorage implements Serializable  {
         } else {
             List<Recipe> recipes = new ArrayList<>();
             for(DataSnapshot child : dataSnapshot.getChildren()){
-                recipes.add(child.getValue(Recipe.class));
+                Recipe recipe = child.getValue(Recipe.class);
+                recipe.setRecipeDatabaseKey(child.getKey());
+                recipes.add(recipe);
             }
 
             ch.onSuccess(recipes);

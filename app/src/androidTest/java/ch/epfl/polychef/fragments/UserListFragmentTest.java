@@ -2,20 +2,27 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telecom.Call;
 
 import androidx.arch.core.util.Function;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
@@ -60,8 +67,6 @@ public class UserListFragmentTest {
         }
     };
 
-    private FakeUserListFragment fakeUserListFragment;
-
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
             false);
@@ -69,28 +74,52 @@ public class UserListFragmentTest {
     @Mock
     UserStorage mockUserStorage;
 
-    @Mock
-    User mockPolyChefUser;
+    User firstUser;
+    User secondUser;
+    User thirdUser;
+    User polyChefUser;
 
-    private User mainUserTest = new User("fake@email.com", "Fake");
+    private FragmentTestUtils fragUtils = new FragmentTestUtils();
 
-    @Before
+    @After
+    public void afterTest(){
+        Intents.release();
+    }
+
     public void initMockAndStorage() {
         MockitoAnnotations.initMocks(this);
         when(mockUserStorage.getAuthenticatedUser()).thenReturn(mock(FirebaseUser.class));
-        when(mockUserStorage.getPolyChefUser()).thenReturn(mockPolyChefUser);
+        when(mockUserStorage.getPolyChefUser()).thenReturn(polyChefUser);
+        getUserFromStorageWhen(polyChefUser);
+        getUserFromStorageWhen(firstUser);
+        getUserFromStorageWhen(secondUser);
+        getUserFromStorageWhen(thirdUser);
     }
 
-    private synchronized void setup(Function<User, List<String>> userListFunction, int fragmentId) {
+    private synchronized void setup(Boolean hasSubscriptions) {
+        firstUser = new User("fake@email.com", "Fake");
+        secondUser = new User("fake1@email.com", "Fake1");
+        thirdUser = new User("fake2@email.com", "Fake2");
+        polyChefUser = new User("user@Polychef.com", "user");
+
+        if(hasSubscriptions){
+            polyChefUser.addSubscription(firstUser.getEmail());
+            polyChefUser.addSubscription(secondUser.getEmail());
+            polyChefUser.addSubscription(thirdUser.getEmail());
+
+            firstUser.addSubscriber(polyChefUser.getEmail());
+            secondUser.addSubscriber(polyChefUser.getEmail());
+            thirdUser.addSubscriber(polyChefUser.getEmail());
+        }
+
+        initMockAndStorage();
+
+        Intents.init();
         intentsTestRule.launchActivity(new Intent());
-        Bundle bundle = new Bundle();
-        bundle.putInt("fragmentID", R.id.nav_host_fragment);
-        fakeUserListFragment = new FakeUserListFragment(userListFunction, fragmentId);
-        Fragment fragment = fakeUserListFragment;
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.onlineMiniaturesFragment, fragment).addToBackStack(null);
-        transaction.commit();
+        onView(ViewMatchers.withId(R.id.drawer)).perform(DrawerActions.open());
+        onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_subscriptions));
+        onView(withId(R.id.drawer)).perform(DrawerActions.close());
+
         try {
             wait(1000);
         } catch (InterruptedException e) {
@@ -110,32 +139,21 @@ public class UserListFragmentTest {
         }).when(mockUserStorage).getUserByEmail(eq(user.getEmail()), any(CallHandler.class));
     }
 
-    private List<String> getUserList() {
-        List<String> users = new ArrayList<>();
-        users.add(mainUserTest.getEmail());
-        getUserFromStorageWhen(mainUserTest);
-        users.add("fake1@email.com");
-        getUserFromStorageWhen(getUser("fake1@email.com", "Fake1"));
-        users.add("fake2@email.com");
-        getUserFromStorageWhen(getUser("fake2@email.com", "Fake2"));
-        return users;
-    }
-
     @Test
     public void emptyListShowNothing() {
-        setup((user) -> new ArrayList<>(), R.layout.fragment_subscriptions);
-        assertThat(fakeUserListFragment.getRecyclerView().getAdapter().getItemCount(), is(0));
+        setup(false);
+        assertThat(((UserListFragment)fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount(), is(0));
     }
 
     @Test
     public void multipleUserCanBeShown() {
-        setup((user) -> getUserList(), R.layout.fragment_subscriptions);
-        assertThat(fakeUserListFragment.getRecyclerView().getAdapter().getItemCount(), is(3));
+        setup(true);
+        assertThat(((UserListFragment)fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount(), is(3));
     }
 
     @Test
     public void onClickGoesToUserProfile() {
-        setup((user) -> getUserList(), R.layout.fragment_subscriptions);
+        setup(true);
         onView(withId(R.id.miniatureUserList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
         onView(withId(R.id.UsernameDisplay)).check(matches(withText("Fake")));
@@ -143,16 +161,16 @@ public class UserListFragmentTest {
 
     @Test
     public void canSubscribeAndUnsubscribe() {
-        setup((user) -> getUserList(), R.layout.fragment_subscriptions);
+        setup(true);
         onView(withId(R.id.miniatureUserList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.subscribeButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.subscribeButton)).check(matches(withText("subscribe")));
-        onView(withId(R.id.subscribeButton)).perform(click());
         onView(withId(R.id.subscribeButton)).check(matches(withText("subscribed")));
         onView(withId(R.id.subscribeButton)).perform(click());
         onView(withId(R.id.subscribeButton)).check(matches(withText("subscribe")));
+        onView(withId(R.id.subscribeButton)).perform(click());
+        onView(withId(R.id.subscribeButton)).check(matches(withText("subscribed")));
         verify(mockUserStorage, times(2)).updateUserInfo();
-        verify(mockUserStorage, times(2)).updateUserInfo(eq(mainUserTest));
+        verify(mockUserStorage, times(2)).updateUserInfo(eq(firstUser));
     }
 
     private class FakeHomePage extends HomePage {
@@ -171,13 +189,6 @@ public class UserListFragmentTest {
         @Override
         public RecipeStorage getRecipeStorage(){
             return mock(RecipeStorage.class);
-        }
-    }
-
-    public static class FakeUserListFragment extends UserListFragment {
-
-        public FakeUserListFragment(Function<User, List<String>> userListFunction, int fragmentId) {
-            super(userListFunction, fragmentId);
         }
     }
 }
