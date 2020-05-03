@@ -1,5 +1,7 @@
 package ch.epfl.polychef.recipe;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,8 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     private int estimatedCookingTime;
     private Difficulty recipeDifficulty;
     private final Rating rating;
+
+    private String recipeDatabaseKey;
 
     // Having pictures and miniature is optional, if none is provided the default one should be displayed
     private Either<String, Integer> miniaturePath;
@@ -76,6 +80,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
             this.date = date;
         }
         this.author = author;
+        this.recipeDatabaseKey = "";
     }
 
     /**
@@ -204,6 +209,25 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     public String getRecipeUuid(){
         return recipeUuid;
+    }
+
+    /**
+     * Returns the key used by the database to store the recipe.
+     * @return the key used by the database to store the recipe
+     */
+    @Exclude
+    public String getRecipeDatabaseKey(){
+        return recipeDatabaseKey;
+    }
+
+    /**
+     * Should only be used by Firebase.
+     * Sets the key used by the database to store the recipe.
+     * @param recipeDatabaseKey the new key for the recipe
+     */
+    @Exclude
+    public void setRecipeDatabaseKey(String recipeDatabaseKey){
+        this.recipeDatabaseKey =recipeDatabaseKey;
     }
 
     @Override

@@ -26,5 +26,6 @@ public class OnAttachTest {
         onAttachThrowsExceptionWhenWrongContext(new UserProfileFragment());
         onAttachThrowsExceptionWhenWrongContext(new PostRecipeFragment());
         onAttachThrowsExceptionWhenWrongContext(new OnlineMiniaturesFragment());
+        onAttachThrowsExceptionWhenWrongContext(new RateRecipeFragment());
     }
 }

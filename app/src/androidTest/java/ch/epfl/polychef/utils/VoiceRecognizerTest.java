@@ -2,10 +2,12 @@ package ch.epfl.polychef.utils;
 
 
 import android.app.Activity;
+import android.os.Build;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,8 @@ import ch.epfl.polychef.pages.EntryPage;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
+import static androidx.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +33,15 @@ public class VoiceRecognizerTest {
     @Rule
     public IntentsTestRule<EntryPage> intentsTestRule = new IntentsTestRule<>(EntryPage.class);
 
+    @Before
+    public void grantRecordingAudioPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getInstrumentation().getUiAutomation().executeShellCommand(
+                    "pm grant " + getTargetContext().getPackageName()
+                            + " android.permission.RECORD_AUDIO");
+            //intentsTestRule.getActivity().getApplicationContext();
+        }
+    }
 
     CallNotifier<String> mockCallNotifier= Mockito.mock(CallNotifier.class);
 
