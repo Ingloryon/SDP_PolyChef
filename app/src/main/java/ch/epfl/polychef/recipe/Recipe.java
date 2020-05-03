@@ -1,5 +1,7 @@
 package ch.epfl.polychef.recipe;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -213,6 +215,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      * Returns the key used by the database to store the recipe.
      * @return the key used by the database to store the recipe
      */
+    @Exclude
     public String getRecipeDatabaseKey(){
         return recipeDatabaseKey;
     }
@@ -222,6 +225,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      * Sets the key used by the database to store the recipe.
      * @param recipeDatabaseKey the new key for the recipe
      */
+    @Exclude
     public void setRecipeDatabaseKey(String recipeDatabaseKey){
         this.recipeDatabaseKey =recipeDatabaseKey;
     }
