@@ -35,11 +35,14 @@ import java.util.UUID;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
+import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
+import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class PostRecipeFragment extends Fragment {
@@ -240,6 +243,10 @@ public class PostRecipeFragment extends Fragment {
             hostActivity.getRecipeStorage().addRecipe(postedRecipe);
             hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
             hostActivity.getUserStorage().updateUserInfo();
+
+            // Send notification to all users subscribed to the current user
+            User currentUser = hostActivity.getUserStorage().getPolyChefUser();
+            NotificationSender.getInstance().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
 
             return true;
         }
