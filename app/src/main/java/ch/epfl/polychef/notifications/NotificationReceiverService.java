@@ -23,10 +23,16 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 
 public class NotificationReceiverService extends FirebaseMessagingService {
-    private String TAG = "MessagingService";
+    private static final String TAG = "MessagingService";
     private String channelID = "User notification";
 
     public NotificationReceiverService() {
+    }
+
+    @Override
+    public void onNewToken(@NonNull String s) {
+        super.onNewToken(s);
+        // TODO on new token should check if user should be subscribed
     }
 
     @Override
@@ -62,10 +68,5 @@ public class NotificationReceiverService extends FirebaseMessagingService {
         if (notificationManager != null) {
             notificationManager.createNotificationChannel(adminChannel);
         }
-    }
-
-    @Override
-    public void onSendError(@NonNull String s, @NonNull Exception e) {
-        Log.e(TAG, "send notification error");
     }
 }
