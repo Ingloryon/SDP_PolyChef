@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
@@ -217,10 +215,14 @@ public class PostRecipeFragment extends Fragment {
             printWrongInputsToUser();
         }else{
             try{
-                wait(5);
+                wait(100);
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
+            // Send notification to all users subscribed to the current user
+            User currentUser = hostActivity.getUserStorage().getPolyChefUser();
+            NotificationSender.getInstance().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
+
             Intent intent = new Intent(getActivity(), HomePage.class);
             startActivity(intent);
         }
@@ -243,10 +245,6 @@ public class PostRecipeFragment extends Fragment {
             hostActivity.getRecipeStorage().addRecipe(postedRecipe);
             hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
             hostActivity.getUserStorage().updateUserInfo();
-
-            // Send notification to all users subscribed to the current user
-            User currentUser = hostActivity.getUserStorage().getPolyChefUser();
-            NotificationSender.getInstance().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
 
             return true;
         }

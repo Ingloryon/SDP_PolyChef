@@ -5,9 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,10 +15,14 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Objects;
 import java.util.Random;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
 
 public class NotificationReceiverService extends FirebaseMessagingService {
     private static final String TAG = "MessagingService";
@@ -37,12 +39,28 @@ public class NotificationReceiverService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Intent intent = new Intent(this, HomePage.class);
-//        if(remoteMessage.getData().get("type").equals("recipe")) {
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("Recipe", OfflineRecipes.getInstance().getOfflineRecipes().get(0));
-//            intent = new Intent(this, FullRecipeFragment.class); // TODO find a way to lauch the fullRecipeFragment directly and add recipe by its uuid
-//        }
+        if(Objects.equals(remoteMessage.getData().get("type"), "recipe")) {
+            RecipeStorage.getInstance().readRecipeFromUuid(remoteMessage.getData().get("recipe"), new CallHandler<Recipe>() {
+                @Override
+                public void onSuccess(Recipe data) {
+                    Intent intent = new Intent(NotificationReceiverService.this, HomePage.class);
+                    intent.putExtra("RecipeToSend", data);
+                    setNotificationWithIntent(remoteMessage, intent);
+                }
+
+                @Override
+                public void onFailure() {
+                    Log.e(TAG, "failure");
+                }
+            });
+
+        } else {
+            setNotificationWithIntent(remoteMessage, new Intent(this, HomePage.class));
+        }
+
+    }
+
+    private void setNotificationWithIntent(RemoteMessage remoteMessage, Intent intent) {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         int notificationID = new Random().nextInt(3000);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
