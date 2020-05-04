@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -19,10 +20,13 @@ import java.util.Objects;
 import java.util.Random;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
 public class NotificationReceiverService extends FirebaseMessagingService {
     private static final String TAG = "MessagingService";
@@ -34,7 +38,16 @@ public class NotificationReceiverService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        // TODO on new token should check if user should be subscribed
+        if(UserStorage.getInstance().getPolyChefUser() != null) {
+            MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(UserStorage.getInstance().getPolyChefUser().getSubscriptions().size(), (dataList) -> {
+                for(User user: dataList) {
+                    FirebaseMessaging.getInstance().subscribeToTopic("recipe_"+user.getKey());
+                }
+            });
+            for(String userEmail: UserStorage.getInstance().getPolyChefUser().getSubscriptions()) {
+                UserStorage.getInstance().getUserByEmail(userEmail, multipleCallHandler);
+            }
+        }
     }
 
     @Override
