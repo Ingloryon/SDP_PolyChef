@@ -11,10 +11,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
-public class User implements Serializable {
+public class User implements Serializable, Miniatures {
 
     private String email;
     private String username;

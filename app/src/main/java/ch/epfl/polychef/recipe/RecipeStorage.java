@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.utils.Preconditions;
 
 /**
@@ -104,7 +105,7 @@ public class RecipeStorage implements Serializable  {
      * @param newest whether we want recent recipes or older recipes
      * @param caller the caller of this method
      */
-    public void getNRecipes(int nbRecipes, String startDate, String endDate, boolean newest, CallHandler<List<Recipe>> caller){
+    public void getNRecipes(int nbRecipes, String startDate, String endDate, boolean newest, CallHandler<List<Miniatures>> caller){
         Preconditions.checkArgument(nbRecipes > 0, "Number of recipe to get should "
                 + "be positive");
         Preconditions.checkArgument(startDate != null);
@@ -135,7 +136,7 @@ public class RecipeStorage implements Serializable  {
         listenerForListOfRecipes(query, caller);
     }*/
 
-    public void listenerForListOfRecipes(Query query, CallHandler<List<Recipe>> ch){
+    public void listenerForListOfRecipes(Query query, CallHandler<List<Miniatures>> ch){
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -159,16 +160,16 @@ public class RecipeStorage implements Serializable  {
         }
     }
 
-    public void getManyRecipeFromSnapshot(DataSnapshot dataSnapshot, CallHandler<List<Recipe>> ch){
+    public void getManyRecipeFromSnapshot(DataSnapshot dataSnapshot, CallHandler<List<Miniatures>> ch){
         if(dataSnapshot.getChildrenCount() == 0){
             ch.onFailure();
 
         } else {
-            List<Recipe> recipes = new ArrayList<>();
+            List<Miniatures> recipes = new ArrayList<>();
             for(DataSnapshot child : dataSnapshot.getChildren()){
                 Recipe recipe = child.getValue(Recipe.class);
                 recipe.setRecipeDatabaseKey(child.getKey());
-                recipes.add(recipe);
+                recipes.add((Miniatures)recipe);
             }
 
             ch.onSuccess(recipes);

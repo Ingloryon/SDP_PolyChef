@@ -8,11 +8,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.Preconditions;
 
-public final class Recipe implements Serializable, Cloneable, Comparable<Recipe> {
+public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>, Miniatures {
 
     public Recipe(){
         recipeUuid=null;

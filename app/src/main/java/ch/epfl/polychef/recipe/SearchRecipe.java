@@ -16,6 +16,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.Miniatures;
 
 public class SearchRecipe {
     private static final String TAG = "Search Recipe";
@@ -35,7 +36,7 @@ public class SearchRecipe {
      * @param ingredient the ingredient to match
      * @param caller     the caller to call onSuccess and onFailure
      */
-    public void searchRecipeByIngredient(String ingredient, CallHandler<List<Recipe>> caller) {
+    public void searchRecipeByIngredient(String ingredient, CallHandler<List<Miniatures>> caller) {
         // this is just an example we should be able to apply more filter later
         searchRecipe(ingredient, this::compareIngredient, caller);
     }
@@ -46,20 +47,21 @@ public class SearchRecipe {
      * @param query  the query to be matched
      * @param caller the caller to call onSuccess and onFailure
      */
-    public void searchForRecipe(String query, CallHandler<List<Recipe>> caller) {
+    public void searchForRecipe(String query, CallHandler<List<Miniatures>> caller) {
         searchRecipe(query, this::compareName, caller);
     }
 
-    private void searchRecipe(String query, BiFunction<String, Recipe, Boolean> comparator, CallHandler<List<Recipe>> caller) {
+    private void searchRecipe(String query, BiFunction<String, Recipe, Boolean> comparator, CallHandler<List<Miniatures>> caller) {
         DatabaseReference nameRef = getDatabase().getReference(RecipeStorage.DB_NAME);
         nameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    List<Recipe> recipes = new ArrayList<>();
+                    List<Miniatures> recipes = new ArrayList<>();
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
                         Recipe value = d.getValue(Recipe.class);
                         if (comparator.apply(query, value)) {
+
                             recipes.add(value);
                         }
                     }
