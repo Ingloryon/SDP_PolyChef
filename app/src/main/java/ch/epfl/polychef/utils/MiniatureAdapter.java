@@ -35,6 +35,9 @@ import ch.epfl.polychef.users.UserStorage;
 
 public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.MiniatureViewHolder>{
 
+    private static final int RECIPE_TYPE=0;
+    private static final int USER_TYPE=1;
+
     private Context mainContext;
     private List<Miniatures> miniaturesList;
     private RecyclerView recyclerview;
@@ -113,10 +116,12 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
     @Override
     public int getItemViewType(int position) {
-        if(miniaturesList.get(position).getClass().equals(Recipe.class))
-            return 0;
-        else
-            return 1;
+        if(miniaturesList.get(position).getClass().equals(Recipe.class)) {
+            return RECIPE_TYPE;
+        }
+        else {
+            return USER_TYPE;
+        }
     }
 
     @NonNull
@@ -124,10 +129,12 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
     public MiniatureAdapter.MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mainContext);
         View view;
-        if(viewType==0)
+        if(viewType==RECIPE_TYPE) {
             view = inflater.inflate(R.layout.miniature_layout, null);
-        else
+        }
+        else {
             view = inflater.inflate(R.layout.user_miniature_layout, null);
+        }
         view.setOnClickListener(new MiniatureAdapter.MiniatureOnClickListener(recyclerview));
         return new MiniatureAdapter.MiniatureViewHolder(view);
     }
