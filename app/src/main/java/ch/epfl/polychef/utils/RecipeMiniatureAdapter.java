@@ -121,7 +121,6 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         } else {
             getImageFor(holder, recipe);
         }
-
     }
 
     private void getImageFor(MiniatureViewHolder holder, Recipe recipe) {
