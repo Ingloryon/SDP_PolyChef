@@ -43,10 +43,8 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
     private RecyclerView recyclerview;
     private int fragmentContainerID;
 
-    private ImageStorage imageStorage;// = new ImageStorage();
+    private ImageStorage imageStorage;
     private UserStorage userStorage;
-
-    private Map<String, Bitmap> images;
 
     public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
         this(mainContext, miniaturesList, recyclerView, fragmentContainerID, storage, null);
@@ -59,7 +57,6 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         this.fragmentContainerID = fragmentContainerID;
         this.imageStorage = storage;
         this.userStorage = userStorage;
-        this.images = new HashMap<>();
     }
 
     public void changeList(List<Miniatures> miniatures){
@@ -74,11 +71,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
             holder.recipeTitle.setText(recipe.getName());
             holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
             FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
-            if (images.containsKey(recipe.getRecipeUuid())) {
-                holder.image.setImageBitmap(images.get(recipe.getRecipeUuid()));
-            } else {
-                getImageFor(holder, recipe);
-            }
+            getImageFor(holder, recipe);
         }else if(miniaturesList.get(position).getClass().equals(User.class)){
             User user = (User) miniaturesList.get(position);
             holder.username.setText(user.getUsername());
@@ -89,17 +82,14 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
             holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
-            images.put(recipe.getRecipeUuid(), BitmapFactory.decodeResource(mainContext.getResources(), Recipe.DEFAULT_MINIATURE_PATH));
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
-            images.put(recipe.getRecipeUuid(), BitmapFactory.decodeResource(mainContext.getResources(), miniatureMeta.getRight()));
         } else {
             getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
                 @Override
                 public void onSuccess(byte[] data) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                     holder.image.setImageBitmap(bmp);
-                    images.put(recipe.getRecipeUuid(), bmp);
                 }
 
                 @Override
@@ -176,25 +166,28 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         @Override
         public void onClick(View view) {
 
-            int position = recyclerView.getChildLayoutPosition(view);
-            if (miniaturesList.get(position).getClass().equals(Recipe.class)) {
-                Recipe clickedRecipe = (Recipe) miniaturesList.get(position);
-                //Create new Bundle to store recipe object inside the recipe fragment that will be open after
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Recipe", clickedRecipe);
-                ((HomePage) mainContext)
-                            .getNavController()
-                            .navigate(R.id.fullRecipeFragment, bundle);
+            int targetFragment;
 
-            } else if(miniaturesList.get(position).getClass().equals(User.class)){
+            Bundle bundle = new Bundle();
+
+            int position = recyclerView.getChildLayoutPosition(view);
+
+            if (miniaturesList.get(position).getClass().equals(Recipe.class)) {
+                targetFragment = R.id.fullRecipeFragment;
+
+                Recipe clickedRecipe = (Recipe) miniaturesList.get(position);
+                bundle.putSerializable("Recipe", clickedRecipe);
+
+            } else {
+                targetFragment = R.id.userProfileFragment;
+
                 User clickedUser = (User) miniaturesList.get(position);
-                //Create new Bundle to store user object inside the user fragment that will be open after
-                Bundle bundle = new Bundle();
                 bundle.putSerializable("User", clickedUser);
-                ((HomePage) mainContext)
-                        .getNavController()
-                        .navigate(R.id.userProfileFragment, bundle);
             }
+
+            ((HomePage) mainContext)
+                    .getNavController()
+                    .navigate(targetFragment, bundle);
         }
     }
 }

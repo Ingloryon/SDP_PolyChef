@@ -45,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class RecipeMiniatureImageTest {
@@ -53,6 +54,7 @@ public class RecipeMiniatureImageTest {
     private String mockUsername = "mockUsername";
     private User mockUser;
     private FragmentTestUtils fragUtils = new FragmentTestUtils();
+    private ImageStorage mockImageStorage;
 
     private RecipeBuilder recipeBuilder = new RecipeBuilder()
                 .addInstruction("test instruction")
@@ -84,6 +86,21 @@ public class RecipeMiniatureImageTest {
     @Before
     public synchronized void initTest() {
         mockUser = new User(mockEmail, mockUsername);
+        mockImageStorage = mock(ImageStorage.class);
+        doAnswer(invocation -> {
+
+            CallHandler<byte[]> caller = invocation.getArgument(1);
+
+            byte[] data = new byte[] {1, 2, 3, 4, 3, 2, 1};
+
+            if(invocation.getArgument(0).equals("test_path")) {
+                caller.onSuccess(data);
+            } else {
+                caller.onFailure();
+            }
+            return null;
+        }).when(mockImageStorage).getImage(any(String.class), any(CallHandler.class));
+
 
         Intents.init();
         intentsTestRule.launchActivity(new Intent());
@@ -105,24 +122,13 @@ public class RecipeMiniatureImageTest {
         Intents.release();
     }
 
-    private static class FakeImageStorage extends ImageStorage {
-        @Override
-        public void getImage(String imageName, CallHandler<byte[]> caller) {
-            byte[] data = new byte[] {1, 2, 3, 4, 3, 2, 1};
-            if(imageName.equals("test_path")) {
-                caller.onSuccess(data);
-            } else {
-                caller.onFailure();
-            }
-        }
-    }
 
     class FakeHomePage extends HomePage {
 
         @Override
         public UserStorage getUserStorage(){
-            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
-            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+            UserStorage mockUserStorage = mock(UserStorage.class);
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(mock(FirebaseUser.class));
             when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
 
             return mockUserStorage;
@@ -130,7 +136,7 @@ public class RecipeMiniatureImageTest {
 
         @Override
         public RecipeStorage getRecipeStorage(){
-            RecipeStorage mockRecipeStorage = Mockito.mock(RecipeStorage.class);
+            RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
 
             when(mockRecipeStorage.getCurrentDate()).thenReturn(RecipeStorage.OLDEST_RECIPE);
 
@@ -148,12 +154,12 @@ public class RecipeMiniatureImageTest {
 
         @Override
         public ImageStorage getImageStorage() {
-            return new FakeImageStorage();
+            return mockImageStorage;
         }
 
         @Override
         public FirebaseUser getUser() {
-            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+            FirebaseUser mockUser = mock(FirebaseUser.class);
             return mockUser;
         }
     }

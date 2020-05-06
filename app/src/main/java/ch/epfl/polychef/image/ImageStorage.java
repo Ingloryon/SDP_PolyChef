@@ -1,9 +1,15 @@
 package ch.epfl.polychef.image;
 
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.utils.Preconditions;
@@ -15,6 +21,18 @@ public class ImageStorage {
 
     private static final long TEN_MEGABYTE = 10 * 1024 * 1024;
 
+    static public ImageStorage INSTANCE = new ImageStorage();
+
+    static public ImageStorage getInstance() {
+        return INSTANCE;
+    }
+
+    private Map<String, byte[]> storedImages;
+
+    private ImageStorage(){
+        storedImages = new HashMap<>();
+    }
+
     /**
      * Upload an image to Firebase.
      * @param image the image to upload
@@ -24,6 +42,7 @@ public class ImageStorage {
         Preconditions.checkArgument(image != null, "image to upload cannot be null");
         Preconditions.checkArgument(image.length != 0, "image to upload cannot be empty");
         Preconditions.checkArgument(imageName != null, "image path to upload cannot be null");
+
         String path = "images/" + imageName + ".jpg";
         StorageReference storageRef = getStorage().getReference(path);
 
@@ -32,7 +51,11 @@ public class ImageStorage {
                 .setCustomMetadata("Recipe", recipeUId == null ? "no_recipe" : recipeUId)
                 .build();
 
-        return storageRef.putBytes(image, metadata);
+        UploadTask task = storageRef.putBytes(image, metadata);
+
+        task.addOnSuccessListener(taskSnapshot -> storedImages.put(imageName, image));
+
+        return task;
     }
 
     /**
@@ -43,10 +66,20 @@ public class ImageStorage {
     public void getImage(String imageName, final CallHandler<byte []> caller) {
         Preconditions.checkArgument(imageName != null, "image name to download cannot be null");
         Preconditions.checkArgument(caller != null, "CallHandler cannot be null");
-        StorageReference storageRef = getStorage().getReference();
-        StorageReference imgRef = storageRef.child("images/" + imageName + ".jpg");
-        imgRef.getBytes(TEN_MEGABYTE).addOnSuccessListener(bytes -> caller.onSuccess(bytes))
-                .addOnFailureListener(exception -> caller.onFailure());
+
+        if(storedImages.containsKey(imageName)){
+            caller.onSuccess(storedImages.get(imageName));
+        } else {
+            StorageReference storageRef = getStorage().getReference();
+            StorageReference imgRef = storageRef.child("images/" + imageName + ".jpg");
+            imgRef.getBytes(TEN_MEGABYTE)
+                    .addOnFailureListener(exception -> caller.onFailure())
+                    .addOnSuccessListener(bytes -> {
+                        storedImages.put(imageName, bytes);
+                        caller.onSuccess(bytes);
+                    });
+
+        }
     }
 
     /**

@@ -32,7 +32,6 @@ public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdap
     private final RecyclerView recyclerview;
     private final ImageStorage imageStorage;
     private final UserStorage userStorage;
-    private final HashMap<String, Bitmap> images;
 
     public UserMiniatureAdapter(Context mainContext, List<User> userList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage, UserStorage userStorage) {
         this.mainContext = mainContext;
@@ -41,7 +40,6 @@ public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdap
         this.fragmentContainerID = fragmentContainerID;
         this.imageStorage = storage;
         this.userStorage = userStorage;
-        this.images = new HashMap<>();
     }
 
     @NonNull

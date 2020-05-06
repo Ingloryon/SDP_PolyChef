@@ -42,10 +42,8 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     private int fragmentContainerID;
     private MiniatureViewHolder currentMinViewHolder = null;
 
-    private ImageStorage imageStorage;// = new ImageStorage();
+    private ImageStorage imageStorage;
     private UserStorage userStorage;
-
-    private Map<String, Bitmap> images;
 
     /**
      * Creates a new adapter of recipes to miniatures.
@@ -75,7 +73,6 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         this.fragmentContainerID = fragmentContainerID;
         this.imageStorage = storage;
         this.userStorage = userStorage;
-        this.images = new HashMap<>();
     }
 
     /**
@@ -116,28 +113,21 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
         FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
-        if(images.containsKey(recipe.getRecipeUuid())) {
-            holder.image.setImageBitmap(images.get(recipe.getRecipeUuid()));
-        } else {
-            getImageFor(holder, recipe);
-        }
+        getImageFor(holder, recipe);
     }
 
     private void getImageFor(MiniatureViewHolder holder, Recipe recipe) {
         Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
             holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
-            images.put(recipe.getRecipeUuid(), BitmapFactory.decodeResource(mainContext.getResources(), Recipe.DEFAULT_MINIATURE_PATH));
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
-            images.put(recipe.getRecipeUuid(), BitmapFactory.decodeResource(mainContext.getResources(), miniatureMeta.getRight()));
         } else {
             getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
                 @Override
                 public void onSuccess(byte[] data) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                     holder.image.setImageBitmap(bmp);
-                    images.put(recipe.getRecipeUuid(), bmp);
                 }
 
                 @Override

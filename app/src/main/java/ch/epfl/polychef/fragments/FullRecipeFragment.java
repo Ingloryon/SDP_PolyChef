@@ -103,7 +103,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         return view;
     }
 
-
     private void displayAuthorName(View view) {
         authorName = view.findViewById(R.id.authorUsername);
         getUserStorage().getUserByEmail(currentRecipe.getAuthor(), new CallHandler<User>() {
@@ -174,7 +173,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         carouselView = view.findViewById(R.id.recipeImages);
         carouselView.setPageCount(imagesToDisplay.size());
         carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(imagesToDisplay.get(position)));
-        ImageStorage imageStorage = getImageStorage();
+
         Either<String, Integer> miniatureMeta = currentRecipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
             imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
@@ -183,10 +182,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), miniatureMeta.getRight()));
             carouselView.setPageCount(imagesToDisplay.size());
         } else {
-            imageStorage.getImage(miniatureMeta.getLeft(), this);
+            getImageStorage().getImage(miniatureMeta.getLeft(), this);
         }
         for(String path: currentRecipe.getPicturesPath()) {
-            imageStorage.getImage(path, this);
+            getImageStorage().getImage(path, this);
         }
     }
 
@@ -293,7 +292,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     public ImageStorage getImageStorage() {
-        return new ImageStorage();
+        return ImageStorage.getInstance();
     }
 
     public UserStorage getUserStorage() {
