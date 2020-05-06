@@ -21,6 +21,9 @@ import ch.epfl.polychef.image.ProfilePicture;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.ProfilePictureAdapter;
 
+/**
+ * The fragment displaying the different profile picture choices to the user.
+ */
 public class ProfilePictChoice extends Fragment {
 
     private HomePage hostActivity;
