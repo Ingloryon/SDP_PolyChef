@@ -125,6 +125,7 @@ public class SearchRecipeTest {
     public void testSearchForRecipeFindOverString(){
         List<Miniatures> recipeArrayList=new ArrayList<>();
         addRecipes(recipeArrayList);
+        recipeArrayList.add(recipe2);
 
         CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
 
