@@ -18,6 +18,7 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.utils.Similarity;
 
 public class SearchUser {
 
@@ -33,7 +34,7 @@ public class SearchUser {
     }
 
     public void searchForUser(String query, CallHandler<List<Miniatures>> caller) {
-        searchUser(query, this::compareName, caller);
+        searchUser(query, this::compareSimilarity, caller);
     }
 
     private void searchUser(String query, BiFunction<String, User, Boolean> comparator, CallHandler<List<Miniatures>> caller) {
@@ -64,12 +65,18 @@ public class SearchUser {
         });
     }
 
+    private boolean compareSimilarity(String query, User value) {
+        return Similarity.similarity(query,value.getUsername())>0.1;
+    }
+
+    /**
     private boolean compareName(String query, User value) {
         String searchInput = query;
         searchInput = searchInput.toLowerCase();
         String name = value.getUsername().toLowerCase();
         return searchInput.contains(name) || name.contains(searchInput);
     }
+     */
 
     /**
      * Get the current instance of the {@code FirebaseDatabase}.

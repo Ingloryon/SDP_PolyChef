@@ -69,16 +69,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private Comparator<Miniatures> similarityComparator = (o1, o2) -> {
         String s1;
         String s2;
-        if(o1.getClass().equals(Recipe.class)){
-            s1 = ((Recipe)o1).getName();
-        }else{
-            s1 = ((User)o1).getUsername();
-        }
-        if(o2.getClass().equals(Recipe.class)){
-            s2 = ((Recipe)o2).getName();
-        }else{
-            s2 = ((User)o2).getUsername();
-        }
+        s1 = getName(o1);
+        s2 = getName(o2);
         if(Similarity.similarity(s1,actualQuery)>Similarity.similarity(s2,actualQuery)){
             return -1;
         }else if(Similarity.similarity(s1,actualQuery)==Similarity.similarity(s2,actualQuery)){
@@ -244,5 +236,13 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
     public RecyclerView getRecyclerView(){
         return onlineRecyclerView;
+    }
+
+    private String getName(Miniatures miniature){
+        if(miniature.getClass().equals(Recipe.class)){
+            return ((Recipe)miniature).getName();
+        }else{
+            return ((User)miniature).getUsername();
+        }
     }
 }

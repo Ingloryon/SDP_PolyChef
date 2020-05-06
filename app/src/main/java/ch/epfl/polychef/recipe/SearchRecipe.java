@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.Miniatures;
+import ch.epfl.polychef.utils.Similarity;
 
 public class SearchRecipe {
     private static final String TAG = "Search Recipe";
@@ -48,7 +49,7 @@ public class SearchRecipe {
      * @param caller the caller to call onSuccess and onFailure
      */
     public void searchForRecipe(String query, CallHandler<List<Miniatures>> caller) {
-        searchRecipe(query, this::compareName, caller);
+        searchRecipe(query, this::compareSimilarity, caller);
     }
 
     private void searchRecipe(String query, BiFunction<String, Recipe, Boolean> comparator, CallHandler<List<Miniatures>> caller) {
@@ -80,12 +81,18 @@ public class SearchRecipe {
         });
     }
 
+    private boolean compareSimilarity(String query, Recipe value) {
+        return Similarity.similarity(query,value.getName())>0.1;
+    }
+
+    /**
     private boolean compareName(String query, Recipe value) {
         String searchInput = query;
         searchInput = searchInput.toLowerCase();
         String name = value.getName().toLowerCase();
         return searchInput.contains(name) || name.contains(searchInput);
     }
+     */
 
     private boolean compareIngredient(String ingredient, Recipe value) {
         String searchInput = ingredient;
