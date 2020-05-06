@@ -16,8 +16,6 @@ import java.util.function.BiFunction;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.Miniatures;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.Similarity;
 
 public class SearchUser {
