@@ -1,45 +1,59 @@
 package ch.epfl.polychef.image;
 
+/**
+ * Class that represents a possible profile Picture.
+ */
 public class ProfilePicture {
 
-    private String countryName;
-
+    private String pictureName;
     // Image name (Without extension)
-    private String flagName;
-    private int population;
+    private String picturePath;
 
-    public ProfilePicture(String countryName, String flagName, int population) {
-        this.countryName= countryName;
-        this.flagName= flagName;
-        this.population= population;
+
+    /**
+     *
+     * @param pictureName
+     * @param picturePath
+     */
+    public ProfilePicture(String pictureName, String picturePath) {
+        this.pictureName = pictureName;
+        this.picturePath = picturePath;
     }
 
-    public int getPopulation() {
-        return population;
+    /**
+     *
+     * @return
+     */
+    public String getPictureName() {
+        return pictureName;
     }
 
-    public void setPopulation(int population) {
-        this.population = population;
+    /**
+     *
+     * @param pictureName
+     */
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
     }
 
-    public String getCountryName() {
-        return countryName;
+    /**
+     *
+     * @return
+     */
+    public String getPicturePath() {
+        return picturePath;
     }
 
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public String getFlagName() {
-        return flagName;
-    }
-
-    public void setFlagName(String flagName) {
-        this.flagName = flagName;
+    /**
+     *
+     * @param picturePath
+     */
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
     }
 
     @Override
     public String toString()  {
-        return this.countryName+" (Population: "+ this.population+")";
+        return this.pictureName;
     }
 }

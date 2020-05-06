@@ -71,14 +71,14 @@ public class ProfilePictChoice extends Fragment {
 
     private  List<ProfilePicture> getListData() {
         List<ProfilePicture> list = new ArrayList<ProfilePicture>();
-        ProfilePicture vietnam = new ProfilePicture("Vietnam", "vn", 98000000);
-        ProfilePicture usa = new ProfilePicture("United States", "us", 320000000);
-        ProfilePicture russia = new ProfilePicture("Russia", "ru", 142000000);
+        ProfilePicture boy = new ProfilePicture("A real life boiii", "boy");
+        ProfilePicture girl = new ProfilePicture("An outstanding girl", "girl");
+        ProfilePicture man = new ProfilePicture("An awesome man", "man");
 
 
-        list.add(vietnam);
-        list.add(usa);
-        list.add(russia);
+        list.add(boy);
+        list.add(girl);
+        list.add(man);
 
         return list;
     }
