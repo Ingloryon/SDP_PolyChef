@@ -129,8 +129,7 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindOverString(){
-        List<Miniatures> recipeArrayList = addRecipes();
-        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker = addRecipes();
 
         mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
 
@@ -155,8 +154,7 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientIsCaseInsensitive(){
-        List<Miniatures> list = addRecipes();
-        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker = addRecipes();
 
         mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
 
@@ -211,11 +209,11 @@ public class SearchRecipeTest {
         when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
     }
 
-    public List<Miniatures> addRecipes(){
+    public CallHandlerChecker<List<Miniatures>> addRecipes(){
         List<Miniatures> list = new ArrayList<>();
         list.add(recipe0);
         list.add(recipe1);
         list.add(recipe2);
-        return list;
+        return new CallHandlerChecker<>(list ,true);
     }
 }
