@@ -37,7 +37,7 @@
     <string name="RateButton">Rate me !</string>
     <string name="RateText">How many stars would you give to the recipe </string>
     <string name="sendRate">Send rate</string>
-
+    <string name="clickProfilePict">Click me to change avatar</string>
 
     <string name="difficulty_prompt">Select difficulty...</string>
     <string-array name="difficulty_array">

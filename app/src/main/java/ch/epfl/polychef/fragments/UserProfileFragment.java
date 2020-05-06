@@ -4,14 +4,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -117,6 +121,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
         getNextRecipes();
+        setupProfilePictureButton();
     }
 
     @Override
@@ -143,6 +148,9 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         }
     }
 
+    /**
+     * Gets the next recipe for the current user
+     */
     public void getNextRecipes(){
         isLoading = true;
         int nbRecipes = userToDisplay.getRecipes().size();
@@ -161,7 +169,35 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         --waitingFor;
     }
 
+    /**
+     * Getter for the recycler view of the user
+     * @return the user recycler view
+     */
     public RecyclerView getUserRecyclerView(){
         return userRecyclerView;
+    }
+
+    private void setupProfilePictureButton(){
+        ImageView profile_pict = getView().findViewById(R.id.usersImage);
+
+        profile_pict.setOnHoverListener(new View.OnHoverListener(){
+            @Override
+            public boolean onHover(View v, MotionEvent event) {
+                Toast.makeText(getActivity(),getActivity().getString(R.string.clickProfilePict), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        profile_pict.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("UserDisplayed", userToDisplay);
+
+                NavController navController = ((HomePage) getActivity()).getNavController();
+                navController.navigate(R.id.favouritesFragment, bundle);
+            }
+        });
     }
 }
