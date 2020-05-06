@@ -62,7 +62,6 @@ public class SearchRecipe {
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
                         Recipe value = d.getValue(Recipe.class);
                         if (comparator.apply(query, value)) {
-
                             recipes.add(value);
                         }
                     }

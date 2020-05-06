@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -66,7 +67,7 @@ public class SearchRecipeTest {
     @Test
     public void testSearchForRecipeFailWithSnapshotNullValue(){
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(null,false);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(null,false);
 
         mockSearchRecipe.searchForRecipe("e",callHandlerChecker);
 
@@ -81,7 +82,7 @@ public class SearchRecipeTest {
     @Test
     public void testSearchForRecipeFailOnCancel(){
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(null,false);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(null,false);
 
         mockSearchRecipe.searchForRecipe("e",callHandlerChecker);
 
@@ -93,12 +94,12 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindRecipeWithGivenWord(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
+        List<Miniatures> expectedRecipeList=new ArrayList<>();
         expectedRecipeList.add(recipe0);
         expectedRecipeList.add(recipe1);
         expectedRecipeList.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
 
         mockSearchRecipe.searchForRecipe("3",callHandlerChecker);
 
@@ -109,9 +110,9 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindNothing(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
+        List<Miniatures> expectedRecipeList=new ArrayList<>();
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
 
         mockSearchRecipe.searchForRecipe("8",callHandlerChecker);
 
@@ -122,10 +123,10 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindOverString(){
-        List<Recipe> recipeArrayList=new ArrayList<>();
+        List<Miniatures> recipeArrayList=new ArrayList<>();
         addRecipes(recipeArrayList);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
 
         mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
 
@@ -136,10 +137,10 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeIsCaseInsensitive(){
-        List<Recipe> expected=new ArrayList<>();
+        List<Miniatures> expected=new ArrayList<>();
         expected.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expected ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(expected ,true);
 
         mockSearchRecipe.searchForRecipe("AbcD",callHandlerChecker);
 
@@ -150,11 +151,11 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientIsCaseInsensitive(){
-        List<Recipe> list=new ArrayList<>();
+        List<Miniatures> list=new ArrayList<>();
         addRecipes(list);
         list.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
 
@@ -165,9 +166,9 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientFindParticularValue(){
-        List<Recipe> maListLaMailer=new ArrayList(Collections.singleton(recipe1));
+        List<Miniatures> maListLaMailer=new ArrayList(Collections.singleton(recipe1));
 
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(maListLaMailer ,true);
+        CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(maListLaMailer ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("ssssaltttt",callHandlerChecker);
 
@@ -209,7 +210,7 @@ public class SearchRecipeTest {
         when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
     }
 
-    public void addRecipes(List <Recipe> list){
+    public void addRecipes(List <Miniatures> list){
         list.add(recipe0);
         list.add(recipe1);
     }
