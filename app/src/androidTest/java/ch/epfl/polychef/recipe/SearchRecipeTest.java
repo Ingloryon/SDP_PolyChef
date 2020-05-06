@@ -125,7 +125,6 @@ public class SearchRecipeTest {
     public void testSearchForRecipeFindOverString(){
         List<Miniatures> recipeArrayList=new ArrayList<>();
         addRecipes(recipeArrayList);
-        recipeArrayList.add(recipe2);
 
         CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
 
@@ -154,7 +153,6 @@ public class SearchRecipeTest {
     public void testSearchForIngredientIsCaseInsensitive(){
         List<Miniatures> list=new ArrayList<>();
         addRecipes(list);
-        list.add(recipe2);
 
         CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
 
@@ -214,5 +212,6 @@ public class SearchRecipeTest {
     public void addRecipes(List <Miniatures> list){
         list.add(recipe0);
         list.add(recipe1);
+        list.add(recipe2);
     }
 }
