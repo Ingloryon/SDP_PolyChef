@@ -13,7 +13,7 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ProfilePicture;
 
 /**
- *
+ * An adapter to display the different profile pictures in the main ListView.
  */
 public class ProfilePictureAdapter  extends BaseAdapter {
 
@@ -22,12 +22,13 @@ public class ProfilePictureAdapter  extends BaseAdapter {
     private Context context;
 
     /**
-     *
-     * @param aContext
-     * @param listPictures
+     * The constructor of the adapter.
+     * @param aContext the context
+     * @param listPictures the list of profile pictures
      */
     public ProfilePictureAdapter(Context aContext,  List<ProfilePicture> listPictures) {
         this.context = aContext;
+        //TODO: deep copy ?
         this.listPictures = listPictures;
         layoutInflater = LayoutInflater.from(aContext);
     }
@@ -48,11 +49,11 @@ public class ProfilePictureAdapter  extends BaseAdapter {
     }
 
     /**
-     *
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
+     * Returns the updated view with the profile picture choice.
+     * @param position the position on the display
+     * @param convertView the initial view
+     * @param parent the viewGroup the activity belongs to
+     * @return the updated view
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -67,7 +68,7 @@ public class ProfilePictureAdapter  extends BaseAdapter {
         }
 
         ProfilePicture current_picture = this.listPictures.get(position);
-        holder.pictureName.setText(current_picture.getPictureName());
+        holder.pictureName.setText(current_picture.getPictureLabel());
 
         int pictureId = context.getResources().getIdentifier(current_picture.getPicturePath(), "drawable", context.getPackageName());
         holder.flagView.setImageResource(pictureId);

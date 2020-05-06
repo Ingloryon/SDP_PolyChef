@@ -51,12 +51,11 @@ public class ProfilePictChoice extends Fragment {
 
         // When the user clicks on the ListItem
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = listView.getItemAtPosition(position);
-                ProfilePicture country = (ProfilePicture) o;
-                Toast.makeText(getActivity(), "Selected :" + " " + country, Toast.LENGTH_LONG).show();
+                ProfilePicture picture = (ProfilePicture) o;
+                Toast.makeText(getActivity(), "Selected :" + " " + picture, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -71,14 +70,13 @@ public class ProfilePictChoice extends Fragment {
 
     private  List<ProfilePicture> getListData() {
         List<ProfilePicture> list = new ArrayList<ProfilePicture>();
-        ProfilePicture boy = new ProfilePicture("A real life boiii", "boy");
-        ProfilePicture girl = new ProfilePicture("An outstanding girl", "girl");
-        ProfilePicture man = new ProfilePicture("An awesome man", "man");
-
-
-        list.add(boy);
-        list.add(girl);
-        list.add(man);
+        list.add(new ProfilePicture("A real life boiii", "boy"));
+        list.add(new ProfilePicture("An outstanding girl", "girl"));
+        list.add(new ProfilePicture("An awesome man", "man1"));
+        list.add(new ProfilePicture("An old fella", "man2"));
+        list.add(new ProfilePicture("A cutie grand-mother", "man3"));
+        list.add(new ProfilePicture("The boss of the kitchen", "man4"));
+        list.add(new ProfilePicture("An healthy man", "boy1"));
 
         return list;
     }

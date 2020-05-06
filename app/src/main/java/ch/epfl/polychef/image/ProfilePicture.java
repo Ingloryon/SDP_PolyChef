@@ -5,48 +5,48 @@ package ch.epfl.polychef.image;
  */
 public class ProfilePicture {
 
-    private String pictureName;
+    private String pictureLabel;
     // Image name (Without extension)
     private String picturePath;
 
 
     /**
-     *
-     * @param pictureName
-     * @param picturePath
+     * Constructor of a new profile picture.
+     * @param pictureLabel the label of the picture
+     * @param picturePath the name of the drawable image
      */
-    public ProfilePicture(String pictureName, String picturePath) {
-        this.pictureName = pictureName;
+    public ProfilePicture(String pictureLabel, String picturePath) {
+        this.pictureLabel = pictureLabel;
         this.picturePath = picturePath;
     }
 
     /**
-     *
-     * @return
+     * Returns the label of the picture.
+     * @return the name of the label
      */
-    public String getPictureName() {
-        return pictureName;
+    public String getPictureLabel() {
+        return pictureLabel;
     }
 
     /**
-     *
-     * @param pictureName
+     * Sets the label of the picture.
+     * @param pictureLabel the new label to set
      */
-    public void setPictureName(String pictureName) {
-        this.pictureName = pictureName;
+    public void setPictureLabel(String pictureLabel) {
+        this.pictureLabel = pictureLabel;
     }
 
     /**
-     *
-     * @return
+     * Returns the picture name in drawable.
+     * @return the image name
      */
     public String getPicturePath() {
         return picturePath;
     }
 
     /**
-     *
-     * @param picturePath
+     * Sets the name of the profile picture
+     * @param picturePath the new name of the picture png
      */
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath;
@@ -54,6 +54,6 @@ public class ProfilePicture {
 
     @Override
     public String toString()  {
-        return this.pictureName;
+        return this.pictureLabel;
     }
 }
