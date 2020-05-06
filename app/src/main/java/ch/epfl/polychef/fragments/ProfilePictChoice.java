@@ -59,6 +59,9 @@ public class ProfilePictChoice extends Fragment {
                 Object o = listView.getItemAtPosition(position);
                 ProfilePicture picture = (ProfilePicture) o;
                 Toast.makeText(getActivity(), "Selected :" + " " + picture, Toast.LENGTH_LONG).show();
+
+
+                //TODO: Send info to the database so the User profile picture gets uploaded
             }
         });
 

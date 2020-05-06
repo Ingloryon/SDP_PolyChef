@@ -1,5 +1,9 @@
 package ch.epfl.polychef.image;
 
+import androidx.annotation.NonNull;
+
+import ch.epfl.polychef.utils.Preconditions;
+
 /**
  * Class that represents a possible profile Picture.
  */
@@ -13,9 +17,10 @@ public class ProfilePicture {
     /**
      * Constructor of a new profile picture.
      * @param pictureLabel the label of the picture
-     * @param picturePath the name of the drawable image
+     * @param picturePath the name of the drawable image, must be non-empty
      */
-    public ProfilePicture(String pictureLabel, String picturePath) {
+    public ProfilePicture(@NonNull String pictureLabel, @NonNull String picturePath) {
+        Preconditions.checkArgument(!picturePath.isEmpty(), "The image name must be non empty");
         this.pictureLabel = pictureLabel;
         this.picturePath = picturePath;
     }
