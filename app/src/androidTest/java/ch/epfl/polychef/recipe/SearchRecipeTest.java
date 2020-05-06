@@ -1,5 +1,8 @@
 package ch.epfl.polychef.recipe;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -11,8 +14,11 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.utils.CallHandlerChecker;
@@ -123,9 +129,7 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeFindOverString(){
-        List<Miniatures> recipeArrayList=new ArrayList<>();
-        addRecipes(recipeArrayList);
-
+        List<Miniatures> recipeArrayList = addRecipes();
         CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
 
         mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
@@ -137,7 +141,7 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForRecipeIsCaseInsensitive(){
-        List<Miniatures> expected=new ArrayList<>();
+        List<Miniatures> expected = new ArrayList<>();
         expected.add(recipe2);
 
         CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(expected ,true);
@@ -151,9 +155,7 @@ public class SearchRecipeTest {
 
     @Test
     public void testSearchForIngredientIsCaseInsensitive(){
-        List<Miniatures> list=new ArrayList<>();
-        addRecipes(list);
-
+        List<Miniatures> list = addRecipes();
         CallHandlerChecker<List<Miniatures>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
 
         mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
@@ -209,9 +211,11 @@ public class SearchRecipeTest {
         when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
     }
 
-    public void addRecipes(List <Miniatures> list){
+    public List<Miniatures> addRecipes(){
+        List<Miniatures> list = new ArrayList<>();
         list.add(recipe0);
         list.add(recipe1);
         list.add(recipe2);
+        return list;
     }
 }
