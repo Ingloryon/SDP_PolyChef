@@ -4,12 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -32,13 +30,6 @@ import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 public class UserProfileFragment extends Fragment implements CallHandler<Recipe> {
 
-    public UserProfileFragment() {
-    }
-
-    public UserProfileFragment(User user) {
-        this.userToDisplay = user;
-    }
-
     private static final String TAG = "UserProfileFragment";
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
     private User userToDisplay;
@@ -54,6 +45,20 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     private int waitingFor;
 
     private int currentIndex = 0;
+
+    /**
+     * Empty getter for Firebase.
+     */
+    public UserProfileFragment() {
+    }
+
+    /**
+     * Public User setter for Firebase
+     * @param user the user to display
+     */
+    public UserProfileFragment(User user) {
+        this.userToDisplay = user;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,7 +154,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     /**
-     * Gets the next recipe for the current user
+     * Gets the next recipe for the current user.
      */
     public void getNextRecipes(){
         isLoading = true;
@@ -170,7 +175,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     /**
-     * Getter for the recycler view of the user
+     * Getter for the recycler view of the user.
      * @return the user recycler view
      */
     public RecyclerView getUserRecyclerView(){
