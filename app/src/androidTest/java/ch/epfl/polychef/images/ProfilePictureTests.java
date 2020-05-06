@@ -18,13 +18,16 @@ public class ProfilePictureTests {
 
     @Test
     public void getterAndSettersReturnCorresctInfos(){
-        ProfilePicture profilePict = new ProfilePicture("The label !", "man");
+        ProfilePicture profilePict = new ProfilePicture("The label!", "man");
         profilePict.setPictureLabel("The label is better");
         profilePict.setPicturePath("boy");
         Assertions.assertEquals(profilePict.getPictureLabel(), "The label is better");
         Assertions.assertEquals(profilePict.getPicturePath(), "boy");
     }
 
-
-
+    @Test
+    public void toStringDisplaysCorrectly(){
+        ProfilePicture profilePict = new ProfilePicture("The label!", "man");
+        Assertions.assertEquals(profilePict.toString(), "The picture has name man in drawable. Its label is The label!");
+    }
 }

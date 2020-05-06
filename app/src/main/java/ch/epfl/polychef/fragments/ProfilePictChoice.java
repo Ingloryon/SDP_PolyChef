@@ -58,7 +58,7 @@ public class ProfilePictChoice extends Fragment {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = listView.getItemAtPosition(position);
                 ProfilePicture picture = (ProfilePicture) o;
-                Toast.makeText(getActivity(), "Selected :" + " " + picture, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Selected :" + " " + picture.getPictureLabel(), Toast.LENGTH_LONG).show();
 
 
                 //TODO: Send info to the database so the User profile picture gets uploaded
