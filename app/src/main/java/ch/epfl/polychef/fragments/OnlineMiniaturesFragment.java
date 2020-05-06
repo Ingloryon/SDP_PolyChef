@@ -25,11 +25,8 @@ import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
-
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.recipe.SearchRecipe;
-import ch.epfl.polychef.users.SearchUser;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.MiniatureAdapter;
@@ -103,7 +100,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-
                 if(!isLoading && !isSearching){
                     isLoading = true;
                     if(!recyclerView.canScrollVertically(DOWN)){
@@ -147,8 +143,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
                 searchList.clear();
                 onlineRecyclerView.setAdapter(searchAdapter);
                 ((MiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(searchList);
-                SearchRecipe.getInstance().searchForRecipe(query, OnlineMiniaturesFragment.this);
-                SearchUser.getInstance().searchForUser(query, OnlineMiniaturesFragment.this);
+                recipeStorage.getSearch().searchForRecipe(query, OnlineMiniaturesFragment.this);
+                userStorage.getSearch().searchForUser(query, OnlineMiniaturesFragment.this);
                 return true;
             }
 

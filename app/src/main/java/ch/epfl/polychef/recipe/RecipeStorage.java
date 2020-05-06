@@ -184,4 +184,8 @@ public class RecipeStorage implements Serializable  {
     public FirebaseDatabase getFirebaseDatabase() {
         return FirebaseDatabase.getInstance();
     }
+
+    public SearchRecipe getSearch(){
+        return SearchRecipe.getInstance();
+    }
 }
