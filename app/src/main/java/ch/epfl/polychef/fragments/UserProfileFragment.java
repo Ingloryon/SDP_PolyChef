@@ -180,14 +180,6 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     private void setupProfilePictureButton(){
         ImageView profile_pict = getView().findViewById(R.id.usersImage);
 
-        profile_pict.setOnHoverListener(new View.OnHoverListener(){
-            @Override
-            public boolean onHover(View v, MotionEvent event) {
-                Toast.makeText(getActivity(),getActivity().getString(R.string.clickProfilePict), Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-
         profile_pict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,7 +188,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
                 bundle.putSerializable("UserDisplayed", userToDisplay);
 
                 NavController navController = ((HomePage) getActivity()).getNavController();
-                navController.navigate(R.id.favouritesFragment, bundle);
+                navController.navigate(R.id.userProfilePictureChoice, bundle);
             }
         });
     }
