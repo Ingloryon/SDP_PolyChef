@@ -179,32 +179,18 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
             int position = recyclerView.getChildLayoutPosition(view);
             if (miniaturesList.get(position).getClass().equals(Recipe.class)) {
                 Recipe clickedRecipe = (Recipe) miniaturesList.get(position);
-
                 //Create new Bundle to store recipe object inside the recipe fragment that will be open after
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Recipe", clickedRecipe);
-
-                if (mainContext instanceof HomePage) {
-                    ((HomePage) mainContext)
+                ((HomePage) mainContext)
                             .getNavController()
                             .navigate(R.id.fullRecipeFragment, bundle);
-                } else if (mainContext instanceof EntryPage) {
 
-                    AppCompatActivity activity = (AppCompatActivity) mainContext;
-                    FragmentManager fragMana = activity.getSupportFragmentManager();
-
-                    FullRecipeFragment recipeFragment = new FullRecipeFragment();
-                    recipeFragment.setArguments(bundle);
-
-                    fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
-                } else {
-                    throw new IllegalStateException();
-                }
             } else if(miniaturesList.get(position).getClass().equals(User.class)){
                 User clickedUser = (User) miniaturesList.get(position);
+                //Create new Bundle to store user object inside the user fragment that will be open after
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("User", clickedUser);
-
                 ((HomePage) mainContext)
                         .getNavController()
                         .navigate(R.id.userProfileFragment, bundle);
