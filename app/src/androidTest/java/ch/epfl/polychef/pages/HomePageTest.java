@@ -168,7 +168,9 @@ public class HomePageTest {
         public UserStorage getUserStorage(){
             UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
             when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
-            when(mockUserStorage.getPolyChefUser()).thenReturn(new User("TestUser@PolyChef.com", "TestUser"));
+            User connectedUser = new User("TestUser@PolyChef.com", "TestUser");
+            connectedUser.setKey("test key");
+            when(mockUserStorage.getPolyChefUser()).thenReturn(connectedUser);
             return mockUserStorage;
         }
 

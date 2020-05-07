@@ -15,32 +15,41 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
-
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.recipe.SearchRecipe;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.MiniatureAdapter;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
+import ch.epfl.polychef.utils.Similarity;
 
-public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Recipe>> {
+public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Miniatures>>{
 
     private static final String TAG = "OnlineMiniaturesFrag";
     private RecyclerView onlineRecyclerView;
     private static final int UP = -1;
     private static final int DOWN = 1;
 
+    private String actualQuery;
+
     private SearchView searchView;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
-    private List<Recipe> searchRecipeList = new ArrayList<>();
+    private List<Miniatures> searchList = new ArrayList<>();
+
+    private MiniatureAdapter searchAdapter;
+    private RecipeMiniatureAdapter adapter;
 
     private String currentOldest;
     private String currentNewest;
@@ -54,6 +63,20 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private ImageStorage imageStorage;
     private UserStorage userStorage;
 
+    private Comparator<Miniatures> similarityComparator = (o1, o2) -> {
+        String s1;
+        String s2;
+        s1 = getName(o1);
+        s2 = getName(o2);
+        if(Similarity.similarity(s1,actualQuery)>Similarity.similarity(s2,actualQuery)){
+            return -1;
+        }else if(Similarity.similarity(s1,actualQuery)==Similarity.similarity(s2,actualQuery)){
+            return 0;
+        }else {
+            return 1;
+        }
+    };
+
     public OnlineMiniaturesFragment(){
         
     }
@@ -64,8 +87,11 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
         onlineRecyclerView = view.findViewById(R.id.miniaturesOnlineList);
         onlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        RecipeMiniatureAdapter adapter = new RecipeMiniatureAdapter(this.getActivity(),
+        adapter = new RecipeMiniatureAdapter(this.getActivity(),
                 dynamicRecipeList, onlineRecyclerView, container.getId(), imageStorage, userStorage);
+
+        searchAdapter = new MiniatureAdapter(this.getActivity(),
+                searchList, onlineRecyclerView, container.getId(), imageStorage, userStorage);
 
         onlineRecyclerView.setAdapter(adapter);
         // Add a scroll listener when we reach the end of the list we load new recipes from database
@@ -73,7 +99,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
 
                 if(!isLoading && !isSearching){
                     isLoading = true;
@@ -113,9 +138,13 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             @Override
             public boolean onQueryTextSubmit(String query) {
                 isSearching = true;
+                actualQuery = query;
                 searchView.clearFocus();
-                ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(searchRecipeList);
-                SearchRecipe.getInstance().searchForRecipe(query, OnlineMiniaturesFragment.this);
+                searchList.clear();
+                onlineRecyclerView.setAdapter(searchAdapter);
+                ((MiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(searchList);
+                recipeStorage.getSearch().searchForRecipe(query, OnlineMiniaturesFragment.this);
+                userStorage.getSearch().searchForUser(query, OnlineMiniaturesFragment.this);
                 return true;
             }
 
@@ -127,7 +156,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                searchRecipeList.clear();
+                searchList.clear();
+                onlineRecyclerView.setAdapter(adapter);
                 ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(dynamicRecipeList);
                 onlineRecyclerView.getAdapter().notifyDataSetChanged();
                 isSearching = false;
@@ -161,17 +191,20 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     }
 
     @Override
-    public void onSuccess(List<Recipe> data){
-
+    public void onSuccess(List<Miniatures> data){
         if(isSearching){
-            searchRecipeList.addAll(data);
-            searchRecipeList.sort(Recipe::compareTo);
+            searchList.addAll(data);
+            Collections.sort(searchList,similarityComparator);
             onlineRecyclerView.getAdapter().notifyDataSetChanged();
             return;
         }
 
+        List<Recipe> newRecipes = new ArrayList<>();
+        for(Miniatures recipe : data){
+            newRecipes.add((Recipe) recipe);
+        }
         //Filter to avoid duplicates at the "edges"
-        List<Recipe> newRecipes = data.stream()
+        newRecipes = newRecipes.stream()
                 .filter((recipe) -> !recipe.getDate().equals(currentOldest)
                         && !recipe.getDate().equals(currentNewest))
                 .collect(Collectors.toList());
@@ -199,5 +232,13 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
     public RecyclerView getRecyclerView(){
         return onlineRecyclerView;
+    }
+
+    private String getName(Miniatures miniature){
+        if(miniature.getClass().equals(Recipe.class)){
+            return ((Recipe)miniature).getName();
+        }else{
+            return ((User)miniature).getUsername();
+        }
     }
 }

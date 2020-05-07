@@ -1,6 +1,5 @@
 package ch.epfl.polychef.fragments;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,9 +15,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -33,15 +29,13 @@ import ch.epfl.polychef.CallNotifier;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
-import ch.epfl.polychef.users.User;
-import ch.epfl.polychef.utils.Preconditions;
-import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
-
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.FavouritesUtils;
+import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
@@ -102,7 +96,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         return view;
     }
-
 
     private void displayAuthorName(View view) {
         authorName = view.findViewById(R.id.authorUsername);
@@ -174,7 +167,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         carouselView = view.findViewById(R.id.recipeImages);
         carouselView.setPageCount(imagesToDisplay.size());
         carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(imagesToDisplay.get(position)));
-        ImageStorage imageStorage = getImageStorage();
+
         Either<String, Integer> miniatureMeta = currentRecipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
             imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
@@ -183,10 +176,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), miniatureMeta.getRight()));
             carouselView.setPageCount(imagesToDisplay.size());
         } else {
-            imageStorage.getImage(miniatureMeta.getLeft(), this);
+            getImageStorage().getImage(miniatureMeta.getLeft(), this);
         }
         for(String path: currentRecipe.getPicturesPath()) {
-            imageStorage.getImage(path, this);
+            getImageStorage().getImage(path, this);
         }
     }
 
@@ -293,7 +286,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     public ImageStorage getImageStorage() {
-        return new ImageStorage();
+        return ImageStorage.getInstance();
     }
 
     public UserStorage getUserStorage() {

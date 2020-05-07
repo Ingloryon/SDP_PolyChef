@@ -229,7 +229,7 @@ public class HomePage extends ConnectedActivity {
     }
 
     public ImageStorage getImageStorage(){
-        return new ImageStorage();
+        return ImageStorage.getInstance();
     }
 
     public NavController getNavController() {

@@ -133,6 +133,6 @@ public class ImageHandler {
     }
 
     public ImageStorage getImageStorage() {
-        return new ImageStorage();
+        return ImageStorage.getInstance();
     }
 }

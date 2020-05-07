@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 
@@ -41,6 +42,9 @@ public class ImageHandlerTest {
     @Mock
     UploadTask task;
 
+    @Mock
+    ImageStorage mockImageStorage;
+
     ImageHandler realImageHandler;
     ImageHandler fakeImageHandler;
 
@@ -48,6 +52,7 @@ public class ImageHandlerTest {
     public void setImagesAndMock() {
         MockitoAnnotations.initMocks(this);
         when(task.addOnSuccessListener(any())).thenReturn(task);
+        when(mockImageStorage.upload(any(byte[].class), any(String.class), isNull(), isNull())).thenReturn(task);
         realImageHandler = new ImageHandler(intentsTestRule.getActivity());
         fakeImageHandler = new FakeImageHandler(intentsTestRule.getActivity());
     }
@@ -104,13 +109,6 @@ public class ImageHandlerTest {
         assertNotNull(realImageHandler.getImageStorage());
     }
 
-    private class FakeImageStorage extends ImageStorage {
-        @Override
-        public UploadTask upload(byte[] image, String imageName, String user, String recipeUId) {
-            return task;
-        }
-    }
-
     private class FakeImageHandler extends ImageHandler {
         public FakeImageHandler(Context context) {
             super(context);
@@ -118,7 +116,7 @@ public class ImageHandlerTest {
 
         @Override
         public ImageStorage getImageStorage() {
-            return new FakeImageStorage();
+            return mockImageStorage;
         }
     }
 }
