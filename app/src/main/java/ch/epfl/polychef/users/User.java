@@ -253,9 +253,12 @@ public class User implements Serializable {
             boolean hasSameSubs = Objects.equals(subscribers, other.subscribers)
                     && Objects.equals(subscriptions, other.subscriptions);
 
+            boolean hasSamePhoto=other.profilePictureId==profilePictureId;
+
             return isSamePerson
                     && hasSameRecipes
-                    && hasSameSubs;
+                    && hasSameSubs
+                    && hasSamePhoto;
         }
 
         return false;
