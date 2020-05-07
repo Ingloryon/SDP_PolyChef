@@ -16,11 +16,20 @@ import java.util.function.BiFunction;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.Miniatures;
+import ch.epfl.polychef.Search;
 import ch.epfl.polychef.utils.Similarity;
 
-public class SearchUser {
+public class SearchUser extends Search<User> {
 
-    private static final String TAG = "SearchUser";
+    @Override
+    protected String getTAG() {
+        return "SearchUser";
+    }
+
+    @Override
+    protected User getValue(DataSnapshot dataSnapshot) {
+        return dataSnapshot.getValue(User.class);
+    }
 
     private static final SearchUser INSTANCE = new SearchUser();
 
@@ -32,35 +41,7 @@ public class SearchUser {
     }
 
     public void searchForUser(String query, CallHandler<List<Miniatures>> caller) {
-        searchUser(query, this::compareSimilarity, caller);
-    }
-
-    private void searchUser(String query, BiFunction<String, User, Boolean> comparator, CallHandler<List<Miniatures>> caller) {
-        DatabaseReference nameRef = getDatabase().getReference(UserStorage.DB_NAME);
-        nameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    List<Miniatures> users = new ArrayList<>();
-                    for (DataSnapshot d : dataSnapshot.getChildren()) {
-                        User value = d.getValue(User.class);
-                        if (comparator.apply(query, value)) {
-                            users.add(value);
-                        }
-                    }
-                    caller.onSuccess(users);
-                } else {
-                    caller.onFailure();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-                caller.onFailure();
-            }
-        });
+        search(query, this::compareSimilarity, caller);
     }
 
     private boolean compareSimilarity(String query, User value) {
@@ -81,6 +62,7 @@ public class SearchUser {
      *
      * @return the current instance of the {@code FirebaseDatabase}
      */
+    @Override
     public FirebaseDatabase getDatabase() {
         return FirebaseDatabase.getInstance();
     }

@@ -109,6 +109,7 @@ public class User implements Serializable, Miniatures {
 
     @Exclude
     public String getKey() {
+        Preconditions.checkArgument(key != null, "User " + email + " has not been initialized correctly");
         return this.key;
     }
 
