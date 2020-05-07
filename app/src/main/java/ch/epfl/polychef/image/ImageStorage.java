@@ -18,9 +18,9 @@ public class ImageStorage {
 
     private static final long TEN_MEGABYTE = 10 * 1024 * 1024;
 
-    static public ImageStorage INSTANCE = new ImageStorage();
+    public static ImageStorage INSTANCE = new ImageStorage();
 
-    static public ImageStorage getInstance() {
+    public static ImageStorage getInstance() {
         return INSTANCE;
     }
 
