@@ -163,8 +163,8 @@ public class User implements Serializable {
         return false;
     }
 
-    public static int getResourceImageFromActivity(HomePage hostActivity){
-        int profilePictureId=hostActivity.getUserStorage().getPolyChefUser().getProfilePictureId();
+    public static int getResourceImageFromActivity(HomePage hostActivity,User userToDisplay){
+        int profilePictureId=userToDisplay.getProfilePictureId();
         String photoName=hostActivity.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
         int resourceImage = hostActivity.getResources().getIdentifier(photoName, "drawable", hostActivity.getPackageName());
         return resourceImage;
