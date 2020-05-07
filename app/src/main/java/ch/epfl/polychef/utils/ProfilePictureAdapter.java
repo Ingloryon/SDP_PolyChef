@@ -23,14 +23,14 @@ public class ProfilePictureAdapter extends BaseAdapter {
 
     /**
      * The constructor of the adapter.
-     * @param aContext the context
+     * @param context the context
      * @param listPictures the list of profile pictures
      */
-    public ProfilePictureAdapter(Context aContext,  List<ProfilePicture> listPictures) {
-        this.context = aContext;
+    public ProfilePictureAdapter(Context context,  List<ProfilePicture> listPictures) {
+        this.context = context;
         //TODO: deep copy ?
         this.listPictures = listPictures;
-        layoutInflater = LayoutInflater.from(aContext);
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -67,10 +67,10 @@ public class ProfilePictureAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        ProfilePicture current_picture = this.listPictures.get(position);
-        holder.pictureName.setText(current_picture.getPictureLabel());
+        ProfilePicture currentPicture = this.listPictures.get(position);
+        holder.pictureName.setText(currentPicture.getPictureLabel());
 
-        int pictureId = context.getResources().getIdentifier(current_picture.getPicturePath(), "drawable", context.getPackageName());
+        int pictureId = context.getResources().getIdentifier(currentPicture.getPicturePath(), "drawable", context.getPackageName());
         holder.flagView.setImageResource(pictureId);
 
         return convertView;

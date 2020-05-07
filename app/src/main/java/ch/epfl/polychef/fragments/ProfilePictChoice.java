@@ -52,16 +52,16 @@ public class ProfilePictChoice extends Fragment {
 
         ListView listView = view.findViewById(R.id.listView);
 
-        List<ProfilePicture> image_details = getListData();
+        List<ProfilePicture> imageDetails = getListData();
 
-        listView.setAdapter(new ProfilePictureAdapter(getContext(), image_details));
+        listView.setAdapter(new ProfilePictureAdapter(getContext(), imageDetails));
 
         // When the user clicks on the ListItem
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = listView.getItemAtPosition(position);
-                ProfilePicture picture = (ProfilePicture) o;
+            public void onItemClick(AdapterView<?> adaptor, View view, int position, long id) {
+                Object obj = listView.getItemAtPosition(position);
+                ProfilePicture picture = (ProfilePicture) obj;
                 Toast.makeText(getActivity(), "Selected :" + " " + picture.getPictureLabel(), Toast.LENGTH_LONG).show();
 
                 User updatedUser=hostActivity.getUserStorage().getPolyChefUser();

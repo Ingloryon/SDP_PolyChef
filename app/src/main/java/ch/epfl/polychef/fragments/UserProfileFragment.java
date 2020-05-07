@@ -53,7 +53,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     /**
-     * Public User setter for Firebase
+     * Public User setter for Firebase.
      * @param user the user to display
      */
     public UserProfileFragment(User user) {
@@ -187,10 +187,10 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     private void setupProfilePictureButton(){
-        ImageView profile_pict = getView().findViewById(R.id.usersImage);
+        ImageView profilePict = getView().findViewById(R.id.usersImage);
         HomePage context = (HomePage) getContext();
 
-        profile_pict.setOnClickListener(new View.OnClickListener() {
+        profilePict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String userID = context.getUserStorage().getPolyChefUser().getKey();

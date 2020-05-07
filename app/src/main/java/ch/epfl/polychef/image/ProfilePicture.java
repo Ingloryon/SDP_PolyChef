@@ -50,7 +50,7 @@ public class ProfilePicture {
     }
 
     /**
-     * Sets the name of the profile picture
+     * Sets the name of the profile picture.
      * @param picturePath the new name of the picture png
      */
     public void setPicturePath(String picturePath) {
