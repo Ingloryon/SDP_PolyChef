@@ -72,7 +72,6 @@ public class ProfilePictChoice extends Fragment {
 
                 DatabaseReference ref = hostActivity.getFireDatabase().getReference(UserStorage.DB_NAME).child(userID);
                 ref.setValue(updatedUser);
-                //TODO: Send info to the database so the User profile picture gets uploaded
             }
         });
 
