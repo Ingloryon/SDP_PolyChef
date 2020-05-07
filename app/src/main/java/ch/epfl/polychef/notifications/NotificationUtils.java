@@ -21,7 +21,8 @@ public class NotificationUtils {
     private String channelID = "User notification";
     private static final NotificationUtils INSTANCE = new NotificationUtils();
 
-    private NotificationUtils() { }
+    private NotificationUtils() {
+    }
 
     public static NotificationUtils getInstance() {
         return INSTANCE;
@@ -46,7 +47,7 @@ public class NotificationUtils {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setChannels(NotificationManager notificationManager){
+    public void setChannels(NotificationManager notificationManager){
         NotificationChannel adminChannel;
         adminChannel = new NotificationChannel(channelID, "New notification", NotificationManager.IMPORTANCE_HIGH);
         adminChannel.setDescription("New user notification");

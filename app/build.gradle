@@ -86,7 +86,7 @@ android {
         androidTestImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
         testImplementation 'junit:junit:4.12'
-        androidTestImplementation 'org.mockito:mockito-android:2.22.0'
+        androidTestImplementation 'org.mockito:mockito-android:3.3.3'
         implementation 'com.google.android.material:material:1.1.0'
         implementation 'com.google.firebase:firebase-database:19.2.1'
         implementation 'androidx.legacy:legacy-support-v4:+'
