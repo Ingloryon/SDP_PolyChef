@@ -95,7 +95,7 @@ public class RecipeMiniatureImageTest {
         assertEquals(2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
         onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withChild(withText("test1"))))).check(matches(isDisplayed()));
         onView(withId(R.id.miniaturesOnlineList)).perform(actionOnItemAtPosition(1, scrollTo()));
-        onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withChild(withText("test2"))))).check(matches(not(isDisplayed())));
+        onView(allOf(withId(R.id.miniatureRecipeImage), hasSibling(withChild(withText("test2"))))).check(matches(isDisplayed()));
     }
 
 

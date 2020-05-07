@@ -28,6 +28,7 @@ import org.mockito.Mockito;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
@@ -231,7 +232,13 @@ public class PostingRecipeFragmentTest {
             when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
             when(mockUser.getEmail()).thenReturn("fake@email.com");
             doNothing().when(mockUser).addRecipe(any(String.class));
+            when(mockUser.getKey()).thenReturn("fake_key");
             return mockUserStorage;
+        }
+
+        @Override
+        public NotificationSender getNotificationSender() {
+            return Mockito.mock(NotificationSender.class);
         }
     }
 }

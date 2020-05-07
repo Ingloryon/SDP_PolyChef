@@ -221,7 +221,7 @@ public class PostRecipeFragment extends Fragment {
             }
             // Send notification to all users subscribed to the current user
             User currentUser = hostActivity.getUserStorage().getPolyChefUser();
-            NotificationSender.getInstance().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
+            hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
 
             Intent intent = new Intent(getActivity(), HomePage.class);
             startActivity(intent);
