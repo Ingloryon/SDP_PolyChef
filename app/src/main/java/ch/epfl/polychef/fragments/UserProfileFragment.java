@@ -47,7 +47,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     private int currentIndex = 0;
 
     /**
-     * Empty getter for Firebase.
+     * Empty constructor for Firebase.
      */
     public UserProfileFragment() {
     }
