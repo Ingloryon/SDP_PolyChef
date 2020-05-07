@@ -15,6 +15,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.ServiceTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
+import com.google.common.base.Supplier;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -28,20 +29,26 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.EntryPageTest;
+import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static org.mockito.AdditionalMatchers.eq;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -51,8 +58,17 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 public class NotificationReceiverServiceTest {
 
-//    @Rule
-//    public final ServiceTestRule serviceRule = new ServiceTestRule();
+    private Recipe fakeRecipe = new RecipeBuilder()
+            .setName("Fake")
+            .addInstruction("ins 1")
+            .addIngredient("ing", 4, Ingredient.Unit.NONE)
+            .setPersonNumber(2)
+            .setEstimatedCookingTime(2)
+            .setEstimatedPreparationTime(2)
+            .setRecipeDifficulty(Recipe.Difficulty.HARD)
+            .setDate("20/06/01 11:11:11")
+            .setAuthor("author")
+            .build();
 
     private SingleActivityFactory<EntryPage> fakeEntryPage = new SingleActivityFactory<EntryPage>(
             EntryPage.class) {
@@ -78,28 +94,17 @@ public class NotificationReceiverServiceTest {
     @Mock
     private FirebaseMessaging firebaseMessaging;
 
-//    @Mock
-//    private Random random;
+    @Mock
+    private NotificationUtils notificationUtils;
 
     @Before
-    public void initMocks() throws TimeoutException {
+    public void initMocks() {
         MockitoAnnotations.initMocks(this);
         when(notificationReceiverService.getFirebaseMessaging()).thenReturn(firebaseMessaging);
         when(notificationReceiverService.getRecipeStorage()).thenReturn(recipeStorage);
         when(notificationReceiverService.getUserStorage()).thenReturn(userStorage);
-        when(notificationReceiverService.getRandom()).thenReturn(23);
         when(notificationReceiverService.getContext()).thenReturn(intentsTestRule.getActivity().getApplicationContext());
-
-//        Intent serviceIntent = new Intent(ApplicationProvider.getApplicationContext(), FakeNotificationReceiver.class);
-////        serviceIntent.setClassName("ch.epfl.polychef", "ch.epfl.polychef.notifications.NotificationReceiverService");
-//        serviceRule.startService(serviceIntent);
-//        IBinder binder = null;
-//        // Fix for https://issuetracker.google.com/issues/37054210
-//        // We have to wait for the binder to not be null
-//        for(int i = 0; i < 10000 && (binder = serviceRule.bindService(serviceIntent)) == null; i++) {}
-////        IBinder binder = serviceRule.bindService(serviceIntent);
-//        notificationReceiverService = ((FakeNotificationReceiver.LocalBinder) binder).getService();
-
+        when(notificationReceiverService.getNotificationUtils()).thenReturn(notificationUtils);
     }
 
     @Test
@@ -132,41 +137,37 @@ public class NotificationReceiverServiceTest {
                 .addData("title", "title")
                 .addData("message", "message")
                 .build();
-        // TODO fix this test
-//        notificationReceiverService.onMessageReceived(remoteMessage);
-//        NotificationManager notificationManager = (NotificationManager) ApplicationProvider.getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-//        for (StatusBarNotification notification : notificationManager.getActiveNotifications()) {
-//            if (notification.getId() == 23) {
-//            }
-//        }
+        checkForIntent(intent -> {
+            assertThat(intent.getComponent().getClassName(), is("ch.epfl.polychef.pages.HomePage"));
+        }, remoteMessage);
+        notificationReceiverService.onMessageReceived(remoteMessage);
     }
 
-//    public class FakeNotificationReceiver extends NotificationReceiverService {
-//
-//        public FakeNotificationReceiver() {
-//
-//        }
-//
-//        public RecipeStorage getRecipeStorage() {
-//            return recipeStorage;
-//        }
-//
-//        public UserStorage getUserStorage() {
-//            return userStorage;
-//        }
-//
-//        public FirebaseMessaging getFirebaseMessaging() {
-//            return firebaseMessaging;
-//        }
-//
-//        public Random getRandom() {
-//            return new Random(2);
-//        }
-//
-//        public class LocalBinder {
-//            public NotificationReceiverService getService() {
-//                return FakeNotificationReceiver.this;
-//            }
-//        }
-//    }
+    @Test
+    public void recipeNotificationsCreateWithRecipeAsExtra() {
+        RemoteMessage remoteMessage = new RemoteMessage.Builder("test")
+                .addData("title", "title")
+                .addData("message", "message")
+                .addData("recipe", "recipe_uuid")
+                .addData("type", "recipe")
+                .build();
+        doAnswer(call -> {
+            CallHandler<Recipe> caller = call.getArgument(1);
+            caller.onSuccess(fakeRecipe);
+            return null;
+        }).when(recipeStorage).readRecipeFromUuid(eq("recipe_uuid"), any(CallHandler.class));
+        checkForIntent(intent -> {
+            assertThat(intent.getComponent().getClassName(), is("ch.epfl.polychef.pages.HomePage"));
+            assertThat(intent.getExtras().getSerializable("RecipeToSend"), is(fakeRecipe));
+        }, remoteMessage);
+        notificationReceiverService.onMessageReceived(remoteMessage);
+    }
+
+    private void checkForIntent(Consumer<Intent> check, RemoteMessage remoteMessage) {
+        doAnswer(call -> {
+            Intent foundIntent = call.getArgument(2);
+            check.accept(foundIntent);
+            return null;
+        }).when(notificationUtils).setNotificationWithIntent(any(Context.class), eq(remoteMessage), any(Intent.class));
+    }
 }

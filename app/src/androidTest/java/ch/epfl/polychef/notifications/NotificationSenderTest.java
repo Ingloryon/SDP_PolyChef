@@ -9,7 +9,6 @@ import org.mockito.Mockito;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
-import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.SingletonQueue;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
