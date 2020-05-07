@@ -11,9 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +19,6 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ProfilePicture;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.User;
-import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.ProfilePictureAdapter;
 
 /**
@@ -60,9 +56,6 @@ public class ProfilePictChoice extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adaptor, View view, int position, long id) {
-                ProfilePicture picture = (ProfilePicture) listView.getItemAtPosition(position);
-                Toast.makeText(getActivity(), "Selected :" + " " + picture.getPictureLabel(), Toast.LENGTH_SHORT).show();
-
                 User updatedUser=hostActivity.getUserStorage().getPolyChefUser();
                 updatedUser.setProfilePictureId(position);
 
