@@ -102,8 +102,11 @@ public class ProfilePictChoiceTest {
             when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
             when(mockUserStorage.getPolyChefUser()).thenReturn(this.mockUser);
 
+            mockUser.setKey("anyKey");
+
             User mockUserCopy=new User("TestUser@PolyChef.com", "TestUser");
             mockUserCopy.setProfilePictureId(IDX_IMAGE_TO_TEST);
+            mockUserCopy.setKey("anyKey");
 
             CallHandlerChecker<User> callHandler=new CallHandlerChecker<>(mockUserCopy,true);
 
