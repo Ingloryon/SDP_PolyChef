@@ -86,9 +86,13 @@ public class UserListFragmentTest {
 
     private synchronized void setup(Boolean hasSubscriptions) {
         firstUser = new User("fake@email.com", "Fake");
+        firstUser.setKey("fake_key1");
         secondUser = new User("fake1@email.com", "Fake1");
+        secondUser.setKey("fake_key2");
         thirdUser = new User("fake2@email.com", "Fake2");
+        thirdUser.setKey("fake_key3");
         polyChefUser = new User("user@Polychef.com", "user");
+        polyChefUser.setKey("fake_key4");
 
         if(hasSubscriptions){
             polyChefUser.addSubscription(firstUser.getEmail());

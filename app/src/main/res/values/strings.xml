@@ -72,4 +72,7 @@
     <string name="subscribe">subscribe</string>
     <string name="author_name">author name</string>
 
+    <string name="recipeNotificationTitle">User %1$s just posted a new recipe!</string>
+    <string name="recipeNotificationMessage">See \"%1$s\" from %2$s</string>
+
 </resources>
