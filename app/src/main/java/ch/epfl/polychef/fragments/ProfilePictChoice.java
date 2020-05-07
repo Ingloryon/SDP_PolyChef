@@ -76,13 +76,11 @@ public class ProfilePictChoice extends Fragment {
 
     private  List<ProfilePicture> getListData() {
         List<ProfilePicture> list = new ArrayList<ProfilePicture>();
-        list.add(new ProfilePicture("A real life boiii", "boy"));
-        list.add(new ProfilePicture("An outstanding girl", "girl"));
-        list.add(new ProfilePicture("An awesome man", "man1"));
-        list.add(new ProfilePicture("An old fella", "man2"));
-        list.add(new ProfilePicture("A cutie grand-mother", "man3"));
-        list.add(new ProfilePicture("The boss of the kitchen", "man4"));
-        list.add(new ProfilePicture("An healthy man", "boy1"));
+
+        String[] photoNames=getResources().getStringArray(R.array.profilePicturesNames);
+        for(int i=0;i<photoNames.length;i++){
+            list.add(new ProfilePicture(photoNames[i].split("_")[0], photoNames[i]));
+        }
 
         return list;
     }

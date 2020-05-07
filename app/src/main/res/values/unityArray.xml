@@ -22,12 +22,12 @@
     </array>
 
     <array name="profilePicturesNames">
-        <item>cat_profile_polychef.png</item>
-        <item>cat_profile_polychef.png</item>
-        <item>cat_profile_polychef.png</item>
-        <item>cat_profile_polychef.png</item>
-        <item>cat_profile_polychef.png</item>
-        <item>cat_profile_polychef.png</item>
+        <item>cat_profile_polychef</item>
+        <item>dog_profile_polychef</item>
+        <item>corn_profile_polychef</item>
+        <item>eggplant_profile_polychef</item>
+        <item>fox_profile_polychef</item>
+        <item>pumpkin_profile_polychef</item>
     </array>
 
 </resources>

@@ -35,7 +35,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                android:src="@drawable/dog_profil_polychef" />
+                android:src="@drawable/dog_profile_polychef" />
 
             <TextView
                 android:id="@+id/UsernameDisplay"
