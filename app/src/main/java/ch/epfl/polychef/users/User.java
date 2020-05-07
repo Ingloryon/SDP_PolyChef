@@ -34,6 +34,8 @@ public class User implements Serializable {
 
     private String key;
 
+    //TODO: There are no sanitization of the given inputs in all the methods below, ideally they should be added
+
     /**
      * Constructs a User from basic information.
      * @param email the email address of the user
@@ -124,6 +126,10 @@ public class User implements Serializable {
         return profilePictureId;
     }
 
+    /**
+     * Sets the id of the new profile picture of this user.
+     * @param profilePictureId the id of the new profile picture
+     */
     public void setProfilePictureId(int profilePictureId) {
         //size of the profile picture array
         int size=GlobalApplication.getAppContext().getResources().getStringArray(R.array.profilePicturesNames).length;
@@ -134,35 +140,76 @@ public class User implements Serializable {
         }
     }
 
+    /**
+     * Adds a recipe to the user.
+     * @param recipe the new recipe of the user
+     */
     public void addRecipe(String recipe) {
         recipes.add(recipe);
     }
 
+    /**
+     * Adds a favorite to the user.
+     * @param recipe the new favorite of the user
+     */
     public void addFavourite(String recipe){
         favourites.add(recipe);
     }
 
+    /**
+     * Removes a favorite to the user.
+     * @param recipe the favorite to remove
+     */
     public void removeFavourite(String recipe) {
         Preconditions.checkArgument(favourites.contains(recipe), "Can not remove recipe from favourite if it was not in favourite before");
         favourites.remove(recipe);
     }
 
+    /**
+     *Adds a subscription to the user
+     * @param user the new subscription
+     */
     public void addSubscription(String user) {
         subscriptions.add(user);
     }
 
+    /**
+     * Removes a subscription from the user
+     * @param email the email of the subscription to remove
+     */
     public void removeSubscription(String email) {
         Preconditions.checkArgument(subscriptions.contains(email), "Can not remove from subscriptions");
         subscriptions.remove(email);
     }
 
+    /**
+     *Adds a subscriber to the user
+     * @param user the new subscriber
+     */
     public void addSubscriber(String user) {
         subscribers.add(user);
     }
 
+    /**
+     * Removes a subscriber from the user
+     * @param email the email of the subscriber to remove
+     */
     public void removeSubscriber(String email) {
         Preconditions.checkArgument(subscribers.contains(email), "Can not remove from subscribers");
         subscribers.remove(email);
+    }
+
+    /**
+     * Returns the profile picture chosen by the user to display
+     * @param userToDisplay the user that will be displayed
+     * @return the profile picture of the user to display
+     */
+    public static int getResourceImageFromActivity(User userToDisplay){
+        Context context=GlobalApplication.getAppContext();
+        int profilePictureId=userToDisplay.getProfilePictureId();
+        String photoName=context.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
+        int resourceImage = context.getResources().getIdentifier(photoName, "drawable", context.getPackageName());
+        return resourceImage;
     }
 
     @Exclude
@@ -212,13 +259,5 @@ public class User implements Serializable {
         }
 
         return false;
-    }
-
-    public static int getResourceImageFromActivity(User userToDisplay){
-        Context context=GlobalApplication.getAppContext();
-        int profilePictureId=userToDisplay.getProfilePictureId();
-        String photoName=context.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
-        int resourceImage = context.getResources().getIdentifier(photoName, "drawable", context.getPackageName());
-        return resourceImage;
     }
 }
