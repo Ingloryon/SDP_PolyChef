@@ -22,12 +22,23 @@
     </array>
 
     <array name="profilePicturesNames">
+        <item>none_profile_polychef</item>
         <item>cat_profile_polychef</item>
         <item>dog_profile_polychef</item>
         <item>corn_profile_polychef</item>
         <item>eggplant_profile_polychef</item>
         <item>fox_profile_polychef</item>
         <item>pumpkin_profile_polychef</item>
+    </array>
+
+    <array name="profilePicturesLabels">
+        <item>Hello World !</item>
+        <item>pun with cat</item>
+        <item>pun with dog</item>
+        <item>pun with corn</item>
+        <item>pun with eggplant</item>
+        <item>pun with fox</item>
+        <item>pun with pumpkin</item>
     </array>
 
 </resources>

@@ -88,8 +88,9 @@ public class ProfilePictChoice extends Fragment {
         List<ProfilePicture> list = new ArrayList<ProfilePicture>();
 
         String[] photoNames=getResources().getStringArray(R.array.profilePicturesNames);
+        String[] photoLabels=getResources().getStringArray(R.array.profilePicturesLabels);
         for(int i=0;i<photoNames.length;i++){
-            list.add(new ProfilePicture(photoNames[i].split("_")[0], photoNames[i]));
+            list.add(new ProfilePicture(photoLabels[i], photoNames[i]));
         }
 
         return list;
