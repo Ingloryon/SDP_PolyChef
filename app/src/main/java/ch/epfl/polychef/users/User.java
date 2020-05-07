@@ -18,6 +18,7 @@ public class User implements Serializable {
 
     private String email;
     private String username;
+    private int profilePictureId;
     private List<String> recipes;
     private List<String> favourites;
     private List<String> subscribers;
@@ -28,6 +29,7 @@ public class User implements Serializable {
     public User(String email, String username){
         this.email = email;
         this.username = username;
+        setProfilePictureId(0);
         recipes = new ArrayList<>();
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
@@ -35,6 +37,7 @@ public class User implements Serializable {
     }
 
     public User() {
+        setProfilePictureId(0);
         recipes = new ArrayList<>();
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
@@ -68,6 +71,14 @@ public class User implements Serializable {
 
     public List<String> getSubscriptions() {
         return new ArrayList<>(subscriptions);
+    }
+
+    public int getProfilePictureId() {
+        return profilePictureId;
+    }
+
+    public void setProfilePictureId(int profilePictureId) {
+        this.profilePictureId = profilePictureId;
     }
 
     public void addRecipe(String recipe) {

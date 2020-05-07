@@ -13,12 +13,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ProfilePicture;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.ProfilePictureAdapter;
 
 /**
@@ -60,7 +65,13 @@ public class ProfilePictChoice extends Fragment {
                 ProfilePicture picture = (ProfilePicture) o;
                 Toast.makeText(getActivity(), "Selected :" + " " + picture.getPictureLabel(), Toast.LENGTH_LONG).show();
 
+                User updatedUser=hostActivity.getUserStorage().getPolyChefUser();
+                updatedUser.setProfilePictureId(position);
 
+                String userID = hostActivity.getUserStorage().getPolyChefUser().getKey();
+
+                DatabaseReference ref = hostActivity.getFireDatabase().getReference(UserStorage.DB_NAME).child(userID);
+                ref.setValue(updatedUser);
                 //TODO: Send info to the database so the User profile picture gets uploaded
             }
         });
