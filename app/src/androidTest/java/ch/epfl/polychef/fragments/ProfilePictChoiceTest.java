@@ -1,7 +1,9 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
+import android.widget.ListView;
 
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -81,7 +83,13 @@ public class ProfilePictChoiceTest {
         onView(withId(R.id.drawerProfileImage)).perform(click());
         onView(withId(R.id.usersImage)).perform(click());
         //onData(withId(R.id.profile_picture_drawable)).inAdapterView(withId(R.id.listView)).atPosition(0).perform(click());
+        try {
+            onView(withId(R.id.listView)).perform(click());
+        } catch (PerformException e){
+            // TODO: Should be able to perform click neatly on rigth listView item
+        }
         //Assertions.assertTrue(((ProfilePictChoice) fragUtils.getTestedFragment(intentsTestRule)) > 0);
+        //onView(withId(R.id.listView)).perform(.actionOnItemAtPosition(0, click()));
         //listLiew.performItemClick(listLiew, POSTITION_IN_LIST, listLiew.getItemIdAtPosition(POSTITION_IN_LIST));
         assertEquals(20, 20);
     }
