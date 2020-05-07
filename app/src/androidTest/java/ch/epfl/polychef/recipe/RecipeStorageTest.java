@@ -1,8 +1,5 @@
 package ch.epfl.polychef.recipe;
 
-import androidx.core.util.Consumer;
-
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -238,11 +236,11 @@ public class RecipeStorageTest {
 
         when(dataSnapshot.getChildren()).thenReturn(resultSnapshots);
 
-        ArrayList<Recipe> result = new ArrayList<>(2);
+        ArrayList<Miniatures> result = new ArrayList<>(2);
         result.add(recipe1);
         result.add(recipe2);
 
-        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(result, true);
+        CallHandlerChecker<List<Miniatures>> fakeCallHandler = new CallHandlerChecker<>(result, true);
         recipeStorage.getNRecipes(5, oldDate, recentDate, true, fakeCallHandler);
 
         wait(1000);
@@ -258,7 +256,7 @@ public class RecipeStorageTest {
 
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 0);
 
-        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(null, false);
+        CallHandlerChecker<List<Miniatures>> fakeCallHandler = new CallHandlerChecker<>(null, false);
         recipeStorage.getNRecipes(5, oldDate, recentDate, false, fakeCallHandler);
 
         wait(1000);
@@ -272,7 +270,7 @@ public class RecipeStorageTest {
 
         mockResponse(false);
 
-        CallHandlerChecker<List<Recipe>> fakeCallHandler = new CallHandlerChecker<>(null, false);
+        CallHandlerChecker<List<Miniatures>> fakeCallHandler = new CallHandlerChecker<>(null, false);
         recipeStorage.getNRecipes(5, oldDate, recentDate, false, fakeCallHandler);
 
         wait(1000);

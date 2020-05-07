@@ -14,6 +14,7 @@ import com.synnapps.carouselview.CarouselView;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
@@ -46,6 +47,8 @@ import static org.mockito.Mockito.mock;
 @RunWith(AndroidJUnit4.class)
 public class FullRecipeImageTest {
 
+    private ImageStorage mockImageStorage;
+
     private SingleActivityFactory<EntryPage> fakeEntryPage = new SingleActivityFactory<EntryPage>(
             EntryPage.class) {
         @Override
@@ -62,6 +65,7 @@ public class FullRecipeImageTest {
     private FragmentTest fragmentTest = new FragmentTest();
 
     private void setUp(String path) {
+
         Recipe recipe = new RecipeBuilder()
                 .setName("test")
                 .setAuthor("testAuthor")
@@ -130,23 +134,28 @@ public class FullRecipeImageTest {
 
         @Override
         public ImageStorage getImageStorage() {
-            return new FakeImageStorage();
-        }
-    }
 
-    private static class FakeImageStorage extends ImageStorage {
-        @Override
-        public void getImage(String imageName, CallHandler<byte[]> caller) {
-            byte[] data = new byte[] {1, 2, 3, 4, 3, 2, 1};
-            if(imageName.equals("test_path")) {
-                caller.onSuccess(data);
-            } else if(imageName.equals("test_1")) {
-                caller.onSuccess(data);
-            } else if(imageName.equals("test_2")) {
-                caller.onSuccess(data);
-            } else {
-                caller.onFailure();
-            }
+            ImageStorage mockImageStorage = Mockito.mock(ImageStorage.class);
+            doAnswer(invocation -> {
+
+                CallHandler<byte[]> caller = invocation.getArgument(1);
+
+                String imageName = invocation.getArgument(0);
+
+                byte[] data = new byte[] {1, 2, 3, 4, 3, 2, 1};
+                if(imageName.equals("test_path")) {
+                    caller.onSuccess(data);
+                } else if(imageName.equals("test_1")) {
+                    caller.onSuccess(data);
+                } else if(imageName.equals("test_2")) {
+                    caller.onSuccess(data);
+                } else {
+                    caller.onFailure();
+                }
+                return null;
+            }).when(mockImageStorage).getImage(any(), any());
+
+            return mockImageStorage;
         }
     }
 }

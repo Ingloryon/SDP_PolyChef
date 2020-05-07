@@ -1,216 +1,68 @@
 package ch.epfl.polychef.recipe;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.polychef.utils.CallHandlerChecker;
+import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.Miniatures;
+import ch.epfl.polychef.utils.SearchTest;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
-public class SearchRecipeTest {
+public class SearchRecipeTest extends SearchTest {
+    SearchRecipe spyRecipeSearch;
 
-    private SearchRecipe mockSearchRecipe;
-    private FirebaseDatabase mockDataBase;
-    private DatabaseReference mockDatabaseReference;
-    private DataSnapshot mockDataSnapshot;
+    Recipe recipe0 = getBuilder().setName("123456") .build();
 
-    private DataSnapshot mockDataSnapshotWithRecipe0;
-    private DataSnapshot mockDataSnapshotWithRecipe1;
-    private DataSnapshot mockDataSnapshotWithRecipe2;
+    Recipe recipe1 = getBuilder().addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
+            .setName("34").build();
 
-    private Recipe recipe0;
-    private Recipe recipe1;
-    private Recipe recipe2;
+    Recipe recipe2 = getBuilder().setName("43-aBcD").build();
 
-    private ValueEventListener givenValueEventListener;
+    Recipe[] recipes = {recipe0, recipe1, recipe2};
 
-    @Before
-    public void initTests(){
-        mockSearchRecipe= Mockito.mock(SearchRecipe.class,Mockito.CALLS_REAL_METHODS);
-        mockDataBase= Mockito.mock(FirebaseDatabase.class);
-        mockDatabaseReference=Mockito.mock(DatabaseReference.class);
-        mockDataSnapshot=Mockito.mock(DataSnapshot.class);
+    @Override
+    public void initTests() {
+        spyRecipeSearch = Mockito.spy(SearchRecipe.getInstance());
+        dbName = spyRecipeSearch.getDbName();
 
-        givenValueEventListener=null;
+        super.initTests();
 
-        when(mockSearchRecipe.getDatabase()).thenReturn(mockDataBase);
-
-        when(mockDataBase.getReference(RecipeStorage.DB_NAME)).thenReturn(mockDatabaseReference);
-
-        doAnswer((call) -> {
-            givenValueEventListener=  call.getArgument(0);
-            return null;
-        }).when(mockDatabaseReference).addValueEventListener(any(ValueEventListener.class));
-
-        initializeMockRecipes();
+        when(spyRecipeSearch.getDatabase()).thenReturn(mockDataBase);
     }
 
-    @Test
-    public void methodGetInstanceExist(){
-        SearchRecipe.getInstance();
+    @Override
+    public void callSearch1(String query, CallHandler<List<Miniatures>> caller) {
+        spyRecipeSearch.searchForRecipe(query, caller);
     }
 
-    @Test
-    public void testSearchForRecipeFailWithSnapshotNullValue(){
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(null,false);
-
-        mockSearchRecipe.searchForRecipe("e",callHandlerChecker);
-
-        when(mockDataSnapshot.getValue()).thenReturn(null);
-
-        //trigger changes
-        givenValueEventListener.onDataChange(mockDataSnapshot);
-
-        callHandlerChecker.assertWasCalled();
+    @Override
+    public void callSearch2(String ingredient, CallHandler<List<Miniatures>> caller) {
+        spyRecipeSearch.searchRecipeByIngredient(ingredient, caller);
     }
 
-    @Test
-    public void testSearchForRecipeFailOnCancel(){
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(null,false);
-
-        mockSearchRecipe.searchForRecipe("e",callHandlerChecker);
-
-        //trigger cancellation
-        givenValueEventListener.onCancelled(Mockito.mock(DatabaseError.class));
-
-        callHandlerChecker.assertWasCalled();
+    @Override
+    public Class getMiniatureClass() {
+        return Recipe.class;
     }
 
-    @Test
-    public void testSearchForRecipeFindRecipeWithGivenWord(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
-        expectedRecipeList.add(recipe0);
-        expectedRecipeList.add(recipe1);
-        expectedRecipeList.add(recipe2);
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
-
-        mockSearchRecipe.searchForRecipe("3",callHandlerChecker);
-
-        when(mockDataSnapshot.getValue()).thenReturn(0);
-
-        givenValueEventListener.onDataChange(mockDataSnapshot);
+    @Override
+    public Miniatures getMiniature(int index) {
+        if(0 <= index && index < 3){
+            return recipes[index];
+        }
+        return getBuilder().setName("other recipe").build();
     }
 
-    @Test
-    public void testSearchForRecipeFindNothing(){
-        List<Recipe> expectedRecipeList=new ArrayList<>();
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expectedRecipeList ,true);
-
-        mockSearchRecipe.searchForRecipe("8",callHandlerChecker);
-
-        when(mockDataSnapshot.getValue()).thenReturn(0);
-
-        givenValueEventListener.onDataChange(mockDataSnapshot);
-    }
-
-    @Test
-    public void testSearchForRecipeFindOverString(){
-        List<Recipe> recipeArrayList=new ArrayList<>();
-        addRecipes(recipeArrayList);
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(recipeArrayList ,true);
-
-        mockSearchRecipe.searchForRecipe("2345",callHandlerChecker);
-
-        when(mockDataSnapshot.getValue()).thenReturn(0);
-
-        givenValueEventListener.onDataChange(mockDataSnapshot);
-    }
-
-    @Test
-    public void testSearchForRecipeIsCaseInsensitive(){
-        List<Recipe> expected=new ArrayList<>();
-        expected.add(recipe2);
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(expected ,true);
-
-        mockSearchRecipe.searchForRecipe("AbcD",callHandlerChecker);
-
-        when(mockDataSnapshot.getValue()).thenReturn(0);
-
-        givenValueEventListener.onDataChange(mockDataSnapshot);
-    }
-
-    @Test
-    public void testSearchForIngredientIsCaseInsensitive(){
-        List<Recipe> list=new ArrayList<>();
-        addRecipes(list);
-        list.add(recipe2);
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(list ,true);
-
-        mockSearchRecipe.searchRecipeByIngredient("moC",callHandlerChecker);
-
-        when(mockDataSnapshot.getValue()).thenReturn(0);
-
-        givenValueEventListener.onDataChange(mockDataSnapshot);
-    }
-
-    @Test
-    public void testSearchForIngredientFindParticularValue(){
-        List<Recipe> maListLaMailer=new ArrayList(Collections.singleton(recipe1));
-
-        CallHandlerChecker<List<Recipe>> callHandlerChecker=new CallHandlerChecker<>(maListLaMailer ,true);
-
-        mockSearchRecipe.searchRecipeByIngredient("ssssaltttt",callHandlerChecker);
-
-        when(mockDataSnapshot.getValue()).thenReturn(0);
-
-        givenValueEventListener.onDataChange(mockDataSnapshot);
-    }
-
-    private void initializeMockRecipes(){
-        mockDataSnapshotWithRecipe0=Mockito.mock(DataSnapshot.class);
-        mockDataSnapshotWithRecipe1=Mockito.mock(DataSnapshot.class);
-        mockDataSnapshotWithRecipe2=Mockito.mock(DataSnapshot.class);
-
-        recipe0=new RecipeBuilder().setName("123456").setEstimatedPreparationTime(1000)
+    private RecipeBuilder getBuilder(){
+        return new RecipeBuilder()
+                .addInstruction("Yay")
+                .setAuthor("testAuthor")
+                .setPersonNumber(6)
+                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
                 .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
-                .setEstimatedCookingTime(1000).addInstruction("Yay").setAuthor("testAuthor")
-                .build();
-        recipe1=new RecipeBuilder().setEstimatedCookingTime(1000).setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
-                .setName("34").setPersonNumber(6).addIngredient("salt", 420, Ingredient.Unit.KILOGRAM)
-                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
-                .addInstruction("Yay").setEstimatedPreparationTime(1000).setAuthor("testAuthor").build();
-
-
-        recipe2=new RecipeBuilder().setName("43-aBcD").addInstruction("Yay")
-                .addIngredient("Mockitooo", 42, Ingredient.Unit.KILOGRAM)
-                .setPersonNumber(6).setEstimatedPreparationTime(1000).setEstimatedCookingTime(1000)
-                .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD).setAuthor("testAuthor").build();
-
-        when(mockDataSnapshotWithRecipe0.getValue(Recipe.class)).thenReturn(recipe0);
-        when(mockDataSnapshotWithRecipe1.getValue(Recipe.class)).thenReturn(recipe1);
-        when(mockDataSnapshotWithRecipe2.getValue(Recipe.class)).thenReturn(recipe2);
-
-        List<DataSnapshot> snapshotsList=new ArrayList<>();
-        snapshotsList.add(mockDataSnapshotWithRecipe0);
-        snapshotsList.add(mockDataSnapshotWithRecipe1);
-        snapshotsList.add(mockDataSnapshotWithRecipe2);
-
-        when(mockDataSnapshot.getChildren()).thenReturn(snapshotsList);
-    }
-
-    public void addRecipes(List <Recipe> list){
-        list.add(recipe0);
-        list.add(recipe1);
+                .setEstimatedPreparationTime(1000)
+                .setEstimatedCookingTime(1000);
     }
 }

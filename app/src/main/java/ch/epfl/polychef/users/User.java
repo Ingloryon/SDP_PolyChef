@@ -14,15 +14,15 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.epfl.polychef.GlobalApplication;
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
 /**
  * Represents a Polychef User.
  */
-public class User implements Serializable {
+public class User implements Serializable, Miniatures {
 
     private String email;
     private String username;
@@ -219,6 +219,7 @@ public class User implements Serializable {
 
     @Exclude
     public String getKey() {
+        Preconditions.checkArgument(key != null, "User " + email + " has not been initialized correctly");
         return this.key;
     }
 
