@@ -19,7 +19,7 @@ import ch.epfl.polychef.utils.Preconditions;
 public class UserStorage {
 
     private static UserStorage INSTANCE = new UserStorage();
-    public static final String DB_NAME = "users_DO_NOT_DESTROY_THE_REAL_ONE";
+    public static final String DB_NAME = "users";
 
     private User user = null;
     private String userKey = null;
