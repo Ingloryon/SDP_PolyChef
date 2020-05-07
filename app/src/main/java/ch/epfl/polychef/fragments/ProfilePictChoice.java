@@ -66,10 +66,12 @@ public class ProfilePictChoice extends Fragment {
                 User updatedUser=hostActivity.getUserStorage().getPolyChefUser();
                 updatedUser.setProfilePictureId(position);
 
-                String userID = hostActivity.getUserStorage().getPolyChefUser().getKey();
+                //String userID = hostActivity.getUserStorage().getPolyChefUser().getKey();
 
-                DatabaseReference ref = hostActivity.getFireDatabase().getReference(UserStorage.DB_NAME).child(userID);
-                ref.setValue(updatedUser);
+                //DatabaseReference ref = hostActivity.getFireDatabase().getReference(UserStorage.DB_NAME).child(userID);
+                //ref.setValue(updatedUser);
+
+                hostActivity.getUserStorage().updateUserInfo(updatedUser);
             }
         });
 
