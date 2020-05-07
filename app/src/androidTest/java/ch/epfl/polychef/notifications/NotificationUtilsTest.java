@@ -3,41 +3,11 @@ package ch.epfl.polychef.notifications;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.UserHandle;
-import android.service.notification.StatusBarNotification;
-import android.util.Log;
-import android.view.Display;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
-
 import com.google.firebase.messaging.RemoteMessage;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,28 +16,14 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.EntryPageTest;
 import ch.epfl.polychef.pages.HomePage;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -130,6 +86,7 @@ public class NotificationUtilsTest {
         setUpSetNotifCommand();
         assert(foundNotification != null);
     }
+
     @Test
     public void setChannelsCallsCreateNotificationChannel(){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -137,6 +94,7 @@ public class NotificationUtilsTest {
             verify(notificationManager).createNotificationChannel(any(NotificationChannel.class));
         }
     }
+
     @Test
     public void getRandomReturnValidRandom(){
         int random = notificationUtils.getRandom();
