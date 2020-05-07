@@ -62,14 +62,14 @@ public class VoiceSynthesizerTest {
         Intents.release();
     }
 
-    /**
+    
     @Test
     public void voiceSythInitializesCorrectlyAndAcceptSimpleWord(){
         VoiceSynthesizer vs = new VoiceSynthesizer(intentsTestRule.getActivity());
         vs.speak("Test");
         vs.onStop();
     }
-    /
+
 
         /* //TODO: complicated test (hard to mock and get the exception in the right place
     @Test(expected = UnsupportedOperationException.class)
