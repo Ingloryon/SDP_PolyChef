@@ -166,7 +166,7 @@ public class User implements Serializable {
     }
 
     /**
-     *Adds a subscription to the user
+     *Adds a subscription to the user.
      * @param user the new subscription
      */
     public void addSubscription(String user) {
@@ -174,7 +174,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Removes a subscription from the user
+     * Removes a subscription from the user.
      * @param email the email of the subscription to remove
      */
     public void removeSubscription(String email) {
@@ -183,7 +183,7 @@ public class User implements Serializable {
     }
 
     /**
-     *Adds a subscriber to the user
+     *Adds a subscriber to the user.
      * @param user the new subscriber
      */
     public void addSubscriber(String user) {
@@ -191,7 +191,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Removes a subscriber from the user
+     * Removes a subscriber from the user.
      * @param email the email of the subscriber to remove
      */
     public void removeSubscriber(String email) {
@@ -200,7 +200,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Returns the profile picture chosen by the user to display
+     * Returns the profile picture chosen by the user to display.
      * @param userToDisplay the user that will be displayed
      * @return the profile picture of the user to display
      */
