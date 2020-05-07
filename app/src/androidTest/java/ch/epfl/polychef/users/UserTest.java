@@ -126,8 +126,6 @@ public class UserTest {
 
     @Test
     public void userProfilePictureIdCannotBeSetToInvalidValues(){
-        int maxSize=GlobalApplication.getAppContext().getResources().getStringArray(R.array.profilePicturesNames).length;
-
         assertEquals(0, mockUser().getProfilePictureId());
 
         User mockUser=mockUser();
@@ -137,6 +135,7 @@ public class UserTest {
         mockUser.setProfilePictureId(-1);
         assertEquals(0, mockUser().getProfilePictureId());
 
+        int maxSize=GlobalApplication.getAppContext().getResources().getStringArray(R.array.profilePicturesNames).length;
         mockUser.setProfilePictureId(maxSize);
         assertEquals(0, mockUser().getProfilePictureId());
 
