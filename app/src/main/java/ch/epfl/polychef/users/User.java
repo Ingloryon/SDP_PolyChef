@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import ch.epfl.polychef.R;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
@@ -159,5 +161,12 @@ public class User implements Serializable {
         }
 
         return false;
+    }
+
+    public static int getResourceImageFromActivity(HomePage hostActivity){
+        int profilePictureId=hostActivity.getUserStorage().getPolyChefUser().getProfilePictureId();
+        String photoName=hostActivity.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
+        int resourceImage = hostActivity.getResources().getIdentifier(photoName, "drawable", hostActivity.getPackageName());
+        return resourceImage;
     }
 }

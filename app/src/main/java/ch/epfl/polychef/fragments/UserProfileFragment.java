@@ -125,14 +125,9 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
-        int profilePictureId=hostActivity.getUserStorage().getPolyChefUser().getProfilePictureId();
-        String photoName=getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
-        //int resourceId = getResources().getIdentifier(photoNames[profilePictureId], "drawable",hostActivity.getPackageName());
-        //((ImageView) getView().findViewById(R.id.usersImage)).setImageDrawable(getResources().getDrawable(resourceId));
-
+        //Display the image of the user
         ImageView image = view.findViewById(R.id.usersImage);
-        int resourceImage = hostActivity.getResources().getIdentifier(photoName, "drawable", hostActivity.getPackageName());
-        image.setImageResource(resourceImage);
+        image.setImageResource(User.getResourceImageFromActivity(hostActivity));
 
         getNextRecipes();
         setupProfilePictureButton();
