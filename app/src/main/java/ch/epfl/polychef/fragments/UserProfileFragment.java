@@ -125,6 +125,10 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
+        //Display the image of the user
+        ImageView image = view.findViewById(R.id.usersImage);
+        image.setImageResource(User.getResourceImageFromActivity(hostActivity));
+
         getNextRecipes();
         setupProfilePictureButton();
     }
