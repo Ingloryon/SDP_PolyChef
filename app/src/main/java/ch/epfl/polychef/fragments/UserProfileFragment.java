@@ -184,16 +184,19 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
     private void setupProfilePictureButton(){
         ImageView profile_pict = getView().findViewById(R.id.usersImage);
+        HomePage context = (HomePage) getContext();
 
         profile_pict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String userID = context.getUserStorage().getPolyChefUser().getKey();
+                if(userToDisplay.getKey() == userID) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("UserDisplayed", userToDisplay);
 
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("UserDisplayed", userToDisplay);
-
-                NavController navController = ((HomePage) getActivity()).getNavController();
-                navController.navigate(R.id.userProfilePictureChoice, bundle);
+                    NavController navController = ((HomePage) getActivity()).getNavController();
+                    navController.navigate(R.id.userProfilePictureChoice, bundle);
+                }
             }
         });
     }

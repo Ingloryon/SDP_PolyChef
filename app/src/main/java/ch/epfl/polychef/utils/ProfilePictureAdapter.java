@@ -15,7 +15,7 @@ import ch.epfl.polychef.image.ProfilePicture;
 /**
  * An adapter to display the different profile pictures in the main ListView.
  */
-public class ProfilePictureAdapter  extends BaseAdapter {
+public class ProfilePictureAdapter extends BaseAdapter {
 
     private List<ProfilePicture> listPictures;
     private LayoutInflater layoutInflater;
