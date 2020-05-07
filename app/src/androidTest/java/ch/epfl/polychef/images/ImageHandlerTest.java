@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 
@@ -51,7 +52,7 @@ public class ImageHandlerTest {
     public void setImagesAndMock() {
         MockitoAnnotations.initMocks(this);
         when(task.addOnSuccessListener(any())).thenReturn(task);
-        when(mockImageStorage.upload(any(), any(), any(), any())).thenReturn(task);
+        when(mockImageStorage.upload(any(byte[].class), any(String.class), isNull(), isNull())).thenReturn(task);
         realImageHandler = new ImageHandler(intentsTestRule.getActivity());
         fakeImageHandler = new FakeImageHandler(intentsTestRule.getActivity());
     }
