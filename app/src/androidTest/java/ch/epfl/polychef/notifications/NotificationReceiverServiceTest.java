@@ -1,21 +1,12 @@
 package ch.epfl.polychef.notifications;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
-import android.service.notification.StatusBarNotification;
-import android.telecom.Call;
-import android.util.Log;
 
-import androidx.test.InstrumentationRegistry;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.ServiceTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
-import com.google.common.base.Supplier;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -24,26 +15,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Random;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.EntryPageTest;
-import ch.epfl.polychef.pages.HomePage;
-import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -58,17 +41,7 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 public class NotificationReceiverServiceTest {
 
-    private Recipe fakeRecipe = new RecipeBuilder()
-            .setName("Fake")
-            .addInstruction("ins 1")
-            .addIngredient("ing", 4, Ingredient.Unit.NONE)
-            .setPersonNumber(2)
-            .setEstimatedCookingTime(2)
-            .setEstimatedPreparationTime(2)
-            .setRecipeDifficulty(Recipe.Difficulty.HARD)
-            .setDate("20/06/01 11:11:11")
-            .setAuthor("author")
-            .build();
+    private Recipe fakeRecipe = NotificationSenderTest.fakeRecipe;
 
     private SingleActivityFactory<EntryPage> fakeEntryPage = new SingleActivityFactory<EntryPage>(
             EntryPage.class) {
