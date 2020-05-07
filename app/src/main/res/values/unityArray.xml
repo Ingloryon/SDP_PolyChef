@@ -21,4 +21,13 @@
         <item>5 stars</item>
     </array>
 
+    <array name="profilePicturesNames">
+        <item>cat_profile_polychef.png</item>
+        <item>cat_profile_polychef.png</item>
+        <item>cat_profile_polychef.png</item>
+        <item>cat_profile_polychef.png</item>
+        <item>cat_profile_polychef.png</item>
+        <item>cat_profile_polychef.png</item>
+    </array>
+
 </resources>
