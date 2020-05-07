@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SearchView;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
@@ -45,6 +46,8 @@ import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -139,12 +142,23 @@ public class OnlineMiniaturesFragmentTest {
     }
 
     @Test
-    public synchronized void searchCanReturnUsersAndRecipes() throws InterruptedException {
+    public synchronized void searchCanReturnRecipes() throws InterruptedException {
         initActivity();
-        wait(1000);
-        onView(withId(R.id.searchBar)).perform(typeSearchViewText("test"));
-        onView(withId(R.id.searchBar)).perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER));
-        wait(1000);
+
+        search("test");
+
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.fullRecipeFragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public synchronized void searchCanReturnUsers() throws InterruptedException {
+        initActivity();
+
+        search("test");
+
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.userProfileFragment)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -266,6 +280,13 @@ public class OnlineMiniaturesFragmentTest {
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeDown());
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
+    }
+
+    private synchronized void search(String query) throws InterruptedException {
+        wait(1000);
+        onView(withId(R.id.searchBar)).perform(typeSearchViewText(query));
+        onView(withId(R.id.searchBar)).perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER));
+        wait(1000);
     }
 
     private class FakeHomePage extends HomePage {
