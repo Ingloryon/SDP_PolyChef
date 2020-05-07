@@ -15,6 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,9 +108,11 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
                 if(isChecked) {
                     hostActivity.getUserStorage().getPolyChefUser().addSubscription(userToDisplay.getEmail());
                     userToDisplay.addSubscriber(hostActivity.getUserStorage().getPolyChefUser().getEmail());
+                    FirebaseMessaging.getInstance().subscribeToTopic("recipe_"+userToDisplay.getKey());
                 } else {
                     hostActivity.getUserStorage().getPolyChefUser().removeSubscription(userToDisplay.getEmail());
                     userToDisplay.removeSubscriber(hostActivity.getUserStorage().getPolyChefUser().getEmail());
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("recipe_"+userToDisplay.getKey());
                 }
                 hostActivity.getUserStorage().updateUserInfo();
                 hostActivity.getUserStorage().updateUserInfo(userToDisplay);

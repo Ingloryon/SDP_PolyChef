@@ -9,6 +9,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.utils.FavouritesUtils;
@@ -85,6 +87,7 @@ public class UserStorage {
             userKey = snap.getKey();
             user.setKey(snap.getKey());
             FavouritesUtils.getInstance().setOfflineFavourites(user);
+            FirebaseMessaging.getInstance().setAutoInitEnabled(true);
         } else {
             //TODO: Find good exception to throw
             throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");

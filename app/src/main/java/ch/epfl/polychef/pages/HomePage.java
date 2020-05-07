@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.notifications.NotificationSender;
+import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
 import ch.epfl.polychef.users.UserStorage;
@@ -67,6 +69,15 @@ public class HomePage extends ConnectedActivity {
         navController.setGraph(R.navigation.nav_graph);
 
         setupNavigation();
+
+        if(getIntent().getExtras() != null) {
+            Recipe toSendRecipe = (Recipe)getIntent().getExtras().getSerializable("RecipeToSend");
+            if(toSendRecipe != null) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Recipe", toSendRecipe);
+                navController.navigate(R.id.fullRecipeFragment, bundle);
+            }
+        }
     }
 
     @Override
@@ -228,5 +239,9 @@ public class HomePage extends ConnectedActivity {
     public Boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public NotificationSender getNotificationSender() {
+        return NotificationSender.getInstance();
     }
 }

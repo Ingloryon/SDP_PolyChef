@@ -34,11 +34,13 @@ import java.util.UUID;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
+import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class PostRecipeFragment extends Fragment {
@@ -213,10 +215,14 @@ public class PostRecipeFragment extends Fragment {
             printWrongInputsToUser();
         }else{
             try{
-                wait(5);
+                wait(100);
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
+            // Send notification to all users subscribed to the current user
+            User currentUser = hostActivity.getUserStorage().getPolyChefUser();
+            hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
+
             Intent intent = new Intent(getActivity(), HomePage.class);
             startActivity(intent);
         }
