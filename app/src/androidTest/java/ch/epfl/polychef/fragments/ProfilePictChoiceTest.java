@@ -1,6 +1,7 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.ListView;
 
 import androidx.test.espresso.PerformException;
@@ -11,7 +12,12 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,6 +25,8 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
@@ -29,13 +37,14 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.CallHandlerChecker;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -79,19 +88,31 @@ public class ProfilePictChoiceTest {
     }
 
     @Test
-    public void possibleProfilePicturesAreDisplayedAndCanBeClicked() {
+    public void profilePicturesCanBeClickedAndUpdatesProfile() {
         onView(withId(R.id.drawerProfileImage)).perform(click());
         onView(withId(R.id.usersImage)).perform(click());
+        onView(withIndex(withId(R.id.profile_picture_drawable), 2)).perform(click());
         //onData(withId(R.id.profile_picture_drawable)).inAdapterView(withId(R.id.listView)).atPosition(0).perform(click());
-        try {
-            onView(withId(R.id.listView)).perform(click());
-        } catch (PerformException e){
-            // TODO: Should be able to perform click neatly on rigth listView item
-        }
-        //Assertions.assertTrue(((ProfilePictChoice) fragUtils.getTestedFragment(intentsTestRule)) > 0);
-        //onView(withId(R.id.listView)).perform(.actionOnItemAtPosition(0, click()));
-        //listLiew.performItemClick(listLiew, POSTITION_IN_LIST, listLiew.getItemIdAtPosition(POSTITION_IN_LIST));
+
         assertEquals(20, 20);
+    }
+
+    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
+        return new TypeSafeMatcher<View>() {
+            int currentIndex = 0;
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with index: ");
+                description.appendValue(index);
+                matcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return matcher.matches(view) && currentIndex++ == index;
+            }
+        };
     }
 
 
@@ -102,6 +123,7 @@ public class ProfilePictChoiceTest {
     }
 
     class FakeHomePage extends HomePage {
+        ArrayList<Recipe> arr=new ArrayList<>();
 
         @Override
         public UserStorage getUserStorage(){
@@ -132,6 +154,28 @@ public class ProfilePictChoiceTest {
             FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
             return mockUser;
         }
+
+       /* @Override
+        public FirebaseDatabase getFireDatabase(){
+
+
+            FirebaseDatabase mockFirebase=Mockito.mock(FirebaseDatabase.class);
+            DatabaseReference mockDatabaseReference=Mockito.mock(DatabaseReference.class);
+
+            when(mockFirebase.getReference(anyString())).thenReturn(mockDatabaseReference);
+            when(mockDatabaseReference.child(anyString())).thenReturn(mockDatabaseReference);
+
+            CallHandlerChecker<Recipe> callHandler=new CallHandlerChecker<Recipe>(arr.get(0),true);
+
+            doAnswer((call) -> {
+                Recipe recipe =  call.getArgument(0);
+                callHandler.onSuccess(recipe);
+
+                return null;
+            }).when(mockDatabaseReference).setValue(any(Recipe.class));
+
+            return mockFirebase;
+        }*/
     }
 
 }
