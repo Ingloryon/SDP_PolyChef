@@ -67,6 +67,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -105,9 +106,8 @@ public class NotificationUtilsTest {
         notifiedID = 0;
         MockitoAnnotations.initMocks(this);
         doAnswer(invocation -> {
-            foundNotification = invocation.getArgument(1);
             notifiedID = invocation.getArgument(0);
-            Log.e("VOILA", "test");
+            foundNotification = invocation.getArgument(1);
             return null;
         }).when(notificationManager).notify(anyInt(), any(Notification.class));
         when(mockContext.getSystemService(Context.NOTIFICATION_SERVICE)).thenReturn(notificationManager);
@@ -120,28 +120,23 @@ public class NotificationUtilsTest {
 
     @Test
     public void theNotificationManagerIsNotified(){
-        disableSetChannels();
         when(notificationUtils.getRandom()).thenReturn(30);
-        RemoteMessage remoteMessage = getRemoteMessage();
-
-        notificationUtils.setNotificationWithIntent(mockContext ,remoteMessage, new Intent(intentsTestRule.getActivity().getApplicationContext(), HomePage.class));
+        setUpSetNotifCommand();
         assertEquals(30, notifiedID);
     }
 
     @Test
     public void theNotificationFoundIsNotNull(){
-        disableSetChannels();
-        RemoteMessage remoteMessage = getRemoteMessage();
-        notificationUtils.setNotificationWithIntent(mockContext ,remoteMessage, new Intent(intentsTestRule.getActivity().getApplicationContext(), HomePage.class));
+        setUpSetNotifCommand();
         assert(foundNotification != null);
     }
     @Test
     public void setChannelsCallsCreateNotificationChannel(){
-        notificationUtils.setChannels(notificationManager);
-        verify(notificationManager).createNotificationChannel(any(NotificationChannel.class));
-
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notificationUtils.setChannels(notificationManager);
+            verify(notificationManager).createNotificationChannel(any(NotificationChannel.class));
+        }
     }
-
     @Test
     public void getRandomReturnValidRandom(){
         int random = notificationUtils.getRandom();
@@ -161,5 +156,11 @@ public class NotificationUtilsTest {
                 .addData("message", "message")
                 .build();
 
+    }
+
+    public void setUpSetNotifCommand(){
+        disableSetChannels();
+        RemoteMessage remoteMessage = getRemoteMessage();
+        notificationUtils.setNotificationWithIntent(mockContext ,remoteMessage, new Intent(intentsTestRule.getActivity().getApplicationContext(), HomePage.class));
     }
 }
