@@ -16,6 +16,9 @@ import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
+/**
+ * Represents a Polychef User.
+ */
 public class User implements Serializable {
 
     private String email;
@@ -28,6 +31,11 @@ public class User implements Serializable {
 
     private String key;
 
+    /**
+     * Constructs a User from basic information.
+     * @param email the email address of the user
+     * @param username the username of the user
+     */
     public User(String email, String username){
         this.email = email;
         this.username = username;
@@ -38,6 +46,9 @@ public class User implements Serializable {
         subscriptions = new ArrayList<>();
     }
 
+    /**
+     * Construct empty User for Firebase.
+     */
     public User() {
         setProfilePictureId(0);
         recipes = new ArrayList<>();
@@ -46,35 +57,66 @@ public class User implements Serializable {
         subscriptions = new ArrayList<>();
     }
 
+    /**
+     * Removes the null values in the list of recipes.
+     */
     public void removeNullFromLists(){
         recipes.removeAll(Collections.singleton(null));
         //TODO remove from others as well?
     }
 
+    /**
+     * Gets the email of the user.
+     * @return the email of the user
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Gets the username of the user.
+     * @return the username of the user
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Gets the list of recipes of the user.
+     * @return the list of recipes of the user
+     */
     public List<String> getRecipes() {
         return new ArrayList<>(recipes);
     }
 
+    /**
+     * Gets the list of favorites of the user.
+     * @return the list of favorites of the user
+     */
     public List<String> getFavourites() {
         return new ArrayList<>(favourites);
     }
 
+    /**
+     * Gets the list of subscribers of the user.
+     * @return the list of subscribers of the user
+     */
     public List<String> getSubscribers() {
         return new ArrayList<>(subscribers);
     }
 
+    /**
+     * Gets the list of subscriptions of the user.
+     * @return the list of subscriptions of the user
+     */
     public List<String> getSubscriptions() {
         return new ArrayList<>(subscriptions);
     }
 
+    /**
+     * Gets the id of the user profile picture.
+     * @return the id of the user profile picture
+     */
     public int getProfilePictureId() {
         return profilePictureId;
     }
