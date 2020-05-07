@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import ch.epfl.polychef.GlobalApplication;
+import ch.epfl.polychef.R;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -119,6 +122,24 @@ public class UserTest {
                 User::addFavourite,
                 User::getFavourites
         );
+    }
+
+    @Test
+    public void userProfilePictureIdCannotBeSetToInvalidValues(){
+        int maxSize=GlobalApplication.getAppContext().getResources().getStringArray(R.array.profilePicturesNames).length;
+
+        assertEquals(0, mockUser().getProfilePictureId());
+
+        User mockUser=mockUser();
+        mockUser.setProfilePictureId(2);
+        assertEquals(2, mockUser().getProfilePictureId());
+
+        mockUser.setProfilePictureId(-1);
+        assertEquals(0, mockUser().getProfilePictureId());
+
+        mockUser.setProfilePictureId(maxSize);
+        assertEquals(0, mockUser().getProfilePictureId());
+
     }
 
     @Test
