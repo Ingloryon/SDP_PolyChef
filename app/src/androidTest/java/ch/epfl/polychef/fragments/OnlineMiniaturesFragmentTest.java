@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SearchView;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
@@ -32,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
@@ -39,9 +41,13 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.SearchRecipe;
+import ch.epfl.polychef.users.SearchUser;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -54,8 +60,12 @@ import static org.mockito.Mockito.when;
 
 public class OnlineMiniaturesFragmentTest {
 
-    private RecipeStorage fakeRecipeStorage = Mockito.mock(RecipeStorage.class,CALLS_REAL_METHODS );
-    private List<Recipe> recipesInDatabase = new ArrayList<>();
+    private RecipeStorage fakeRecipeStorage = Mockito.mock(RecipeStorage.class,CALLS_REAL_METHODS);
+    private SearchRecipe mockRecipeSearch = Mockito.mock(SearchRecipe.class);
+    private UserStorage fakeUserStorage = Mockito.mock(UserStorage.class);
+    private SearchUser mockUserSearch = Mockito.mock(SearchUser.class);
+    private List<Recipe> recipesInDatabase;
+    private User testUser = new User("test", "username");
     private int currentReadIndex = 0;
     private String currentOlderDate = "01/05/20 11:59:59";
     private String currentYoungerDate = "01/05/20 12:00:01";
@@ -84,27 +94,20 @@ public class OnlineMiniaturesFragmentTest {
 
     @Mock
     FirebaseDatabase firebaseInstance;
-    @Mock
-    SearchRecipe mockSearchRecipe;
 
     @Before
     public void initMockAndStorage() {
         MockitoAnnotations.initMocks(this);
 
-        doAnswer((call) -> {
-            CallHandler<List<Recipe>> ch=call.getArgument(1);
-            ch.onSuccess(null);
-            return null;
-        }).when(mockSearchRecipe).searchForRecipe(any(String.class),any(CallHandler.class));
-
         fakeRecipeStorage = Mockito.mock(RecipeStorage.class);
 
-        recipesInDatabase = new ArrayList<Recipe>();
+        recipesInDatabase = new ArrayList<>();
         currentReadIndex = 0;
         currentOlderDate = "2020/05/01 11:59:59";
         currentYoungerDate = "2020/05/01 12:00:01";
 
         initializeMockRecipeStorage();
+        initializerMockUserStorage();
     }
 
     public void addNewOlderRecipe(){
@@ -139,18 +142,30 @@ public class OnlineMiniaturesFragmentTest {
     }
 
     @Test
+    public synchronized void searchCanReturnRecipes() throws InterruptedException {
+        initActivity();
+
+        search("test");
+
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.fullRecipeFragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public synchronized void searchCanReturnUsers() throws InterruptedException {
+        initActivity();
+
+        search("test");
+
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.userProfileFragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public synchronized void databaseEmptyAddNothingToView() throws InterruptedException {
         initActivity();
         wait(1000);
         assertEquals(0, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
-    }
-
-    @Test
-    public synchronized void clickOnSearch() throws InterruptedException {
-        initActivity();
-        wait(1000);
-        onView(withId(R.id.searchBar)).perform(typeSearchViewText("test"));
-        onView(withId(R.id.searchBar)).perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER));
     }
 
     @Test
@@ -267,6 +282,13 @@ public class OnlineMiniaturesFragmentTest {
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
+    private synchronized void search(String query) throws InterruptedException {
+        wait(1000);
+        onView(withId(R.id.searchBar)).perform(typeSearchViewText(query));
+        onView(withId(R.id.searchBar)).perform(ViewActions.pressKey(KeyEvent.KEYCODE_ENTER));
+        wait(1000);
+    }
+
     private class FakeHomePage extends HomePage {
 
         @Override
@@ -276,9 +298,7 @@ public class OnlineMiniaturesFragmentTest {
 
         @Override
         public UserStorage getUserStorage(){
-            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
-            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
-            return mockUserStorage;
+            return fakeUserStorage;
         }
 
         @Override
@@ -293,6 +313,16 @@ public class OnlineMiniaturesFragmentTest {
         when(fakeRecipeStorage.getCurrentDate()).thenReturn("01/05/20 12:00:00");
 
         when(fakeRecipeStorage.getFirebaseDatabase()).thenReturn(firebaseInstance);
+
+        when(fakeRecipeStorage.getSearch()).thenReturn(mockRecipeSearch);
+
+        doAnswer(invocation -> {
+            CallHandler<List<Miniatures>> caller = invocation.getArgument(1);
+            List<Miniatures> result = new ArrayList<>(1);
+            result.add(testRecipeBuilder.build());
+            caller.onSuccess(result);
+            return null;
+        }).when(mockRecipeSearch).searchForRecipe(any(), any());
 
         doAnswer(invocation -> {
             recipesInDatabase.add(invocation.getArgument(0));
@@ -311,7 +341,28 @@ public class OnlineMiniaturesFragmentTest {
             }
             return null;
         }).when(fakeRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
+    }
 
+    private void initializerMockUserStorage(){
+        when(fakeUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+
+        when(fakeUserStorage.getPolyChefUser()).thenReturn(new User("polychef", "user"));
+
+        when(fakeUserStorage.getSearch()).thenReturn(mockUserSearch);
+
+        doAnswer(invocation -> {
+            CallHandler<List<Miniatures>> caller = invocation.getArgument(1);
+            List<Miniatures> result = new ArrayList<>(1);
+            result.add(testUser);
+            caller.onSuccess(result);
+            return null;
+        }).when(mockUserSearch).searchForUser(any(), any());
+
+        doAnswer(invocation -> {
+            CallHandler<Miniatures> caller = invocation.getArgument(1);
+            caller.onSuccess(testUser);
+            return null;
+        }).when(fakeUserStorage).getUserByEmail(any(String.class), any(CallHandler.class));
     }
 
     public static ViewAction typeSearchViewText(final String text){

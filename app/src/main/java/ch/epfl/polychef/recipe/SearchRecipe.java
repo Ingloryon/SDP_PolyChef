@@ -16,9 +16,27 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.Miniatures;
+import ch.epfl.polychef.Search;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.utils.Similarity;
 
-public class SearchRecipe {
-    private static final String TAG = "Search Recipe";
+public class SearchRecipe extends Search<Recipe> {
+
+    @Override
+    protected String getTag() {
+        return "SearchRecipe";
+    }
+
+    @Override
+    protected String getDbName() {
+        return RecipeStorage.DB_NAME;
+    }
+
+    @Override
+    protected Recipe getValue(DataSnapshot dataSnapshot) {
+        return dataSnapshot.getValue(Recipe.class);
+    }
 
     private static final  SearchRecipe INSTANCE = new SearchRecipe();
 
@@ -35,9 +53,9 @@ public class SearchRecipe {
      * @param ingredient the ingredient to match
      * @param caller     the caller to call onSuccess and onFailure
      */
-    public void searchRecipeByIngredient(String ingredient, CallHandler<List<Recipe>> caller) {
+    public void searchRecipeByIngredient(String ingredient, CallHandler<List<Miniatures>> caller) {
         // this is just an example we should be able to apply more filter later
-        searchRecipe(ingredient, this::compareIngredient, caller);
+        search(ingredient, this::compareIngredient, caller);
     }
 
     /**
@@ -46,44 +64,22 @@ public class SearchRecipe {
      * @param query  the query to be matched
      * @param caller the caller to call onSuccess and onFailure
      */
-    public void searchForRecipe(String query, CallHandler<List<Recipe>> caller) {
-        searchRecipe(query, this::compareName, caller);
+    public void searchForRecipe(String query, CallHandler<List<Miniatures>> caller) {
+        search(query, this::compareSimilarity, caller);
     }
 
-    private void searchRecipe(String query, BiFunction<String, Recipe, Boolean> comparator, CallHandler<List<Recipe>> caller) {
-        DatabaseReference nameRef = getDatabase().getReference(RecipeStorage.DB_NAME);
-        nameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    List<Recipe> recipes = new ArrayList<>();
-                    for (DataSnapshot d : dataSnapshot.getChildren()) {
-                        Recipe value = d.getValue(Recipe.class);
-                        if (comparator.apply(query, value)) {
-                            recipes.add(value);
-                        }
-                    }
-                    caller.onSuccess(recipes);
-                } else {
-                    caller.onFailure();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-                caller.onFailure();
-            }
-        });
+    private boolean compareSimilarity(String query, Recipe value) {
+        return Similarity.similarity(query,value.getName())>0.1;
     }
 
+    /**
     private boolean compareName(String query, Recipe value) {
         String searchInput = query;
         searchInput = searchInput.toLowerCase();
         String name = value.getName().toLowerCase();
         return searchInput.contains(name) || name.contains(searchInput);
     }
+     */
 
     private boolean compareIngredient(String ingredient, Recipe value) {
         String searchInput = ingredient;
@@ -101,6 +97,7 @@ public class SearchRecipe {
      *
      * @return the current instance of the {@code FirebaseDatabase}
      */
+    @Override
     public FirebaseDatabase getDatabase() {
         return FirebaseDatabase.getInstance();
     }
