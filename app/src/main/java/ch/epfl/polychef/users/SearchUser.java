@@ -22,7 +22,7 @@ import ch.epfl.polychef.utils.Similarity;
 public class SearchUser extends Search<User> {
 
     @Override
-    protected String getTAG() {
+    protected String getTag() {
         return "SearchUser";
     }
 

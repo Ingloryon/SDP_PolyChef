@@ -37,13 +37,17 @@ public abstract class SearchTest {
     private Miniatures mockMiniature2;
     private Miniatures mockMiniature3;
 
-    protected String DB_NAME;
-    abstract public Class getMiniatureClass();
-    abstract public Miniatures getMiniature(int index);
-    abstract public void callSearch1(String query, CallHandler<List<Miniatures>> caller);
-    abstract public void callSearch2(String ingredient, CallHandler<List<Miniatures>> caller);
-
     private ValueEventListener givenValueEventListener;
+
+    protected String dbName;
+
+    protected abstract Class getMiniatureClass();
+
+    protected abstract Miniatures getMiniature(int index);
+
+    protected abstract void callSearch1(String query, CallHandler<List<Miniatures>> caller);
+
+    protected abstract void callSearch2(String ingredient, CallHandler<List<Miniatures>> caller);
 
     @Before
     public void initTests(){
@@ -54,7 +58,7 @@ public abstract class SearchTest {
 
         givenValueEventListener=null;
 
-        when(mockDataBase.getReference(DB_NAME)).thenReturn(mockDatabaseReference);
+        when(mockDataBase.getReference(dbName)).thenReturn(mockDatabaseReference);
 
         doAnswer((call) -> {
             givenValueEventListener=  call.getArgument(0);

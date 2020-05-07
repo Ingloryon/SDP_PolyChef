@@ -24,7 +24,7 @@ public class SearchRecipeTest extends SearchTest {
 
     @Override
     public void initTests() {
-        DB_NAME = RecipeStorage.DB_NAME;
+        dbName = RecipeStorage.DB_NAME;
 
         super.initTests();
 

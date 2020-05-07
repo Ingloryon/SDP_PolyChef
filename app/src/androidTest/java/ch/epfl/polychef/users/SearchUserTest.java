@@ -26,7 +26,7 @@ public class SearchUserTest extends SearchTest {
 
     @Override
     public void initTests() {
-        DB_NAME = UserStorage.DB_NAME;
+        dbName = UserStorage.DB_NAME;
 
         super.initTests();
 

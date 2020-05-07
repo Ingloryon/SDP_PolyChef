@@ -24,7 +24,7 @@ import ch.epfl.polychef.utils.Similarity;
 public class SearchRecipe extends Search<Recipe> {
 
     @Override
-    protected String getTAG() {
+    protected String getTag() {
         return "SearchRecipe";
     }
 
