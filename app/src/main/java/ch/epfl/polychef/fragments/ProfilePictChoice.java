@@ -21,7 +21,6 @@ import java.util.List;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ProfilePicture;
 import ch.epfl.polychef.pages.HomePage;
-import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.ProfilePictureAdapter;

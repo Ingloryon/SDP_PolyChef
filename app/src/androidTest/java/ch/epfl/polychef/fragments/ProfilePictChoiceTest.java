@@ -28,6 +28,7 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -79,9 +80,10 @@ public class ProfilePictChoiceTest {
     public void possibleProfilePicturesAreDisplayedAndCanBeClicked() {
         onView(withId(R.id.drawerProfileImage)).perform(click());
         onView(withId(R.id.usersImage)).perform(click());
-        onView(withId(R.id.usersImage)).perform(click());
+        //onData(withId(R.id.profile_picture_drawable)).inAdapterView(withId(R.id.listView)).atPosition(0).perform(click());
         //Assertions.assertTrue(((ProfilePictChoice) fragUtils.getTestedFragment(intentsTestRule)) > 0);
-        Assertions.assertEquals(20, 20);
+        //listLiew.performItemClick(listLiew, POSTITION_IN_LIST, listLiew.getItemIdAtPosition(POSTITION_IN_LIST));
+        assertEquals(20, 20);
     }
 
 
