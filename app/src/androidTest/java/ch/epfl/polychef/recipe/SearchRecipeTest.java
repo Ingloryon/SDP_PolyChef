@@ -24,11 +24,11 @@ public class SearchRecipeTest extends SearchTest {
 
     @Override
     public void initTests() {
-        dbName = RecipeStorage.DB_NAME;
+        spyRecipeSearch = Mockito.spy(SearchRecipe.getInstance());
+        dbName = spyRecipeSearch.getDbName();
 
         super.initTests();
 
-        spyRecipeSearch = Mockito.spy(SearchRecipe.getInstance());
         when(spyRecipeSearch.getDatabase()).thenReturn(mockDataBase);
     }
 

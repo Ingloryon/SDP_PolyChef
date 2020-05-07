@@ -22,8 +22,10 @@ public abstract class Search<S extends Miniatures> {
 
     protected abstract S getValue(DataSnapshot dataSnapshot);
 
+    protected abstract String getDbName();
+
     protected void search(String query, BiFunction<String, S, Boolean> comparator, CallHandler<List<Miniatures>> caller) {
-        DatabaseReference nameRef = getDatabase().getReference(UserStorage.DB_NAME);
+        DatabaseReference nameRef = getDatabase().getReference(getDbName());
         nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

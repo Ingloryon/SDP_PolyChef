@@ -26,11 +26,11 @@ public class SearchUserTest extends SearchTest {
 
     @Override
     public void initTests() {
-        dbName = UserStorage.DB_NAME;
+        spyUserSearch = Mockito.spy(SearchUser.getInstance());
+        dbName = spyUserSearch.getDbName();
 
         super.initTests();
 
-        spyUserSearch = Mockito.spy(SearchUser.getInstance());
         when(spyUserSearch.getDatabase()).thenReturn(mockDataBase);
     }
 

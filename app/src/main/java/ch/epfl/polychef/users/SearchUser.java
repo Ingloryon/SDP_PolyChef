@@ -27,6 +27,11 @@ public class SearchUser extends Search<User> {
     }
 
     @Override
+    protected String getDbName() {
+        return UserStorage.DB_NAME;
+    }
+
+    @Override
     protected User getValue(DataSnapshot dataSnapshot) {
         return dataSnapshot.getValue(User.class);
     }

@@ -29,6 +29,11 @@ public class SearchRecipe extends Search<Recipe> {
     }
 
     @Override
+    protected String getDbName() {
+        return RecipeStorage.DB_NAME;
+    }
+
+    @Override
     protected Recipe getValue(DataSnapshot dataSnapshot) {
         return dataSnapshot.getValue(Recipe.class);
     }
