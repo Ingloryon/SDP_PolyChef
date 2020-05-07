@@ -130,14 +130,14 @@ public class UserTest {
 
         User mockUser=mockUser();
         mockUser.setProfilePictureId(2);
-        assertEquals(2, mockUser().getProfilePictureId());
+        assertEquals(2, mockUser.getProfilePictureId());
 
         mockUser.setProfilePictureId(-1);
-        assertEquals(0, mockUser().getProfilePictureId());
+        assertEquals(0, mockUser.getProfilePictureId());
 
         int maxSize=GlobalApplication.getAppContext().getResources().getStringArray(R.array.profilePicturesNames).length;
         mockUser.setProfilePictureId(maxSize);
-        assertEquals(0, mockUser().getProfilePictureId());
+        assertEquals(0, mockUser.getProfilePictureId());
 
     }
 
