@@ -32,13 +32,13 @@
     </array>
 
     <array name="profilePicturesLabels">
-        <item>Hello World !</item>
-        <item>pun with cat</item>
-        <item>pun with dog</item>
-        <item>pun with corn</item>
-        <item>pun with eggplant</item>
-        <item>pun with fox</item>
-        <item>pun with pumpkin</item>
+        <item>Basic icone</item>
+        <item>Cutie cat</item>
+        <item>Brownie Dog</item>
+        <item>Sexy corn</item>
+        <item>Crazy eggplant</item>
+        <item>Smart fox</item>
+        <item>Scary pumpkin</item>
     </array>
 
 </resources>
