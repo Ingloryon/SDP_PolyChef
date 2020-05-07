@@ -13,6 +13,7 @@ import java.util.Map;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.SingletonQueue;
 
 /**
@@ -41,6 +42,9 @@ public class NotificationSender {
      * @param recipe   the recipe that was posted
      */
     public void sendNewRecipe(String userKey, String userName, Recipe recipe) {
+        Preconditions.checkArgument(userKey != null, "User key can not be null");
+        Preconditions.checkArgument(userName != null, "User name can not be null");
+        Preconditions.checkArgument(recipe != null, "Recipe can not be null");
         try {
             JSONObject notificationBody = new JSONObject();
             notificationBody.put("title", String.format(GlobalApplication.getAppContext().getString(R.string.recipeNotificationTitle), userName));
@@ -72,6 +76,10 @@ public class NotificationSender {
                 return params;
             }
         };
-        SingletonQueue.getInstance().addToRequestQueue(jsonObjectRequest);
+        getSingletonQueue().addToRequestQueue(jsonObjectRequest);
+    }
+
+    public SingletonQueue getSingletonQueue() {
+        return SingletonQueue.getInstance();
     }
 }

@@ -16,6 +16,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -38,25 +39,27 @@ public class NotificationReceiverService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        if(UserStorage.getInstance().getPolyChefUser() != null) {
-            MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(UserStorage.getInstance().getPolyChefUser().getSubscriptions().size(), (dataList) -> {
-                for(User user: dataList) {
-                    FirebaseMessaging.getInstance().subscribeToTopic("recipe_"+user.getKey());
-                }
-            });
-            for(String userEmail: UserStorage.getInstance().getPolyChefUser().getSubscriptions()) {
-                UserStorage.getInstance().getUserByEmail(userEmail, multipleCallHandler);
+        if(getUserStorage().getPolyChefUser() != null) {
+            MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(getUserStorage().getPolyChefUser().getSubscriptions().size(),this::doOnSuccess);
+            for(String userEmail: getUserStorage().getPolyChefUser().getSubscriptions()) {
+                getUserStorage().getUserByEmail(userEmail, multipleCallHandler);
             }
+        }
+    }
+
+    private void doOnSuccess(List<User> dataList) {
+        for(User user: dataList) {
+            getFirebaseMessaging().subscribeToTopic("recipe_"+user.getKey());
         }
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if(Objects.equals(remoteMessage.getData().get("type"), "recipe")) {
-            RecipeStorage.getInstance().readRecipeFromUuid(remoteMessage.getData().get("recipe"), new CallHandler<Recipe>() {
+            getRecipeStorage().readRecipeFromUuid(remoteMessage.getData().get("recipe"), new CallHandler<Recipe>() {
                 @Override
                 public void onSuccess(Recipe data) {
-                    Intent intent = new Intent(NotificationReceiverService.this, HomePage.class);
+                    Intent intent = new Intent(NotificationReceiverService.this.getContext(), HomePage.class);
                     intent.putExtra("RecipeToSend", data);
                     setNotificationWithIntent(remoteMessage, intent);
                 }
@@ -68,21 +71,21 @@ public class NotificationReceiverService extends FirebaseMessagingService {
             });
 
         } else {
-            setNotificationWithIntent(remoteMessage, new Intent(this, HomePage.class));
+            setNotificationWithIntent(remoteMessage, new Intent(getContext(), HomePage.class));
         }
 
     }
 
     private void setNotificationWithIntent(RemoteMessage remoteMessage, Intent intent) {
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        int notificationID = new Random().nextInt(3000);
+        NotificationManager notificationManager = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        int notificationID = getRandom();
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this , 0, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext() , 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             setChannels(notificationManager);
         }
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelID)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext(), channelID)
                 .setSmallIcon(R.drawable.ic_star_black_yellow)
                 .setContentTitle(remoteMessage.getData().get("title"))
                 .setContentText(remoteMessage.getData().get("message"))
@@ -99,5 +102,25 @@ public class NotificationReceiverService extends FirebaseMessagingService {
         if (notificationManager != null) {
             notificationManager.createNotificationChannel(adminChannel);
         }
+    }
+
+    public RecipeStorage getRecipeStorage() {
+        return RecipeStorage.getInstance();
+    }
+
+    public UserStorage getUserStorage() {
+        return UserStorage.getInstance();
+    }
+
+    public FirebaseMessaging getFirebaseMessaging() {
+        return FirebaseMessaging.getInstance();
+    }
+
+    public int getRandom() {
+        return new Random().nextInt(3000);
+    }
+
+    public Context getContext() {
+        return this;
     }
 }
