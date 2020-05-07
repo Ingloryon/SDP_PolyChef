@@ -1,5 +1,7 @@
 package ch.epfl.polychef.users;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -11,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.utils.Preconditions;
@@ -80,7 +83,13 @@ public class User implements Serializable {
     }
 
     public void setProfilePictureId(int profilePictureId) {
-        this.profilePictureId = profilePictureId;
+        //size of the profile picture array
+        int size=GlobalApplication.getAppContext().getResources().getStringArray(R.array.profilePicturesNames).length;
+        if(profilePictureId<0 || profilePictureId>=size) {//prevent out of bound exception
+            this.profilePictureId = 0;
+        }else{
+            this.profilePictureId = profilePictureId;
+        }
     }
 
     public void addRecipe(String recipe) {
@@ -163,10 +172,11 @@ public class User implements Serializable {
         return false;
     }
 
-    public static int getResourceImageFromActivity(HomePage hostActivity,User userToDisplay){
+    public static int getResourceImageFromActivity(User userToDisplay){
+        Context context=GlobalApplication.getAppContext();
         int profilePictureId=userToDisplay.getProfilePictureId();
-        String photoName=hostActivity.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
-        int resourceImage = hostActivity.getResources().getIdentifier(photoName, "drawable", hostActivity.getPackageName());
+        String photoName=context.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
+        int resourceImage = context.getResources().getIdentifier(photoName, "drawable", context.getPackageName());
         return resourceImage;
     }
 }
