@@ -127,7 +127,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         //Display the image of the user
         ImageView image = view.findViewById(R.id.usersImage);
-        image.setImageResource(User.getResourceImageFromActivity(hostActivity,userToDisplay));
+        image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
 
         getNextRecipes();
         setupProfilePictureButton();
