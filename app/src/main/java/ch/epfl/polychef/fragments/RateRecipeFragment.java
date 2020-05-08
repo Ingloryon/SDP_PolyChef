@@ -106,7 +106,7 @@ public class RateRecipeFragment extends Fragment {
         }
 
 
-        DatabaseReference ref = fireDatabase.getReference(RecipeStorage.DB_NAME).child(recipe.getRecipeDatabaseKey());
+        DatabaseReference ref = fireDatabase.getReference(RecipeStorage.DB_NAME).child(recipe.getKey());
         ref.setValue(recipe);
 
         getActivity().onBackPressed();

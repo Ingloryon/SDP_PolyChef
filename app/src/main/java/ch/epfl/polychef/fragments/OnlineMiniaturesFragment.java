@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -195,6 +196,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         if(isSearching){
             searchList.addAll(data);
             Collections.sort(searchList,similarityComparator);
+            removeDuplicate(searchList);
             onlineRecyclerView.getAdapter().notifyDataSetChanged();
             return;
         }
@@ -239,6 +241,23 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             return ((Recipe)miniature).getName();
         }else{
             return ((User)miniature).getUsername();
+        }
+    }
+
+    private void removeDuplicate(List<Miniatures> miniatures){
+        List<Miniatures> toBeRemoved = new ArrayList<>();
+        for(int i=0; i<miniatures.size()-1; i++){
+            for(int j=i+1; j<miniatures.size(); j++){
+                if(miniatures.get(i).getClass().equals(miniatures.get(j).getClass())){
+                    if(miniatures.get(i).equals(miniatures.get(j))) {
+                        Log.w(TAG,"removed: "+miniatures.get(i).toString());
+                        toBeRemoved.add(miniatures.get(j));
+                    }
+                }
+            }
+        }
+        for (Miniatures i : toBeRemoved){
+            miniatures.remove(i);
         }
     }
 }

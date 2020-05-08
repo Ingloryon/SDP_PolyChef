@@ -217,6 +217,16 @@ public class User implements Serializable, Miniatures {
         this.key = key;
     }
 
+    @Override
+    public boolean isUser() {
+        return true;
+    }
+
+    @Override
+    public boolean isRecipe() {
+        return false;
+    }
+
     @Exclude
     public String getKey() {
         Preconditions.checkArgument(key != null, "User " + email + " has not been initialized correctly");

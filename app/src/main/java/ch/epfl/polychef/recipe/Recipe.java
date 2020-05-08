@@ -217,7 +217,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      * @return the key used by the database to store the recipe
      */
     @Exclude
-    public String getRecipeDatabaseKey(){
+    public String getKey(){
         return recipeDatabaseKey;
     }
 
@@ -227,8 +227,18 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      * @param recipeDatabaseKey the new key for the recipe
      */
     @Exclude
-    public void setRecipeDatabaseKey(String recipeDatabaseKey){
+    public void setKey(String recipeDatabaseKey){
         this.recipeDatabaseKey =recipeDatabaseKey;
+    }
+
+    @Override
+    public boolean isUser() {
+        return false;
+    }
+
+    @Override
+    public boolean isRecipe() {
+        return true;
     }
 
     @Override

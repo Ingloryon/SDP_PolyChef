@@ -34,6 +34,7 @@ public abstract class Search<S extends Miniatures> {
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
                         S value = getValue(d);
                         if (comparator.apply(query, value)) {
+                            value.setKey(d.getKey());
                             results.add(value);
                         }
                     }

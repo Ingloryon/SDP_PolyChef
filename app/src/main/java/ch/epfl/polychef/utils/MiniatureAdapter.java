@@ -60,13 +60,13 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
     @Override
     public void onBindViewHolder(@NonNull MiniatureAdapter.MiniatureViewHolder holder, int position) {
-        if(miniaturesList.get(position).getClass().equals(Recipe.class)) {
+        if(miniaturesList.get(position).isRecipe()) {
             Recipe recipe = (Recipe) miniaturesList.get(position);
             holder.recipeTitle.setText(recipe.getName());
             holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
             FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
             getImageFor(holder, recipe);
-        }else if(miniaturesList.get(position).getClass().equals(User.class)){
+        }else if(miniaturesList.get(position).isUser()){
             User user = (User) miniaturesList.get(position);
             holder.username.setText(user.getUsername());
         }
@@ -100,7 +100,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
     @Override
     public int getItemViewType(int position) {
-        if(miniaturesList.get(position).getClass().equals(Recipe.class)) {
+        if(miniaturesList.get(position).isRecipe()) {
             return RECIPE_TYPE;
         }
         else {
@@ -166,7 +166,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
             int position = recyclerView.getChildLayoutPosition(view);
 
-            if (miniaturesList.get(position).getClass().equals(Recipe.class)) {
+            if (miniaturesList.get(position).isRecipe()) {
                 targetFragment = R.id.fullRecipeFragment;
 
                 Recipe clickedRecipe = (Recipe) miniaturesList.get(position);
