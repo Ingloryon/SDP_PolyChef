@@ -3,6 +3,7 @@ package ch.epfl.polychef.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +95,11 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         searchAdapter = new MiniatureAdapter(this.getActivity(),
                 searchList, onlineRecyclerView, container.getId(), imageStorage, userStorage);
 
-        onlineRecyclerView.setAdapter(adapter);
+        if(searchList.size()==0) {
+            onlineRecyclerView.setAdapter(adapter);
+        }else{
+            onlineRecyclerView.setAdapter(searchAdapter);
+        }
         // Add a scroll listener when we reach the end of the list we load new recipes from database
         onlineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -135,6 +140,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         searchView = getView().findViewById(R.id.searchBar);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -250,7 +256,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             for(int j=i+1; j<miniatures.size(); j++){
                 if(miniatures.get(i).getClass().equals(miniatures.get(j).getClass())){
                     if(miniatures.get(i).equals(miniatures.get(j))) {
-                        Log.w(TAG,"removed: "+miniatures.get(i).toString());
                         toBeRemoved.add(miniatures.get(j));
                     }
                 }
