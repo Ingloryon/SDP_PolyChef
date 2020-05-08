@@ -21,4 +21,24 @@
         <item>5 stars</item>
     </array>
 
+    <array name="profilePicturesNames">
+        <item>none_profile_polychef</item>
+        <item>cat_profile_polychef</item>
+        <item>dog_profile_polychef</item>
+        <item>corn_profile_polychef</item>
+        <item>eggplant_profile_polychef</item>
+        <item>fox_profile_polychef</item>
+        <item>pumpkin_profile_polychef</item>
+    </array>
+
+    <array name="profilePicturesLabels">
+        <item>Hello World !</item>
+        <item>Cutie cat</item>
+        <item>Brownie Dog</item>
+        <item>Sexy corn</item>
+        <item>Crazy eggplant</item>
+        <item>Smart fox</item>
+        <item>Scary pumpkin</item>
+    </array>
+
 </resources>

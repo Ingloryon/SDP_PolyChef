@@ -195,4 +195,11 @@
             app:destination="@id/fullRecipeFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/userProfilePictureChoice"
+        android:name="ch.epfl.polychef.fragments.ProfilePictChoice"
+        android:label="profile_picture_choice"
+        tools:layout="@layout/profile_pict_choice" >
+    </fragment>
+
 </navigation>

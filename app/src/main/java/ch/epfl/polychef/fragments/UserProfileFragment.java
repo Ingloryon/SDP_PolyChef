@@ -6,12 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,13 +34,6 @@ import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 public class UserProfileFragment extends Fragment implements CallHandler<Recipe> {
 
-    public UserProfileFragment() {
-    }
-
-    public UserProfileFragment(User user) {
-        this.userToDisplay = user;
-    }
-
     private static final String TAG = "UserProfileFragment";
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
     private User userToDisplay;
@@ -54,6 +49,20 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     private int waitingFor;
 
     private int currentIndex = 0;
+
+    /**
+     * Empty constructor for Firebase.
+     */
+    public UserProfileFragment() {
+    }
+
+    /**
+     * Public User setter for Firebase.
+     * @param user the user to display
+     */
+    public UserProfileFragment(User user) {
+        this.userToDisplay = user;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,7 +131,12 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
+        //Display the image of the user
+        ImageView image = view.findViewById(R.id.usersImage);
+        image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
+
         getNextRecipes();
+        setupProfilePictureButton();
     }
 
     @Override
@@ -149,6 +163,9 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         }
     }
 
+    /**
+     * Gets the next recipe for the current user.
+     */
     public void getNextRecipes(){
         isLoading = true;
         int nbRecipes = userToDisplay.getRecipes().size();
@@ -167,7 +184,30 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         --waitingFor;
     }
 
+    /**
+     * Getter for the recycler view of the user.
+     * @return the user recycler view
+     */
     public RecyclerView getUserRecyclerView(){
         return userRecyclerView;
+    }
+
+    private void setupProfilePictureButton(){
+        ImageView profilePict = getView().findViewById(R.id.usersImage);
+        HomePage context = (HomePage) getContext();
+
+        profilePict.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userID = context.getUserStorage().getPolyChefUser().getKey();
+                if(userToDisplay.getKey() == userID) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("UserDisplayed", userToDisplay);
+
+                    NavController navController = ((HomePage) getActivity()).getNavController();
+                    navController.navigate(R.id.userProfilePictureChoice, bundle);
+                }
+            }
+        });
     }
 }
