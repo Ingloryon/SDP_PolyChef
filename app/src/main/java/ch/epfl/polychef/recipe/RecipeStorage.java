@@ -61,7 +61,7 @@ public class RecipeStorage implements Serializable  {
         Preconditions.checkArgument(recipe != null);
 
         DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
-        recipe.setRecipeDatabaseKey(ref.getKey());
+        recipe.setKey(ref.getKey());
         ref.setValue(recipe);
     }
 
@@ -155,7 +155,7 @@ public class RecipeStorage implements Serializable  {
         if (recipe == null) {
             ch.onFailure();
         } else {
-            recipe.setRecipeDatabaseKey(snapshot.getKey());
+            recipe.setKey(snapshot.getKey());
             ch.onSuccess(recipe);
         }
     }
@@ -168,7 +168,7 @@ public class RecipeStorage implements Serializable  {
             List<Miniatures> recipes = new ArrayList<>();
             for(DataSnapshot child : dataSnapshot.getChildren()){
                 Recipe recipe = child.getValue(Recipe.class);
-                recipe.setRecipeDatabaseKey(child.getKey());
+                recipe.setKey(child.getKey());
                 recipes.add((Miniatures)recipe);
             }
 
