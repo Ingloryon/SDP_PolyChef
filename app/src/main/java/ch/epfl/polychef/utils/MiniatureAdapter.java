@@ -100,11 +100,11 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
     @Override
     public int getItemViewType(int position) {
-        if(miniaturesList.get(position).isRecipe()) {
-            return RECIPE_TYPE;
+        if(miniaturesList.get(position).isUser()) {
+            return USER_TYPE;
         }
         else {
-            return USER_TYPE;
+            return RECIPE_TYPE;
         }
     }
 

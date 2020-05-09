@@ -175,6 +175,14 @@ public class OnlineMiniaturesFragmentTest {
     }
 
     @Test
+    public synchronized void removesDuplicate() throws InterruptedException {
+        initActivity();
+        fakeRecipeStorage.addRecipe(testRecipeBuilder.setDate(currentYoungerDate).build());
+        fakeRecipeStorage.addRecipe(testRecipeBuilder.setDate(currentYoungerDate).build());
+        search("test");
+    }
+
+    @Test
     public synchronized void databaseEmptyAddNothingToView() throws InterruptedException {
         initActivity();
         wait(1000);
