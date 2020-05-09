@@ -23,6 +23,8 @@ import ch.epfl.polychef.utils.Similarity;
 
 public class SearchRecipe extends Search<Recipe> {
 
+    private static final double MIN_SIMILARITY = 0.3;
+
     @Override
     protected String getTag() {
         return "SearchRecipe";
@@ -83,7 +85,7 @@ public class SearchRecipe extends Search<Recipe> {
 
     private boolean compareIngredient(String ingredient, Recipe value) {
         for (String ing : value.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList())) {
-            if (Similarity.similarity(ingredient,ing)>0.3) {
+            if (Similarity.similarity(ingredient,ing)>MIN_SIMILARITY) {
                 return true;
             }
         }

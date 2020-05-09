@@ -42,9 +42,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private RecyclerView onlineRecyclerView;
     private static final int UP = -1;
     private static final int DOWN = 1;
-    private static final int filterRecipe = 0;
-    private static final int filterUser = 1;
-    private static final int filterIngredient = 2;
+    private static final int FILTER_RECIPE = 0;
+    private static final int FILTER_USER = 1;
+    private static final int FILTER_INGREDIENT = 2;
 
     private String actualQuery;
 
@@ -100,7 +100,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         searchAdapter = new MiniatureAdapter(this.getActivity(),
                 searchList, onlineRecyclerView, container.getId(), imageStorage, userStorage);
 
-        if(searchList.size()==0) {
+        if(searchList.isEmpty()) {
             onlineRecyclerView.setAdapter(adapter);
         }else{
             onlineRecyclerView.setAdapter(searchAdapter);
@@ -151,11 +151,11 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         recipesFilter = getView().findViewById(R.id.filter_recipe);
         usersFilter = getView().findViewById(R.id.filter_users);
 
-        ingredientsFilter.setOnClickListener(setFilter(filterIngredient));
-        usersFilter.setOnClickListener(setFilter(filterUser));
-        recipesFilter.setOnClickListener(setFilter(filterRecipe));
+        ingredientsFilter.setOnClickListener(setFilter(FILTER_INGREDIENT));
+        usersFilter.setOnClickListener(setFilter(FILTER_USER));
+        recipesFilter.setOnClickListener(setFilter(FILTER_RECIPE));
 
-        if(searchList.size()!=0){
+        if(!searchList.isEmpty()){
             filters.setVisibility(View.VISIBLE);
         }
 
@@ -199,9 +199,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private View.OnClickListener setFilter(int filter){
         return v -> {
             searchList.clear();
-            if(filter==filterRecipe){
+            if(filter== FILTER_RECIPE){
                 recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
-            }else if(filter==filterUser){
+            }else if(filter== FILTER_USER){
                 userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
             }else{
                 recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
