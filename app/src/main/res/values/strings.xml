@@ -74,5 +74,7 @@
 
     <string name="recipeNotificationTitle">User %1$s just posted a new recipe!</string>
     <string name="recipeNotificationMessage">See \"%1$s\" from %2$s</string>
+    <string name="users">users</string>
+    <string name="Recipes">Recipes</string>
 
 </resources>

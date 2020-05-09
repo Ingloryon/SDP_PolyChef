@@ -3,10 +3,11 @@ package ch.epfl.polychef.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +46,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String actualQuery;
 
     private SearchView searchView;
+    private LinearLayout filters;
+    private Button ingredientsFilter;
+    private Button usersFilter;
+    private Button recipesFilter;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
     private List<Miniatures> searchList = new ArrayList<>();
@@ -139,12 +143,42 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         searchView = getView().findViewById(R.id.searchBar);
+        filters = getView().findViewById(R.id.filters);
+        ingredientsFilter = getView().findViewById(R.id.filter_ingre);
+        recipesFilter = getView().findViewById(R.id.filter_recipe);
+        usersFilter = getView().findViewById(R.id.filter_users);
+
+        ingredientsFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setIngredientFilterListener(view);
+            }
+        });
+        usersFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setUsersFilterListener(view);
+            }
+        });
+
+        recipesFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setRecipeFilterListener(view);
+            }
+        });
+
+        if(searchList.size()!=0){
+            filters.setVisibility(View.VISIBLE);
+        }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 isSearching = true;
+                filters.setVisibility(View.VISIBLE);
                 actualQuery = query;
                 searchView.clearFocus();
                 searchList.clear();
@@ -163,6 +197,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                filters.setVisibility(View.GONE);
                 searchList.clear();
                 onlineRecyclerView.setAdapter(adapter);
                 ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(dynamicRecipeList);
@@ -174,6 +209,21 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         if(dynamicRecipeList.isEmpty()) {
             initFirstNRecipes();
         }
+    }
+
+    private void setUsersFilterListener(View view) {
+        searchList.clear();
+        userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+    }
+
+    private void setRecipeFilterListener(View view) {
+        searchList.clear();
+        recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+    }
+
+    private void setIngredientFilterListener(View view) {
+        searchList.clear();
+        recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
     }
 
     private void initFirstNRecipes() {
@@ -261,8 +311,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
                 }
             }
         }
-        for (Miniatures i : toBeRemoved){
-            miniatures.remove(i);
-        }
+        miniatures.removeAll(toBeRemoved);
     }
 }

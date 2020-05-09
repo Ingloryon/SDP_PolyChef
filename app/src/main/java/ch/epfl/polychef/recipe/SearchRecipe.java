@@ -82,10 +82,8 @@ public class SearchRecipe extends Search<Recipe> {
      */
 
     private boolean compareIngredient(String ingredient, Recipe value) {
-        String searchInput = ingredient;
-        searchInput = searchInput.toLowerCase();
         for (String ing : value.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList())) {
-            if (searchInput.contains(ing.toLowerCase()) || ing.toLowerCase().contains(searchInput)) {
+            if (Similarity.similarity(ingredient,ing)>0.3) {
                 return true;
             }
         }
