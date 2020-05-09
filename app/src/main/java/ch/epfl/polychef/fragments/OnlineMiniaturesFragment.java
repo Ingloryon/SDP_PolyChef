@@ -42,6 +42,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private RecyclerView onlineRecyclerView;
     private static final int UP = -1;
     private static final int DOWN = 1;
+    private static final int filterRecipe = 0;
+    private static final int filterUser = 1;
+    private static final int filterIngredient = 2;
 
     private String actualQuery;
 
@@ -150,25 +153,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         recipesFilter = getView().findViewById(R.id.filter_recipe);
         usersFilter = getView().findViewById(R.id.filter_users);
 
-        ingredientsFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setIngredientFilterListener(view);
-            }
-        });
-        usersFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setUsersFilterListener(view);
-            }
-        });
-
-        recipesFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setRecipeFilterListener(view);
-            }
-        });
+        ingredientsFilter.setOnClickListener(setFilter(filterIngredient));
+        usersFilter.setOnClickListener(setFilter(filterUser));
+        recipesFilter.setOnClickListener(setFilter(filterRecipe));
 
         if(searchList.size()!=0){
             filters.setVisibility(View.VISIBLE);
@@ -211,19 +198,19 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         }
     }
 
-    private void setUsersFilterListener(View view) {
-        searchList.clear();
-        userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
-    }
-
-    private void setRecipeFilterListener(View view) {
-        searchList.clear();
-        recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
-    }
-
-    private void setIngredientFilterListener(View view) {
-        searchList.clear();
-        recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
+    private View.OnClickListener setFilter(int filter){
+        return v -> {
+            if(filter==filterRecipe){
+                searchList.clear();
+                recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+            }else if(filter==filterUser){
+                searchList.clear();
+                userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+            }else{
+                searchList.clear();
+                recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
+            }
+        };
     }
 
     private void initFirstNRecipes() {
@@ -262,10 +249,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             newRecipes.add((Recipe) recipe);
         }
         //Filter to avoid duplicates at the "edges"
-        newRecipes = newRecipes.stream()
-                .filter((recipe) -> !recipe.getDate().equals(currentOldest)
-                        && !recipe.getDate().equals(currentNewest))
-                .collect(Collectors.toList());
+        newRecipes = newRecipes.stream().filter((recipe) -> !recipe.getDate().equals(currentOldest)
+                        && !recipe.getDate().equals(currentNewest)).collect(Collectors.toList());
 
         dynamicRecipeList.addAll(newRecipes);
         dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
