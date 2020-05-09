@@ -162,6 +162,19 @@ public class OnlineMiniaturesFragmentTest {
     }
 
     @Test
+    public synchronized void canClickOnFiltersWhenSearch() throws InterruptedException {
+        initActivity();
+
+        search("test");
+        wait(100);
+        onView(withId(R.id.filter_ingre)).perform(click());
+        wait(100);
+        onView(withId(R.id.filter_users)).perform(click());
+        wait(100);
+        onView(withId(R.id.filter_recipe)).perform(click());
+    }
+
+    @Test
     public synchronized void databaseEmptyAddNothingToView() throws InterruptedException {
         initActivity();
         wait(1000);
