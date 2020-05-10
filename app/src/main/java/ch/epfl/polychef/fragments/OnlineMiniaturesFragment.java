@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +32,7 @@ import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.MiniatureAdapter;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
-import ch.epfl.polychef.utils.Similarity;
+import ch.epfl.polychef.utils.Sort;
 
 public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Miniatures>>{
 
@@ -45,6 +43,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private static final int FILTER_RECIPE = 0;
     private static final int FILTER_USER = 1;
     private static final int FILTER_INGREDIENT = 2;
+    private static final int FILTER_RATE = 3;
+
+    private boolean isFilterIngredient = false;
+    private boolean isFilterRate = false;
 
     private String actualQuery;
 
@@ -53,6 +55,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private Button ingredientsFilter;
     private Button usersFilter;
     private Button recipesFilter;
+    private Button rateFilter;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
     private List<Miniatures> searchList = new ArrayList<>();
@@ -71,18 +74,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private RecipeStorage recipeStorage;
     private ImageStorage imageStorage;
     private UserStorage userStorage;
-
-    private Comparator<Miniatures> similarityComparator = (o1, o2) -> {
-        String s1 = getName(o1);
-        String s2 = getName(o2);
-        if(Similarity.similarity(s1,actualQuery)>Similarity.similarity(s2,actualQuery)){
-            return -1;
-        }else if(Similarity.similarity(s1,actualQuery)==Similarity.similarity(s2,actualQuery)){
-            return 0;
-        }else {
-            return 1;
-        }
-    };
 
     public OnlineMiniaturesFragment(){
         
@@ -150,10 +141,12 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         ingredientsFilter = getView().findViewById(R.id.filter_ingre);
         recipesFilter = getView().findViewById(R.id.filter_recipe);
         usersFilter = getView().findViewById(R.id.filter_users);
+        rateFilter = getView().findViewById(R.id.filter_rate);
 
         ingredientsFilter.setOnClickListener(setFilter(FILTER_INGREDIENT));
         usersFilter.setOnClickListener(setFilter(FILTER_USER));
         recipesFilter.setOnClickListener(setFilter(FILTER_RECIPE));
+        rateFilter.setOnClickListener(setFilter(FILTER_RATE));
 
         if(!searchList.isEmpty()){
             filters.setVisibility(View.VISIBLE);
@@ -199,12 +192,17 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private View.OnClickListener setFilter(int filter){
         return v -> {
             searchList.clear();
-            if(filter== FILTER_RECIPE){
+            if(filter == FILTER_RECIPE){
                 recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
-            }else if(filter== FILTER_USER){
+            }else if(filter == FILTER_USER){
                 userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
-            }else{
+            }else if (filter == FILTER_INGREDIENT){
+                isFilterIngredient = true;
                 recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
+            }else {
+                //TODO: add some kind of rate to the users
+                isFilterRate = true;
+                recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
             }
         };
     }
@@ -234,7 +232,15 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     public void onSuccess(List<Miniatures> data){
         if(isSearching){
             searchList.addAll(data);
-            Collections.sort(searchList,similarityComparator);
+            if(isFilterIngredient){
+                Sort.sortByIngredientSimilarity(searchList,actualQuery);
+                isFilterIngredient = false;
+            }else if(isFilterRate) {
+                Sort.sortByRate(searchList);
+                isFilterRate = false;
+            }else{
+                Sort.sortBySimilarity(searchList,actualQuery);
+            }
             removeDuplicate(searchList);
             onlineRecyclerView.getAdapter().notifyDataSetChanged();
             return;
@@ -271,14 +277,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
     public RecyclerView getRecyclerView(){
         return onlineRecyclerView;
-    }
-
-    private String getName(Miniatures miniature){
-        if(miniature.getClass().equals(Recipe.class)){
-            return ((Recipe)miniature).getName();
-        }else{
-            return ((User)miniature).getUsername();
-        }
     }
 
     private void removeDuplicate(List<Miniatures> miniatures){

@@ -16,6 +16,7 @@ import java.util.Objects;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
