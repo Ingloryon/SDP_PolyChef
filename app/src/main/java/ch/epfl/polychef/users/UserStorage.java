@@ -19,7 +19,7 @@ import ch.epfl.polychef.utils.Preconditions;
 public class UserStorage {
 
     private static UserStorage INSTANCE = new UserStorage();
-    public static final String DB_NAME = "users";
+    public static final String DB_NAME = "users_comments";
 
     private User user = null;
     private String userKey = null;

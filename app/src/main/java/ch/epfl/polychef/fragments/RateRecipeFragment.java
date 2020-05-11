@@ -95,7 +95,7 @@ public class RateRecipeFragment extends Fragment {
 
         Log.w(TAG, "userID "+userID);
 
-        int oldRating = recipe.getRating().addRate(userID, starNb);
+        int oldRating = recipe.getRating().addOpinion(userID, starNb);
 
         if(oldRating == -1 || oldRating==starNb) {
             String newRatingText =  "Your rating is " + starNb +" stars.";
