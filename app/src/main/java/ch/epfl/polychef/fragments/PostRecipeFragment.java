@@ -86,6 +86,7 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
+
     private HomePage hostActivity;
 
     /**
