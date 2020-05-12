@@ -1,7 +1,6 @@
 package ch.epfl.polychef.users.gamification;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -79,7 +78,7 @@ public final class Achievement {
     }
 
     /**
-     * Gets the name of the achievement
+     * Gets the name of the achievement.
      * @return the name of the achievement
      */
     public String getName(){

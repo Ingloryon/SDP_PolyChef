@@ -15,7 +15,7 @@ public final class AchievementsList {
     private List<Achievement> achievementList;
 
     /**
-     * Gets the unique instance of AchievementList (Singleton)
+     * Gets the unique instance of AchievementList (Singleton).
      * @return the instance of AchievementList
      */
     public static AchievementsList getInstance(){
@@ -23,7 +23,7 @@ public final class AchievementsList {
     }
 
     /**
-     * Gets the common achievements list
+     * Gets the common achievements list.
      * @return the common achievements list
      */
     public List<Achievement> getAllAchievements() {

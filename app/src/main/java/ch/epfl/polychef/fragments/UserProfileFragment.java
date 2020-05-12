@@ -39,7 +39,6 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     private static final String TAG = "UserProfileFragment";
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
     private User userToDisplay;
-    private List<String> labelsOfDisplayedAchievements;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
