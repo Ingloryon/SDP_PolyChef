@@ -44,7 +44,8 @@ public class AchievementTest {
     public void achievementRejectsInvalidInputs(){
         Assertions.assertThrows(IllegalArgumentException.class, () -> new Achievement("", 3, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes));
         Assertions.assertThrows(IllegalArgumentException.class, () -> new Achievement("achievement", 8, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new Achievement("", 4, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Achievement("achievement", -1, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Achievement("achievement", 4, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes));
     }
 
     @Test
@@ -72,7 +73,9 @@ public class AchievementTest {
     public void gettersRejectsInvalidInputs(){
         Achievement achi = createValidAchievement();
         Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(5));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(5) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(5));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(-1));
     }
 
     @Test

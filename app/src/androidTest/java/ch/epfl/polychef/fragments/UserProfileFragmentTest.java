@@ -29,10 +29,16 @@ import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -102,6 +108,45 @@ public class UserProfileFragmentTest {
     @Test
     public synchronized void recipesAreDisplayedWhenUserHasManyOfThem() throws InterruptedException {
         testUserRecipes(UserProfileFragment.nbOfRecipesLoadedAtATime + 1, 20);
+    }
+
+    @Test
+    public synchronized void userAchievementsDisplayCorrectToast() throws InterruptedException {
+        mockUser.addRecipe("Recipe1");
+        mockUser.addRecipe("Recipe2");
+
+        startTest();
+
+        /*
+        onView(withId(R.id.cuistot_achievement)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.cuistot_achievement)).perform(scrollTo(), click());
+
+        onView(withText("Starting Chef"))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        wait(1000);
+
+        onView(withId(R.id.followed_achievement)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.followed_achievement)).perform(scrollTo(), click());
+
+        onView(withText("No followers"))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        wait(1000);
+
+        onView(withId(R.id.favorite_achievement)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.favorite_achievement)).perform(scrollTo(), click());
+
+        onView(withText("No favorite"))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        wait(1000);*/
     }
 
     public synchronized void testUserRecipes(int min, int max) throws InterruptedException {
