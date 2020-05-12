@@ -22,7 +22,7 @@ public final class Achievement {
 
     public Achievement(int nbOfLevels, ArrayList<String> picturesPaths, ArrayList<String> picturesLabels, ArrayList<Integer> levelSteps, Function<User, Integer> evaluatedCriteria){
         Preconditions.checkArgument(0 < nbOfLevels && nbOfLevels <= MAX_ACHIEVEMENT_LEVEL, "The number of levelSteps must be strictly positive and less than the maximum number of levelSteps (" + MAX_ACHIEVEMENT_LEVEL + ")");
-        Preconditions.checkArgument(picturesPaths.size() == nbOfLevels && picturesLabels.size() == nbOfLevels && levelSteps.size() == nbOfLevels);
+        Preconditions.checkArgument(picturesPaths.size() == nbOfLevels+1 && picturesLabels.size() == nbOfLevels+1 && levelSteps.size() == nbOfLevels);
 
         this.nbOfLevels = nbOfLevels;
         this.evaluatedCriteria = evaluatedCriteria;
@@ -40,13 +40,13 @@ public final class Achievement {
 
 
     public String getAchievementLevelImage(int level){
-        Preconditions.checkArgument(0<=level && level<=MAX_ACHIEVEMENT_LEVEL);
+        Preconditions.checkArgument(0<=level && level<=nbOfLevels);
 
         return picturesPaths.get(level);
     }
 
     public String getAchievementLevelLabel(int level){
-        Preconditions.checkArgument(0<=level && level<=MAX_ACHIEVEMENT_LEVEL);
+        Preconditions.checkArgument(0<=level && level<=nbOfLevels);
 
         return picturesLabels.get(level);
     }

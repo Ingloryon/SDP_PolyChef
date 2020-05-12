@@ -16,11 +16,13 @@ public final class AchievementsList {
     private static Achievement createCuistotAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
+        picturesPaths.add("cuistot_default");
         picturesPaths.add("cuistot_bronze");
         picturesPaths.add("cuistot_silver");
         picturesPaths.add("cuistot_diamond");
 
         ArrayList<String> picturesLabels = new ArrayList<>();
+        picturesLabels.add("No recipes");
         picturesLabels.add("Starting Chef");
         picturesLabels.add("Casual Chef");
         picturesLabels.add("Legacy Chef");
@@ -38,11 +40,13 @@ public final class AchievementsList {
     private static Achievement createFollowedAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
+        picturesPaths.add("followed_default");
         picturesPaths.add("followed_bronze");
         picturesPaths.add("followed_silver");
         picturesPaths.add("followed_diamond");
 
         ArrayList<String> picturesLabels = new ArrayList<>();
+        picturesLabels.add("No followers");
         picturesLabels.add("Followed Chef");
         picturesLabels.add("Famous Chef");
         picturesLabels.add("Renowned Chef");
@@ -60,11 +64,13 @@ public final class AchievementsList {
     private static Achievement createFavoriteAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
+        picturesPaths.add("favorite_default");
         picturesPaths.add("favorite_bronze");
         picturesPaths.add("favorite_silver");
         picturesPaths.add("favorite_diamond");
 
         ArrayList<String> picturesLabels = new ArrayList<>();
+        picturesLabels.add("No favorites");
         picturesLabels.add("Curious Chef");
         picturesLabels.add("Local Chef");
         picturesLabels.add("Library Chef");
