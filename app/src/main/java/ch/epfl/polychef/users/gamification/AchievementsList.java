@@ -5,11 +5,25 @@ import java.util.function.Function;
 
 import ch.epfl.polychef.users.User;
 
+/**
+ * Static achievements that can be obtained by the users.
+ */
 public final class AchievementsList {
-    private static final int STANDART_NB_LEVELS = 3;
+    private static final int STANDARD_NB_LEVELS = 3;
 
+    /**
+     * The Cuistot achievement depends on the number of Recipes the user posted (levels: 0/1/10/50).
+     */
     public static final Achievement cuistotAchievement = createCuistotAchievement();
+
+    /**
+     * The Followed achievement depends on the number of followers the user has (levels: 0/1/30/100).
+     */
     public static final Achievement followedAchievement = createFollowedAchievement();
+
+    /**
+     * The Favorite achievement depends on the number of favorites the user has (levels:0/1/10/50).
+     */
     public static final Achievement favoriteAchievement = createFavoriteAchievement();
 
 
@@ -34,7 +48,7 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbRecipes = u -> u.getRecipes().size();
 
-        return new Achievement(STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
+        return new Achievement(STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
     }
 
     private static Achievement createFollowedAchievement(){
@@ -58,7 +72,7 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbFollowers = u -> u.getSubscribers().size();
 
-        return new Achievement(STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
+        return new Achievement(STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
     }
 
     private static Achievement createFavoriteAchievement(){
@@ -82,6 +96,6 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbFavorites = u -> u.getFavourites().size();
 
-        return new Achievement(STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFavorites);
+        return new Achievement(STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFavorites);
     }
 }
