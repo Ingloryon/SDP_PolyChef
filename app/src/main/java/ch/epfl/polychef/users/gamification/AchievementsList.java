@@ -30,30 +30,17 @@ public final class AchievementsList {
         return achievementList;
     }
 
-    /**
-     * The Cuistot achievement depends on the number of Recipes the user posted (levels: 0/1/10/50).
-     */
-    private static final Achievement cuistotAchievement = createCuistotAchievement();
-
-    /**
-     * The Followed achievement depends on the number of followers the user has (levels: 0/1/30/100).
-     */
-    private static final Achievement followedAchievement = createFollowedAchievement();
-
-    /**
-     * The Favorite achievement depends on the number of favorites the user has (levels:0/1/10/50).
-     */
-    private static final Achievement favoriteAchievement = createFavoriteAchievement();
-
-
     private AchievementsList(){
         achievementList = new ArrayList<>();
-        achievementList.add(cuistotAchievement);
-        achievementList.add(followedAchievement);
-        achievementList.add(favoriteAchievement);
+        achievementList.add(createCuistotAchievement());
+        achievementList.add(createFollowedAchievement());
+        achievementList.add(createFavoriteAchievement());
     }
 
 
+    /**
+     * The Cuistot achievement depends on the number of Recipes the user posted (levels: 0/1/10/50).
+     */
     private static Achievement createCuistotAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
@@ -78,6 +65,9 @@ public final class AchievementsList {
         return new Achievement("cuistot", STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
     }
 
+    /**
+     * The Followed achievement depends on the number of followers the user has (levels: 0/1/30/100).
+     */
     private static Achievement createFollowedAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
@@ -102,6 +92,9 @@ public final class AchievementsList {
         return new Achievement("followed", STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
     }
 
+    /**
+     * The Favorite achievement depends on the number of favorites the user has (levels:0/1/10/50).
+     */
     private static Achievement createFavoriteAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();

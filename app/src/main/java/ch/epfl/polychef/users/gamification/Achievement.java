@@ -13,9 +13,9 @@ import ch.epfl.polychef.utils.Preconditions;
  */
 public final class Achievement {
     private static final int MAX_ACHIEVEMENT_LEVEL = 5;
-    private final List<Integer> levelSteps = new ArrayList<>();
-    private final List<String> picturesLabels = new ArrayList<>();
-    private final List<String> picturesPaths = new ArrayList<>();
+    private final List<Integer> levelSteps;
+    private final List<String> picturesLabels;
+    private final List<String> picturesPaths;
     private final int nbOfLevels;
     private final Function<User, Integer> evaluatedCriteria;
     private final String name;
@@ -36,9 +36,9 @@ public final class Achievement {
         this.name = name;
         this.nbOfLevels = nbOfLevels;
         this.evaluatedCriteria = evaluatedCriteria;
-        Collections.copy(this.levelSteps, levelSteps);
-        Collections.copy(this.picturesLabels, picturesLabels);
-        Collections.copy(this.picturesPaths, picturesPaths);
+        this.levelSteps = new ArrayList<>(levelSteps);
+        this.picturesLabels = new ArrayList<>(picturesLabels);
+        this.picturesPaths = new ArrayList<>(picturesPaths);
     }
 
     /**

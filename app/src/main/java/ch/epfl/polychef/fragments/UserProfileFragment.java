@@ -102,8 +102,6 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         });
         toggleButton = view.findViewById(R.id.subscribeButton);
 
-        determineAndDisplayAchievements(view);
-
         return view;
     }
 
@@ -141,6 +139,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ImageView image = view.findViewById(R.id.usersImage);
         image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
 
+        determineAndDisplayAchievements(view);
         getNextRecipes();
         setupProfilePictureButton();
     }
