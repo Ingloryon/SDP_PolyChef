@@ -48,7 +48,9 @@ public final class Achievement {
      */
     public int getLevel(User user){
         for(int i = 0 ; i < levelSteps.size() ; ++i){
-            if(evaluatedCriteria.apply(user) < levelSteps.get(i)) return i;
+            if(evaluatedCriteria.apply(user) < levelSteps.get(i)) {
+                return i;
+            }
         }
         return nbOfLevels;
     }

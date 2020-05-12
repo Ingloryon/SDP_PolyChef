@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
@@ -37,6 +39,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     private static final String TAG = "UserProfileFragment";
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
     private User userToDisplay;
+    private List<String> labelsOfDisplayedAchievements;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
 
@@ -214,20 +217,20 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         });
     }
 
-
     private void determineAndDisplayAchievements(View view){
         List<Achievement> achievementList = AchievementsList.getInstance().getAllAchievements();
+        Context context= GlobalApplication.getAppContext();
 
         for (int i = 0 ; i < achievementList.size() ; ++i){
             Achievement achievement = achievementList.get(i);
-            ImageView imageView = view.findViewById(getImageViewAchievementId(achievement.getName()));
+            ImageView image = view.findViewById(getImageViewAchievementId(achievement.getName()));
+            int achievementLevel = achievement.getLevel(userToDisplay);
 
+            setAchievementToastOnClick(image, achievement.getLevelLabel(achievementLevel));
+
+            int resourceImage = context.getResources().getIdentifier(achievement.getLevelImage(achievementLevel), "drawable", context.getPackageName());
+            image.setImageResource(resourceImage);
         }
-
-        ImageView image = view.findViewById(R.id.usersImage);
-        image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
-
-
     }
 
     private int getImageViewAchievementId(String achievementName) {
@@ -241,6 +244,16 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
             default:
                 throw new IllegalArgumentException("There are no image view corresponding to this achievement name.");
         }
+    }
+
+    private void setAchievementToastOnClick(ImageView image, String achievementLabel) {
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), achievementLabel , Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
