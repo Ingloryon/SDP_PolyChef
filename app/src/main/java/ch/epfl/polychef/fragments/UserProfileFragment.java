@@ -29,8 +29,8 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
-import ch.epfl.polychef.users.gamification.Achievement;
-import ch.epfl.polychef.users.gamification.AchievementsList;
+import ch.epfl.polychef.gamification.Achievement;
+import ch.epfl.polychef.gamification.AchievementsList;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 

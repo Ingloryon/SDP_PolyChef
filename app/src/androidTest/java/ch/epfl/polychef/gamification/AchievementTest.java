@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import ch.epfl.polychef.users.User;
-import ch.epfl.polychef.users.gamification.Achievement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -83,7 +82,7 @@ public class AchievementTest {
         assertEquals(achi.getLevelImage(2), "pict2");
         assertEquals(achi.getLevelLabel(2), "label2");
     }
-    
+
 
     private Achievement createValidAchievement() {
         return new Achievement("cuistot", 3, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);

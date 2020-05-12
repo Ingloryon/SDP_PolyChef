@@ -1,4 +1,4 @@
-package ch.epfl.polychef.users.gamification;
+package ch.epfl.polychef.gamification;
 
 import java.util.ArrayList;
 import java.util.List;
