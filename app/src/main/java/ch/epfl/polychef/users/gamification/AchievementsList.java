@@ -30,7 +30,7 @@ public final class AchievementsList {
     private static Achievement createCuistotAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
-        picturesPaths.add("cuistot_default");
+        picturesPaths.add("cuistot_none");
         picturesPaths.add("cuistot_bronze");
         picturesPaths.add("cuistot_silver");
         picturesPaths.add("cuistot_diamond");
@@ -54,7 +54,7 @@ public final class AchievementsList {
     private static Achievement createFollowedAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
-        picturesPaths.add("followed_default");
+        picturesPaths.add("followed_none");
         picturesPaths.add("followed_bronze");
         picturesPaths.add("followed_silver");
         picturesPaths.add("followed_diamond");
@@ -78,7 +78,7 @@ public final class AchievementsList {
     private static Achievement createFavoriteAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
-        picturesPaths.add("favorite_default");
+        picturesPaths.add("favorite_none");
         picturesPaths.add("favorite_bronze");
         picturesPaths.add("favorite_silver");
         picturesPaths.add("favorite_diamond");
