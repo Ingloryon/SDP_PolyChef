@@ -77,7 +77,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/UserEmailDisplay" />
 
             <ImageView
-                android:id="@+id/cuisto_achievement"
+                android:id="@+id/cuistot_achievement"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="16dp"
@@ -101,7 +101,7 @@
                 android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/favorite_achievement"
-                app:layout_constraintStart_toEndOf="@+id/cuisto_achievement"
+                app:layout_constraintStart_toEndOf="@+id/cuistot_achievement"
                 app:layout_constraintTop_toBottomOf="@+id/usersImage"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/followed_none" />

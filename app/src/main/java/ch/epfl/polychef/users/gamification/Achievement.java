@@ -18,6 +18,7 @@ public final class Achievement {
     private final List<String> picturesPaths = new ArrayList<>();
     private final int nbOfLevels;
     private final Function<User, Integer> evaluatedCriteria;
+    private final String name;
 
 
     /**
@@ -28,10 +29,11 @@ public final class Achievement {
      * @param levelSteps the required steps needed to achieve the given levels
      * @param evaluatedCriteria the function returning the number of the evaluated criteria for the user
      */
-    public Achievement(int nbOfLevels, ArrayList<String> picturesPaths, ArrayList<String> picturesLabels, ArrayList<Integer> levelSteps, Function<User, Integer> evaluatedCriteria){
+    public Achievement(String name, int nbOfLevels, ArrayList<String> picturesPaths, ArrayList<String> picturesLabels, ArrayList<Integer> levelSteps, Function<User, Integer> evaluatedCriteria){
         Preconditions.checkArgument(0 < nbOfLevels && nbOfLevels <= MAX_ACHIEVEMENT_LEVEL, "The number of levelSteps must be strictly positive and less than the maximum number of levelSteps (" + MAX_ACHIEVEMENT_LEVEL + ")");
         Preconditions.checkArgument(picturesPaths.size() == nbOfLevels+1 && picturesLabels.size() == nbOfLevels+1 && levelSteps.size() == nbOfLevels);
 
+        this.name = name;
         this.nbOfLevels = nbOfLevels;
         this.evaluatedCriteria = evaluatedCriteria;
         Collections.copy(this.levelSteps, levelSteps);

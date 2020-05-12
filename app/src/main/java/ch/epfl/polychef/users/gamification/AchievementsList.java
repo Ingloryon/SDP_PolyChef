@@ -75,7 +75,7 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbRecipes = u -> u.getRecipes().size();
 
-        return new Achievement(STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
+        return new Achievement("cuistot", STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
     }
 
     private static Achievement createFollowedAchievement(){
@@ -99,7 +99,7 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbFollowers = u -> u.getSubscribers().size();
 
-        return new Achievement(STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
+        return new Achievement("followed", STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
     }
 
     private static Achievement createFavoriteAchievement(){
@@ -111,7 +111,7 @@ public final class AchievementsList {
         picturesPaths.add("favorite_diamond");
 
         ArrayList<String> picturesLabels = new ArrayList<>();
-        picturesLabels.add("No favorites");
+        picturesLabels.add("No favorite");
         picturesLabels.add("Curious Chef");
         picturesLabels.add("Local Chef");
         picturesLabels.add("Library Chef");
@@ -123,6 +123,6 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbFavorites = u -> u.getFavourites().size();
 
-        return new Achievement(STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFavorites);
+        return new Achievement("favorite", STANDARD_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFavorites);
     }
 }

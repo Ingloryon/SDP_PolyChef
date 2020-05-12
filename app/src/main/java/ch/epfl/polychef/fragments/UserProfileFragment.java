@@ -99,7 +99,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         });
         toggleButton = view.findViewById(R.id.subscribeButton);
 
-        determineAndDisplayAchievements();
+        determineAndDisplayAchievements(view);
 
         return view;
     }
@@ -215,14 +215,16 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
 
-    private void determineAndDisplayAchievements(){
+    private void determineAndDisplayAchievements(View view){
         List<Achievement> achievementList = AchievementsList.getInstance().getAllAchievements();
 
         for (int i = 0 ; i < achievementList.size() ; ++i){
-
-
+            ImageView iv1 = view.findViewById(R.id.subscribeButton);
 
         }
+
+        ImageView image = view.findViewById(R.id.usersImage);
+        image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
 
 
     }
