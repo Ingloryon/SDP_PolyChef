@@ -1,6 +1,7 @@
 package ch.epfl.polychef.users.gamification;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import ch.epfl.polychef.users.User;
@@ -10,21 +11,47 @@ import ch.epfl.polychef.users.User;
  */
 public final class AchievementsList {
     private static final int STANDARD_NB_LEVELS = 3;
+    private static final AchievementsList achievementListInstance = new AchievementsList();
+    private List<Achievement> achievementList;
+
+    /**
+     * Gets the unique instance of AchievementList (Singleton)
+     * @return the instance of AchievementList
+     */
+    public static AchievementsList getInstance(){
+        return achievementListInstance;
+    }
+
+    /**
+     * Gets the common achievements list
+     * @return the common achievements list
+     */
+    public List<Achievement> getAllAchievements() {
+        return achievementList;
+    }
 
     /**
      * The Cuistot achievement depends on the number of Recipes the user posted (levels: 0/1/10/50).
      */
-    public static final Achievement cuistotAchievement = createCuistotAchievement();
+    private static final Achievement cuistotAchievement = createCuistotAchievement();
 
     /**
      * The Followed achievement depends on the number of followers the user has (levels: 0/1/30/100).
      */
-    public static final Achievement followedAchievement = createFollowedAchievement();
+    private static final Achievement followedAchievement = createFollowedAchievement();
 
     /**
      * The Favorite achievement depends on the number of favorites the user has (levels:0/1/10/50).
      */
-    public static final Achievement favoriteAchievement = createFavoriteAchievement();
+    private static final Achievement favoriteAchievement = createFavoriteAchievement();
+
+
+    private AchievementsList(){
+        achievementList = new ArrayList<>();
+        achievementList.add(cuistotAchievement);
+        achievementList.add(followedAchievement);
+        achievementList.add(favoriteAchievement);
+    }
 
 
     private static Achievement createCuistotAchievement(){

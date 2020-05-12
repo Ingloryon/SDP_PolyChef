@@ -27,6 +27,7 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.gamification.Achievement;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 
@@ -96,6 +97,9 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
             }
         });
         toggleButton = view.findViewById(R.id.subscribeButton);
+
+        determineAndDisplayAchievements();
+
         return view;
     }
 
@@ -207,6 +211,13 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
                 }
             }
         });
+    }
+
+
+    private void determineAndDisplayAchievements(){
+        //Achievement =
+
+
     }
 
 }
