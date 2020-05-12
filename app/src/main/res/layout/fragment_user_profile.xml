@@ -16,6 +16,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/UserRecipesList"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -34,7 +35,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/UsernameDisplay"
@@ -88,7 +89,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/usersImage"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/cuistot_bronze" />
+                app:srcCompat="@drawable/cuisto_none" />
 
             <ImageView
                 android:id="@+id/followed_achievement"
@@ -103,7 +104,7 @@
                 app:layout_constraintStart_toEndOf="@+id/cuisto_achievement"
                 app:layout_constraintTop_toBottomOf="@+id/usersImage"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/followed_bronze" />
+                app:srcCompat="@drawable/followed_none" />
 
             <ImageView
                 android:id="@+id/stared_achievement"
@@ -118,7 +119,7 @@
                 app:layout_constraintStart_toEndOf="@+id/followed_achievement"
                 app:layout_constraintTop_toBottomOf="@+id/usersImage"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/favorite_bronze" />
+                app:srcCompat="@drawable/stared_none" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
