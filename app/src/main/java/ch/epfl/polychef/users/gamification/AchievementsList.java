@@ -1,10 +1,8 @@
 package ch.epfl.polychef.users.gamification;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
-import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 
 public final class AchievementsList {
@@ -12,7 +10,7 @@ public final class AchievementsList {
 
     public static final Achievement cuistotAchievement = createCuistotAchievement();
     public static final Achievement followedAchievement = createFollowedAchievement();
-    public static final Achievement staredAchievement = createStaredAchievement();
+    public static final Achievement favoriteAchievement = createFavoriteAchievement();
 
 
     private static Achievement createCuistotAchievement(){
@@ -34,7 +32,7 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbRecipes = u -> u.getRecipes().size();
 
-        return new Achievement("Cuistot", STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
+        return new Achievement(STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
     }
 
     private static Achievement createFollowedAchievement(){
@@ -56,39 +54,28 @@ public final class AchievementsList {
 
         Function<User, Integer> getUserNbFollowers = u -> u.getSubscribers().size();
 
-        return new Achievement("Cuistot", STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
+        return new Achievement(STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
     }
 
-    private static Achievement createStaredAchievement(){
+    private static Achievement createFavoriteAchievement(){
 
         ArrayList<String> picturesPaths = new ArrayList<>();
-        picturesPaths.add("stared_bronze");
-        picturesPaths.add("stared_silver");
-        picturesPaths.add("stared_diamond");
+        picturesPaths.add("favorite_bronze");
+        picturesPaths.add("favorite_silver");
+        picturesPaths.add("favorite_diamond");
 
         ArrayList<String> picturesLabels = new ArrayList<>();
-        picturesLabels.add("Rated Chef");
-        picturesLabels.add("Appreciated Chef");
-        picturesLabels.add("Adored Chef");
+        picturesLabels.add("Curious Chef");
+        picturesLabels.add("Local Chef");
+        picturesLabels.add("Library Chef");
 
         ArrayList<Integer> levelSteps = new ArrayList<>();
         levelSteps.add(1);
-        levelSteps.add(30);
-        levelSteps.add(100);
+        levelSteps.add(10);
+        levelSteps.add(50);
 
-        //Function<User, Integer> getUserNbFollowers = u -> u.getFavourites().size();
-        Function<User, Integer> getUserNbFollowers = u -> {
+        Function<User, Integer> getUserNbFavorites = u -> u.getFavourites().size();
 
-            int nbRecipes = u.getRecipes().size();
-            /*for(int i = 0 ; i < nbRecipes; i++){
-                String stringUuid = u.getRecipes().get(nbRecipes - i - 1);
-                hostActivity.getRecipeStorage().readRecipeFromUuid(stringUuid, UserProfileFragment.this);
-            }*/
-
-            return 0;
-        };
-
-        return new Achievement("Cuistot", STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
+        return new Achievement(STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFavorites);
     }
-
 }

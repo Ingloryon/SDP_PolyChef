@@ -20,7 +20,7 @@ public final class Achievement {
     private final Function<User, Integer> evaluatedCriteria;
 
 
-    public Achievement(String name, int nbOfLevels, ArrayList<String> picturesPaths, ArrayList<String> picturesLabels, ArrayList<Integer> levelSteps, Function<User, Integer> evaluatedCriteria){
+    public Achievement(int nbOfLevels, ArrayList<String> picturesPaths, ArrayList<String> picturesLabels, ArrayList<Integer> levelSteps, Function<User, Integer> evaluatedCriteria){
         Preconditions.checkArgument(0 < nbOfLevels && nbOfLevels <= MAX_ACHIEVEMENT_LEVEL, "The number of levelSteps must be strictly positive and less than the maximum number of levelSteps (" + MAX_ACHIEVEMENT_LEVEL + ")");
         Preconditions.checkArgument(picturesPaths.size() == nbOfLevels && picturesLabels.size() == nbOfLevels && levelSteps.size() == nbOfLevels);
 

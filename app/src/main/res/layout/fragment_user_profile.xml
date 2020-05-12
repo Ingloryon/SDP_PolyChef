@@ -118,7 +118,7 @@
                 app:layout_constraintStart_toEndOf="@+id/followed_achievement"
                 app:layout_constraintTop_toBottomOf="@+id/usersImage"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/stared_bronze" />
+                app:srcCompat="@drawable/favorite_bronze" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
