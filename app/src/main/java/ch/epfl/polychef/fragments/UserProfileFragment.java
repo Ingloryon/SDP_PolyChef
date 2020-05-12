@@ -28,6 +28,7 @@ import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.gamification.Achievement;
+import ch.epfl.polychef.users.gamification.AchievementsList;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 
@@ -215,7 +216,13 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
 
     private void determineAndDisplayAchievements(){
-        //Achievement =
+        List<Achievement> achievementList = AchievementsList.getInstance().getAllAchievements();
+
+        for (int i = 0 ; i < achievementList.size() ; ++i){
+
+
+
+        }
 
 
     }
