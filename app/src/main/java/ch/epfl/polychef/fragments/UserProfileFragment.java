@@ -219,7 +219,8 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         List<Achievement> achievementList = AchievementsList.getInstance().getAllAchievements();
 
         for (int i = 0 ; i < achievementList.size() ; ++i){
-            ImageView iv1 = view.findViewById(R.id.subscribeButton);
+            Achievement achievement = achievementList.get(i);
+            ImageView imageView = view.findViewById(getImageViewAchievementId(achievement.getName()));
 
         }
 
@@ -227,6 +228,19 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
 
 
+    }
+
+    private int getImageViewAchievementId(String achievementName) {
+        switch (achievementName) {
+            case "cuistot":
+                return R.id.cuistot_achievement;
+            case "followed":
+                return R.id.followed_achievement;
+            case "favorite":
+                return R.id.favorite_achievement;
+            default:
+                throw new IllegalArgumentException("There are no image view corresponding to this achievement name.");
+        }
     }
 
 }

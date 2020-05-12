@@ -46,7 +46,7 @@ public final class Achievement {
      * @param user the user to evaluate
      * @return the level achieved
      */
-    public int getAchivementLevel(User user){
+    public int getLevel(User user){
         for(int i = 0 ; i < levelSteps.size() ; ++i){
             if(evaluatedCriteria.apply(user) < levelSteps.get(i)) return i;
         }
@@ -59,7 +59,7 @@ public final class Achievement {
      * @param level the level of achievement
      * @return the image name of the corresponding achievement level
      */
-    public String getAchievementLevelImage(int level){
+    public String getLevelImage(int level){
         Preconditions.checkArgument(0<=level && level<=nbOfLevels);
 
         return picturesPaths.get(level);
@@ -70,10 +70,18 @@ public final class Achievement {
      * @param level the level of achievement
      * @return the label name of the corresponding achievement level
      */
-    public String getAchievementLevelLabel(int level){
+    public String getLevelLabel(int level){
         Preconditions.checkArgument(0<=level && level<=nbOfLevels);
 
         return picturesLabels.get(level);
+    }
+
+    /**
+     * Gets the name of the achievement
+     * @return the name of the achievement
+     */
+    public String getName(){
+        return name;
     }
 
 }
