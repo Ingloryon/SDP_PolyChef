@@ -8,7 +8,8 @@ import ch.epfl.polychef.users.User;
 public final class AchievementsList {
     private static final int STANDART_NB_LEVELS = 3;
 
-    public static final Achievement Cuistot_Achievement = createCuistotAchievement();
+    public static final Achievement cuistotAchievement = createCuistotAchievement();
+    public static final Achievement follwedAchievement = createFollowedAchievement();
 
 
     private static Achievement createCuistotAchievement(){
@@ -31,6 +32,28 @@ public final class AchievementsList {
         Function<User, Integer> getUserNbRecipes = u -> u.getRecipes().size();
 
         return new Achievement("Cuistot", STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbRecipes);
+    }
+
+    private static Achievement createFollowedAchievement(){
+
+        ArrayList<String> picturesPaths = new ArrayList<>();
+        picturesPaths.add("followed_bronze");
+        picturesPaths.add("followed_silver");
+        picturesPaths.add("followed_diamond");
+
+        ArrayList<String> picturesLabels = new ArrayList<>();
+        picturesLabels.add("Followed Chef");
+        picturesLabels.add("Famous Chef");
+        picturesLabels.add("Renowned Chef");
+
+        ArrayList<Integer> levelSteps = new ArrayList<>();
+        levelSteps.add(1);
+        levelSteps.add(30);
+        levelSteps.add(100);
+
+        Function<User, Integer> getUserNbFollowers = u -> u.getSubscribers().size();
+
+        return new Achievement("Cuistot", STANDART_NB_LEVELS, picturesPaths, picturesLabels, levelSteps, getUserNbFollowers);
     }
 
     //"Followed"
