@@ -12,31 +12,34 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Opinion;
-import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMiniatureAdapter.MiniatureViewHolder> {
 
     private Context mainContext;
-    private List<Opinion> opinions;
     private RecyclerView recyclerView;
-    private UserStorage userStorage;
-    private Recipe recipe;
+    private HashMap<Opinion, User> userOp;
+    List<Opinion> opinions;
 
-    public OpinionsMiniatureAdapter(Context mainContext, Recipe recipe, RecyclerView recyclerView, UserStorage userStorage){
+    public OpinionsMiniatureAdapter(Context mainContext, List<Opinion> opinions, HashMap<Opinion, User> userOp, RecyclerView recyclerView, UserStorage userStorage){
         this.mainContext = mainContext;
         this.recyclerView = recyclerView;
-        this.userStorage = userStorage;
-        this.recipe = recipe;
-        opinions = new ArrayList<>();
-        for(Opinion opinion : recipe.getRating().getAllOpinion().values()){
-            opinions.add(opinion);
-        }
+        this.userOp = userOp;
+        this.opinions = opinions;
+    }
+
+    public void setHashMap(HashMap<Opinion, User> newUserOp){
+        this.userOp = newUserOp;
+    }
+
+    public void setOpinionsList(List<Opinion> newOpinions){
+        this.opinions = newOpinions;
     }
 
     @NonNull
@@ -53,8 +56,8 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         Opinion opinion = opinions.get(position);
         holder.rate.setRating(opinion.getRate());
         holder.commentText.setText(opinion.getComment());
-
-        // Handle image
+        holder.commentUsername.setText(userOp.get(opinion).getUsername());
+        holder.profilePict.setImageResource(userOp.get(opinion).getProfilePictureId());
     }
 
     @Override
@@ -67,12 +70,14 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         RatingBar rate;
         ImageView profilePict;
         TextView commentText;
+        TextView commentUsername;
 
         public MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             rate = itemView.findViewById(R.id.ratingCommentBar);
             profilePict = itemView.findViewById(R.id.commentProfilePict);
             commentText = itemView.findViewById(R.id.commentText);
+            commentUsername = itemView.findViewById(R.id.commentUsername);
         }
     }
 

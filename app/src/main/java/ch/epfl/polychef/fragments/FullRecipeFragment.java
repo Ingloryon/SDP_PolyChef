@@ -18,11 +18,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.synnapps.carouselview.CarouselView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
@@ -55,7 +57,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
     private List<Opinion> dynamicOpinionsList = new ArrayList<>();
+    private HashMap<Opinion, User> savedMatchOpUser = new HashMap<>();
     public static final int nbOfOpinionsLoadedAtATime = 5;
+    private boolean isLoading = false;
+    private UserStorage userStorage;
+    private int currentIndex;
 
     private int indexOfInstruction=-1;
 
@@ -102,7 +108,19 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         containerId = container.getId();
 
+        loadNewComments();
+        opinionsRecyclerView = view.findViewById(R.id.opinionsList);
+        opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), dynamicOpinionsList, savedMatchOpUser, );
+
         return view;
+    }
+
+    private void loadNewComments(){
+
+        userStorage.getUserByID();
+
+
     }
 
     private void displayAuthorName(View view) {

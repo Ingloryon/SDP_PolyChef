@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/miniatureCommentCard"
-    android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true">
@@ -31,8 +31,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ratingCommentBar"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/corn_profile_polychef" />
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/commentUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="277dp"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/commentProfilePict"
+            app:layout_constraintTop_toBottomOf="@+id/ratingCommentBar" />
 
         <TextView
             android:id="@+id/commentText"
@@ -40,14 +51,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="128dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.063"
             app:layout_constraintStart_toEndOf="@+id/commentProfilePict"
-            app:layout_constraintTop_toBottomOf="@+id/ratingCommentBar"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/commentUsername" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
