@@ -17,10 +17,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
-public class LoginPage extends AppCompatActivity{
+public class LoginPage extends AppCompatActivity implements CallHandler<User> {
 
     SignInButton googleButton;
 
@@ -58,7 +60,7 @@ public class LoginPage extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
         FirebaseUser user = getUser();
         if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK && user != null) {
-            startNextActivity();
+            prepareNextActivity();
         } else {
             Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
         }
@@ -68,8 +70,21 @@ public class LoginPage extends AppCompatActivity{
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    public void prepareNextActivity(){
+        UserStorage.getInstance().initializeUserFromAuthenticatedUser(this);
+    }
+
+    @Override
+    public void onFailure() {
+        //TODO fail gracefully
+    }
+
+    @Override
+    public void onSuccess(User data) {
+        startNextActivity();
+    }
+
     public void startNextActivity() {
-        UserStorage.getInstance().initializeUserFromAuthenticatedUser();
         startActivity(new Intent(this, HomePage.class));
     }
 }

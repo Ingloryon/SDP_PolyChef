@@ -12,10 +12,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
-public class EntryPage extends AppCompatActivity {
+public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
     private Button logButton;
     private OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();
@@ -57,7 +60,8 @@ public class EntryPage extends AppCompatActivity {
 
     protected void goHomeIfConnected() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            startActivity(new Intent(this, HomePage.class));
+//            startActivity(new Intent(this, HomePage.class));
+            UserStorage.getInstance().initializeUserFromAuthenticatedUser(this);
         }
     }
 
@@ -67,4 +71,13 @@ public class EntryPage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onFailure() {
+
+    }
+
+    @Override
+    public void onSuccess(User data) {
+        startActivity(new Intent(this, HomePage.class));
+    }
 }

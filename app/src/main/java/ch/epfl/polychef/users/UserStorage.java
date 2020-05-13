@@ -31,7 +31,7 @@ public class UserStorage {
     private UserStorage() {
     }
 
-    public void initializeUserFromAuthenticatedUser() {
+    public void initializeUserFromAuthenticatedUser(CallHandler<User> caller) {
         String email = getAuthenticatedUserEmail();
 
         getDatabase()
@@ -53,8 +53,12 @@ public class UserStorage {
                             }
 
                         } else {
+                            caller.onFailure();
                             throw new IllegalStateException("Inconsistent result: multiple user with the same email.");
                         }
+
+                        //We have received the user, so we send it back to the caller
+                        caller.onSuccess(user);
                     }
 
                     @Override
@@ -89,7 +93,6 @@ public class UserStorage {
             FavouritesUtils.getInstance().setOfflineFavourites(user);
             FirebaseMessaging.getInstance().setAutoInitEnabled(true);
         } else {
-            //TODO: Find good exception to throw
             throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");
         }
     }

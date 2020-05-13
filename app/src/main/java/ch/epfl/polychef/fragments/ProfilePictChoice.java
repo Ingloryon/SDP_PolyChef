@@ -58,7 +58,7 @@ public class ProfilePictChoice extends Fragment {
             public void onItemClick(AdapterView<?> adaptor, View view, int position, long id) {
                 User updatedUser=hostActivity.getUserStorage().getPolyChefUser();
                 updatedUser.setProfilePictureId(position);
-
+                hostActivity.setupProfilePicture();
                 hostActivity.getUserStorage().updateUserInfo(updatedUser);
             }
         });

@@ -22,12 +22,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.ConnectedActivity;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class HomePage extends ConnectedActivity {
@@ -48,7 +50,7 @@ public class HomePage extends ConnectedActivity {
         setContentView(R.layout.activity_home_page);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        getUserStorage().initializeUserFromAuthenticatedUser();
+//        getUserStorage().initializeUserFromAuthenticatedUser(this);
 
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -62,13 +64,12 @@ public class HomePage extends ConnectedActivity {
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
         navController = NavHostFragment.findNavController(hostFragment);
+        navController.setGraph(R.navigation.nav_graph);
 
         navView = findViewById(R.id.navigationView);
 
-        // Set this bundle to be an arguments of the startDestination using this trick
-        navController.setGraph(R.navigation.nav_graph);
-
-        setupNavigation();
+//        setupNavigation();
+        setupDrawer();
 
         if(getIntent().getExtras() != null) {
             Recipe toSendRecipe = (Recipe)getIntent().getExtras().getSerializable("RecipeToSend");
@@ -80,27 +81,36 @@ public class HomePage extends ConnectedActivity {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    public void setupDrawer(){
+        View headerView = navView.getHeaderView(0);
 
-        updateDrawerInfo(navView.getHeaderView(0));
+        setupUserInfo(headerView);
+
+        setupProfilePicture();
+
+        setupProfileNavigation(headerView);
+
+        setupNavigation();
     }
 
-    public void updateDrawerInfo(View parentView) {
-        ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getUserStorage().getAuthenticatedUser().getEmail());
-        ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getUserStorage().getAuthenticatedUser().getDisplayName());
+    public void setupUserInfo(View parentView) {
+        ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getPolychefUser().getEmail());
+        ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getPolychefUser().getUsername());
     }
 
-    public void setupUserProfileNavigation(View parentView){
-        ImageView profileImage = parentView.findViewById(R.id.drawerProfileImage);
-
-        profileImage.setOnClickListener((view) -> {
+    public void setupProfileNavigation(View parentView){
+        parentView.findViewById(R.id.drawerProfileImage).setOnClickListener((view) -> {
             setCurrentItemChecked(false);
             currentItem = null;
             navController.navigate(R.id.userProfileFragment);
             drawer.closeDrawer(GravityCompat.START, true);
         });
+    }
+
+    public void setupProfilePicture(){
+        ImageView profileImage = navView.getHeaderView(0).findViewById(R.id.drawerProfileImage);
+
+        profileImage.setImageResource(User.getResourceImageFromActivity(getPolychefUser()));
     }
 
     @Override
@@ -209,7 +219,7 @@ public class HomePage extends ConnectedActivity {
                 }
         );
 
-        setupUserProfileNavigation(navView.getHeaderView(0));
+//        setupUserProfileNavigation(navView.getHeaderView(0));
 
         //Home should be checked initially
         currentItem = navView.getMenu().findItem(R.id.nav_home);
@@ -232,6 +242,10 @@ public class HomePage extends ConnectedActivity {
         return ImageStorage.getInstance();
     }
 
+    public User getPolychefUser(){
+        return UserStorage.getInstance().getPolyChefUser();
+    }
+
     public NavController getNavController() {
         return navController;
     }
@@ -244,4 +258,5 @@ public class HomePage extends ConnectedActivity {
     public NotificationSender getNotificationSender() {
         return NotificationSender.getInstance();
     }
+
 }

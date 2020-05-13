@@ -93,7 +93,7 @@ public class UserStorageTest {
 
     @After
     public void initializeFakeUserStorage() {
-        fakeUserStorage.initializeUserFromAuthenticatedUser();
+        fakeUserStorage.initializeUserFromAuthenticatedUser(mock(CallHandler.class));
     }
 
     @Test
@@ -146,11 +146,11 @@ public class UserStorageTest {
 
         assertSendingBackCorrectUser(mockNewUserRef, new User(mockUserEmail, mockUserName));
 
-        fakeUserStorage.initializeUserFromAuthenticatedUser();
+        fakeUserStorage.initializeUserFromAuthenticatedUser(mock(CallHandler.class));
         //Need to launch updateUserInfo after initialization
         fakeUserStorage.updateUserInfo();
         //the initialization in the @After is superfluous
-        doNothing().when(fakeUserStorage).initializeUserFromAuthenticatedUser();
+        doNothing().when(fakeUserStorage).initializeUserFromAuthenticatedUser(any(CallHandler.class));
     }
 
 
