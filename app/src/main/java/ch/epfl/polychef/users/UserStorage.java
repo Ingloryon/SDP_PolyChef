@@ -9,7 +9,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import ch.epfl.polychef.CallHandler;
@@ -74,7 +73,7 @@ public class UserStorage {
                 .getReference(UserStorage.DB_NAME)
                 .push();
 
-        userKey=ref.getKey();
+        userKey = ref.getKey();
         user.setKey(ref.getKey());
         ref.setValue(user);
     }
@@ -146,29 +145,54 @@ public class UserStorage {
      */
     public void getUserByEmail(String email, CallHandler<User> caller) {
         getDatabase().getReference(UserStorage.DB_NAME).orderByChild("email").equalTo(email)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getChildrenCount() == 1) {
-                            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                if (child.exists()) {
-                                    User user = child.getValue(User.class);
-                                    user.setKey(child.getKey());
-                                    caller.onSuccess(user);
-                                } else {
-                                    caller.onFailure();
-                                }
-                            }
+                .addListenerForSingleValueEvent(getUniqueUser(caller));
+    }
+
+    /**
+     * Get a {@code User} by its ID in Firebase database.
+     *
+     * @param userID the id of the user
+     * @param caller the caller to call on success and failure
+     */
+    public void getUserByID(String userID, CallHandler<User> caller) {
+        getDatabase()
+                .getReference(UserStorage.DB_NAME)
+                .child(userID)
+                .addListenerForSingleValueEvent(getUniqueUser(caller));
+    }
+
+    private ValueEventListener getUniqueUser(CallHandler<User> caller) {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 1) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        if (child.exists()) {
+                            getUserFromDataSnapshot(child, caller);
                         } else {
                             caller.onFailure();
                         }
                     }
+                } else {
+                    getUserFromDataSnapshot(dataSnapshot, caller);
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        caller.onFailure();
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                caller.onFailure();
+            }
+        };
+    }
+
+    private void getUserFromDataSnapshot(DataSnapshot dataSnapshot, CallHandler<User> caller) {
+        User user = dataSnapshot.getValue(User.class);
+        if(user != null) {
+            user.setKey(dataSnapshot.getKey());
+            caller.onSuccess(user);
+        } else {
+            caller.onFailure();
+        }
     }
 
     /**
@@ -180,7 +204,7 @@ public class UserStorage {
         return FirebaseDatabase.getInstance();
     }
 
-    public SearchUser getSearch(){
+    public SearchUser getSearch() {
         return SearchUser.getInstance();
     }
 }

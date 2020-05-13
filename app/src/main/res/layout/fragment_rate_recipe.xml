@@ -55,6 +55,12 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <EditText
+                android:id="@+id/CommentText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_a_comment" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/post_recipe_spacing" />

@@ -1,5 +1,7 @@
 package ch.epfl.polychef.recipe;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;

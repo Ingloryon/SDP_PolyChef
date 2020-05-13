@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +19,13 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.Opinion;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
+import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Preconditions;
 
@@ -34,8 +38,12 @@ public class RateRecipeFragment extends Fragment {
     private Button postButton;
     private Recipe recipe;
 
+    Spinner spinner;
+    EditText comment;
+
     private FirebaseDatabase fireDatabase;
     private UserStorage userStorage;
+    private RecipeStorage recipeStorage;
 
     /**
      * Required empty public constructor.
@@ -68,6 +76,17 @@ public class RateRecipeFragment extends Fragment {
 
         recipe = (Recipe) bundle.getSerializable("RecipeToRate");
 
+        spinner = getView().findViewById(R.id.RateChoices);
+        comment = getView().findViewById(R.id.CommentText);
+
+        if(recipe.getRating().getAllOpinion().containsKey(userStorage.getPolyChefUser().getKey())) {
+            Opinion previousOpinion = recipe.getRating().getAllOpinion().get(userStorage.getPolyChefUser().getKey());
+            spinner.setSelection(previousOpinion.getRate());
+            if(previousOpinion.getComment() != null && !previousOpinion.getComment().isEmpty()) {
+                comment.setText(previousOpinion.getComment());
+            }
+        }
+
         String text = getActivity().getString(R.string.RateText) + " \"" + recipe.getName() + "\" ?";
         TextView rateText =  getView().findViewById(R.id.RateText);
         rateText.setText(text);
@@ -76,26 +95,26 @@ public class RateRecipeFragment extends Fragment {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkAndSendRate();
+                checkAndSendOpinion();
             }
         });
 
     }
 
-    private void checkAndSendRate(){
-        Spinner spinner = getView().findViewById(R.id.RateChoices);
+    private void checkAndSendOpinion(){
         // The index returned is the same as the nb of stars
-        int starNb = spinner.getSelectedItemPosition() ;
+        int starNb = spinner.getSelectedItemPosition();
 
         //TODO: remove -> the index returned = nb of stars
         /*String txt = Integer.toString(starNb);
         */
+        String commentString = comment.getText().toString().trim();
 
-        String userID = userStorage.getPolyChefUser().getKey();
+        String userKey = userStorage.getPolyChefUser().getKey();
 
-        Log.w(TAG, "userID "+userID);
-
-        int oldRating = recipe.getRating().addOpinion(userID, starNb);
+        int oldRating = commentString.isEmpty() ?
+                recipe.getRating().addOpinion(userKey, starNb)
+                : recipe.getRating().addOpinion(userKey, starNb, commentString);
 
         if(oldRating == -1 || oldRating==starNb) {
             String newRatingText =  "Your rating is " + starNb +" stars.";
@@ -105,9 +124,7 @@ public class RateRecipeFragment extends Fragment {
             Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
 
-
-        DatabaseReference ref = fireDatabase.getReference(RecipeStorage.DB_NAME).child(recipe.getKey());
-        ref.setValue(recipe);
+        recipeStorage.updateRecipe(recipe);
 
         getActivity().onBackPressed();
     }
@@ -120,6 +137,7 @@ public class RateRecipeFragment extends Fragment {
             HomePage homePage = (HomePage) context;
             fireDatabase = homePage.getFireDatabase();
             userStorage = homePage.getUserStorage();
+            recipeStorage = homePage.getRecipeStorage();
             Preconditions.checkArgument(fireDatabase != null && userStorage!=null );
         } else {
             throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");

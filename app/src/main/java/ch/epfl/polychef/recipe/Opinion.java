@@ -9,6 +9,12 @@ public class Opinion {
     private String comment;
     private int rate;
 
+    /**
+     * Empty constructor for Firebase.
+     */
+    public Opinion() {
+    }
+
     public Opinion(int rate) {
         this(rate, null);
     }

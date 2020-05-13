@@ -52,6 +52,13 @@ public class RecipeStorage implements Serializable  {
     private RecipeStorage(){
     }
 
+    public void updateRecipe(Recipe recipe) {
+        Preconditions.checkArgument(recipe != null, "Can not update an empty recipe");
+        getFirebaseDatabase()
+                .getReference(RecipeStorage.DB_NAME).child(recipe.getKey())
+                .setValue(recipe);
+    }
+
     /**
      * Add a new {@code Recipe} to the storage.
      *
