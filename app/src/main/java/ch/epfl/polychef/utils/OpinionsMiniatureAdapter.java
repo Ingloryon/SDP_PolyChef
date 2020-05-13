@@ -12,23 +12,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import org.w3c.dom.Comment;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Opinion;
+import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.users.UserStorage;
 
 public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMiniatureAdapter.MiniatureViewHolder> {
 
-    Context mainContext;
-    List<Opinion> opinions;
-    RecyclerView recyclerView;
+    private Context mainContext;
+    private List<Opinion> opinions;
+    private RecyclerView recyclerView;
+    private UserStorage userStorage;
+    private Recipe recipe;
 
-    public OpinionsMiniatureAdapter(Context mainContext, List<Opinion> opinions, RecyclerView recyclerView){
+    public OpinionsMiniatureAdapter(Context mainContext, Recipe recipe, RecyclerView recyclerView, UserStorage userStorage){
         this.mainContext = mainContext;
-        this.opinions = opinions;
         this.recyclerView = recyclerView;
+        this.userStorage = userStorage;
+        this.recipe = recipe;
+        opinions = new ArrayList<>();
+        for(Opinion opinion : recipe.getRating().getAllOpinion().values()){
+            opinions.add(opinion);
+        }
     }
 
     @NonNull
@@ -45,6 +53,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         Opinion opinion = opinions.get(position);
         holder.rate.setRating(opinion.getRate());
         holder.commentText.setText(opinion.getComment());
+
         // Handle image
     }
 

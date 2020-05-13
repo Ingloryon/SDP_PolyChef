@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.synnapps.carouselview.CarouselView;
 
@@ -30,11 +31,13 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
+import ch.epfl.polychef.recipe.Opinion;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.FavouritesUtils;
+import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
@@ -48,6 +51,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private TextView authorName;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
+
+    private RecyclerView opinionsRecyclerView;
+    private OpinionsMiniatureAdapter opinionsAdapter;
+    private List<Opinion> dynamicOpinionsList = new ArrayList<>();
+    public static final int nbOfOpinionsLoadedAtATime = 5;
 
     private int indexOfInstruction=-1;
 
