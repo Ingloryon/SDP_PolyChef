@@ -1,7 +1,6 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;

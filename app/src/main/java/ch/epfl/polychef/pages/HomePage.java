@@ -22,7 +22,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.FirebaseDatabase;
 
-import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.notifications.NotificationSender;
