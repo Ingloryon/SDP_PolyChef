@@ -7,4 +7,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="post_recipe_margin">8dp</dimen>
     <dimen name="post_recipe_spacing">8dp</dimen>
+    <dimen name="user_miniatures_height">120dp</dimen>
 </resources>
