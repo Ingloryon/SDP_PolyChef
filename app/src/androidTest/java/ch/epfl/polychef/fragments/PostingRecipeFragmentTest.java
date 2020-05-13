@@ -67,7 +67,7 @@ public class PostingRecipeFragmentTest {
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            true);
+            false);
 
     @Before
     public void initActivity(){

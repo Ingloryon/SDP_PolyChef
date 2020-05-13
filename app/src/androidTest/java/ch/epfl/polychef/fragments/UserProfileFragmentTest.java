@@ -1,6 +1,7 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
@@ -65,7 +66,7 @@ public class UserProfileFragmentTest {
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            true);
+            false);
 
     @Before
     public synchronized void initTest() throws InterruptedException {

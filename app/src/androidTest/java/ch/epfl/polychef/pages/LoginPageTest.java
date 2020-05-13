@@ -16,7 +16,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -29,7 +32,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginPageTest {
@@ -118,6 +124,17 @@ public class LoginPageTest {
         @Override
         public void startNextActivity() {
             //Shouldn't start Homepage when testing the LoginPage
+        }
+
+        @Override
+        public UserStorage getUserStorage() {
+            UserStorage mockUserStorage = mock(UserStorage.class);
+            doAnswer((invocation -> {
+                CallHandler<User> caller = invocation.getArgument(0);
+                caller.onSuccess(mock(User.class));
+                return null;
+            })).when(mockUserStorage).initializeUserFromAuthenticatedUser(any(CallHandler.class));
+            return mockUserStorage;
         }
     }
 }

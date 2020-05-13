@@ -71,7 +71,7 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
     }
 
     public void prepareNextActivity(){
-        UserStorage.getInstance().initializeUserFromAuthenticatedUser(this);
+        getUserStorage().initializeUserFromAuthenticatedUser(this);
     }
 
     @Override
@@ -86,5 +86,9 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
 
     public void startNextActivity() {
         startActivity(new Intent(this, HomePage.class));
+    }
+
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
     }
 }

@@ -243,7 +243,7 @@ public class HomePage extends ConnectedActivity {
     }
 
     public User getPolychefUser(){
-        return UserStorage.getInstance().getPolyChefUser();
+        return getUserStorage().getPolyChefUser();
     }
 
     public NavController getNavController() {

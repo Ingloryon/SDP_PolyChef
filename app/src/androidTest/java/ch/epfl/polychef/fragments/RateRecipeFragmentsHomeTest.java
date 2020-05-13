@@ -3,6 +3,7 @@ package ch.epfl.polychef.fragments;
 import android.content.Intent;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -10,8 +11,11 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
@@ -59,8 +63,18 @@ public class RateRecipeFragmentsHomeTest {
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRuleHome = new ActivityTestRule<>(fakeHomePage, false,
-            true);
+            false);
 
+    @Before
+    public void startTest() {
+        Intents.init();
+        intentsTestRuleHome.launchActivity(new Intent());
+    }
+
+    @After
+    public void releaseIntent() {
+        Intents.release();
+    }
 
     @Test
     public void createInstanceOfRateRecipeFragmentDoesNotThrowError(){

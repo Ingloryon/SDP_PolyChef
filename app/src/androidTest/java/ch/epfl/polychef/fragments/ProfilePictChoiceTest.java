@@ -60,7 +60,17 @@ public class ProfilePictChoiceTest {
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            true);
+            false);
+    @Before
+    public void startTest() {
+        Intents.init();
+        intentsTestRule.launchActivity(new Intent());
+    }
+
+    @After
+    public void releaseIntent() {
+        Intents.release();
+    }
 
     @Test
     public void profilePicturesCanBeClickedAndUpdatesProfile() {
