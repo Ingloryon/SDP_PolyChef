@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -56,13 +57,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
-    private List<Opinion> dynamicOpinionsList = new ArrayList<>();
 
-    private HashMap<Opinion, User> savedMatchOpUser = new HashMap<>();
-    public static final int nbOfOpinionsLoadedAtATime = 5;
-    private boolean isLoading = false;
-    private UserStorage userStorage;
-    private int currentIndex;
+    private boolean online;
+
+    private HomePage hostActivity;
 
     private int indexOfInstruction=-1;
 
@@ -109,16 +107,23 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         containerId = container.getId();
 
-        loadNewComments();
-        opinionsRecyclerView = view.findViewById(R.id.opinionsList);
-        opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        //opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), dynamicOpinionsList, savedMatchOpUser, opinionsRecyclerView, );
-
+        if(online) {
+            opinionsRecyclerView = view.findViewById(R.id.opinionsList);
+            opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+            opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
+            opinionsRecyclerView.setAdapter(opinionsAdapter);
+            opinionsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if(!opinionsAdapter.isLoading()){
+                        opinionsAdapter.loadNewComments();
+                    }
+                }
+            });
+            opinionsAdapter.loadNewComments();
+        }
         return view;
-    }
-
-    private void loadNewComments(){
-
     }
 
     private void displayAuthorName(View view) {
@@ -163,6 +168,19 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             }
         });
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+            online = true;
+        } else {
+            online = false;
+            hostActivity = null;
+        }
     }
 
     private void displayFavouriteButton(View view) {

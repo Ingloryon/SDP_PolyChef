@@ -52,7 +52,8 @@ public class UserStorage {
                             }
 
                         } else {
-                            throw new IllegalStateException("Inconsistent result: multiple user with the same email.");
+                            // TODO Replace me
+                            //throw new IllegalStateException("Inconsistent result: multiple user with the same email.");
                         }
                     }
 
