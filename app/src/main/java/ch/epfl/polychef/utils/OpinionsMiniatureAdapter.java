@@ -57,6 +57,10 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         return isLoading;
     }
 
+    public int getNbOfOpinionsLoadedAtATime(){
+        return nbOfOpinionsLoadedAtATime;
+    }
+
     @NonNull
     @Override
     public MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -72,8 +76,8 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         User user = userOp.get(opinion);
         holder.rate.setRating(opinion.getRate());
         holder.commentText.setText(opinion.getComment());
-        holder.commentUsername.setText(userOp.get(opinion).getUsername());
-        int imageID = User.getResourceImageFromUser(userOp.get(opinion));
+        holder.commentUsername.setText(user.getUsername());
+        int imageID = User.getResourceImageFromUser(user);
         holder.profilePict.setImageResource(imageID);
     }
 

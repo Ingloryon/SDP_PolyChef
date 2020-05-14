@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,6 +56,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
 
+
+    private NestedScrollView topScrollView;
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
 
@@ -112,12 +115,14 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
             opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
             opinionsRecyclerView.setAdapter(opinionsAdapter);
-            opinionsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            topScrollView = view.findViewById(R.id.fullRecipeFragment);
+            topScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    if(!opinionsAdapter.isLoading()){
-                        opinionsAdapter.loadNewComments();
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if(!opinionsAdapter.isLoading()) {
+                        if (!topScrollView.canScrollVertically(1)) {
+                            opinionsAdapter.loadNewComments();
+                        }
                     }
                 }
             });

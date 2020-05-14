@@ -231,27 +231,20 @@ public class CommentTestOnFullRecipe {
         testRecipe.getRating().addOpinion("id6", 3, "Ceci est un commentaire de test");
 
         userResults.put("id1", mockUser("testEmail", "test"));
+        userResults.put("id2", mockUser("testEmail", "test"));
+        userResults.put("id3", mockUser("testEmail", "test"));
+        userResults.put("id4", mockUser("testEmail", "test"));
+        userResults.put("id5", mockUser("testEmail", "test"));
+        userResults.put("id6", mockUser("testEmail", "test"));
+
         setUp(testRecipe);
         wait(1000);
+        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
+        wait(1000);
+        onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
+        wait(1000);
+        int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
+        assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
-
-    public static class FakeFullRecipeFragment extends FullRecipeFragment {
-
-        private UserStorage fakeUserStorage;
-
-        public FakeFullRecipeFragment(UserStorage userStorage){
-            this.fakeUserStorage = userStorage;
-        }
-
-//        @Override
-//        public UserStorage getUserStorage(){
-//            return fakeUserStorage;
-//        }
-
-    }
-
-
-
-
 
 }
