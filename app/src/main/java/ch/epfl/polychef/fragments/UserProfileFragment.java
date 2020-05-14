@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -23,10 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.gamification.Achievement;
+import ch.epfl.polychef.gamification.AchievementsList;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 
@@ -96,6 +100,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
             }
         });
         toggleButton = view.findViewById(R.id.subscribeButton);
+
         return view;
     }
 
@@ -131,8 +136,9 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         //Display the image of the user
         ImageView image = view.findViewById(R.id.usersImage);
-        image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
+        image.setImageResource(User.getResourceImageFromUser(userToDisplay));
 
+        determineAndDisplayAchievements(view);
         getNextRecipes();
         setupProfilePictureButton();
     }
@@ -208,4 +214,44 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
             }
         });
     }
+
+    private void determineAndDisplayAchievements(View view){
+        List<Achievement> achievementList = AchievementsList.getInstance().getAllAchievements();
+        Context context= GlobalApplication.getAppContext();
+
+        for (int i = 0 ; i < achievementList.size() ; ++i){
+            Achievement achievement = achievementList.get(i);
+            ImageView image = view.findViewById(getImageViewAchievementId(achievement.getName()));
+            int achievementLevel = achievement.getLevel(userToDisplay);
+
+            setAchievementToastOnClick(image, achievement.getLevelLabel(achievementLevel));
+
+            int resourceImage = context.getResources().getIdentifier(achievement.getLevelImage(achievementLevel), "drawable", context.getPackageName());
+            image.setImageResource(resourceImage);
+        }
+    }
+
+    private int getImageViewAchievementId(String achievementName) {
+        switch (achievementName) {
+            case "cuistot":
+                return R.id.cuistot_achievement;
+            case "followed":
+                return R.id.followed_achievement;
+            case "favorite":
+                return R.id.favorite_achievement;
+            default:
+                throw new IllegalArgumentException("There are no image view corresponding to this achievement name.");
+        }
+    }
+
+    private void setAchievementToastOnClick(ImageView image, String achievementLabel) {
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), achievementLabel , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

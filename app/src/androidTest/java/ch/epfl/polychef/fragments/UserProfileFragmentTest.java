@@ -29,10 +29,16 @@ import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -70,6 +76,7 @@ public class UserProfileFragmentTest {
     @Before
     public synchronized void initTest() throws InterruptedException {
         mockUser = new User(mockEmail, mockUsername);
+        mockUser.setKey("test key");
 
         Intents.init();
         intentsTestRule.launchActivity(new Intent());
@@ -104,6 +111,45 @@ public class UserProfileFragmentTest {
         testUserRecipes(UserProfileFragment.nbOfRecipesLoadedAtATime + 1, 20);
     }
 
+    @Test
+    public synchronized void userAchievementsDisplayCorrectToast() throws InterruptedException {
+        mockUser.addRecipe("Recipe1");
+        mockUser.addRecipe("Recipe2");
+
+        startTest();
+
+        onView(withId(R.id.userProfileFragment)).perform(swipeDown());
+        onView(withId(R.id.cuistot_achievement)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.cuistot_achievement)).perform(click());
+
+        onView(withText("Starting Chef"))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        wait(2000);
+
+        onView(withId(R.id.followed_achievement)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.followed_achievement)).perform(click());
+
+        onView(withText("No followers"))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        wait(2000);
+
+        onView(withId(R.id.favorite_achievement)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.favorite_achievement)).perform(click());
+
+        onView(withText("No favorite"))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        wait(20000);
+    }
+
     public synchronized void testUserRecipes(int min, int max) throws InterruptedException {
         Random rnd = new Random();
 
@@ -125,22 +171,18 @@ public class UserProfileFragmentTest {
         assertEquals(nbr, ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
     }
 
+    private void reFreshMockUser(){
+        mockUser = new User(mockEmail, mockUsername);
+        mockUser.setKey("test key");
+    }
+
     @After
     public void finishActivity(){
         intentsTestRule.finishActivity();
         Intents.release();
     }
 
-    class FakeHomePage extends HomePage {
-
-        @Override
-        public UserStorage getUserStorage(){
-            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
-            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
-            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
-
-            return mockUserStorage;
-        }
+    class FakeHomePage extends HomePage{
 
         @Override
         public RecipeStorage getRecipeStorage(){
@@ -158,8 +200,18 @@ public class UserProfileFragmentTest {
         }
 
         @Override
+        public UserStorage getUserStorage(){
+            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
+            return mockUserStorage;
+        }
+
+      @Override
         public FirebaseUser getUser() {
             FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+            when(mockUser.getEmail()).thenReturn(mockEmail);
+            when(mockUser.getDisplayName()).thenReturn(mockUsername);
             return mockUser;
         }
     }
