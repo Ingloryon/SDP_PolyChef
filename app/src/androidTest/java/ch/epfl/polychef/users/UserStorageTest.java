@@ -260,6 +260,14 @@ public class UserStorageTest {
     }
 
     @Test
+    public void canGetUserByID() {
+        DatabaseReference databaseReference = mock(DatabaseReference.class);
+        when(fakeUserStorage.getDatabase().getReference(UserStorage.DB_NAME).child("userIDTest")).thenReturn(databaseReference);
+        fakeUserStorage.getUserByID("userIDTest", mock(CallHandler.class));
+        verify(databaseReference).addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
+
+    @Test
     public void wrongUserFailsOnGetByEmail() {
         when(fakeUserStorage.getDatabase().getReference(UserStorage.DB_NAME).orderByChild("email").equalTo(eq("fake@email.com"))).thenReturn(query);
         when(dataSnapshot.getChildrenCount()).thenReturn((long) 1);

@@ -34,8 +34,12 @@ public class Opinion {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         Opinion that = (Opinion) obj;
         return Objects.equals(this.comment, that.comment) && rate == that.rate;
     }

@@ -31,7 +31,7 @@ public class UserStorage {
     }
 
     public void initializeUserFromAuthenticatedUser() {
-        String email = getAuthenticatedUserEmail();
+        String email = getAuthenticatedUser().getEmail();
 
         getDatabase()
                 .getReference(UserStorage.DB_NAME)
@@ -65,7 +65,7 @@ public class UserStorage {
     }
 
     private void initializeNewUser(String email) {
-        String username = getAuthenticatedUserName();
+        String username = getAuthenticatedUser().getDisplayName();
         user = new User(email, username);
 
         //TODO: Add OnSuccess and OnFailure listener
@@ -121,14 +121,6 @@ public class UserStorage {
         }
     }
 
-    private String getAuthenticatedUserEmail() {
-        return getAuthenticatedUser().getEmail();
-    }
-
-    private String getAuthenticatedUserName() {
-        return getAuthenticatedUser().getDisplayName();
-    }
-
     public FirebaseUser getAuthenticatedUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -165,17 +157,7 @@ public class UserStorage {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 1) {
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        if (child.exists()) {
-                            getUserFromDataSnapshot(child, caller);
-                        } else {
-                            caller.onFailure();
-                        }
-                    }
-                } else {
-                    getUserFromDataSnapshot(dataSnapshot, caller);
-                }
+                getUniqueUserFromDataSnapshot(dataSnapshot, caller);
             }
 
             @Override
@@ -183,6 +165,20 @@ public class UserStorage {
                 caller.onFailure();
             }
         };
+    }
+
+    public void getUniqueUserFromDataSnapshot(DataSnapshot dataSnapshot, CallHandler<User> caller) {
+        if (dataSnapshot.getChildrenCount() == 1) {
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                if (child.exists()) {
+                    getUserFromDataSnapshot(child, caller);
+                } else {
+                    caller.onFailure();
+                }
+            }
+        } else {
+            getUserFromDataSnapshot(dataSnapshot, caller);
+        }
     }
 
     private void getUserFromDataSnapshot(DataSnapshot dataSnapshot, CallHandler<User> caller) {

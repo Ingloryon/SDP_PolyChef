@@ -112,8 +112,8 @@ public class RateRecipeFragment extends Fragment {
 
         String userKey = userStorage.getPolyChefUser().getKey();
 
-        int oldRating = commentString.isEmpty() ?
-                recipe.getRating().addOpinion(userKey, starNb)
+        int oldRating = commentString.isEmpty()
+                ? recipe.getRating().addOpinion(userKey, starNb)
                 : recipe.getRating().addOpinion(userKey, starNb, commentString);
 
         if(oldRating == -1 || oldRating==starNb) {

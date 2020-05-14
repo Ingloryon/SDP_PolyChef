@@ -23,15 +23,15 @@ public class OpinionTest {
     @Test
     public void equalOpinionsAreEqual() {
         Opinion withoutComment = new Opinion(2);
-        Opinion otherWithoutComment = new Opinion(2);
-        Opinion withComment = new Opinion(4, "This is a comment");
-        Opinion otherWithComment = new Opinion(4, "This is a comment");
-        Opinion otherDifferentWithComment = new Opinion(4, "This is an other comment");
         assertEquals(withoutComment, withoutComment);
+        Opinion otherWithoutComment = new Opinion(2);
         assertEquals(withoutComment, otherWithoutComment);
+        Opinion withComment = new Opinion(4, "This is a comment");
         assertEquals(withComment, withComment);
+        Opinion otherWithComment = new Opinion(4, "This is a comment");
         assertEquals(withComment, otherWithComment);
         assertNotEquals(withComment, withoutComment);
+        Opinion otherDifferentWithComment = new Opinion(4, "This is an other comment");
         assertNotEquals(withComment, otherDifferentWithComment);
     }
 }

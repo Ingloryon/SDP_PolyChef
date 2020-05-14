@@ -22,55 +22,21 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
  */
 public class NestedScrollViewHelper {
     public static ViewAction nestedScrollTo() {
-        return new ViewAction() {
-
-            @Override
-            public Matcher<View> getConstraints() {
-                return Matchers.allOf(
-                        isDescendantOfA(isAssignableFrom(NestedScrollView.class)),
-                        ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE));
-            }
-
-            @Override
-            public String getDescription() {
-                return "View is not NestedScrollView";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                try {
-                    NestedScrollView nestedScrollView = (NestedScrollView)
-                            findFirstParentLayoutOfClass(view, NestedScrollView.class);
-                    if (nestedScrollView != null) {
-                        nestedScrollView.scrollTo(0, view.getTop());
-                    } else {
-                        throw new Exception("Unable to find NestedScrollView parent.");
-                    }
-                } catch (Exception e) {
-                    throw new PerformException.Builder()
-                            .withActionDescription(this.getDescription())
-                            .withViewDescription(HumanReadables.describe(view))
-                            .withCause(e)
-                            .build();
-                }
-                uiController.loopMainThreadUntilIdle();
-            }
-
-        };
+        return new NestedScrollViewAction();
     }
 
     private static View findFirstParentLayoutOfClass(View view, Class<? extends View> parentClass) {
         ViewParent parent = new FrameLayout(view.getContext());
         ViewParent incrementView = null;
-        int i = 0;
+        int level = 0;
         while (parent != null && !(parent.getClass() == parentClass)) {
-            if (i == 0) {
+            if (level == 0) {
                 parent = findParent(view);
             } else {
                 parent = findParent(incrementView);
             }
             incrementView = parent;
-            i++;
+            level++;
         }
         return (View) parent;
     }
@@ -81,5 +47,39 @@ public class NestedScrollViewHelper {
 
     private static ViewParent findParent(ViewParent view) {
         return view.getParent();
+    }
+
+    private static class NestedScrollViewAction implements ViewAction {
+
+        @Override
+        public Matcher<View> getConstraints() {
+            return Matchers.allOf(
+                    isDescendantOfA(isAssignableFrom(NestedScrollView.class)),
+                    ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE));
+        }
+
+        @Override
+        public String getDescription() {
+            return "View is not NestedScrollView";
+        }
+
+        @Override
+        public void perform(UiController uiController, View view) {
+            try {
+                NestedScrollView nestedScrollView = (NestedScrollView)
+                        findFirstParentLayoutOfClass(view, NestedScrollView.class);
+                if (nestedScrollView != null) {
+                    nestedScrollView.scrollTo(0, view.getTop());
+                } else {
+                    throw new Exception("Unable to find NestedScrollView parent.");
+                }
+            } catch (Exception e) {
+                throw new PerformException.Builder().withActionDescription(this.getDescription())
+                        .withViewDescription(HumanReadables.describe(view)).withCause(e)
+                        .build();
+            }
+            uiController.loopMainThreadUntilIdle();
+        }
+
     }
 }
