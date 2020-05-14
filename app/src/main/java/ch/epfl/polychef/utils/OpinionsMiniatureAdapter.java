@@ -148,4 +148,11 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         }
         currentIndex += Math.min(currentIndex + nbOfOpinionsLoadedAtATime, allOpinions.size());
     }
+
+    public List<Opinion> getDisplayedOpinions(){
+        return displayedOpinions;
+    }
+    public HashMap<Opinion, User>  getMap(){
+        return userOp;
+    }
 }

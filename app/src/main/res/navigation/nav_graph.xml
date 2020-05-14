@@ -70,10 +70,10 @@
             app:destination="@id/onlineMiniaturesFragment" />
         <action
             android:id="@+id/action_fullRecipeFragment_to_rateRecipeFragment"
-            app:destination="@id/userProfileFragment" />
+            app:destination="@id/rateRecipeFragment" />
         <action
             android:id="@+id/action_fullRecipeFragment_to_fullUsersFragment"
-            app:destination="@id/rateRecipeFragment" />
+            app:destination="@id/userProfileFragment"/>
     </fragment>
 
     <fragment
