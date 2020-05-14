@@ -79,8 +79,8 @@ public class RateRecipeFragment extends Fragment {
         spinner = getView().findViewById(R.id.RateChoices);
         comment = getView().findViewById(R.id.CommentText);
 
-        if(recipe.getRating().getUserIDMatchOp().containsKey(userStorage.getPolyChefUser().getKey())) {
-            Opinion previousOpinion = recipe.getRating().getUserIDMatchOp().get(userStorage.getPolyChefUser().getKey());
+        if(recipe.getRating().getAllOpinion().containsKey(userStorage.getPolyChefUser().getKey())) {
+            Opinion previousOpinion = recipe.getRating().getAllOpinion().get(userStorage.getPolyChefUser().getKey());
             spinner.setSelection(previousOpinion.getRate());
             if(previousOpinion.getComment() != null && !previousOpinion.getComment().isEmpty()) {
                 comment.setText(previousOpinion.getComment());

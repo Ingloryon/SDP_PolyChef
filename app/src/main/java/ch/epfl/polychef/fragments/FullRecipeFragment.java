@@ -57,6 +57,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
     private List<Opinion> dynamicOpinionsList = new ArrayList<>();
+
     private HashMap<Opinion, User> savedMatchOpUser = new HashMap<>();
     public static final int nbOfOpinionsLoadedAtATime = 5;
     private boolean isLoading = false;
@@ -111,15 +112,12 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         loadNewComments();
         opinionsRecyclerView = view.findViewById(R.id.opinionsList);
         opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), dynamicOpinionsList, savedMatchOpUser, );
+        //opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), dynamicOpinionsList, savedMatchOpUser, );
 
         return view;
     }
 
     private void loadNewComments(){
-
-        userStorage.getUserByID();
-
 
     }
 

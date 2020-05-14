@@ -3,9 +3,7 @@ package ch.epfl.polychef.recipe;
 import android.util.Log;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -13,16 +11,14 @@ import ch.epfl.polychef.utils.Preconditions;
 
 public final class Rating implements Serializable {
     private int ratingSum;
-    private Map<String, Opinion> userIDMatchOp;
-    private List<Opinion> opinions;
+    private Map<String, Opinion> allOpinion;
 
     /**
      * Constructs a new empty rating.
      */
     public Rating() {
         ratingSum = 0;
-        userIDMatchOp = new HashMap<>();
-        opinions = new ArrayList<>();
+        allOpinion = new HashMap<>();
     }
 
     /**
@@ -47,18 +43,13 @@ public final class Rating implements Serializable {
     public int addOpinion(String userID, int rate, String comment) {
         Preconditions.checkArgument(0 <= rate && rate <= 5, "A rate's value should be between 0 and 5");
 
-        if (userIDMatchOp.containsKey(userID)) {
-            Opinion oldOpinion = userIDMatchOp.get(userID);
-            opinions.remove(oldOpinion);
-            Opinion newOpinion = new Opinion(rate, comment);
-            opinions.add(newOpinion);
-            userIDMatchOp.replace(userID, newOpinion);
+        if (allOpinion.containsKey(userID)) {
+            Opinion oldOpinion = allOpinion.get(userID);
+            allOpinion.replace(userID, new Opinion(rate, comment));
             ratingSum = ratingSum - oldOpinion.getRate() + rate;
             return oldOpinion.getRate();
         } else {
-            Opinion newOpinion = new Opinion(rate, comment);
-            opinions.add(newOpinion);
-            userIDMatchOp.put(userID, newOpinion);
+            allOpinion.put(userID, new Opinion(rate, comment));
             ratingSum += rate;
             return -1;
         }
@@ -70,23 +61,19 @@ public final class Rating implements Serializable {
      * @return the average rating
      */
     public double ratingAverage() {
-        return userIDMatchOp.size() == 0 ? 0.0 : ((double) ratingSum) / userIDMatchOp.size();
+        return allOpinion.size() == 0 ? 0.0 : ((double) ratingSum) / allOpinion.size();
     }
 
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "%.2f", ratingAverage()) + "/5 stars by " + userIDMatchOp.size() + " users.\n";
+        return String.format(Locale.ENGLISH, "%.2f", ratingAverage()) + "/5 stars by " + allOpinion.size() + " users.\n";
     }
 
     public int getRatingSum() {
         return ratingSum;
     }
 
-    public Map<String, Opinion> getUserIDMatchOp() {
-        return userIDMatchOp;
-    }
-
-    public List<Opinion> getOpinions(){
-        return  opinions;
+    public Map<String, Opinion> getAllOpinion() {
+        return allOpinion;
     }
 }
