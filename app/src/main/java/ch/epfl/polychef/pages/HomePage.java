@@ -77,7 +77,7 @@ public class HomePage extends ConnectedActivity {
         }
     }
 
-    public void setupDrawer(){
+    private void setupDrawer(){
         View headerView = navView.getHeaderView(0);
 
         setupUserInfo(headerView);
@@ -89,12 +89,12 @@ public class HomePage extends ConnectedActivity {
         setupNavigation();
     }
 
-    public void setupUserInfo(View parentView) {
+    private void setupUserInfo(View parentView) {
         ((TextView) parentView.findViewById(R.id.drawerEmailField)).setText(getPolychefUser().getEmail());
         ((TextView) parentView.findViewById(R.id.drawerUsernameField)).setText(getPolychefUser().getUsername());
     }
 
-    public void setupProfileNavigation(View parentView){
+    private void setupProfileNavigation(View parentView){
         parentView.findViewById(R.id.drawerProfileImage).setOnClickListener((view) -> {
             setCurrentItemChecked(false);
             currentItem = null;

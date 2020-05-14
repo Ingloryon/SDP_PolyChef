@@ -1,12 +1,7 @@
 package ch.epfl.polychef.pages;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.widget.ProgressBar;
 
-import androidx.core.content.ContextCompat;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -14,24 +9,14 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 
 import ch.epfl.polychef.CallHandler;
-import ch.epfl.polychef.R;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;

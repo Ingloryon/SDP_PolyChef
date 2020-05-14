@@ -81,10 +81,6 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
 
     @Override
     public void onSuccess(User data) {
-        startNextActivity();
-    }
-
-    public void startNextActivity() {
         startActivity(new Intent(this, HomePage.class));
     }
 

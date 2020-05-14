@@ -121,7 +121,7 @@ public class LoginPageTest {
         }
 
         @Override
-        public void startNextActivity() {
+        public void onSuccess(User data) {
             //Shouldn't start Homepage when testing the LoginPage
         }
 

@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
@@ -26,6 +25,8 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
     private Button logButton;
     private OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();
+
+    private static final String TAG = "EntryPage-TAG";
 
     public static final String LOG_IN = "Log in";
 
@@ -64,15 +65,27 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
     protected void goHomeIfConnected() {
         if(getFireBaseAuth().getCurrentUser() != null) {
-            findViewById(R.id.autoLoginBackground).setVisibility(View.VISIBLE);
-            findViewById(R.id.autoLoginProgress).setVisibility(View.VISIBLE);
 
-            preventInteractions();
+            startLoading();
 
             Toast.makeText(this, "Auto connect" , Toast.LENGTH_SHORT).show();
 
             getUserStorage().initializeUserFromAuthenticatedUser(this);
         }
+    }
+
+    private void startLoading(){
+        findViewById(R.id.autoLoginBackground).setVisibility(View.VISIBLE);
+        findViewById(R.id.autoLoginProgress).setVisibility(View.VISIBLE);
+
+        preventInteractions();
+    }
+
+    private void stopLoading(){
+        allowInteractions();
+
+        findViewById(R.id.autoLoginProgress).setVisibility(View.GONE);
+        findViewById(R.id.autoLoginBackground).setVisibility(View.GONE);
     }
 
     private void preventInteractions(){
@@ -92,21 +105,22 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
     @Override
     public void onFailure() {
-
+        Log.e(TAG, "Unable to initialise the PolyChef User");
+        stopLoading();
     }
 
     @Override
     public synchronized void onSuccess(User data) {
+
+        //Small delay to make it feel intentional
         try{
             wait(500);
         } catch(InterruptedException e){
             e.printStackTrace();
         }
 
-        allowInteractions();
+        stopLoading();
 
-        findViewById(R.id.autoLoginProgress).setVisibility(View.GONE);
-        findViewById(R.id.autoLoginBackground).setVisibility(View.GONE);
         startNextActivity();
     }
 
