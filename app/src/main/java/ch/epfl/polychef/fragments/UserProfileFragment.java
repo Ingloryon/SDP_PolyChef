@@ -17,8 +17,6 @@ import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -133,7 +131,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
         //Display the image of the user
         ImageView image = view.findViewById(R.id.usersImage);
-        image.setImageResource(User.getResourceImageFromActivity(userToDisplay));
+        image.setImageResource(User.getResourceImageFromUser(userToDisplay));
 
         getNextRecipes();
         setupProfilePictureButton();

@@ -67,10 +67,12 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
     @Override
     public void onBindViewHolder(@NonNull MiniatureViewHolder holder, int position) {
         Opinion opinion = displayedOpinions.get(position);
+        User user = userOp.get(opinion);
         holder.rate.setRating(opinion.getRate());
         holder.commentText.setText(opinion.getComment());
         holder.commentUsername.setText(userOp.get(opinion).getUsername());
-        holder.profilePict.setImageResource(userOp.get(opinion).getProfilePictureId());
+        int imageID = User.getResourceImageFromUser(userOp.get(opinion));
+        holder.profilePict.setImageResource(imageID);
     }
 
     @Override

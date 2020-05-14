@@ -19,7 +19,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            tools:ignore="ExtraText">
 
             <TextView
                 android:id="@+id/recipeName"
@@ -33,9 +34,9 @@
                 android:textColor="@android:color/background_dark"
                 android:textSize="36sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/favouriteButton"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/favouriteButton" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ToggleButton
                 android:id="@+id/favouriteButton"
@@ -43,10 +44,10 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textOff=""
                 android:textOn=""
-                android:textOff=""/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
 
@@ -257,10 +258,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/opinionsList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="400dp"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@+id/instruction0"
-                tools:layout_editor_absoluteX="38dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/instruction0" />
             app:layout_constraintTop_toBottomOf="@+id/RatingRow" />
 
 
