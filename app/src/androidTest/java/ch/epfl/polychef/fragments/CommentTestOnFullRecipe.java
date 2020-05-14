@@ -51,6 +51,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CommentTestOnFullRecipe {
 
@@ -65,11 +66,15 @@ public class CommentTestOnFullRecipe {
             .setDate("20/06/01 13:10:00")
             .setAuthor("author name");
 
-    private UserStorage fakeUserStorage = mock(UserStorage.class,CALLS_REAL_METHODS );
+    private UserStorage fakeUserStorage = mock(UserStorage.class, CALLS_REAL_METHODS);
 
     private HashMap<String, User> userResults;
 
     private FakeFullRecipeFragment fakeFragment = new FakeFullRecipeFragment(fakeUserStorage);
+
+    private String mockEmail = "mock@email.com";
+    private String mockUsername = "mockUsername";
+    private User mockUser;
 
     private User mockUser(String userEmail, String userName){
         return new User(userEmail, userName);
@@ -103,7 +108,9 @@ public class CommentTestOnFullRecipe {
             return null;
         }).when(fakeUserStorage).getUserByID(anyString(), any(CallHandler.class));
 
+
         userResults = new HashMap<>();
+        mockUser = mockUser(mockEmail, mockUsername);
     }
 
 
@@ -128,16 +135,41 @@ public class CommentTestOnFullRecipe {
 
     private class FakeHomePage extends HomePage {
 
-        public RecipeStorage mockUserStorage = mock(RecipeStorage.class);
+        public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
 
         @Override
         public UserStorage getUserStorage(){
-            return fakeUserStorage;
+            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+            doAnswer(invocation -> {
+
+                String userID = invocation.getArgument(0);
+                CallHandler<User> ch = invocation.getArgument(1);
+                if(userResults.containsKey(userID)) {
+                    ch.onSuccess(userResults.get(userID));
+                }else{
+                    ch.onFailure();
+                }
+
+                return null;
+            }).when(mockUserStorage).getUserByID(anyString(), any(CallHandler.class));
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+            User connectedUser = new User("TestUser@PolyChef.com", "TestUser");
+            connectedUser.setKey("test key");
+            when(mockUserStorage.getPolyChefUser()).thenReturn(connectedUser);
+            return mockUserStorage;
         }
 
         @Override
         public RecipeStorage getRecipeStorage(){
-            return mockUserStorage;
+            return mockRecipeStorage;
+        }
+
+        @Override
+        public FirebaseUser getUser() {
+            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+            when(mockUser.getEmail()).thenReturn("test@epfl.ch");
+            when(mockUser.getDisplayName()).thenReturn("TestUsername");
+            return mockUser;
         }
     }
 
@@ -217,10 +249,10 @@ public class CommentTestOnFullRecipe {
             this.fakeUserStorage = userStorage;
         }
 
-        @Override
-        public UserStorage getUserStorage(){
-            return fakeUserStorage;
-        }
+//        @Override
+//        public UserStorage getUserStorage(){
+//            return fakeUserStorage;
+//        }
 
     }
 
