@@ -72,10 +72,12 @@ public class AchievementTest {
     @Test
     public void gettersRejectsInvalidInputs(){
         Achievement achi = createValidAchievement();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(5));
+        //for the images
+        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(3+1));
         Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(-1));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(5));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelImage(-1));
+        //for the labels
+        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelLabel(3+1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> achi.getLevelLabel(-1));
     }
 
     @Test

@@ -11,7 +11,7 @@ import ch.epfl.polychef.utils.Preconditions;
  * An Achievement that can be obtained by Users.
  */
 public final class Achievement {
-    private static final int MAX_ACHIEVEMENT_LEVEL = 5;
+    public static final int MAX_ACHIEVEMENT_LEVEL = 5;
     private final List<Integer> levelSteps;
     private final List<String> picturesLabels;
     private final List<String> picturesPaths;
