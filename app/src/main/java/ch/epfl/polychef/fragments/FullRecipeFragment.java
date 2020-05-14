@@ -206,6 +206,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Display the recipe images in the correct field in the activity.
      */
     private void displayImage(View view) {
+        imagesToDisplay.clear();
         carouselView = view.findViewById(R.id.recipeImages);
         carouselView.setPageCount(imagesToDisplay.size());
         carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(imagesToDisplay.get(position)));
