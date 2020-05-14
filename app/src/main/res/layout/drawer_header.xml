@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_header_height"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/drawer_header_background"
-    android:gravity="bottom"
-    android:orientation="vertical"
+    android:gravity="start"
     android:paddingLeft="@dimen/drawer_horizontal_margin"
     android:paddingTop="@dimen/drawer_vertical_margin"
     android:paddingRight="@dimen/drawer_horizontal_margin"
@@ -15,24 +14,52 @@
 
     <ImageView
         android:id="@+id/drawerProfileImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp"
         android:paddingTop="8dp"
-        tools:ignore="ContentDescription"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
-    <TextView
-        android:id="@+id/drawerUsernameField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:text="@string/Username"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        app:layout_constraintBottom_toTopOf="@+id/drawerEmailField"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/none_profile_polychef"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/drawerEmailField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/Email"
+        app:layout_constraintBottom_toTopOf="@+id/drawerUsernameField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/drawerProfileImage"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/drawerUsernameField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:paddingTop="0dp"
+        android:text="@string/Username"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/drawerEmailField" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Email" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

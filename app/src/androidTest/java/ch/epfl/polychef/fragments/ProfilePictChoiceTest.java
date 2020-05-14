@@ -21,16 +21,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-
-import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.pages.HomePageTest;
-import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeBuilder;
-import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.CallHandlerChecker;
@@ -38,7 +31,6 @@ import ch.epfl.polychef.utils.CallHandlerChecker;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -60,7 +52,18 @@ public class ProfilePictChoiceTest {
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            true);
+            false);
+
+    @Before
+    public void startTest() {
+        Intents.init();
+        intentsTestRule.launchActivity(new Intent());
+    }
+
+    @After
+    public void releaseIntent() {
+        Intents.release();
+    }
 
     @Test
     public void profilePicturesCanBeClickedAndUpdatesProfile() {

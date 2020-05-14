@@ -71,7 +71,7 @@ public class UserProfileFragmentTest {
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            true);
+            false);
 
     @Before
     public synchronized void initTest() throws InterruptedException {
