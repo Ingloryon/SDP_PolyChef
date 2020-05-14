@@ -76,4 +76,16 @@ public final class Rating implements Serializable {
     public Map<String, Opinion> getAllOpinion() {
         return allOpinion;
     }
+
+    public String getUserIdFromOpinion(Opinion opinion){
+        if(!allOpinion.containsValue(opinion)){
+            return null;
+        }
+        for(String userId : allOpinion.keySet()){
+            if(allOpinion.get(userId).equals(opinion)){
+                return userId;
+            }
+        }
+        return null;
+    }
 }

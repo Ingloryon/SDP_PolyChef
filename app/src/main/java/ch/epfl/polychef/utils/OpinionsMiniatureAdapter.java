@@ -12,34 +12,39 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Opinion;
+import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
-public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMiniatureAdapter.MiniatureViewHolder> {
+public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMiniatureAdapter.MiniatureViewHolder> implements CallHandler<User>
+{
 
     private Context mainContext;
     private RecyclerView recyclerView;
     private HashMap<Opinion, User> userOp;
-    List<Opinion> opinions;
+    List<Opinion> displayedOpinions;
+    List<Opinion> allOpinions;
+    private int currentIndex = 0;
+    public static final int nbOfOpinionsLoadedAtATime = 5;
+    private boolean isLoading = false;
+    private Recipe recipe;
 
-    public OpinionsMiniatureAdapter(Context mainContext, List<Opinion> opinions, HashMap<Opinion, User> userOp, RecyclerView recyclerView, UserStorage userStorage){
+    public OpinionsMiniatureAdapter(Context mainContext, RecyclerView recyclerView, Recipe recipe, UserStorage userStorage){
         this.mainContext = mainContext;
         this.recyclerView = recyclerView;
-        this.userOp = userOp;
-        this.opinions = opinions;
-    }
-
-    public void setHashMap(HashMap<Opinion, User> newUserOp){
-        this.userOp = newUserOp;
-    }
-
-    public void setOpinionsList(List<Opinion> newOpinions){
-        this.opinions = newOpinions;
+        this.displayedOpinions = new ArrayList<>();
+        this.userOp = new HashMap<>();
+        for(Opinion opinion : recipe.getRating().getAllOpinion().values()){
+            allOpinions.add(opinion);
+        }
+        this.recipe = recipe;
     }
 
     @NonNull
@@ -53,7 +58,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
 
     @Override
     public void onBindViewHolder(@NonNull MiniatureViewHolder holder, int position) {
-        Opinion opinion = opinions.get(position);
+        Opinion opinion = displayedOpinions.get(position);
         holder.rate.setRating(opinion.getRate());
         holder.commentText.setText(opinion.getComment());
         holder.commentUsername.setText(userOp.get(opinion).getUsername());
@@ -62,7 +67,17 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
 
     @Override
     public int getItemCount() {
-        return opinions.size();
+        return displayedOpinions.size();
+    }
+
+    @Override
+    public void onSuccess(User user) {
+
+    }
+
+    @Override
+    public void onFailure() {
+
     }
 
     class MiniatureViewHolder extends RecyclerView.ViewHolder {
@@ -95,6 +110,12 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         @Override
         public void onClick(View view) {
             // Go to user page
+        }
+    }
+
+    public void loadNewComments(){
+        for(int i = currentIndex; i < Math.min(currentIndex + nbOfOpinionsLoadedAtATime, allOpinions.size()); i++){
+            
         }
     }
 }

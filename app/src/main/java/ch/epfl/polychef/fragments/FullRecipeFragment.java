@@ -112,7 +112,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         loadNewComments();
         opinionsRecyclerView = view.findViewById(R.id.opinionsList);
         opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        //opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), dynamicOpinionsList, savedMatchOpUser, );
+        //opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), dynamicOpinionsList, savedMatchOpUser, opinionsRecyclerView, );
 
         return view;
     }
