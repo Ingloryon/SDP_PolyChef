@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.NestedScrollViewHelper;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.FullRecipeFragment;
 import ch.epfl.polychef.image.ImageStorage;
@@ -91,7 +92,7 @@ public class FullRecipeImageTest {
     @Test
     public void canShowPicturesOnFullRecipe() {
         setUp("test_2");
-        onView(withId(R.id.recipeImages)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.recipeImages)).perform(NestedScrollViewHelper.nestedScrollTo()).check(matches(isDisplayed()));
         CarouselView carouselView = intentsTestRule.getActivity().findViewById(R.id.recipeImages);
         assertThat(carouselView.getCurrentItem(), is(0));
         onView(withId(R.id.recipeImages)).perform(swipeLeft());
@@ -105,7 +106,7 @@ public class FullRecipeImageTest {
     @Test
     public void callOnFailureIfImageDoesNotExistsShowToast() {
         setUp("other_not_found_string");
-        onView(withId(R.id.recipeImages)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.recipeImages)).perform(NestedScrollViewHelper.nestedScrollTo()).check(matches(isDisplayed()));
         onView(withText(R.string.errorImageRetrieve))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))

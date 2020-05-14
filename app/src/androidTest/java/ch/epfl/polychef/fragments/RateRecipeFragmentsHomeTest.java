@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.NestedScrollViewHelper;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.pages.HomePageTest;
@@ -90,7 +91,7 @@ public class RateRecipeFragmentsHomeTest {
 
     private void rateCurrentRecipeNStars(int nbStars){
 
-        onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
+        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
         onView(withId(R.id.RateChoices)).perform(click());
         String star= nbStars<2?" star":" stars";
         onData(allOf(is(instanceOf(String.class)), is(nbStars+star))).perform(click());
