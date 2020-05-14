@@ -20,7 +20,6 @@ import java.util.Random;
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
-import ch.epfl.polychef.pages.HomePageTest;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
@@ -30,7 +29,6 @@ import ch.epfl.polychef.users.UserStorage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -184,7 +182,7 @@ public class UserProfileFragmentTest {
         Intents.release();
     }
 
-    class FakeHomePage extends HomePage{//HomePageTest.FakeHomePage {//
+    class FakeHomePage extends HomePage{
 
         @Override
         public RecipeStorage getRecipeStorage(){
