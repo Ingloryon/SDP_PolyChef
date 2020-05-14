@@ -2,6 +2,7 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -70,8 +71,6 @@ public class CommentTestOnFullRecipe {
 
     private HashMap<String, User> userResults;
 
-    private FakeFullRecipeFragment fakeFragment = new FakeFullRecipeFragment(fakeUserStorage);
-
     private String mockEmail = "mock@email.com";
     private String mockUsername = "mockUsername";
     private User mockUser;
@@ -91,7 +90,7 @@ public class CommentTestOnFullRecipe {
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            true);
+            false);
 
     @Before
     public void init(){
@@ -111,12 +110,13 @@ public class CommentTestOnFullRecipe {
 
         userResults = new HashMap<>();
         mockUser = mockUser(mockEmail, mockUsername);
+
+        Intents.init();
     }
 
 
     public void initActivity() {
-        Intents.init();
-        intentsTestRule.launchActivity(new Intent());
+
     }
     @After
     public void afterTest(){
@@ -124,13 +124,9 @@ public class CommentTestOnFullRecipe {
     }
 
     public void setUp(Recipe recipe){
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Recipe", recipe);
-        Fragment fragment = fakeFragment;
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, fragment).addToBackStack(null);
-        transaction.commit();
+        Intent intent = new Intent();
+        intent.putExtra("RecipeToSend", recipe);
+        intentsTestRule.launchActivity(intent);
     }
 
     private class FakeHomePage extends HomePage {
@@ -179,7 +175,7 @@ public class CommentTestOnFullRecipe {
         Recipe testRecipe = fakeRecipeBuilder.build();
         setUp(testRecipe);
         wait(1000);
-        assertEquals(0, fakeFragment.getOpinionsRecyclerView().getAdapter().getItemCount());
+        assertEquals(0, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -190,7 +186,7 @@ public class CommentTestOnFullRecipe {
         userResults.put("id1", mockUser("testEmail", "test"));
         setUp(testRecipe);
         wait(1000);
-        assertEquals(1, fakeFragment.getOpinionsRecyclerView().getAdapter().getItemCount());
+        assertEquals(1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -201,7 +197,7 @@ public class CommentTestOnFullRecipe {
         userResults.put("id1", mockUser("testEmail", "test"));
         setUp(testRecipe);
         wait(1000);
-        OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) fakeFragment.getOpinionsRecyclerView().getAdapter();
+        OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
         assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
         assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
     }
@@ -215,12 +211,10 @@ public class CommentTestOnFullRecipe {
         mockUser.setKey("id1");
         userResults.put("id1", mockUser);
         setUp(testRecipe);
-        wait(1000);
         onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
         onView(withId(R.id.opinionsList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        wait(1000);
         onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
-        //onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
+        onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
     }
 
 

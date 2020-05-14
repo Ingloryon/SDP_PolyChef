@@ -2,9 +2,10 @@ package ch.epfl.polychef.recipe;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Opinion {
+public class Opinion implements Serializable {
 
     private String comment;
     private int rate;
