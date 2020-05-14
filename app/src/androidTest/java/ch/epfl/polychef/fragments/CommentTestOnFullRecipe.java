@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -107,7 +108,12 @@ public class CommentTestOnFullRecipe {
 
 
     public void initActivity() {
+        Intents.init();
         intentsTestRule.launchActivity(new Intent());
+    }
+    @After
+    public void afterTest(){
+        Intents.release();
     }
 
     public void setUp(Recipe recipe){
@@ -118,11 +124,6 @@ public class CommentTestOnFullRecipe {
         FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_host_fragment, fragment).addToBackStack(null);
         transaction.commit();
-    }
-
-    @After
-    public void finishActivity(){
-        intentsTestRule.finishActivity();
     }
 
     private class FakeHomePage extends HomePage {
