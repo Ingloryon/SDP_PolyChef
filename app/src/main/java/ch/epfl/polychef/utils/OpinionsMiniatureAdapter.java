@@ -1,6 +1,7 @@
 package ch.epfl.polychef.utils;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Opinion;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
@@ -109,7 +111,16 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
 
         @Override
         public void onClick(View view) {
-            // Go to user page
+            // Get the clicked user from the recyclerView
+            int opinionPosition = recyclerView.getChildLayoutPosition(view);
+            Opinion clickedOpinion = allOpinions.get(opinionPosition);
+            User clickedUser = userOp.get(clickedOpinion);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("User", clickedUser);
+
+            ((HomePage) mainContext)
+                    .getNavController()
+                    .navigate(R.id.userProfileFragment, bundle);
         }
     }
 
