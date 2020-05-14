@@ -49,8 +49,6 @@ public class HomePage extends ConnectedActivity {
         setContentView(R.layout.activity_home_page);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-//        getUserStorage().initializeUserFromAuthenticatedUser(this);
-
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,7 +65,6 @@ public class HomePage extends ConnectedActivity {
 
         navView = findViewById(R.id.navigationView);
 
-//        setupNavigation();
         setupDrawer();
 
         if(getIntent().getExtras() != null) {
@@ -217,8 +214,6 @@ public class HomePage extends ConnectedActivity {
                     }
                 }
         );
-
-//        setupUserProfileNavigation(navView.getHeaderView(0));
 
         //Home should be checked initially
         currentItem = navView.getMenu().findItem(R.id.nav_home);

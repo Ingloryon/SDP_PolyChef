@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
@@ -61,14 +63,15 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
     }
 
     protected void goHomeIfConnected() {
-        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if(getFireBaseAuth().getCurrentUser() != null) {
             findViewById(R.id.autoLoginBackground).setVisibility(View.VISIBLE);
             findViewById(R.id.autoLoginProgress).setVisibility(View.VISIBLE);
 
             preventInteractions();
 
             Toast.makeText(this, "Auto connect" , Toast.LENGTH_SHORT).show();
-            UserStorage.getInstance().initializeUserFromAuthenticatedUser(this);
+
+            getUserStorage().initializeUserFromAuthenticatedUser(this);
         }
     }
 
@@ -104,6 +107,18 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
         findViewById(R.id.autoLoginProgress).setVisibility(View.GONE);
         findViewById(R.id.autoLoginBackground).setVisibility(View.GONE);
+        startNextActivity();
+    }
+
+    public void startNextActivity(){
         startActivity(new Intent(this, HomePage.class));
+    }
+
+    public FirebaseAuth getFireBaseAuth(){
+        return FirebaseAuth.getInstance();
+    }
+
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
     }
 }
