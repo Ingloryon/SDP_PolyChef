@@ -106,7 +106,7 @@ public class HomePage extends ConnectedActivity {
     public void setupProfilePicture(){
         ImageView profileImage = navView.getHeaderView(0).findViewById(R.id.drawerProfileImage);
 
-        profileImage.setImageResource(User.getResourceImageFromActivity(getPolychefUser()));
+        profileImage.setImageResource(User.getResourceImageFromUser(getPolychefUser()));
     }
 
     @Override

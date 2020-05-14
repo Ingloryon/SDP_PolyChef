@@ -50,7 +50,7 @@ public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdap
     public void onBindViewHolder(@NonNull MiniatureViewHolder holder, int position) {
         User user = userList.get(position);
         holder.username.setText(user.getUsername());
-        holder.imageView.setImageResource(User.getResourceImageFromActivity(user));
+        holder.imageView.setImageResource(User.getResourceImageFromUser(user));
     }
 
     @Override

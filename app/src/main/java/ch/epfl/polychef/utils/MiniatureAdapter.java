@@ -69,7 +69,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         }else if(miniaturesList.get(position).isUser()){
             User user = (User) miniaturesList.get(position);
             holder.username.setText(user.getUsername());
-            holder.imageView.setImageResource(User.getResourceImageFromActivity(user));
+            holder.imageView.setImageResource(User.getResourceImageFromUser(user));
         }
     }
 
