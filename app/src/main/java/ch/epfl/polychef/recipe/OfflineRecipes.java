@@ -6,8 +6,9 @@ import java.util.List;
 
 import ch.epfl.polychef.R;
 
-/*
- * This is a Singleton class of the offline recipes that can't be modified
+
+/**
+ * This is a Singleton class of the offline recipes that can't be modified.
  */
 public final class OfflineRecipes {
     private static final OfflineRecipes offlineRecipesInstance = new OfflineRecipes();
