@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import ch.epfl.polychef.users.UserStorage;
-
 public abstract class Search<S extends Miniatures> {
 
     protected abstract String getTag();

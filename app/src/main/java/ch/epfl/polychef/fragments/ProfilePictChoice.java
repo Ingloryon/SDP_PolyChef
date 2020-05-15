@@ -1,9 +1,5 @@
 package ch.epfl.polychef.fragments;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class ProfilePictChoice extends Fragment {
             public void onItemClick(AdapterView<?> adaptor, View view, int position, long id) {
                 User updatedUser=hostActivity.getUserStorage().getPolyChefUser();
                 updatedUser.setProfilePictureId(position);
-
+                hostActivity.setupProfilePicture();
                 hostActivity.getUserStorage().updateUserInfo(updatedUser);
             }
         });

@@ -4,21 +4,29 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
+import ch.epfl.polychef.users.User;
+import ch.epfl.polychef.users.UserStorage;
 
-public class EntryPage extends AppCompatActivity {
+public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
     private Button logButton;
     private OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();
+
+    private static final String TAG = "EntryPage-TAG";
 
     public static final String LOG_IN = "Log in";
 
@@ -56,9 +64,37 @@ public class EntryPage extends AppCompatActivity {
     }
 
     protected void goHomeIfConnected() {
-        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            startActivity(new Intent(this, HomePage.class));
+        if(getFireBaseAuth().getCurrentUser() != null) {
+
+            startLoading();
+
+            Toast.makeText(this, "Auto connect" , Toast.LENGTH_SHORT).show();
+
+            getUserStorage().initializeUserFromAuthenticatedUser(this);
         }
+    }
+
+    private void startLoading(){
+        findViewById(R.id.autoLoginBackground).setVisibility(View.VISIBLE);
+        findViewById(R.id.autoLoginProgress).setVisibility(View.VISIBLE);
+
+        preventInteractions();
+    }
+
+    private void stopLoading(){
+        allowInteractions();
+
+        findViewById(R.id.autoLoginProgress).setVisibility(View.GONE);
+        findViewById(R.id.autoLoginBackground).setVisibility(View.GONE);
+    }
+
+    private void preventInteractions(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void allowInteractions(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     /** Called when the user taps the log button. */
@@ -67,4 +103,36 @@ public class EntryPage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onFailure() {
+        Log.e(TAG, "Unable to initialise the PolyChef User");
+        stopLoading();
+    }
+
+    @Override
+    public synchronized void onSuccess(User data) {
+
+        //Small delay to make it feel intentional
+        try{
+            wait(500);
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        stopLoading();
+
+        startNextActivity();
+    }
+
+    public void startNextActivity(){
+        startActivity(new Intent(this, HomePage.class));
+    }
+
+    public FirebaseAuth getFireBaseAuth(){
+        return FirebaseAuth.getInstance();
+    }
+
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
+    }
 }

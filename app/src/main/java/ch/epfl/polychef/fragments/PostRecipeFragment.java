@@ -34,7 +34,6 @@ import java.util.UUID;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
-import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
