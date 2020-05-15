@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Opinion;
@@ -130,32 +131,24 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
 
     public void loadNewComments(){
         isLoading = true;
+        MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(Math.min(nbOfOpinionsLoadedAtATime, allOpinions.size() - currentIndex), (newUser) -> {
+            isLoading = false;
+            for(int i = 0; i < newUser.size(); i++){
+                userOp.put(allOpinions.get(currentIndex), newUser.get(i));
+                displayedOpinions.add(allOpinions.get(currentIndex));
+                currentIndex += 1;
+            }
+            notifyDataSetChanged();
+        });
         for(int i = currentIndex; i < Math.min(currentIndex + nbOfOpinionsLoadedAtATime, allOpinions.size()); i++){
-            final Opinion current = allOpinions.get(i);
-            final int forIndex = i;
-            userStorage.getUserByID(recipe.getRating().getUserIdFromOpinion(current), new CallHandler<User>() {
-                @Override
-                public void onSuccess(User user) {
-                    userOp.put(current, user);
-                    displayedOpinions.add(current);
-                    notifyDataSetChanged();
-                    if(forIndex == Math.min(currentIndex + nbOfOpinionsLoadedAtATime, allOpinions.size()) - 1){
-                        isLoading = false;
-                    }
-                }
-
-                @Override
-                public void onFailure() {
-                    Log.e("Comments", "Error loading User");
-                }
-            });
+            userStorage.getUserByID(recipe.getRating().getUserIdFromOpinion(allOpinions.get(i)), multipleCallHandler);
         }
-        currentIndex += Math.min(currentIndex + nbOfOpinionsLoadedAtATime, allOpinions.size());
     }
 
     public List<Opinion> getDisplayedOpinions(){
         return displayedOpinions;
     }
+
     public HashMap<Opinion, User>  getMap(){
         return userOp;
     }
