@@ -1,15 +1,9 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
@@ -22,13 +16,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.InterruptedIOException;
 import java.util.HashMap;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.NestedScrollViewHelper;
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.notifications.NotificationSenderTest;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
@@ -40,7 +32,6 @@ import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -49,7 +40,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -66,8 +56,6 @@ public class CommentTestOnFullRecipe {
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setDate("20/06/01 13:10:00")
             .setAuthor("author name");
-
-    private UserStorage fakeUserStorage = mock(UserStorage.class, CALLS_REAL_METHODS);
 
     private HashMap<String, User> userResults;
 
@@ -94,30 +82,12 @@ public class CommentTestOnFullRecipe {
 
     @Before
     public void init(){
-        doAnswer(invocation -> {
-
-            String userID = invocation.getArgument(0);
-            CallHandler<User> ch = invocation.getArgument(1);
-            if(userResults.containsKey(userID)) {
-                ch.onSuccess(userResults.get(userID));
-            }else{
-                ch.onFailure();
-            }
-
-            return null;
-        }).when(fakeUserStorage).getUserByID(anyString(), any(CallHandler.class));
-
-
         userResults = new HashMap<>();
         mockUser = mockUser(mockEmail, mockUsername);
 
         Intents.init();
     }
 
-
-    public void initActivity() {
-
-    }
     @After
     public void afterTest(){
         Intents.release();
@@ -162,16 +132,12 @@ public class CommentTestOnFullRecipe {
 
         @Override
         public FirebaseUser getUser() {
-            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
-            when(mockUser.getEmail()).thenReturn("test@epfl.ch");
-            when(mockUser.getDisplayName()).thenReturn("TestUsername");
-            return mockUser;
+            return mock(FirebaseUser.class);
         }
     }
 
     @Test
     public synchronized void noCommentIsDisplayedOnFragmentLoad() throws InterruptedException {
-        initActivity();
         Recipe testRecipe = fakeRecipeBuilder.build();
         setUp(testRecipe);
         wait(1000);
@@ -180,7 +146,6 @@ public class CommentTestOnFullRecipe {
 
     @Test
     public synchronized void oneCommentIsDisplayed() throws InterruptedException {
-        initActivity();
         Recipe testRecipe = fakeRecipeBuilder.build();
         testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
         userResults.put("id1", mockUser("testEmail", "test"));
@@ -191,7 +156,6 @@ public class CommentTestOnFullRecipe {
 
     @Test
     public synchronized void oneCommentIsDisplayedWithCorrectUser() throws InterruptedException {
-        initActivity();
         Recipe testRecipe = fakeRecipeBuilder.build();
         testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
         userResults.put("id1", mockUser("testEmail", "test"));
@@ -204,7 +168,6 @@ public class CommentTestOnFullRecipe {
 
     @Test
     public synchronized void clickOnCommentLaunchUserProfile() throws InterruptedException {
-        initActivity();
         Recipe testRecipe = fakeRecipeBuilder.build();
         testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
         User mockUser = mockUser("testEmail", "test");
@@ -221,7 +184,6 @@ public class CommentTestOnFullRecipe {
 
     @Test
     public synchronized  void scrollDownTheCommentsLoadNewComments() throws InterruptedException {
-        initActivity();
         Recipe testRecipe = fakeRecipeBuilder.build();
         testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
         testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
