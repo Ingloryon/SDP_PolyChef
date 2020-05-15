@@ -338,7 +338,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     public UserStorage getUserStorage() {
-        return hostActivity.getUserStorage();
+        if(hostActivity != null) {
+            return hostActivity.getUserStorage();
+        } else {
+            return UserStorage.getInstance();
+        }
     }
 
     public RecyclerView getOpinionsRecyclerView(){
