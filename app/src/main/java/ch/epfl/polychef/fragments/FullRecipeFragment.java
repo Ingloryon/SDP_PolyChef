@@ -108,8 +108,14 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         setupSwitch(view);
 
+        addOpinion(view);
+
         containerId = container.getId();
 
+        return view;
+    }
+
+    private void addOpinion(View view) {
         if(online) {
             opinionsRecyclerView = view.findViewById(R.id.opinionsList);
             opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
@@ -118,7 +124,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             topScrollView = view.findViewById(R.id.fullRecipeFragment);
             topScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
-                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     if(!opinionsAdapter.isLoading()) {
                         if (!topScrollView.canScrollVertically(1)) {
                             opinionsAdapter.loadNewComments();
@@ -128,7 +134,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             });
             opinionsAdapter.loadNewComments();
         }
-        return view;
     }
 
     private void displayAuthorName(View view) {
