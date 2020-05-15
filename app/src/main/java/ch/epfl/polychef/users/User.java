@@ -218,11 +218,13 @@ public class User implements Serializable, Miniatures {
         this.key = key;
     }
 
+    @Exclude
     @Override
     public boolean isUser() {
         return true;
     }
 
+    @Exclude
     @Override
     public boolean isRecipe() {
         return false;
