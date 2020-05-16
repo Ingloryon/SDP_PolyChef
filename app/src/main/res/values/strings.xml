@@ -35,6 +35,7 @@
     <string name="EnterCookTime">Cooking time:</string>
     <string name="PostRecipe">Post your Recipe !</string>
     <string name="RateButton">Rate me !</string>
+    <string name="ModifyButton">Modify</string>
     <string name="RateText">How many stars would you give to the recipe </string>
     <string name="sendRate">Send rate</string>
     <string name="clickProfilePict">Click me to change avatar</string>
@@ -67,6 +68,7 @@
     <string name="commandPrevious">previous</string>
     <string name="commandNext">next</string>
     <string name="commandRepeat">repeat</string>
+
     <string name="user_picture">user picture</string>
     <string name="subscribed">subscribed</string>
     <string name="subscribe">subscribe</string>

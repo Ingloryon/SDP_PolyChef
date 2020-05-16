@@ -94,6 +94,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         containerId = container.getId();
 
+        view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+
         return view;
     }
 
@@ -109,6 +111,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                     bundle.putSerializable("User", data);
                     navController.navigate(R.id.userProfileFragment, bundle);
                 });
+
+                if(data!=null && data.equals(getUserStorage().getPolyChefUser())) {
+                    view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+                }
             }
 
             @Override
