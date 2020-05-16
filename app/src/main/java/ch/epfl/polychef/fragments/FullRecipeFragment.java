@@ -113,7 +113,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                 });
 
                 if(data!=null && data.equals(getUserStorage().getPolyChefUser())) {
-                    view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+                    view.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
                 }
             }
 
