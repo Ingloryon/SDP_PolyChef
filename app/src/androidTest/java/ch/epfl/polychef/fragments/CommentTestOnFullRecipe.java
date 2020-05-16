@@ -106,6 +106,11 @@ public class CommentTestOnFullRecipe {
         @Override
         public UserStorage getUserStorage(){
             UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+            doAnswer((call) -> {
+                CallHandler<User> ch = call.getArgument(1);
+                ch.onSuccess(mockUser);
+                return null;
+            }).when(mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
             doAnswer(invocation -> {
 
                 String userID = invocation.getArgument(0);
