@@ -491,7 +491,6 @@ public class PostRecipeFragment extends Fragment {
         difficultyInput.setSelection(originalRecipe.getRecipeDifficulty().ordinal());
 
         List<String> instructions=originalRecipe.getRecipeInstructions();
-
         instructionText.setText(instructions.get(0));
 
         for (int i=1;i<instructions.size();++i){
@@ -499,7 +498,23 @@ public class PostRecipeFragment extends Fragment {
             ((TextView)getView().findViewById(instructionsId.get(i))).setText(instructions.get(i));
         }
 
+        List<Ingredient> ingredients=originalRecipe.getIngredients();
 
+        insertIngredientAtIndex(ingredients.get(0),0);
+        for (int i=1;i<ingredients.size();++i){
+            setAddIngredientButton(getView());
+
+            insertIngredientAtIndex(ingredients.get(i),i);
+        }
+
+    }
+
+    private void insertIngredientAtIndex(Ingredient ingredient, int i) {
+        ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(i);
+
+        ((TextView) currentIngredient.getChildAt(0)).setText(ingredient.getName());
+        ((TextView) currentIngredient.getChildAt(1)).setText(Double.toString(ingredient.getQuantity()));
+        ((Spinner) currentIngredient.getChildAt(2)).setSelection(ingredient.getUnit().ordinal());
     }
 
     public String getUserEmail(){
