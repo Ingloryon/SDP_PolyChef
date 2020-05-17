@@ -503,14 +503,13 @@ public class PostRecipeFragment extends Fragment {
         insertIngredientAtIndex(ingredients.get(0),0);
         for (int i=1;i<ingredients.size();++i){
             setAddIngredientButton(getView());
-
             insertIngredientAtIndex(ingredients.get(i),i);
         }
 
     }
 
-    private void insertIngredientAtIndex(Ingredient ingredient, int i) {
-        ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(i);
+    private void insertIngredientAtIndex(Ingredient ingredient, int index) {
+        ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(index);
 
         ((TextView) currentIngredient.getChildAt(0)).setText(ingredient.getName());
         ((TextView) currentIngredient.getChildAt(1)).setText(Double.toString(ingredient.getQuantity()));
