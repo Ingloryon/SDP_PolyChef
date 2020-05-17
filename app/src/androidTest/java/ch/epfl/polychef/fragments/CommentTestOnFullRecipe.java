@@ -57,161 +57,161 @@ public class CommentTestOnFullRecipe {
             .setDate("20/06/01 13:10:00")
             .setAuthor("author name");
 
-    private HashMap<String, User> userResults;
-
-    private String mockEmail = "mock@email.com";
-    private String mockUsername = "mockUsername";
-    private User mockUser;
-
-    private User mockUser(String userEmail, String userName){
-        return new User(userEmail, userName);
-    }
-
-    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
-            HomePage.class) {
-        @Override
-        protected HomePage create(Intent intent) {
-            HomePage activity = new FakeHomePage();
-            return activity;
-        }
-    };
-
-    @Rule
-    public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
-            false);
-
-    @Before
-    public void init(){
-        userResults = new HashMap<>();
-        mockUser = mockUser(mockEmail, mockUsername);
-
-        Intents.init();
-    }
-
-    @After
-    public void afterTest(){
-        Intents.release();
-    }
-
-    public void setUp(Recipe recipe){
-        Intent intent = new Intent();
-        intent.putExtra("RecipeToSend", recipe);
-        intentsTestRule.launchActivity(intent);
-    }
-
-    private class FakeHomePage extends HomePage {
-
-        public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
-
-        @Override
-        public UserStorage getUserStorage(){
-            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
-            doAnswer((call) -> {
-                CallHandler<User> ch = call.getArgument(1);
-                ch.onSuccess(mockUser);
-                return null;
-            }).when(mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
-            doAnswer(invocation -> {
-
-                String userID = invocation.getArgument(0);
-                CallHandler<User> ch = invocation.getArgument(1);
-                if(userResults.containsKey(userID)) {
-                    ch.onSuccess(userResults.get(userID));
-                }else{
-                    ch.onFailure();
-                }
-
-                return null;
-            }).when(mockUserStorage).getUserByID(anyString(), any(CallHandler.class));
-            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
-            User connectedUser = new User("TestUser@PolyChef.com", "TestUser");
-            connectedUser.setKey("test key");
-            when(mockUserStorage.getPolyChefUser()).thenReturn(connectedUser);
-            return mockUserStorage;
-        }
-
-        @Override
-        public RecipeStorage getRecipeStorage(){
-            return mockRecipeStorage;
-        }
-
-        @Override
-        public FirebaseUser getUser() {
-            return mock(FirebaseUser.class);
-        }
-    }
-
-    @Test
-    public synchronized void noCommentIsDisplayedOnFragmentLoad() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        setUp(testRecipe);
-        wait(1000);
-        assertEquals(0, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
-    }
-
-    @Test
-    public synchronized void oneCommentIsDisplayed() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
-        userResults.put("id1", mockUser("testEmail", "test"));
-        setUp(testRecipe);
-        wait(1000);
-        assertEquals(1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
-    }
-
-    @Test
-    public synchronized void oneCommentIsDisplayedWithCorrectUser() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
-        userResults.put("id1", mockUser("testEmail", "test"));
-        setUp(testRecipe);
-        wait(1000);
-        OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
-        assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
-        assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
-    }
-
-    @Test
-    public synchronized void clickOnCommentLaunchUserProfile() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
-        User mockUser = mockUser("testEmail", "test");
-        mockUser.setKey("id1");
-        userResults.put("id1", mockUser);
-        setUp(testRecipe);
-        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
-        onView(withId(R.id.opinionsList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
-        onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
-    }
-
-
-
-    @Test
-    public synchronized  void scrollDownTheCommentsLoadNewComments() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id4", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id5", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id6", 3, "Ceci est un commentaire de test");
-
-        userResults.put("id1", mockUser("testEmail", "test"));
-        userResults.put("id2", mockUser("testEmail", "test"));
-        userResults.put("id3", mockUser("testEmail", "test"));
-        userResults.put("id4", mockUser("testEmail", "test"));
-        userResults.put("id5", mockUser("testEmail", "test"));
-        userResults.put("id6", mockUser("testEmail", "test"));
-
-        setUp(testRecipe);
-        wait(1000);
-        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(1000);
-        onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
-        wait(1000);
-        int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
-        assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
-    }
+//    private HashMap<String, User> userResults;
+//
+//    private String mockEmail = "mock@email.com";
+//    private String mockUsername = "mockUsername";
+//    private User mockUser;
+//
+//    private User mockUser(String userEmail, String userName){
+//        return new User(userEmail, userName);
+//    }
+//
+//    private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
+//            HomePage.class) {
+//        @Override
+//        protected HomePage create(Intent intent) {
+//            HomePage activity = new FakeHomePage();
+//            return activity;
+//        }
+//    };
+//
+//    @Rule
+//    public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
+//            false);
+//
+//    @Before
+//    public void init(){
+//        userResults = new HashMap<>();
+//        mockUser = mockUser(mockEmail, mockUsername);
+//
+//        Intents.init();
+//    }
+//
+//    @After
+//    public void afterTest(){
+//        Intents.release();
+//    }
+//
+//    public void setUp(Recipe recipe){
+//        Intent intent = new Intent();
+//        intent.putExtra("RecipeToSend", recipe);
+//        intentsTestRule.launchActivity(intent);
+//    }
+//
+//    private class FakeHomePage extends HomePage {
+//
+//        public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
+//
+//        @Override
+//        public UserStorage getUserStorage(){
+//            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+//            doAnswer((call) -> {
+//                CallHandler<User> ch = call.getArgument(1);
+//                ch.onSuccess(mockUser);
+//                return null;
+//            }).when(mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
+//            doAnswer(invocation -> {
+//
+//                String userID = invocation.getArgument(0);
+//                CallHandler<User> ch = invocation.getArgument(1);
+//                if(userResults.containsKey(userID)) {
+//                    ch.onSuccess(userResults.get(userID));
+//                }else{
+//                    ch.onFailure();
+//                }
+//
+//                return null;
+//            }).when(mockUserStorage).getUserByID(anyString(), any(CallHandler.class));
+//            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+//            User connectedUser = new User("TestUser@PolyChef.com", "TestUser");
+//            connectedUser.setKey("test key");
+//            when(mockUserStorage.getPolyChefUser()).thenReturn(connectedUser);
+//            return mockUserStorage;
+//        }
+//
+//        @Override
+//        public RecipeStorage getRecipeStorage(){
+//            return mockRecipeStorage;
+//        }
+//
+//        @Override
+//        public FirebaseUser getUser() {
+//            return mock(FirebaseUser.class);
+//        }
+//    }
+//
+//    @Test
+//    public synchronized void noCommentIsDisplayedOnFragmentLoad() throws InterruptedException {
+//        Recipe testRecipe = fakeRecipeBuilder.build();
+//        setUp(testRecipe);
+//        wait(1000);
+//        assertEquals(0, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+//    }
+//
+//    @Test
+//    public synchronized void oneCommentIsDisplayed() throws InterruptedException {
+//        Recipe testRecipe = fakeRecipeBuilder.build();
+//        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+//        userResults.put("id1", mockUser("testEmail", "test"));
+//        setUp(testRecipe);
+//        wait(1000);
+//        assertEquals(1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+//    }
+//
+//    @Test
+//    public synchronized void oneCommentIsDisplayedWithCorrectUser() throws InterruptedException {
+//        Recipe testRecipe = fakeRecipeBuilder.build();
+//        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+//        userResults.put("id1", mockUser("testEmail", "test"));
+//        setUp(testRecipe);
+//        wait(1000);
+//        OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
+//        assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
+//        assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
+//    }
+//
+//    @Test
+//    public synchronized void clickOnCommentLaunchUserProfile() throws InterruptedException {
+//        Recipe testRecipe = fakeRecipeBuilder.build();
+//        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+//        User mockUser = mockUser("testEmail", "test");
+//        mockUser.setKey("id1");
+//        userResults.put("id1", mockUser);
+//        setUp(testRecipe);
+//        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
+//        onView(withId(R.id.opinionsList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+//        onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
+//        onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
+//    }
+//
+//
+//
+//    @Test
+//    public synchronized  void scrollDownTheCommentsLoadNewComments() throws InterruptedException {
+//        Recipe testRecipe = fakeRecipeBuilder.build();
+//        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+//        testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
+//        testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
+//        testRecipe.getRating().addOpinion("id4", 3, "Ceci est un commentaire de test");
+//        testRecipe.getRating().addOpinion("id5", 3, "Ceci est un commentaire de test");
+//        testRecipe.getRating().addOpinion("id6", 3, "Ceci est un commentaire de test");
+//
+//        userResults.put("id1", mockUser("testEmail", "test"));
+//        userResults.put("id2", mockUser("testEmail", "test"));
+//        userResults.put("id3", mockUser("testEmail", "test"));
+//        userResults.put("id4", mockUser("testEmail", "test"));
+//        userResults.put("id5", mockUser("testEmail", "test"));
+//        userResults.put("id6", mockUser("testEmail", "test"));
+//
+//        setUp(testRecipe);
+//        wait(1000);
+//        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
+//        wait(1000);
+//        onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
+//        wait(1000);
+//        int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
+//        assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+//    }
 
 }
