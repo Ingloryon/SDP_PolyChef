@@ -58,7 +58,8 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients,
                      int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty,
-                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date,String recipeUuid){
+                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date,String recipeUuid,
+                     Rating rating){
 
         if(recipeUuid==null){
             this.recipeUuid = UUID.randomUUID().toString();
@@ -73,7 +74,11 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         this.estimatedPreparationTime = estimatedPreparationTime;
         this.estimatedCookingTime = estimatedCookingTime;
         this.recipeDifficulty = recipeDifficulty;
-        this.rating = new Rating();
+        if(rating==null) {
+            this.rating = new Rating();
+        }else{
+            this.rating=rating;
+        }
         this.miniaturePath = miniaturePath;
         if(this.miniaturePath == null) {
             this.miniaturePath = Either.none();
@@ -298,5 +303,4 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
 
     // TODO: Add setters for needed attributes
     // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
-    // TODO: Or all the UUID setup isn't necessary and just using Object's equals def is enough ?
 }

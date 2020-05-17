@@ -27,6 +27,7 @@ public final class RecipeBuilder {
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
+    private Rating rating;
 
     private Either<String, Integer> miniaturePath = Either.none();
     private ArrayList<String> picturesName = new ArrayList<>();
@@ -46,7 +47,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
         Preconditions.checkArgument(!author.isEmpty(), "The author must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date,uuid);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date,uuid,rating);
     }
 
     /**
@@ -211,6 +212,18 @@ public final class RecipeBuilder {
     public RecipeBuilder setAuthor(@NonNull String author) {
         Preconditions.checkArgument(!author.isEmpty(), "The author must be non empty");
         this.author = author;
+        return this;
+    }
+
+    /**
+     * Set the rating of the recipe.
+     * Must be used only when modifying a recipe
+     *
+     * @param rating the rating of the recipe
+     * @return the modified builder
+     */
+    public RecipeBuilder setRating(@NonNull Rating rating) {
+        this.rating = rating;
         return this;
     }
 

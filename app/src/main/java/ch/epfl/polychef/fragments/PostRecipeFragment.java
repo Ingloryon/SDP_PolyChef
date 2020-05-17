@@ -36,6 +36,7 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
+import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
@@ -62,6 +63,7 @@ public class PostRecipeFragment extends Fragment {
     private int estimatedCookingTime;
     private String recipeUuid;
     private Recipe.Difficulty recipeDifficulty;
+    private Rating rating;
     private Recipe postedRecipe;
     private LinearLayout instructionLayout;
     private LinearLayout ingredientLayout;
@@ -326,6 +328,9 @@ public class PostRecipeFragment extends Fragment {
             if(recipeUuid!=null){
                 rb.setUuid(recipeUuid);
             }
+            if(rating!=null){
+                rb.setRating(rating);
+            }
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
@@ -481,6 +486,7 @@ public class PostRecipeFragment extends Fragment {
 
     private void initializeFromOriginalRecipe(Recipe originalRecipe) {
         recipeUuid=originalRecipe.getRecipeUuid();//to be able to replace the old one
+        rating=originalRecipe.getRating();//to be able to replace the old one
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
