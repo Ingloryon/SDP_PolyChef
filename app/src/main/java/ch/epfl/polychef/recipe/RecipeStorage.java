@@ -1,6 +1,7 @@
 package ch.epfl.polychef.recipe;
 
 import android.icu.text.SimpleDateFormat;
+import android.telecom.Call;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -60,10 +61,26 @@ public class RecipeStorage implements Serializable  {
     public void addRecipe(Recipe recipe) {
         Preconditions.checkArgument(recipe != null);
 
-        DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
 
-        recipe.setKey(ref.getKey());
-        ref.setValue(recipe);
+        CallHandler<Recipe> callHandler =new CallHandler<Recipe>(){
+            @Override
+            public void onSuccess(Recipe data) {//if the recipe exist, then override it
+                if(data!=null) {
+                    getFirebaseDatabase()
+                            .getReference(RecipeStorage.DB_NAME + "/" + data.getKey())
+                            .setValue(recipe);
+                }
+            }
+
+            @Override
+            public void onFailure() {//if the recipe does not exist, add it
+                DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
+                recipe.setKey(ref.getKey());
+                ref.setValue(recipe);
+            }
+        };
+
+        readRecipeFromUuid(recipe.getRecipeUuid(),callHandler);
     }
 
     public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
