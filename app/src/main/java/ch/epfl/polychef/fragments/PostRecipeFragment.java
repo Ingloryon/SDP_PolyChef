@@ -172,8 +172,8 @@ public class PostRecipeFragment extends Fragment {
         difficultyInput.setAdapter(adapter);
 
         Bundle bundle = this.getArguments();
-        Recipe originalRecipe = (Recipe) bundle.getSerializable("ModifyRecipe");
-        if(originalRecipe!=null){
+        if(bundle!=null){
+            Recipe originalRecipe = (Recipe) bundle.getSerializable("ModifyRecipe");
             initializeFromOriginalRecipe(originalRecipe);
         }
     }
