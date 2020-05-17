@@ -125,8 +125,6 @@ public class PostRecipeFragment extends Fragment {
             }
         });
 
-
-
         instructionLayout = getView().findViewById(R.id.listOfInstructions);
         ingredientLayout = getView().findViewById(R.id.listOfIngredients);
         instructionText = getView().findViewById(R.id.instruction0);
@@ -172,6 +170,12 @@ public class PostRecipeFragment extends Fragment {
                 R.array.difficulty_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficultyInput.setAdapter(adapter);
+
+        Bundle bundle = this.getArguments();
+        Recipe originalRecipe = (Recipe) bundle.getSerializable("ModifyRecipe");
+        if(originalRecipe!=null){
+            initializeFromOriginalRecipe(originalRecipe);
+        }
     }
 
     @Override
@@ -468,6 +472,34 @@ public class PostRecipeFragment extends Fragment {
             return;
         }
         wrongInputs.put("Ingredients", true);
+    }
+
+
+    private void initializeFromOriginalRecipe(Recipe originalRecipe) {
+        EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
+        prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
+
+        EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
+        cookTimeInput.setText(Integer.toString(originalRecipe.getEstimatedCookingTime()));
+
+        EditText personNb = getView().findViewById(R.id.personNbInput);
+        personNb.setText(Integer.toString(originalRecipe.getPersonNumber()));
+
+        EditText title=getView().findViewById(R.id.nameInput);
+        title.setText(originalRecipe.getName());
+
+        difficultyInput.setSelection(originalRecipe.getRecipeDifficulty().ordinal());
+
+        List<String> instructions=originalRecipe.getRecipeInstructions();
+
+        instructionText.setText(instructions.get(0));
+
+        for (int i=1;i<instructions.size();++i){
+            setAddInstructionButton(getView());
+            ((TextView)getView().findViewById(instructionsId.get(i))).setText(instructions.get(i));
+        }
+
+
     }
 
     public String getUserEmail(){

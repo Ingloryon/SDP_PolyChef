@@ -145,6 +145,22 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             }
         });
 
+        Button modifyButton = getView().findViewById(R.id.modifyButton);
+        modifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() instanceof HomePage) {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("ModifyRecipe", currentRecipe);
+
+                    NavController navController = ((HomePage) getActivity()).getNavController();
+                    navController.navigate(R.id.postRecipeFragment, bundle);
+
+                }
+            }
+        });
+
     }
 
     private void displayFavouriteButton(View view) {
