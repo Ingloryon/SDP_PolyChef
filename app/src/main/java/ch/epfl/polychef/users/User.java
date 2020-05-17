@@ -142,10 +142,16 @@ public class User implements Serializable, Miniatures {
 
     /**
      * Adds a recipe to the user.
-     * @param recipe the new recipe of the user
+     * If the recipe does not already exist.
+     * @param recipeUuid the new recipe of the user
      */
-    public void addRecipe(String recipe) {
-        recipes.add(recipe);
+    public void addRecipe(String recipeUuid) {
+        recipes.forEach(uuid->{
+            if(uuid.equals(recipeUuid)){
+                return;//do not add it twice if existing
+            }
+        });
+        recipes.add(recipeUuid);
     }
 
     /**

@@ -60,6 +60,7 @@ public class PostRecipeFragment extends Fragment {
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
+    private String recipeUuid;
     private Recipe.Difficulty recipeDifficulty;
     private Recipe postedRecipe;
     private LinearLayout instructionLayout;
@@ -322,6 +323,9 @@ public class PostRecipeFragment extends Fragment {
                 rb.addPicturePath(uuidPath + i);
             }
             rb.setAuthor(getUserEmail()).build();
+            if(recipeUuid!=null){
+                rb.setUuid(recipeUuid);
+            }
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
@@ -476,6 +480,8 @@ public class PostRecipeFragment extends Fragment {
 
 
     private void initializeFromOriginalRecipe(Recipe originalRecipe) {
+        recipeUuid=originalRecipe.getRecipeUuid();//to be able to replace the old one
+
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
 

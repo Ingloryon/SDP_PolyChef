@@ -29,7 +29,7 @@ public class RecipeStorage implements Serializable  {
     private static RecipeStorage INSTANCE=new RecipeStorage();
 
     private static final String TAG = "RecipeStorage";
-    public static final String DB_NAME = "recipes";
+    public static final String DB_NAME = "recipes_DO_NOT_DESTROY_THE_REAL_ONE";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
     public static final String RECIPE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 
@@ -61,6 +61,7 @@ public class RecipeStorage implements Serializable  {
         Preconditions.checkArgument(recipe != null);
 
         DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
+
         recipe.setKey(ref.getKey());
         ref.setValue(recipe);
     }

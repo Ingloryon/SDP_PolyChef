@@ -20,6 +20,7 @@ public final class RecipeBuilder {
     private String date;
     private String name = "";
     private String author = "";
+    private String uuid=null;
     private List<String> recipeInstructions = new ArrayList<>();
     private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
@@ -45,7 +46,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
         Preconditions.checkArgument(!author.isEmpty(), "The author must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date,uuid);
     }
 
     /**
@@ -210,6 +211,19 @@ public final class RecipeBuilder {
     public RecipeBuilder setAuthor(@NonNull String author) {
         Preconditions.checkArgument(!author.isEmpty(), "The author must be non empty");
         this.author = author;
+        return this;
+    }
+
+    /**
+     * Set the uuid of the recipe.
+     * Must be used only when modifying a recipe
+     *
+     * @param uuid the uuid of the recipe, must be non empty
+     * @return the modified builder
+     */
+    public RecipeBuilder setUuid(@NonNull String uuid) {
+        Preconditions.checkArgument(!uuid.isEmpty(), "The uuid must be non empty");
+        this.uuid = uuid;
         return this;
     }
 }

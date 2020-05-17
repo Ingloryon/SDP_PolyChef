@@ -58,9 +58,13 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients,
                      int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty,
-                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date){
+                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date,String recipeUuid){
 
-        this.recipeUuid = UUID.randomUUID().toString();
+        if(recipeUuid==null){
+            this.recipeUuid = UUID.randomUUID().toString();
+        }else{
+            this.recipeUuid=recipeUuid;
+        }
         this.name = name;
         this.recipeInstructions = recipeInstructions;
         //TODO save deepCopy of ingredients;
