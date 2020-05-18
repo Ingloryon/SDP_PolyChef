@@ -154,24 +154,24 @@ public class CommentTestOnFullRecipe {
 
     @Test
     public void noCommentIsDisplayedOnFragmentLoad() {
-//        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-//        assertEquals(0, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        assertEquals(0, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
     public void oneCommentIsDisplayed() {
-//        userResults.put("id1", mockUser("testEmail", "test"));
-//        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
-//        assertEquals(1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+        userResults.put("id1", mockUser("testEmail", "test"));
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        assertEquals(1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
     public void oneCommentIsDisplayedWithCorrectUser() {
-//        userResults.put("id1", mockUser("testEmail", "test"));
-//        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
-//        OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
-//        assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
-//        assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
+        userResults.put("id1", mockUser("testEmail", "test"));
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
+        assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
+        assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
     }
 
     @Test
