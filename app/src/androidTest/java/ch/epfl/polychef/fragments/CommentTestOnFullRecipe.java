@@ -86,11 +86,10 @@ public class CommentTestOnFullRecipe {
             false);
 
     @Before
-    public synchronized void init() throws InterruptedException {
+    public void init() {
         userResults = new HashMap<>();
         mockUser = mockUser("mock@email.com", "mockUsername");
         intentsTestRule.launchActivity(new Intent());
-        wait(1000);
     }
 
     private class FakeHomePage extends RateRecipeFragmentsHomeTest.FakeFakeHomePage {
@@ -176,27 +175,27 @@ public class CommentTestOnFullRecipe {
 
     @Test
     public void clickOnCommentLaunchUserProfile() {
-//        User mockUser = mockUser("testEmail", "test");
-//        mockUser.setKey("id1");
-//        userResults.put("id1", mockUser);
-//        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
-//        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), RecyclerViewActions.actionOnItemAtPosition(0, click()));
-//        onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
-//        onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
+        User mockUser = mockUser("testEmail", "test");
+        mockUser.setKey("id1");
+        userResults.put("id1", mockUser);
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
+        onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
     }
 
     @Test
     public synchronized void scrollDownTheCommentsLoadNewComments() {
-//        userResults.put("id1", mockUser("testEmail", "test"));
-//        userResults.put("id2", mockUser("testEmail", "test"));
-//        userResults.put("id3", mockUser("testEmail", "test"));
-//        userResults.put("id4", mockUser("testEmail", "test"));
-//        userResults.put("id5", mockUser("testEmail", "test"));
-//        userResults.put("id6", mockUser("testEmail", "test"));
-//        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
-//        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), swipeUp());
-//        int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
-//        assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+        userResults.put("id1", mockUser("testEmail", "test"));
+        userResults.put("id2", mockUser("testEmail", "test"));
+        userResults.put("id3", mockUser("testEmail", "test"));
+        userResults.put("id4", mockUser("testEmail", "test"));
+        userResults.put("id5", mockUser("testEmail", "test"));
+        userResults.put("id6", mockUser("testEmail", "test"));
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
+        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), swipeUp());
+        int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
+        assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
 }
