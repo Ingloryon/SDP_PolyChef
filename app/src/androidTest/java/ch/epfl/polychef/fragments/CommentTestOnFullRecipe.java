@@ -3,21 +3,18 @@ package ch.epfl.polychef.fragments;
 import android.content.Intent;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
 
 import com.google.firebase.auth.FirebaseUser;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,8 +59,6 @@ public class CommentTestOnFullRecipe {
 
     private HashMap<String, User> userResults;
 
-    private String mockEmail = "mock@email.com";
-    private String mockUsername = "mockUsername";
     private User mockUser;
     private List<Recipe> recipeArr = new ArrayList<>();
 
@@ -87,9 +82,11 @@ public class CommentTestOnFullRecipe {
     @Before
     public synchronized void init() throws InterruptedException {
         userResults = new HashMap<>();
+        String mockEmail = "mock@email.com";
+        String mockUsername = "mockUsername";
         mockUser = mockUser(mockEmail, mockUsername);
         intentsTestRule.launchActivity(new Intent());
-        wait(1000);
+        wait(2000);
     }
 
     private class FakeHomePage extends HomePage {
@@ -186,8 +183,6 @@ public class CommentTestOnFullRecipe {
         onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
         onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
     }
-
-
 
     @Test
     public  void scrollDownTheCommentsLoadNewComments() {
