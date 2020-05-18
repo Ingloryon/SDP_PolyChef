@@ -84,13 +84,11 @@ public class CommentTestOnFullRecipe {
     public void init(){
         userResults = new HashMap<>();
         mockUser = mockUser(mockEmail, mockUsername);
-
-        Intents.init();
     }
 
     @After
-    public void afterTest(){
-        Intents.release();
+    public void finishActivity() {
+        intentsTestRule.finishActivity();
     }
 
     public void setUp(Recipe recipe){
