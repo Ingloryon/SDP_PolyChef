@@ -9,6 +9,8 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,6 +32,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.CallHandlerChecker;
 import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -85,9 +88,7 @@ public class CommentTestOnFullRecipe {
     @Before
     public synchronized void init() throws InterruptedException {
         userResults = new HashMap<>();
-        String mockEmail = "mock@email.com";
-        String mockUsername = "mockUsername";
-        mockUser = mockUser(mockEmail, mockUsername);
+        mockUser = mockUser("mock@email.com", "mockUsername");
         intentsTestRule.launchActivity(new Intent());
         wait(1000);
     }
@@ -95,6 +96,22 @@ public class CommentTestOnFullRecipe {
     private class FakeHomePage extends HomePage {
 
         public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
+
+        public FakeHomePage() {
+            Recipe testRecipe = fakeRecipeBuilder.build();
+            recipeArr.add(testRecipe);
+            testRecipe = fakeRecipeBuilder.build();
+            testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+            recipeArr.add(testRecipe);
+            testRecipe = fakeRecipeBuilder.build();
+            testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id4", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id5", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id6", 3, "Ceci est un commentaire de test");
+            recipeArr.add(testRecipe);
+        }
 
         @Override
         public UserStorage getUserStorage(){
@@ -124,20 +141,28 @@ public class CommentTestOnFullRecipe {
         }
 
         @Override
+        public FirebaseDatabase getFireDatabase(){
+
+            FirebaseDatabase mockFirebase=Mockito.mock(FirebaseDatabase.class);
+            DatabaseReference mockDatabaseReference=Mockito.mock(DatabaseReference.class);
+
+            when(mockFirebase.getReference(anyString())).thenReturn(mockDatabaseReference);
+            when(mockDatabaseReference.child(anyString())).thenReturn(mockDatabaseReference);
+
+            CallHandlerChecker<Recipe> callHandler=new CallHandlerChecker<Recipe>(recipeArr.get(0),true);
+
+            doAnswer((call) -> {
+                Recipe recipe =  call.getArgument(0);
+                callHandler.onSuccess(recipe);
+
+                return null;
+            }).when(mockDatabaseReference).setValue(any(Recipe.class));
+
+            return mockFirebase;
+        }
+
+        @Override
         public RecipeStorage getRecipeStorage(){
-            Recipe testRecipe = fakeRecipeBuilder.build();
-            recipeArr.add(testRecipe);
-            testRecipe = fakeRecipeBuilder.build();
-            testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
-            recipeArr.add(testRecipe);
-            testRecipe = fakeRecipeBuilder.build();
-            testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
-            testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
-            testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
-            testRecipe.getRating().addOpinion("id4", 3, "Ceci est un commentaire de test");
-            testRecipe.getRating().addOpinion("id5", 3, "Ceci est un commentaire de test");
-            testRecipe.getRating().addOpinion("id6", 3, "Ceci est un commentaire de test");
-            recipeArr.add(testRecipe);
             when(mockRecipeStorage.getCurrentDate()).thenCallRealMethod();
             doAnswer((call) -> {
                 CallHandler<List<Recipe>> ch =  call.getArgument(4);
@@ -149,7 +174,10 @@ public class CommentTestOnFullRecipe {
 
         @Override
         public FirebaseUser getUser() {
-            return mock(FirebaseUser.class);
+            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+            when(mockUser.getEmail()).thenReturn("test@epfl.ch");
+            when(mockUser.getDisplayName()).thenReturn("TestUsername");
+            return mockUser;
         }
     }
 
@@ -177,13 +205,13 @@ public class CommentTestOnFullRecipe {
 
     @Test
     public void clickOnCommentLaunchUserProfile() {
-//        User mockUser = mockUser("testEmail", "test");
-//        mockUser.setKey("id1");
-//        userResults.put("id1", mockUser);
-//        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
-//        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), RecyclerViewActions.actionOnItemAtPosition(0, click()));
-//        onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
-//        onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
+        User mockUser = mockUser("testEmail", "test");
+        mockUser.setKey("id1");
+        userResults.put("id1", mockUser);
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
+        onView(withId(R.id.UsernameDisplay)).check(matches(withText("test")));
     }
 
     @Test
