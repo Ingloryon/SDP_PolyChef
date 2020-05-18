@@ -3,6 +3,7 @@ package ch.epfl.polychef.fragments;
 import android.content.Intent;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
@@ -12,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(AndroidJUnit4.class)
 public class CommentTestOnFullRecipe {
 
     public static RecipeBuilder fakeRecipeBuilder = new RecipeBuilder()
@@ -86,7 +89,7 @@ public class CommentTestOnFullRecipe {
         String mockUsername = "mockUsername";
         mockUser = mockUser(mockEmail, mockUsername);
         intentsTestRule.launchActivity(new Intent());
-        wait(2000);
+        wait(1000);
     }
 
     private class FakeHomePage extends HomePage {
