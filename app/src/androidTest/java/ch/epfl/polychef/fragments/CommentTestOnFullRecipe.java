@@ -16,7 +16,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.NestedScrollViewHelper;
@@ -62,6 +65,7 @@ public class CommentTestOnFullRecipe {
     private String mockEmail = "mock@email.com";
     private String mockUsername = "mockUsername";
     private User mockUser;
+    private List<Recipe> recipeArr = new ArrayList<>();
 
     private User mockUser(String userEmail, String userName){
         return new User(userEmail, userName);
@@ -81,20 +85,11 @@ public class CommentTestOnFullRecipe {
             false);
 
     @Before
-    public void init(){
+    public synchronized void init() throws InterruptedException {
         userResults = new HashMap<>();
         mockUser = mockUser(mockEmail, mockUsername);
-    }
-
-    @After
-    public void finishActivity() {
-        intentsTestRule.finishActivity();
-    }
-
-    public void setUp(Recipe recipe){
-        Intent intent = new Intent();
-        intent.putExtra("RecipeToSend", recipe);
-        intentsTestRule.launchActivity(intent);
+        intentsTestRule.launchActivity(new Intent());
+        wait(1000);
     }
 
     private class FakeHomePage extends HomePage {
@@ -130,6 +125,25 @@ public class CommentTestOnFullRecipe {
 
         @Override
         public RecipeStorage getRecipeStorage(){
+            Recipe testRecipe = fakeRecipeBuilder.build();
+            recipeArr.add(testRecipe);
+            testRecipe = fakeRecipeBuilder.build();
+            testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+            recipeArr.add(testRecipe);
+            testRecipe = fakeRecipeBuilder.build();
+            testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id4", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id5", 3, "Ceci est un commentaire de test");
+            testRecipe.getRating().addOpinion("id6", 3, "Ceci est un commentaire de test");
+            recipeArr.add(testRecipe);
+            when(mockRecipeStorage.getCurrentDate()).thenCallRealMethod();
+            doAnswer((call) -> {
+                CallHandler<List<Recipe>> ch =  call.getArgument(4);
+                ch.onSuccess(recipeArr);
+                return null;
+            }).when(mockRecipeStorage).getNRecipes(any(Integer.class),any(String.class),any(String.class),any(Boolean.class),any(CallHandler.class));
             return mockRecipeStorage;
         }
 
@@ -140,44 +154,33 @@ public class CommentTestOnFullRecipe {
     }
 
     @Test
-    public synchronized void noCommentIsDisplayedOnFragmentLoad() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        setUp(testRecipe);
-        wait(1000);
+    public void noCommentIsDisplayedOnFragmentLoad() {
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         assertEquals(0, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
-    public synchronized void oneCommentIsDisplayed() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+    public void oneCommentIsDisplayed() {
         userResults.put("id1", mockUser("testEmail", "test"));
-        setUp(testRecipe);
-        wait(1000);
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         assertEquals(1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
-    public synchronized void oneCommentIsDisplayedWithCorrectUser() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+    public void oneCommentIsDisplayedWithCorrectUser() {
         userResults.put("id1", mockUser("testEmail", "test"));
-        setUp(testRecipe);
-        wait(1000);
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
         assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
         assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
     }
 
     @Test
-    public synchronized void clickOnCommentLaunchUserProfile() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
+    public void clickOnCommentLaunchUserProfile() {
         User mockUser = mockUser("testEmail", "test");
         mockUser.setKey("id1");
         userResults.put("id1", mockUser);
-        setUp(testRecipe);
-        wait(1000);
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
         onView(withId(R.id.opinionsList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.UsernameDisplay)).check(matches(isDisplayed()));
@@ -187,28 +190,16 @@ public class CommentTestOnFullRecipe {
 
 
     @Test
-    public synchronized  void scrollDownTheCommentsLoadNewComments() throws InterruptedException {
-        Recipe testRecipe = fakeRecipeBuilder.build();
-        testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id4", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id5", 3, "Ceci est un commentaire de test");
-        testRecipe.getRating().addOpinion("id6", 3, "Ceci est un commentaire de test");
-
+    public  void scrollDownTheCommentsLoadNewComments() {
         userResults.put("id1", mockUser("testEmail", "test"));
         userResults.put("id2", mockUser("testEmail", "test"));
         userResults.put("id3", mockUser("testEmail", "test"));
         userResults.put("id4", mockUser("testEmail", "test"));
         userResults.put("id5", mockUser("testEmail", "test"));
         userResults.put("id6", mockUser("testEmail", "test"));
-
-        setUp(testRecipe);
-        wait(1000);
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
         onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(1000);
         onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
-        wait(1000);
         int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
         assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
