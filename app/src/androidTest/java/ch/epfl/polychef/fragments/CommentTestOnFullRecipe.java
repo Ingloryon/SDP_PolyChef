@@ -4,13 +4,11 @@ import android.content.Intent;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
-
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,7 +30,6 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
-import ch.epfl.polychef.utils.CallHandlerChecker;
 import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -50,6 +47,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class CommentTestOnFullRecipe {
 
     public static RecipeBuilder fakeRecipeBuilder = new RecipeBuilder()
@@ -185,7 +183,7 @@ public class CommentTestOnFullRecipe {
     }
 
     @Test
-    public synchronized void scrollDownTheCommentsLoadNewComments() {
+    public void scrollDownTheCommentsLoadNewComments() {
         userResults.put("id1", mockUser("testEmail", "test"));
         userResults.put("id2", mockUser("testEmail", "test"));
         userResults.put("id3", mockUser("testEmail", "test"));
@@ -193,9 +191,11 @@ public class CommentTestOnFullRecipe {
         userResults.put("id5", mockUser("testEmail", "test"));
         userResults.put("id6", mockUser("testEmail", "test"));
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
-        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), swipeUp());
-        int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
-        assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+        onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo());
+        onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
+        onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
+        onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
+        assertEquals(6, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
 
 }
