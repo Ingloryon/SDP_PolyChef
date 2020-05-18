@@ -93,7 +93,7 @@ public class CommentTestOnFullRecipe {
         wait(1000);
     }
 
-    private class FakeHomePage extends HomePage {
+    private class FakeHomePage extends RateRecipeFragmentsHomeTest.FakeFakeHomePage {
 
         public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
 
@@ -141,27 +141,6 @@ public class CommentTestOnFullRecipe {
         }
 
         @Override
-        public FirebaseDatabase getFireDatabase(){
-
-            FirebaseDatabase mockFirebase=Mockito.mock(FirebaseDatabase.class);
-            DatabaseReference mockDatabaseReference=Mockito.mock(DatabaseReference.class);
-
-            when(mockFirebase.getReference(anyString())).thenReturn(mockDatabaseReference);
-            when(mockDatabaseReference.child(anyString())).thenReturn(mockDatabaseReference);
-
-            CallHandlerChecker<Recipe> callHandler=new CallHandlerChecker<Recipe>(recipeArr.get(0),true);
-
-            doAnswer((call) -> {
-                Recipe recipe =  call.getArgument(0);
-                callHandler.onSuccess(recipe);
-
-                return null;
-            }).when(mockDatabaseReference).setValue(any(Recipe.class));
-
-            return mockFirebase;
-        }
-
-        @Override
         public RecipeStorage getRecipeStorage(){
             when(mockRecipeStorage.getCurrentDate()).thenCallRealMethod();
             doAnswer((call) -> {
@@ -170,14 +149,6 @@ public class CommentTestOnFullRecipe {
                 return null;
             }).when(mockRecipeStorage).getNRecipes(any(Integer.class),any(String.class),any(String.class),any(Boolean.class),any(CallHandler.class));
             return mockRecipeStorage;
-        }
-
-        @Override
-        public FirebaseUser getUser() {
-            FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
-            when(mockUser.getEmail()).thenReturn("test@epfl.ch");
-            when(mockUser.getDisplayName()).thenReturn("TestUsername");
-            return mockUser;
         }
     }
 
@@ -224,11 +195,6 @@ public class CommentTestOnFullRecipe {
         userResults.put("id6", mockUser("testEmail", "test"));
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
         onView(withId(R.id.opinionsList)).perform(NestedScrollViewHelper.nestedScrollTo(), swipeUp());
-        try {
-            wait(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         int nbOfCommentsLoadedAtATime = ((OpinionsMiniatureAdapter) (((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter())).getNbOfOpinionsLoadedAtATime();
         assertEquals(nbOfCommentsLoadedAtATime + 1, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
     }
