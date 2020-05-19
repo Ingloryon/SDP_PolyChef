@@ -29,11 +29,11 @@ connected_check_task:
     - chmod +x ./cc-test-reporter
     - ./cc-test-reporter before-build
   run_instrumented_tests_script:
-    ./gradlew build connectedCheck jacocoTestReport
+    ./gradlew connectedCheck jacocoTestReport
   report_codeclimate_script:
     # Report test coverage to Code Climate
     - export JACOCO_SOURCE_PATH=app/src/main/java/
-    - ./cc-test-reporter format-coverage ./app/build/reports/coverage/debug/report.xml --input-type jacoco -d
+    - ./cc-test-reporter format-coverage ./app/build/reports/coverage/debug/report.xml --input-type jacoco
     - ./cc-test-reporter upload-coverage
 
 android_lint_task:
