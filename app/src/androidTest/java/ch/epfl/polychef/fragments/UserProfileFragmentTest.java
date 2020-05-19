@@ -168,12 +168,8 @@ public class UserProfileFragmentTest {
             wait(1000);
 
         }
-        assertEquals(nbr, ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
-    }
 
-    private void reFreshMockUser(){
-        mockUser = new User(mockEmail, mockUsername);
-        mockUser.setKey("test key");
+        assertEquals(nbr, ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
     }
 
     @After

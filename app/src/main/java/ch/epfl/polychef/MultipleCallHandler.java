@@ -27,6 +27,7 @@ public class MultipleCallHandler<T> implements CallHandler<T> {
     }
 
     public void onFailure() {
+        ++currentIndex;
         Log.e("MultipleCallHandler", "Error");
     }
 }
