@@ -61,7 +61,7 @@ public class ProfilePictureAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.profile_pict_item, null);
             holder = new ViewHolder();
-            holder.flagView = (ImageView) convertView.findViewById(R.id.profile_picture_drawable);
+            holder.flagView = (ImageView) convertView.findViewById(R.id.profilePicture);
             holder.pictureName = (TextView) convertView.findViewById(R.id.profile_picture_label);
             convertView.setTag(holder);
         } else {
