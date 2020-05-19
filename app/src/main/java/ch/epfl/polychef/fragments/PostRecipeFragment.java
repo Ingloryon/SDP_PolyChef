@@ -219,9 +219,6 @@ public class PostRecipeFragment extends Fragment {
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
-            // Send notification to all users subscribed to the current user
-            User currentUser = hostActivity.getUserStorage().getPolyChefUser();
-            hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
 
             Intent intent = new Intent(getActivity(), HomePage.class);
             startActivity(intent);
@@ -243,9 +240,14 @@ public class PostRecipeFragment extends Fragment {
                 imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), getUserEmail(), postedRecipe.getRecipeUuid());
             }
             if(postedRecipe.getKey().equals("")){
+                User currentUser  = hostActivity.getUserStorage().getPolyChefUser();
+
                 hostActivity.getRecipeStorage().addRecipe(postedRecipe);
-                hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
+                currentUser.addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
                 hostActivity.getUserStorage().updateUserInfo();
+
+                // Send notification to all users subscribed to the current user
+                hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
             } else {
                 hostActivity.getRecipeStorage().updateRecipe(postedRecipe);
             }
