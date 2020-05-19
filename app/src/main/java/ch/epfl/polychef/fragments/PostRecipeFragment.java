@@ -242,12 +242,12 @@ public class PostRecipeFragment extends Fragment {
             for(int i = 0; i < currentMealPictures.size(); ++i) {
                 imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), getUserEmail(), postedRecipe.getRecipeUuid());
             }
-            if(postedRecipe.getKey() != null){
-                hostActivity.getRecipeStorage().updateRecipe(postedRecipe);
-            } else {
+            if(postedRecipe.getKey().equals("")){
                 hostActivity.getRecipeStorage().addRecipe(postedRecipe);
                 hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
                 hostActivity.getUserStorage().updateUserInfo();
+            } else {
+                hostActivity.getRecipeStorage().updateRecipe(postedRecipe);
             }
 
             return true;
