@@ -30,8 +30,10 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:isIndicator="true"/>
 
-            <ImageView
+
+            <include
                 android:id="@+id/commentProfilePict"
+                layout="@layout/profile_picture_layout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
@@ -45,9 +47,16 @@
 
             <TextView
                 android:id="@+id/commentUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:textSize="24sp"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/commentProfilePict"
                 app:layout_constraintStart_toStartOf="@+id/guideline4"
                 app:layout_constraintTop_toBottomOf="@+id/ratingCommentBar" />

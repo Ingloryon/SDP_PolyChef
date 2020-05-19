@@ -24,10 +24,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
-            <ImageView
+            <include
                 android:id="@+id/usersImage"
+                layout="@layout/profile_picture_layout"
                 android:layout_width="111dp"
-                android:layout_height="114dp"
+                android:layout_height="111dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
