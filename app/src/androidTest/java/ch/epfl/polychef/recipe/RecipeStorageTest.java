@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class RecipeStorageTest {
@@ -219,6 +220,15 @@ public class RecipeStorageTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> recipeStorage.getNRecipes(5, recentDate, oldDate, true, mockCallHandler));
+        assertThrows(IllegalArgumentException.class, () -> recipeStorage.updateRecipe(null));
+    }
+
+    @Test
+    public void canUpdateARecipe() {
+        DatabaseReference databaseReference = mock(DatabaseReference.class);
+        when(databaseRecipeReference.child(recipe1.getKey())).thenReturn(databaseReference);
+        recipeStorage.updateRecipe(recipe1);
+        verify(databaseReference).setValue(recipe1);
     }
 
     @Test

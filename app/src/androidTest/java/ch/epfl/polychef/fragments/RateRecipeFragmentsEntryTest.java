@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.polychef.NestedScrollViewHelper;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.pages.EntryPage;
 import ch.epfl.polychef.pages.EntryPageTest;
@@ -52,7 +53,7 @@ public class RateRecipeFragmentsEntryTest {
     public void rateButtonIsDisplayedAndDisplayCorrectText(){
 
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
+        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
         onView(withId(R.id.buttonRate)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonRate)).check(matches(withText(R.string.RateButton)));
     }
@@ -61,7 +62,7 @@ public class RateRecipeFragmentsEntryTest {
     public void toastIsDisplayedIfTryToRateWhileNotLoggedIn(){
 
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.buttonRate)).perform(scrollTo(),click());
+        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
         onView(withId(R.id.buttonRate)).perform(click());
         onView(withText(R.string.errorOnlineFeature))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleEntry.getActivity()
