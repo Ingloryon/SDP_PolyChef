@@ -110,6 +110,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         Recipe recipe = recipeList.get(position);
         holder.recipeTitle.setText(recipe.getName());
         holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
+        holder.favouriteButton.setOnCheckedChangeListener(null);
         FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
         getImageFor(holder, recipe);
     }
