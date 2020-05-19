@@ -97,7 +97,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         public MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             rate = itemView.findViewById(R.id.ratingCommentBar);
-            profilePict = itemView.findViewById(R.id.commentProfilePict);
+            profilePict = itemView.findViewById(R.id.profilePicture);
             commentText = itemView.findViewById(R.id.commentText);
             commentUsername = itemView.findViewById(R.id.commentUsername);
         }
