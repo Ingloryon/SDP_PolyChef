@@ -135,7 +135,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
         //Display the image of the user
-        ImageView image = view.findViewById(R.id.usersImage);
+        ImageView image = view.findViewById(R.id.profilePicture);
         image.setImageResource(User.getResourceImageFromUser(userToDisplay));
 
         determineAndDisplayAchievements(view);
@@ -197,7 +197,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     private void setupProfilePictureButton(){
-        ImageView profilePict = getView().findViewById(R.id.usersImage);
+        ImageView profilePict = getView().findViewById(R.id.profilePicture);
         HomePage context = (HomePage) getContext();
 
         profilePict.setOnClickListener(new View.OnClickListener() {
