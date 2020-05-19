@@ -4,7 +4,7 @@ connected_check_task:
     API_LEVEL: 24
     TARGET: default
     ARCH: x86
-    CC_TEST_REPORTER_ID: ENCRYPTED[7f194a9019ec4e273ed8f0f0985783ec70bc3d76908f112924b5ae021503fde0018f0c9c6db83c55b5fd60d3a7a542de]
+    CC_TEST_REPORTER_ID: ENCRYPTED[7b85590920367e50756a2072414258a26e4e50dd7dbe1f21c2d3ad172a744191bf303b99b4862b361771780632c638b0]
     JAVA_TOOL_OPTIONS: -Xmx6g
     GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
   container:
