@@ -6,9 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import ch.epfl.polychef.recipe.Ingredient;
+import ch.epfl.polychef.fragments.CommentTestOnFullRecipe;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.utils.SingletonQueue;
 
 import static org.hamcrest.Matchers.hasEntry;
@@ -25,17 +24,7 @@ public class NotificationSenderTest {
 
     private NotificationSender notificationSender = Mockito.mock(NotificationSender.class, CALLS_REAL_METHODS);
     private SingletonQueue singletonQueue = mock(SingletonQueue.class);
-    public static Recipe fakeRecipe = new RecipeBuilder()
-            .setName("Fake recipe")
-            .addInstruction("Instruction 1")
-            .addIngredient("ingredient", 2, Ingredient.Unit.NONE)
-            .setPersonNumber(1)
-            .setEstimatedCookingTime(1)
-            .setEstimatedPreparationTime(1)
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
-            .setDate("20/06/01 13:10:00")
-            .setAuthor("author name")
-            .build();
+    public static Recipe fakeRecipe = CommentTestOnFullRecipe.fakeRecipeBuilder.build();
 
     @Before
     public void initMock() {

@@ -40,6 +40,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -152,6 +153,30 @@ public class FavouritesFragmentTest {
         }).when(fakeRecipeStorage).readRecipeFromUuid(eq(recipe.getRecipeUuid()), any(CallHandler.class));
         setup();
         assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(1));
+    }
+
+    @Test
+    public void multipleFavouriteCanBeShownOnlineEvenIfOneFails() {
+        isOnline = true;
+        Map<String, Recipe> recipesInFavourite = new HashMap<>();
+        Recipe recipe = getRecipe("test0");
+        recipesInFavourite.put(getRecipe("test1").getRecipeUuid(), recipe);
+        recipesInFavourite.put(getRecipe("test2").getRecipeUuid(), recipe);
+        recipesInFavourite.put(recipe.getRecipeUuid(), recipe);
+        recipesInFavourite.put(getRecipe("test3").getRecipeUuid(), recipe);
+        when(mockPolyChefUser.getFavourites()).thenReturn(new ArrayList<>(recipesInFavourite.keySet()));
+        doAnswer((call) -> {
+            String recipeUuid = call.getArgument(0);
+            CallHandler<Recipe> ch = call.getArgument(1);
+            if(recipeUuid.equals(recipe.getRecipeUuid())) {
+                ch.onFailure();
+            } else {
+                ch.onSuccess(recipesInFavourite.get(recipeUuid));
+            }
+            return null;
+        }).when(fakeRecipeStorage).readRecipeFromUuid(anyString(), any(CallHandler.class));
+        setup();
+        assertThat(getTestedFragment().getRecyclerView().getAdapter().getItemCount(), is(3));
     }
 
     @Test
