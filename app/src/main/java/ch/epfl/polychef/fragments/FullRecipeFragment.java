@@ -394,6 +394,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         return opinionsRecyclerView;
     }
 
+    public Recipe getCurrentRecipe(){
+        return currentRecipe;
+    }
+
     @Override
     public void onStop() {
         super.onStop();
