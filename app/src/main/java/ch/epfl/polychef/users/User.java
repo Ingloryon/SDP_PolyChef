@@ -1,7 +1,6 @@
 package ch.epfl.polychef.users;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,16 +11,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Rating;
-import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
@@ -35,7 +30,7 @@ public class User implements Serializable, Miniatures {
     private String username;
     private String key;
     private int profilePictureId;
-    private Rating rating;
+    private Rating userRating;
     private List<String> recipes;
     private List<String> favourites;
     private List<String> subscribers;
@@ -56,7 +51,7 @@ public class User implements Serializable, Miniatures {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
-        rating = new Rating();
+        userRating = new Rating();
     }
 
     /**
@@ -68,7 +63,7 @@ public class User implements Serializable, Miniatures {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
-        rating = new Rating();
+        userRating = new Rating();
     }
 
     public User(String email, String username, Rating rating){
@@ -79,7 +74,7 @@ public class User implements Serializable, Miniatures {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
-        this.rating = rating;
+        this.userRating = rating;
     }
 
     /**
@@ -105,6 +100,9 @@ public class User implements Serializable, Miniatures {
     public String getUsername() {
         return username;
     }
+
+    @Exclude
+    public String getName(){return getUsername();}
 
     /**
      * Gets the list of recipes of the user.
@@ -298,6 +296,6 @@ public class User implements Serializable, Miniatures {
     }
 
     public Rating getRating(){
-        return rating;
+        return userRating;
     }
 }

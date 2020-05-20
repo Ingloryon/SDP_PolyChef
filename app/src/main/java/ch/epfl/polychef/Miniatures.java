@@ -14,4 +14,6 @@ public interface Miniatures {
 
     boolean isRecipe();
 
+    String getName();
+
 }

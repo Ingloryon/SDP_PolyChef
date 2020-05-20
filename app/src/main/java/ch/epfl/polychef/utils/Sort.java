@@ -29,8 +29,8 @@ public class Sort {
     }
 
     private static Comparator<Miniatures> similarityComparator = (o1, o2) -> {
-        String s1 = getName(o1);
-        String s2 = getName(o2);
+        String s1 = o1.getName();
+        String s2 = o2.getName();
         if(Similarity.similarity(s1,actualQuery)>Similarity.similarity(s2,actualQuery)){
             return -1;
         }else if(Similarity.similarity(s1,actualQuery)==Similarity.similarity(s2,actualQuery)){
@@ -65,12 +65,4 @@ public class Sort {
             return 1;
         }
     };
-
-    private static String getName(Miniatures miniature){
-        if(miniature.getClass().equals(Recipe.class)){
-            return ((Recipe)miniature).getName();
-        }else{
-            return ((User)miniature).getUsername();
-        }
-    }
 }

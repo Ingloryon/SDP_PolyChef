@@ -27,7 +27,6 @@ import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
-import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.MiniatureAdapter;
 import ch.epfl.polychef.utils.Preconditions;
@@ -158,7 +157,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             @Override
             public boolean onQueryTextSubmit(String query) {
                 isSearching = true;
-                setAllBoolToFalse();
+                resetFilters();
                 filters.setVisibility(View.VISIBLE);
                 actualQuery = query;
                 searchView.clearFocus();
@@ -196,15 +195,15 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         return v -> {
             searchList.clear();
             if(filter == FILTER_RECIPE){
-                setAllBoolToFalse();
+                resetFilters();
                 isFilterRecipe = true;
                 recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
             }else if(filter == FILTER_USER){
-                setAllBoolToFalse();
+                resetFilters();
                 isFilterUser = true;
                 userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
             }else if (filter == FILTER_INGREDIENT){
-                setAllBoolToFalse();
+                resetFilters();
                 isFilterIngredient = true;
                 recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
             }else {
@@ -307,7 +306,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         miniatures.removeAll(toBeRemoved);
     }
 
-    private  void setAllBoolToFalse(){
+    private  void resetFilters(){
         isFilterRate = false;
         isFilterIngredient = false;
         isFilterRecipe = false;
