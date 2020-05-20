@@ -105,15 +105,11 @@ public class RateRecipeFragment extends Fragment {
         // The index returned is the same as the nb of stars
         int starNb = spinner.getSelectedItemPosition();
 
-        //TODO: remove -> the index returned = nb of stars
-        /*String txt = Integer.toString(starNb);
-        */
         String commentString = comment.getText().toString().trim();
 
         String userKey = userStorage.getPolyChefUser().getKey();
 
-        int oldRating = commentString.isEmpty()
-                ? recipe.getRating().addOpinion(userKey, starNb)
+        int oldRating = commentString.isEmpty() ? recipe.getRating().addOpinion(userKey, starNb)
                 : recipe.getRating().addOpinion(userKey, starNb, commentString);
 
         if(oldRating == -1 || oldRating==starNb) {
