@@ -1,6 +1,7 @@
 package ch.epfl.polychef.users;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,20 +12,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
+import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
 /**
  * Represents a Polychef User.
  */
-public class User implements Serializable, Miniatures {
+public class User implements Serializable, Miniatures, CallHandler<Recipe> {
 
+    private static final String TAG = "User";
     private String email;
     private String username;
     private int profilePictureId;
@@ -276,5 +282,42 @@ public class User implements Serializable, Miniatures {
         }
 
         return false;
+    }
+
+    public Rating getRating(){
+        Rating rating = new Rating();
+        if(recipes.isEmpty()){
+            return rating;
+        }
+        List<Boolean> isDone = new ArrayList<>();
+        CallHandler<Recipe> callHandler = new CallHandler<Recipe>() {
+            @Override
+            public void onSuccess(Recipe data) {
+                    rating.addRate(data.getRecipeUuid(),data.getRating().ratingAverage());
+                    isDone.remove(false);
+                    Log.w(TAG, "Recipe found");
+            }
+
+            @Override
+            public void onFailure() {
+                Log.w(TAG, "Recipe not found");
+            }
+        };
+        for (String str: recipes) {
+            isDone.add(false);
+            RecipeStorage.getInstance().readRecipeFromUuid(str,callHandler);
+        }
+        while (isDone.contains(false)){}
+        return rating;
+    }
+
+    @Override
+    public void onSuccess(Recipe data) {
+
+    }
+
+    @Override
+    public void onFailure() {
+
     }
 }

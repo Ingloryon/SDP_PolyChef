@@ -55,8 +55,8 @@ public class Sort {
     };
 
     private static Comparator<Miniatures> rateComparator = (o1, o2) -> {
-        Rating r1 = ((Recipe)o1).getRating();
-        Rating r2 = ((Recipe)o2).getRating();
+        Rating r1 = o1.getRating();
+        Rating r2 = o2.getRating();
         if(r1.ratingAverage()>r2.ratingAverage()){
             return -1;
         }else if(r1.ratingAverage()==r2.ratingAverage()){

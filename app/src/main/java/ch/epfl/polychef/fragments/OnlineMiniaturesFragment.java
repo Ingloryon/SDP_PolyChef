@@ -47,6 +47,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
     private boolean isFilterIngredient = false;
     private boolean isFilterRate = false;
+    private boolean isFilterUser = false;
+    private boolean isFilterRecipe = false;
 
     private String actualQuery;
 
@@ -156,6 +158,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             @Override
             public boolean onQueryTextSubmit(String query) {
                 isSearching = true;
+                isFilterIngredient = false;
+                isFilterRecipe = false;
+                isFilterUser = false;
+                isFilterRate = false;
                 filters.setVisibility(View.VISIBLE);
                 actualQuery = query;
                 searchView.clearFocus();
@@ -193,16 +199,35 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         return v -> {
             searchList.clear();
             if(filter == FILTER_RECIPE){
+                isFilterRate = false;
+                isFilterIngredient = false;
+                isFilterRecipe = true;
+                isFilterUser = false;
                 recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
             }else if(filter == FILTER_USER){
+                isFilterRate = false;
+                isFilterIngredient = false;
+                isFilterRecipe = false;
+                isFilterUser = true;
                 userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
             }else if (filter == FILTER_INGREDIENT){
+                isFilterRate = false;
                 isFilterIngredient = true;
+                isFilterRecipe = false;
+                isFilterUser = false;
                 recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
             }else {
-                //TODO: add some kind of rate to the users
                 isFilterRate = true;
-                recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+                if(isFilterUser){
+                    userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+                }else if(isFilterRecipe){
+                    recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+                }else if(isFilterIngredient){
+                    recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
+                }else {
+                    userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+                    recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+                }
             }
         };
     }
@@ -232,13 +257,11 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     public void onSuccess(List<Miniatures> data){
         if(isSearching){
             searchList.addAll(data);
-            if(isFilterIngredient){
-                Sort.sortByIngredientSimilarity(searchList,actualQuery);
-                isFilterIngredient = false;
-            }else if(isFilterRate) {
+            if(isFilterRate) {
                 Sort.sortByRate(searchList);
-                isFilterRate = false;
-            }else{
+            }else if(isFilterIngredient){
+                Sort.sortByIngredientSimilarity(searchList,actualQuery);
+            }else {
                 Sort.sortBySimilarity(searchList,actualQuery);
             }
             removeDuplicate(searchList);
