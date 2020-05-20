@@ -211,7 +211,7 @@ public class User implements Serializable, Miniatures, CallHandler<Recipe> {
      * @param userToDisplay the user that will be displayed
      * @return the profile picture of the user to display
      */
-    public static int getResourceImageFromActivity(User userToDisplay){
+    public static int getResourceImageFromUser(User userToDisplay){
         Context context=GlobalApplication.getAppContext();
         int profilePictureId=userToDisplay.getProfilePictureId();
         String photoName=context.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];

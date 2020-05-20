@@ -16,6 +16,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/UserRecipesList"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -34,7 +35,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/UsernameDisplay"
@@ -74,6 +75,51 @@
                 android:textOn="@string/subscribed"
                 app:layout_constraintStart_toEndOf="@+id/usersImage"
                 app:layout_constraintTop_toBottomOf="@+id/UserEmailDisplay" />
+
+            <ImageView
+                android:id="@+id/cuistot_achievement"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/followed_achievement"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usersImage"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/cuistot_none" />
+
+            <ImageView
+                android:id="@+id/followed_achievement"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/favorite_achievement"
+                app:layout_constraintStart_toEndOf="@+id/cuistot_achievement"
+                app:layout_constraintTop_toBottomOf="@+id/usersImage"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/followed_none" />
+
+            <ImageView
+                android:id="@+id/favorite_achievement"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/followed_achievement"
+                app:layout_constraintTop_toBottomOf="@+id/usersImage"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/favorite_none" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
