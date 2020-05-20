@@ -157,6 +157,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             public void afterTextChanged(Editable s) {
                 int newQuantity = 0;
                 try {
+                    if(quantityInput.getText().toString().equals("")){
+                        currentRecipe.scalePersonAndIngredientsQuantities(1);
+                        displayIngredients(view);
+                    }
                     newQuantity = Integer.parseInt(quantityInput.getText().toString());
                     if(newQuantity <= QUANTITY_LIMIT && newQuantity > 0) {
                         currentRecipe.scalePersonAndIngredientsQuantities(newQuantity);
