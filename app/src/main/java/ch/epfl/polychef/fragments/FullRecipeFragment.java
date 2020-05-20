@@ -4,11 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.synnapps.carouselview.CarouselView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,13 +57,17 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private CarouselView carouselView;
     private ToggleButton favouriteButton;
     private TextView authorName;
+    private EditText quantityInput;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
+    private int defaultQuantity;
 
 
     private NestedScrollView topScrollView;
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
+
+    private int QUANTITY_LIMIT = 500;
 
     private boolean online;
 
@@ -88,6 +96,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         if(bundle != null){
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");
         }
+        defaultQuantity = currentRecipe.getPersonNumber();
 
         displayFavouriteButton(view);
         displayRecipeName(view);
@@ -96,6 +105,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         displayPrepAndCookTime(view);
         displayDifficulty(view);
         displayInstructions(view);
+        displayQuantity(view);
         displayIngredients(view);
         displayAuthorName(view);
 
@@ -105,11 +115,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }catch(UnsupportedOperationException e){
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
-
         setupSwitch(view);
-
         addOpinion(view);
-
         containerId = container.getId();
 
         return view;
@@ -134,6 +141,39 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             });
             opinionsAdapter.loadNewComments();
         }
+    }
+    private void displayQuantity(View view){
+        quantityInput = view.findViewById(R.id.quantityinput);
+        quantityInput.setText("" + currentRecipe.getPersonNumber());
+        quantityInput.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int newQuantity = 0;
+                try {
+                    newQuantity = Integer.parseInt(quantityInput.getText().toString());
+                    if(newQuantity <= QUANTITY_LIMIT && newQuantity > 0) {
+                        currentRecipe.scalePersonAndIngredientsQuantities(newQuantity);
+                        displayIngredients(view);
+                    }else if( newQuantity > QUANTITY_LIMIT){
+                        currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
+                        quantityInput.setText("" + QUANTITY_LIMIT);
+                        Toast.makeText(getActivity(), "Limite de quantité : 500" , Toast.LENGTH_SHORT).show();
+                    }else{
+                        currentRecipe.scalePersonAndIngredientsQuantities(1);
+                        quantityInput.setText("" + 1);
+                        Toast.makeText(getActivity(), "La quantité ne peux pas être nulle" , Toast.LENGTH_SHORT).show();
+                    }
+                }catch(NumberFormatException e){}
+            }
+        });
+
     }
 
     private void displayAuthorName(View view) {
