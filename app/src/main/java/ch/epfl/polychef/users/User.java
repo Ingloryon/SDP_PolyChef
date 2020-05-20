@@ -28,18 +28,18 @@ import ch.epfl.polychef.utils.Preconditions;
 /**
  * Represents a Polychef User.
  */
-public class User implements Serializable, Miniatures, CallHandler<Recipe> {
+public class User implements Serializable, Miniatures {
 
     private static final String TAG = "User";
     private String email;
     private String username;
+    private String key;
     private int profilePictureId;
+    private Rating rating;
     private List<String> recipes;
     private List<String> favourites;
     private List<String> subscribers;
     private List<String> subscriptions;
-
-    private String key;
 
     //TODO: There are no sanitization of the given inputs in all the methods below, ideally they should be added
 
@@ -56,6 +56,7 @@ public class User implements Serializable, Miniatures, CallHandler<Recipe> {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
+        rating = new Rating();
     }
 
     /**
@@ -67,6 +68,18 @@ public class User implements Serializable, Miniatures, CallHandler<Recipe> {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
+        rating = new Rating();
+    }
+
+    public User(String email, String username, Rating rating){
+        this.email = email;
+        this.username = username;
+        setProfilePictureId(0);
+        recipes = new ArrayList<>();
+        favourites = new ArrayList<>();
+        subscribers = new ArrayList<>();
+        subscriptions = new ArrayList<>();
+        this.rating = rating;
     }
 
     /**
@@ -285,16 +298,6 @@ public class User implements Serializable, Miniatures, CallHandler<Recipe> {
     }
 
     public Rating getRating(){
-        return new Rating();
-    }
-
-    @Override
-    public void onSuccess(Recipe data) {
-
-    }
-
-    @Override
-    public void onFailure() {
-
+        return rating;
     }
 }

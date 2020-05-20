@@ -124,6 +124,21 @@ public class RateRecipeFragment extends Fragment {
             Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
 
+        CallHandler<User> callHandler = new CallHandler<User>() {
+            @Override
+            public void onSuccess(User data) {
+                data.getRating().addOpinion(recipe.getRecipeUuid()+userKey, starNb);
+                userStorage.updateUserInfo(data);
+            }
+
+            @Override
+            public void onFailure() {
+                Log.w(TAG,"No user found");
+            }
+        };
+
+        userStorage.getUserByEmail(recipe.getAuthor(),callHandler);
+
         recipeStorage.updateRecipe(recipe);
 
         getActivity().onBackPressed();
