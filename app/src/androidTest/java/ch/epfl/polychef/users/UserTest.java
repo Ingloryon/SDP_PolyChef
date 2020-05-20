@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.recipe.Rating;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserTest {
@@ -252,4 +254,15 @@ public class UserTest {
         assertNotEquals(alice, doppelganger);
         assertNotEquals(doppelganger, alice);
     }
+
+    @Test
+    public void addingRateToUserWorks(){
+        Rating rating = new Rating();
+        rating.addOpinion("0", 5);
+        User user = new User(mockUserEmail,mockUserName,rating);
+        user.getRating().addOpinion("1",3);
+        assertEquals(4,user.getRating().ratingAverage());
+    }
+
+
 }
