@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SortTest {
     @Test
     public void sortByRateTest(){
-        List<Miniatures> list = new ArrayList<>();
         User user1 = new User();
         user1.getRating().addOpinion("0",1);
         User user2 = new User();
         user2.getRating().addOpinion("1",5);
         User user3 = new User();
         user3.getRating().addOpinion("2",3);
+        List<Miniatures> list = new ArrayList<>();
         list.add(user1);
         list.add(user2);
         list.add(user3);
@@ -32,7 +32,6 @@ public class SortTest {
 
     @Test
     public void sortBySimilarityIngredient(){
-        List<Miniatures> list = new ArrayList<>();
         RecipeBuilder rb = new RecipeBuilder();
         rb.setName("Chicken fried");
         rb.setAuthor("testUser@polychef.ch");
@@ -44,6 +43,7 @@ public class SortTest {
         Recipe recipe1 = rb.addIngredient("Carrots", 300d, Ingredient.Unit.NONE).build();
         Recipe recipe2 = rb.addIngredient("Chocolate", 300d, Ingredient.Unit.NONE).build();
         Recipe recipe3 = rb.addIngredient("Rat", 300d, Ingredient.Unit.NONE).build();
+        List<Miniatures> list = new ArrayList<>();
         list.add(recipe1);
         list.add(recipe2);
         list.add(recipe3);
