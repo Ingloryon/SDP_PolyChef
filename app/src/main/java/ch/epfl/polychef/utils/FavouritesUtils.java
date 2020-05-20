@@ -45,7 +45,7 @@ public class FavouritesUtils {
     public void setFavouriteButton(UserStorage userStorage, ToggleButton button, Recipe recipe) {
         Preconditions.checkArgument(recipe != null, "The recipe can not be null");
         Preconditions.checkArgument(button != null, "The button can not be null");
-        if (userStorage != null && userStorage.getPolyChefUser() != null) {
+        if (userStorage != null && userStorage.getPolyChefUser() != null && !recipe.getAuthor().equals(userStorage.getPolyChefUser().getEmail())) {
             List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
             button.setVisibility(View.VISIBLE);
             button.setChecked(favouritesList.contains(recipe.getRecipeUuid()));
