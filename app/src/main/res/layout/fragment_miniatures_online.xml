@@ -45,6 +45,13 @@
                     android:text="@string/Recipes" />
 
                 <Button
+                    android:id="@+id/filter_users"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/users" />
+
+                <Button
                     android:id="@+id/filter_ingre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,11 +59,12 @@
                     android:text="@string/Ingredients" />
 
                 <Button
-                    android:id="@+id/filter_users"
+                    android:id="@+id/filter_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/users" />
+                    android:text="@string/Rate" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

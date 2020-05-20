@@ -171,6 +171,8 @@ public class OnlineMiniaturesFragmentTest {
         onView(withId(R.id.filter_users)).perform(click());
         wait(100);
         onView(withId(R.id.filter_recipe)).perform(click());
+        wait(100);
+        onView(withId(R.id.filter_rate)).perform(click());
     }
 
     @Test
