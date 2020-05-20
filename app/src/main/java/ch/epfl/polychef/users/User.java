@@ -102,7 +102,9 @@ public class User implements Serializable, Miniatures {
     }
 
     @Exclude
-    public String getName(){return getUsername();}
+    public String getName(){
+        return getUsername();
+    }
 
     /**
      * Gets the list of recipes of the user.
