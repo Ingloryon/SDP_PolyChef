@@ -285,30 +285,7 @@ public class User implements Serializable, Miniatures, CallHandler<Recipe> {
     }
 
     public Rating getRating(){
-        Rating rating = new Rating();
-        if(recipes.isEmpty()){
-            return rating;
-        }
-        List<Boolean> isDone = new ArrayList<>();
-        CallHandler<Recipe> callHandler = new CallHandler<Recipe>() {
-            @Override
-            public void onSuccess(Recipe data) {
-                    rating.addRate(data.getRecipeUuid(),data.getRating().ratingAverage());
-                    isDone.remove(false);
-                    Log.w(TAG, "Recipe found");
-            }
-
-            @Override
-            public void onFailure() {
-                Log.w(TAG, "Recipe not found");
-            }
-        };
-        for (String str: recipes) {
-            isDone.add(false);
-            RecipeStorage.getInstance().readRecipeFromUuid(str,callHandler);
-        }
-        while (isDone.contains(false)){}
-        return rating;
+        return new Rating();
     }
 
     @Override

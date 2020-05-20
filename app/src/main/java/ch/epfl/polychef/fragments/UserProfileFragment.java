@@ -20,11 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
+import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.gamification.Achievement;
 import ch.epfl.polychef.gamification.AchievementsList;
@@ -34,7 +36,7 @@ import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
 
-public class UserProfileFragment extends Fragment implements CallHandler<Recipe> {
+public class UserProfileFragment extends Fragment {
 
     private static final String TAG = "UserProfileFragment";
     private HomePage hostActivity;  //TODO use ConnectedActivity if possible
@@ -48,7 +50,6 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
 
     public static final int nbOfRecipesLoadedAtATime = 5;
     private boolean isLoading = false;
-    private int waitingFor;
 
     private int currentIndex = 0;
 
@@ -87,7 +88,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         userRecyclerView.setAdapter(
                 new RecipeMiniatureAdapter(this.getActivity(), dynamicRecipeList, userRecyclerView,
-                        container.getId(), hostActivity.getImageStorage()));
+                        container.getId(), hostActivity.getImageStorage(), hostActivity.getUserStorage()));
 
         userRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -135,11 +136,13 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
         //Display the image of the user
-        ImageView image = view.findViewById(R.id.usersImage);
+        ImageView image = view.findViewById(R.id.profilePicture);
         image.setImageResource(User.getResourceImageFromUser(userToDisplay));
 
         determineAndDisplayAchievements(view);
-        getNextRecipes();
+        if(dynamicRecipeList.isEmpty()){
+            getNextRecipes();
+        }
         setupProfilePictureButton();
     }
 
@@ -154,19 +157,6 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         }
     }
 
-    @Override
-    public void onSuccess(Recipe data) {
-        --waitingFor;
-        dynamicRecipeList.add(data);
-        if(waitingFor == 0){
-            dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
-            userRecyclerView.getAdapter().notifyDataSetChanged();
-            isLoading = false;
-        } else if(waitingFor < 0){
-            Log.w(TAG, "Waiting for " + waitingFor);
-        }
-    }
-
     /**
      * Gets the next recipe for the current user.
      */
@@ -174,18 +164,21 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
         isLoading = true;
         int nbRecipes = userToDisplay.getRecipes().size();
         int threshold = Math.min(nbOfRecipesLoadedAtATime + currentIndex, nbRecipes);
+        int waitingFor = threshold - currentIndex;
 
-        waitingFor = threshold - currentIndex;
+        MultipleCallHandler handler = new MultipleCallHandler<Recipe>(waitingFor, (recipeList) -> {
+
+            dynamicRecipeList.addAll(recipeList);
+            dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
+            userRecyclerView.getAdapter().notifyDataSetChanged();
+            currentIndex += waitingFor;
+            isLoading = false;
+        });
+
         for(int i = currentIndex; i < threshold; i++){
             String stringUuid = userToDisplay.getRecipes().get(nbRecipes - i - 1);
-            hostActivity.getRecipeStorage().readRecipeFromUuid(stringUuid, UserProfileFragment.this);
+            hostActivity.getRecipeStorage().readRecipeFromUuid(stringUuid, handler);
         }
-        currentIndex = threshold;
-    }
-
-    @Override
-    public void onFailure() {
-        --waitingFor;
     }
 
     /**
@@ -197,7 +190,7 @@ public class UserProfileFragment extends Fragment implements CallHandler<Recipe>
     }
 
     private void setupProfilePictureButton(){
-        ImageView profilePict = getView().findViewById(R.id.usersImage);
+        ImageView profilePict = getView().findViewById(R.id.profilePicture);
         HomePage context = (HomePage) getContext();
 
         profilePict.setOnClickListener(new View.OnClickListener() {

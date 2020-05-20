@@ -95,7 +95,7 @@ public class HomePage extends ConnectedActivity {
     }
 
     private void setupProfileNavigation(View parentView){
-        parentView.findViewById(R.id.drawerProfileImage).setOnClickListener((view) -> {
+        parentView.findViewById(R.id.profilePicture).setOnClickListener((view) -> {
             setCurrentItemChecked(false);
             currentItem = null;
             navController.navigate(R.id.userProfileFragment);
@@ -104,7 +104,7 @@ public class HomePage extends ConnectedActivity {
     }
 
     public void setupProfilePicture(){
-        ImageView profileImage = navView.getHeaderView(0).findViewById(R.id.drawerProfileImage);
+        ImageView profileImage = navView.getHeaderView(0).findViewById(R.id.profilePicture);
 
         profileImage.setImageResource(User.getResourceImageFromUser(getPolychefUser()));
     }

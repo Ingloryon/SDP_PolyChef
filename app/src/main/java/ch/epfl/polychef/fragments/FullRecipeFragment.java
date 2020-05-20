@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,12 +17,16 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.synnapps.carouselview.CarouselView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
@@ -30,11 +35,13 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
+import ch.epfl.polychef.recipe.Opinion;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.FavouritesUtils;
+import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
@@ -48,6 +55,15 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private TextView authorName;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
+
+
+    private NestedScrollView topScrollView;
+    private RecyclerView opinionsRecyclerView;
+    private OpinionsMiniatureAdapter opinionsAdapter;
+
+    private boolean online;
+
+    private HomePage hostActivity;
 
     private int indexOfInstruction=-1;
 
@@ -92,9 +108,32 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         setupSwitch(view);
 
+        addOpinion(view);
+
         containerId = container.getId();
 
         return view;
+    }
+
+    private void addOpinion(View view) {
+        if(online) {
+            opinionsRecyclerView = view.findViewById(R.id.opinionsList);
+            opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+            opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
+            opinionsRecyclerView.setAdapter(opinionsAdapter);
+            topScrollView = view.findViewById(R.id.fullRecipeFragment);
+            topScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if(!opinionsAdapter.isLoading()) {
+                        if (!topScrollView.canScrollVertically(1)) {
+                            opinionsAdapter.loadNewComments();
+                        }
+                    }
+                }
+            });
+            opinionsAdapter.loadNewComments();
+        }
     }
 
     private void displayAuthorName(View view) {
@@ -141,6 +180,19 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+            online = true;
+        } else {
+            online = false;
+            hostActivity = null;
+        }
+    }
+
     private void displayFavouriteButton(View view) {
         favouriteButton = view.findViewById(R.id.favouriteButton);
         FavouritesUtils.getInstance().setFavouriteButton(getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
@@ -164,6 +216,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Display the recipe images in the correct field in the activity.
      */
     private void displayImage(View view) {
+        imagesToDisplay.clear();
         carouselView = view.findViewById(R.id.recipeImages);
         carouselView.setPageCount(imagesToDisplay.size());
         carouselView.setImageListener((position, imageView) -> imageView.setImageBitmap(imagesToDisplay.get(position)));
@@ -290,7 +343,15 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     public UserStorage getUserStorage() {
-        return UserStorage.getInstance();
+        if(hostActivity != null) {
+            return hostActivity.getUserStorage();
+        } else {
+            return UserStorage.getInstance();
+        }
+    }
+
+    public RecyclerView getOpinionsRecyclerView(){
+        return opinionsRecyclerView;
     }
 
     @Override
