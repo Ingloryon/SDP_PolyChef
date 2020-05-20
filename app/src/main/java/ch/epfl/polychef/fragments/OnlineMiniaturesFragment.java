@@ -158,10 +158,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             @Override
             public boolean onQueryTextSubmit(String query) {
                 isSearching = true;
-                isFilterIngredient = false;
-                isFilterRecipe = false;
-                isFilterUser = false;
-                isFilterRate = false;
+                setAllBoolToFalse();
                 filters.setVisibility(View.VISIBLE);
                 actualQuery = query;
                 searchView.clearFocus();
@@ -199,22 +196,16 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         return v -> {
             searchList.clear();
             if(filter == FILTER_RECIPE){
-                isFilterRate = false;
-                isFilterIngredient = false;
+                setAllBoolToFalse();
                 isFilterRecipe = true;
-                isFilterUser = false;
                 recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
             }else if(filter == FILTER_USER){
-                isFilterRate = false;
-                isFilterIngredient = false;
-                isFilterRecipe = false;
+                setAllBoolToFalse();
                 isFilterUser = true;
                 userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
             }else if (filter == FILTER_INGREDIENT){
-                isFilterRate = false;
+                setAllBoolToFalse();
                 isFilterIngredient = true;
-                isFilterRecipe = false;
-                isFilterUser = false;
                 recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
             }else {
                 isFilterRate = true;
@@ -314,5 +305,12 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             }
         }
         miniatures.removeAll(toBeRemoved);
+    }
+
+    private  void setAllBoolToFalse(){
+        isFilterRate = false;
+        isFilterIngredient = false;
+        isFilterRecipe = false;
+        isFilterUser = false;
     }
 }
