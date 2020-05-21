@@ -28,6 +28,7 @@ import com.synnapps.carouselview.CarouselView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.CallNotifier;
@@ -278,10 +279,12 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Display both the preparation time and the cooking time in the correct field in the activity.
      */
     private void displayPrepAndCookTime(View view){
+        String prepText = "Prep time : "+currentRecipe.getEstimatedPreparationTime()+" mins";
         TextView prepTime = view.findViewById(R.id.prepTime);
-        prepTime.setText("Prep time : "+currentRecipe.getEstimatedPreparationTime()+" mins");
+        prepTime.setText(prepText);
+        String cookText = "Cook time : "+currentRecipe.getEstimatedCookingTime()+" mins";
         TextView cookTime = view.findViewById(R.id.cookTime);
-        cookTime.setText("Cook time : "+currentRecipe.getEstimatedCookingTime()+" mins");
+        cookTime.setText(cookText);
     }
 
     /**
@@ -290,8 +293,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private void displayDifficulty(View view){
         TextView difficulty = view.findViewById(R.id.difficulty);
         String diff = currentRecipe.getRecipeDifficulty().toString();
-        String finalDiffStr = diff.substring(0, 1).toUpperCase().concat(diff.substring(1, diff.length()).toLowerCase().replaceAll("_", " "));
-        difficulty.setText("Difficulty : " + finalDiffStr);
+        String finalDiffStr = "Difficulty : " + diff.substring(0, 1).toUpperCase(Locale.ENGLISH).concat(diff.substring(1, diff.length()).toLowerCase(Locale.ENGLISH).replaceAll("_", " "));
+        difficulty.setText(finalDiffStr);
     }
 
     /**

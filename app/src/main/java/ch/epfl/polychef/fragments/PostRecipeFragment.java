@@ -189,7 +189,8 @@ public class PostRecipeFragment extends Fragment {
             Uri uri = imageHandler.handleActivityResult(requestCode / MEAL_PICTURES_FACTOR, resultCode, data);
             if(uri != null) {
                 currentMealPictures.add(uri);
-                mealPicturesText.setText(currentMealPictures.size() + " to upload");
+                String mealText = currentMealPictures.size() + " to upload";
+                mealPicturesText.setText(mealText);
             }
         } else {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
@@ -423,8 +424,9 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void setAddInstructionButton(View view) {
-        //TODO: add message when trying to add to many instructions
-        if(numberOfInstruction< MAX_INSTRUCTIONS){
+        if(numberOfInstruction >= MAX_INSTRUCTIONS){
+            Toast.makeText(getActivity(), "Max instructions nb reached" , Toast.LENGTH_SHORT).show();
+        } else {
             final ViewGroup.LayoutParams lparams = instructionText.getLayoutParams();
             final EditText textView = new EditText(getActivity());
             textView.setLayoutParams(lparams);
@@ -438,8 +440,9 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void setAddIngredientButton(View view) {
-        //TODO: print a message when trying to add too many ingredients
-        if(numberOfIngredients< MAX_INGREDIENTS){
+        if(numberOfIngredients >= MAX_INGREDIENTS) {
+            Toast.makeText(getActivity(), "Max ingredients nb reached" , Toast.LENGTH_SHORT).show();
+        } else {
             numberOfIngredients++;
 
             ConstraintLayout newIngredient = (ConstraintLayout) LayoutInflater.from(getContext()).inflate(R.layout.ingredient_field, null);

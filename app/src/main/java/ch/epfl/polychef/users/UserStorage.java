@@ -11,6 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.concurrent.CancellationException;
+
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.utils.Preconditions;
@@ -62,8 +64,7 @@ public class UserStorage {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        //TODO: Find good exception to throw
-                        throw new IllegalArgumentException("Query cancelled");
+                        throw new CancellationException("Query cancelled");
                     }
                 });
     }
@@ -72,7 +73,7 @@ public class UserStorage {
         String username = getAuthenticatedUser().getDisplayName();
         user = new User(email, username);
 
-        //TODO: Add OnSuccess and OnFailure listener
+        // Add OnSuccess and OnFailure listener ?
         DatabaseReference ref = getDatabase()
                 .getReference(UserStorage.DB_NAME)
                 .push();

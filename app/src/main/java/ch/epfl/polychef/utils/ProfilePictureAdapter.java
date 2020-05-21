@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.R;
@@ -29,8 +30,14 @@ public class ProfilePictureAdapter extends BaseAdapter {
      */
     public ProfilePictureAdapter(Context context,  List<ProfilePicture> listPictures) {
         this.context = context;
-        //TODO: deep copy ?
-        this.listPictures = listPictures;
+
+        // we perform a deep copy of the argument
+        this.listPictures = new ArrayList<>();
+        for(int i = 0 ; i < listPictures.size() ; ++i){
+            ProfilePicture pp = listPictures.get(i);
+            this.listPictures.add(new ProfilePicture(pp.getPictureLabel(), pp.getPicturePath()));
+        }
+
         layoutInflater = LayoutInflater.from(context);
     }
 

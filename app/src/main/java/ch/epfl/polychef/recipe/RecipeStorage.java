@@ -27,15 +27,39 @@ import ch.epfl.polychef.utils.Preconditions;
  */
 public class RecipeStorage implements Serializable  {
 
-    private static RecipeStorage INSTANCE=new RecipeStorage();
-
     private static final String TAG = "RecipeStorage";
     public static final String DB_NAME = "recipes_DO_NOT_DESTROY_THE_REAL_ONE";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
     public static final String RECIPE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 
+    private static RecipeStorage INSTANCE = new RecipeStorage();
+
+    private RecipeStorage(){
+    }
+
+    /**
+     * Gets the instance of Recipe Storage.
+     * @return
+     */
     public static RecipeStorage getInstance(){
         return INSTANCE;
+    }
+
+    /**
+     * Get the current instance of the {@code FirebaseDatabase}.
+     *
+     * @return the current instance of the {@code FirebaseDatabase}
+     */
+    public FirebaseDatabase getFirebaseDatabase() {
+        return FirebaseDatabase.getInstance();
+    }
+
+    /**
+     *  Returns the search recipe instance.
+     * @return the search recipe instance
+     */
+    public SearchRecipe getSearch(){
+        return SearchRecipe.getInstance();
     }
 
     /**
@@ -49,17 +73,13 @@ public class RecipeStorage implements Serializable  {
         return formatter.format(date);
     }
 
-
-    private RecipeStorage(){
-    }
-
     /**
      * Update the recipe with the local changes.
      *
      * @param recipe the recipe to update
      */
-    public void updateRecipe(Recipe recipe) {
-        Preconditions.checkArgument(recipe != null, "Cannot update an empty recipe");
+
+    public void updateRecipe(@NonNull Recipe recipe) {
         getFirebaseDatabase()
                 .getReference(RecipeStorage.DB_NAME).child(recipe.getKey())
                 .setValue(recipe);
@@ -70,7 +90,7 @@ public class RecipeStorage implements Serializable  {
      *
      * @param recipe the {@code Recipe to add}
      */
-    public void addRecipe(Recipe recipe) {
+    public void addRecipe(@NonNull Recipe recipe) {
         Preconditions.checkArgument(recipe != null);
 
 
@@ -95,9 +115,13 @@ public class RecipeStorage implements Serializable  {
         readRecipeFromUuid(recipe.getRecipeUuid(),callHandler);
     }
 
-    public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
-        Preconditions.checkArgument(uuid != null, "Uuid should not be null");
-        Preconditions.checkArgument(ch != null, "Call handler should not be null");
+    /**
+     * Reads the Recipe with the given uuid.
+     * @param uuid the uuid of the recipe to read, must be non null
+     * @param ch the call handler of the recipe
+     */
+    public void readRecipeFromUuid(String uuid, @NonNull CallHandler<Recipe> ch){
+        Preconditions.checkArgument(!uuid.isEmpty(), "The given uuid must be non empty.");
 
         getFirebaseDatabase()
                 .getReference(DB_NAME)
@@ -135,12 +159,9 @@ public class RecipeStorage implements Serializable  {
      * @param newest whether we want recent recipes or older recipes
      * @param caller the caller of this method
      */
-    public void getNRecipes(int nbRecipes, String startDate, String endDate, boolean newest, CallHandler<List<Miniatures>> caller){
+    public void getNRecipes(int nbRecipes,@NonNull String startDate,@NonNull String endDate, boolean newest,@NonNull CallHandler<List<Miniatures>> caller){
         Preconditions.checkArgument(nbRecipes > 0, "Number of recipe to get should "
                 + "be positive");
-        Preconditions.checkArgument(startDate != null);
-        Preconditions.checkArgument(endDate != null);
-        Preconditions.checkArgument(caller != null, "Call handler should not be null");
         Preconditions.checkArgument(startDate.compareTo(endDate) < 0);
 
         Query query = getFirebaseDatabase().getReference(DB_NAME)
@@ -155,18 +176,12 @@ public class RecipeStorage implements Serializable  {
         listenerForListOfRecipes(query, caller);
     }
 
-    //TODO Is it ok to pull all the recipes of a user? Or do we want to get them N by N as we scroll?
-    /*public void getAllRecipesByUser(String userEmail, CallHandler<List<Recipe>> caller){
-        Preconditions.checkArgument(userEmail != null);
-        Preconditions.checkArgument(caller != null, "Call handler should not be null");
-
-        Query query = getFirebaseDatabase().getReference(DB_NAME)
-                .orderByChild("author").equalTo(userEmail);
-
-        listenerForListOfRecipes(query, caller);
-    }*/
-
-    public void listenerForListOfRecipes(Query query, CallHandler<List<Miniatures>> ch){
+    /**
+     * Adds a listener for the given query.
+     * @param query the query to add a listener to, must be non null
+     * @param ch the caller of this method
+     */
+    public void listenerForListOfRecipes(@NonNull Query query,@NonNull CallHandler<List<Miniatures>> ch){
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -180,7 +195,12 @@ public class RecipeStorage implements Serializable  {
         });
     }
 
-    public void getSingleRecipeFromSnapshot(DataSnapshot snapshot, CallHandler<Recipe> ch){
+    /**
+     * Gets a single recipe from the given data snapshot.
+     * @param snapshot the data snapshot
+     * @param ch the call handler of the recipe
+     */
+    public void getSingleRecipeFromSnapshot(@NonNull DataSnapshot snapshot,@NonNull CallHandler<Recipe> ch){
         Recipe recipe = snapshot.getValue(Recipe.class);
         if (recipe == null) {
             ch.onFailure();
@@ -190,7 +210,12 @@ public class RecipeStorage implements Serializable  {
         }
     }
 
-    public void getManyRecipeFromSnapshot(DataSnapshot dataSnapshot, CallHandler<List<Miniatures>> ch){
+    /**
+     * Gets a multiple recipes from the given data snapshot.
+     * @param dataSnapshot the data snapshot
+     * @param ch the call handler of the recipe
+     */
+    public void getManyRecipeFromSnapshot(@NonNull DataSnapshot dataSnapshot,@NonNull CallHandler<List<Miniatures>> ch){
         if(dataSnapshot.getChildrenCount() == 0){
             ch.onFailure();
 
@@ -199,23 +224,10 @@ public class RecipeStorage implements Serializable  {
             for(DataSnapshot child : dataSnapshot.getChildren()){
                 Recipe recipe = child.getValue(Recipe.class);
                 recipe.setKey(child.getKey());
-                recipes.add((Miniatures)recipe);
+                recipes.add(recipe);
             }
 
             ch.onSuccess(recipes);
         }
-    }
-
-    /**
-     * Get the current instance of the {@code FirebaseDatabase}.
-     *
-     * @return the current instance of the {@code FirebaseDatabase}
-     */
-    public FirebaseDatabase getFirebaseDatabase() {
-        return FirebaseDatabase.getInstance();
-    }
-
-    public SearchRecipe getSearch(){
-        return SearchRecipe.getInstance();
     }
 }

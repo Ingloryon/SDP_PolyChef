@@ -1,46 +1,61 @@
 <resources>
     <string name="app_name">PolyChef</string>
-    <string name="enter_name">Enter your name !</string>
-    <string name="Instructions">Instructions</string>
-    <string name="Ingredients">Ingredients</string>
-    <string name="recipeImage">This is the image of the recipe displayed</string>
-    <string name="tequila">Tequila</string>
-    <string name="google">Google</string>
-    <string name="log_in">Log In</string>
-    <string name="log_out">Log Out</string>
-    <string name="VoiceRecognitionSwitch">Voice Recognition</string>
-
 
     <string name="Username">Username</string>
     <string name="Email">Email</string>
+    <string name="google">Google</string>
 
     <string name="Home">Home</string>
     <string name="Favourites">Favourites</string>
     <string name="Subscriptions">Subscriptions</string>
     <string name="Subscribers">Subscribers</string>
-    <string name="ErrorOccurred">Error</string>
 
+    <string name="ErrorOccurred">Error</string>
+    <string name="errorImageRetrieve">Error while retrieving the picture</string>
+    <string name="errorOnlineFeature">Online feature, please log in</string>
+
+    <string name="Instructions">Instructions</string>
+    <string name="Ingredients">Ingredients</string>
     <string name="CreateRecipe">Create recipe</string>
     <string name="EnterName">Recipe title:</string>
     <string name="EnterIngredients">Ingredients:</string>
     <string name="EnterInstructions">Instructions:</string>
     <string name="EnterDifficulty">Difficulty:</string>
-    <string name="CookingInfoTitle">Cooking info:</string>
     <string name="UploadMiniature">Upload a miniature</string>
     <string name="UploadPictures">Upload meal pictures</string>
-    <string name="EnterIngredientList">format: {name, quantity, UNIT}, {name, ...</string>
-    <string name="EnterInstructionsList">format: {step1},{step2},{...</string>
     <string name="EnterPersonNb">Number of persons:</string>
     <string name="EnterPrepTime">Preparation time:</string>
     <string name="EnterCookTime">Cooking time:</string>
     <string name="PostRecipe">Post your Recipe !</string>
-    <string name="RateButton">Rate me !</string>
     <string name="ModifyButton">Modify</string>
+
+
+    <string name="plus">+</string>
+    <string name="hintInstr">Instruction 1</string>
+    <string name="EnterIngr">Ingredient 1</string>
+    <string name="Quantity">Quantity</string>
+    <string name="Recipes">Recipes</string>
+    <string name="searchMessage">Search for a recipe</string>
+
+    <string name="RateButton">Rate me !</string>
     <string name="RateText">How many stars would you give to the recipe </string>
     <string name="sendRate">Send rate</string>
-    <string name="clickProfilePict">Click me to change avatar</string>
+    <string name="Rate">Rate</string>
+    <string name="add_a_comment">(Optional) Add a comment</string>
 
-    <string name="difficulty_prompt">Select difficulty...</string>
+    <string name="VoiceRecognitionSwitch">Voice Recognition</string>
+    <string name="commandPrevious">previous</string>
+    <string name="commandNext">next</string>
+
+
+    <string name="users">users</string>
+    <string name="user_picture">user picture</string>
+    <string name="subscribed">subscribed</string>
+    <string name="subscribe">subscribe</string>
+    <string name="recipeNotificationTitle">User %1$s just posted a new recipe!</string>
+    <string name="recipeNotificationMessage">See \"%1$s\" from %2$s</string>
+
+    <string name="difficulty_prompt">Select difficulty (…, &#8230;)</string>
     <string-array name="difficulty_array">
         <item>Very easy</item>
         <item>Easy</item>
@@ -48,38 +63,5 @@
         <item>Hard</item>
         <item>Very hard</item>
     </string-array>
-
-    <string name="errorImageRetrieve">Error while retrieving the picture</string>
-
-    <string name="errorOnlineFeature">Online feature, please log in</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="searchMessage">Search for a recipe</string>
-    <string name="Search">Search</string>
-
-    <string name="plus">+</string>
-    <string name="hintInstr">Instruction 1</string>
-    <string name="EnterIngredient">Ingredient 1</string>
-    <string name="EnterIngr">Ingredient 1</string>
-    <string name="Quantity">Quantity</string>
-
-
-    <string name="commandPrevious">previous</string>
-    <string name="commandNext">next</string>
-    <string name="commandRepeat">repeat</string>
-
-    <string name="user_picture">user picture</string>
-    <string name="subscribed">subscribed</string>
-    <string name="subscribe">subscribe</string>
-    <string name="author_name">author name</string>
-
-    <string name="recipeNotificationTitle">User %1$s just posted a new recipe!</string>
-    <string name="recipeNotificationMessage">See \"%1$s\" from %2$s</string>
-    <string name="users">users</string>
-    <string name="Recipes">Recipes</string>
-    <string name="Rate">Rate</string>
-    <string name="All">All</string>
-    <string name="add_a_comment">(Optional) Add a comment</string>
 
 </resources>
