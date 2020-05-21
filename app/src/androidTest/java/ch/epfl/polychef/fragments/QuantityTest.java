@@ -184,8 +184,14 @@ public class QuantityTest {
     private void textClear(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
-        EditText quantityText = currentFragment.getView().findViewById(R.id.quantityinput);
-        quantityText.setText("");
+        try {
+            intentsTestRule.runOnUiThread(() -> {
+                EditText quantityText = currentFragment.getView().findViewById(R.id.quantityinput);
+                quantityText.setText("");
+            });
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
     }
 
 }
