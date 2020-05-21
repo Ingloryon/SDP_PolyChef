@@ -33,6 +33,7 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -147,6 +148,7 @@ public class QuantityTest {
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        intentsTestRule.getActivity().getWindow().getDecorView().
     }
 
     @Test
@@ -194,25 +196,25 @@ public class QuantityTest {
     }
 
     // Helped by https://stackoverflow.com/questions/47412063/use-espresso-with-custom-edittext to make Cirrus happy with clearing the text
-    private ViewAction clearText(){
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                // Check that the editText is displayed and can be assigned to EditText
-                // or a subclass which is what Cirrus is asking for and the default clearText is not assuring
-                return allOf(isDisplayed() ,isAssignableFrom(EditText.class));
-            }
-
-            @Override
-            public String getDescription() {
-                return "Clear the text in the EditText";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                ((EditText) view).setText("");
-            }
-        };
-    }
+//    private ViewAction clearText(){
+//        return new ViewAction() {
+//            @Override
+//            public Matcher<View> getConstraints() {
+//                // Check that the editText is displayed and can be assigned to EditText
+//                // or a subclass which is what Cirrus is asking for and the default clearText is not assuring
+//                return allOf(isDisplayed() ,isAssignableFrom(EditText.class));
+//            }
+//
+//            @Override
+//            public String getDescription() {
+//                return "Clear the text in the EditText";
+//            }
+//
+//            @Override
+//            public void perform(UiController uiController, View view) {
+//                ((EditText) view).setText("");
+//            }
+//        };
+//    }
 
 }
