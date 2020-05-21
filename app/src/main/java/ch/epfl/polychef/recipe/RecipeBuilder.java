@@ -42,8 +42,8 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(!recipeInstructions.isEmpty(), "There must be at least one instruction");
         Preconditions.checkArgument(ingredients.size() > 0, "The recipe should have at least one ingredient");
         Preconditions.checkArgument(personNumber > 0, "The number of persons must be set and can't be zero");
-        Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated preparation time must be set");
-        Preconditions.checkArgument(estimatedCookingTime > 0, "The estimated cooking time must be set");
+        Preconditions.checkArgument(estimatedPreparationTime >= 0, "The estimated preparation time must be set");
+        Preconditions.checkArgument(estimatedCookingTime >= 0, "The estimated cooking time must be set");
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
         Preconditions.checkArgument(!author.isEmpty(), "The author must be set");
 
@@ -138,7 +138,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder setEstimatedPreparationTime(int estimatedPreparationTime) {
-        Preconditions.checkArgument(estimatedPreparationTime > 0, "The estimated time required must be strictly positive");
+        Preconditions.checkArgument(estimatedPreparationTime >= 0, "The estimated time required must be strictly positive");
 
         this.estimatedPreparationTime = estimatedPreparationTime;
         return this;

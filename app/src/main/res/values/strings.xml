@@ -78,6 +78,8 @@
     <string name="recipeNotificationMessage">See \"%1$s\" from %2$s</string>
     <string name="users">users</string>
     <string name="Recipes">Recipes</string>
+    <string name="Rate">Rate</string>
+    <string name="All">All</string>
     <string name="add_a_comment">(Optional) Add a comment</string>
 
 </resources>
