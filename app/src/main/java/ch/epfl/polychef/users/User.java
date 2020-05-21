@@ -38,6 +38,18 @@ public class User implements Serializable, Miniatures {
     //TODO: There are no sanitization of the given inputs in all the methods below, ideally they should be added
 
     /**
+     * Construct empty User for Firebase.
+     */
+    public User() {
+        setProfilePictureId(0);
+        recipes = new ArrayList<>();
+        favourites = new ArrayList<>();
+        subscribers = new ArrayList<>();
+        subscriptions = new ArrayList<>();
+        userRating = new Rating();
+    }
+
+    /**
      * Constructs a User from basic information.
      * @param email the email address of the user
      * @param username the username of the user
@@ -54,18 +66,12 @@ public class User implements Serializable, Miniatures {
     }
 
     /**
-     * Construct empty User for Firebase.
+     * Constructs a User from basic information.
+     * @param email the email address of the user
+     * @param username the username of the user
+     * @param rating an existing Rating to give the user
      */
-    public User() {
-        setProfilePictureId(0);
-        recipes = new ArrayList<>();
-        favourites = new ArrayList<>();
-        subscribers = new ArrayList<>();
-        subscriptions = new ArrayList<>();
-        userRating = new Rating();
-    }
-
-    public User(String email, String username, Rating rating){
+    public User(String email, String username, @NonNull Rating rating){
         this.email = email;
         this.username = username;
         setProfilePictureId(0);
@@ -81,7 +87,6 @@ public class User implements Serializable, Miniatures {
      */
     public void removeNullFromLists(){
         recipes.removeAll(Collections.singleton(null));
-        //TODO remove from others as well?
     }
 
     /**
@@ -231,6 +236,14 @@ public class User implements Serializable, Miniatures {
         return resourceImage;
     }
 
+    /**
+     * Gets the rating of the user.
+     * @return the rating of the user
+     */
+    public Rating getRating(){
+        return userRating;
+    }
+
     @Exclude
     public void setKey(String key) {
         this.key = key;
@@ -296,7 +309,4 @@ public class User implements Serializable, Miniatures {
         return false;
     }
 
-    public Rating getRating(){
-        return userRating;
-    }
 }
