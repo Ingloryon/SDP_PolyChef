@@ -125,10 +125,10 @@ public class QuantityTest {
 
     @Test
     public synchronized void exceedQuantityDisplayAToast() throws InterruptedException {
-
         wait(3000);
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
+        wait(2000);
         onView(withId(R.id.quantityinput)).perform(clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withText("The quantity limit is : " + FullRecipeFragment.QUANTITY_LIMIT))
@@ -142,6 +142,7 @@ public class QuantityTest {
         wait(3000);
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
+        wait(2000);
         onView(withId(R.id.quantityinput)).perform(clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withText("The quantity can't be 0"))
@@ -158,18 +159,20 @@ public class QuantityTest {
     }
 
     @Test
-    public synchronized void writtingNothingWorks(){
+    public synchronized void writtingNothingWorks() throws InterruptedException {
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
+        wait(2000);
         onView(withId(R.id.quantityinput)).perform(clearText());
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         assertEquals(1, currentFragment.getCurrentRecipe().getPersonNumber());
     }
 
     @Test
-    public synchronized void changeQuantityActuallyChangeQuantity(){
+    public synchronized void changeQuantityActuallyChangeQuantity() throws InterruptedException {
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
+        wait(2000);
         onView(withId(R.id.quantityinput)).perform(clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 9));
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
@@ -177,18 +180,20 @@ public class QuantityTest {
     }
 
     @Test
-    public synchronized void exceedQuantityChangeInputToMaxOne(){
+    public synchronized void exceedQuantityChangeInputToMaxOne() throws InterruptedException {
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
+        wait(2000);
         onView(withId(R.id.quantityinput)).perform(clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + FullRecipeFragment.QUANTITY_LIMIT)));
     }
 
     @Test
-    public synchronized void zeroQuantityPutToOne(){
+    public synchronized void zeroQuantityPutToOne() throws InterruptedException {
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
+        wait(2000);
         onView(withId(R.id.quantityinput)).perform(clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + 1)));
