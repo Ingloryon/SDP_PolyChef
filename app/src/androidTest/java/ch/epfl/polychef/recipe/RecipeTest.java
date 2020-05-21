@@ -124,11 +124,8 @@ public class RecipeTest {
         rb.setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE);
         Recipe recipe = rb.build();
 
-        List<Ingredient> ingre = recipe.getIngredients();
         List<String> instr = recipe.getRecipeInstructions();
 
-
-        Assertions.assertThrows(UnsupportedOperationException.class, () -> ingre.add(new Ingredient("Steaks", 1000d, Ingredient.Unit.GRAM)));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.add("/src/hello.png"));
         Assertions.assertThrows(UnsupportedOperationException.class, () -> instr.set(0, "/src/evilChanger.png"));
     }
