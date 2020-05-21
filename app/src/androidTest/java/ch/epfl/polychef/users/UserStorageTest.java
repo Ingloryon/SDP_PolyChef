@@ -214,7 +214,7 @@ public class UserStorageTest {
         doAnswer((call) -> {
             ValueEventListener listener =  call.getArgument(0);
 
-            assertThrows(IllegalArgumentException.class, () -> listener.onCancelled(DatabaseError.fromException(new Exception())));
+            assertThrows(java.util.concurrent.CancellationException.class, () -> listener.onCancelled(DatabaseError.fromException(new Exception())));
 
             return null;
         }).when(mockEqualToEmail).addListenerForSingleValueEvent(any(ValueEventListener.class));
