@@ -192,11 +192,11 @@ public class PostRecipeFragment extends Fragment {
             }
         } else {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
-            displayImageMiniatureFromURI(currentMiniature);
+            displayImageMiniatureFromUri(currentMiniature);
         }
     }
 
-    private void displayImageMiniatureFromURI(Uri uri){
+    private void displayImageMiniatureFromUri(Uri uri){
         if(uri != null) {
             try {
                 Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
