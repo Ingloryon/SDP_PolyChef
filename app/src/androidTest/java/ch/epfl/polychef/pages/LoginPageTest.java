@@ -73,7 +73,7 @@ public class LoginPageTest {
     }
 
     @Test
-    public void wrongResultCodeShouldDisplayToast() throws InterruptedException {
+    public synchronized void wrongResultCodeShouldDisplayToast() throws InterruptedException {
         FakeLogin fakeLogin=(FakeLogin)activityTestRule.getActivity();
         fakeLogin.setResultCodeOnActivityResult(Activity.RESULT_CANCELED);
 
@@ -87,7 +87,7 @@ public class LoginPageTest {
     }
 
     @Test
-    public void wrongRequestCodeShouldDisplayToast() throws InterruptedException {
+    public synchronized void wrongRequestCodeShouldDisplayToast() throws InterruptedException {
         FakeLogin fakeLogin=(FakeLogin)activityTestRule.getActivity();
         fakeLogin.setRequestCodeOnActivityResult(1);
 

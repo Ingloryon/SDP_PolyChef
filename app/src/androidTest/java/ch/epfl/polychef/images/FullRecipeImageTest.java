@@ -104,7 +104,7 @@ public class FullRecipeImageTest {
     }
 
     @Test
-    public void callOnFailureIfImageDoesNotExistsShowToast() throws InterruptedException {
+    public synchronized void callOnFailureIfImageDoesNotExistsShowToast() throws InterruptedException {
         setUp("other_not_found_string");
         onView(withId(R.id.recipeImages)).perform(NestedScrollViewHelper.nestedScrollTo()).check(matches(isDisplayed()));
         onView(withText(R.string.errorImageRetrieve))
