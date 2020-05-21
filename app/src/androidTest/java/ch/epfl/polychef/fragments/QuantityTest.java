@@ -125,11 +125,8 @@ public class QuantityTest {
 
     @Test
     public synchronized void exceedQuantityDisplayAToast() throws InterruptedException {
+        textClear();
         wait(3000);
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(2000);
-        onView(withId(R.id.quantityinput)).perform(clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withText("The quantity limit is : " + FullRecipeFragment.QUANTITY_LIMIT))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
@@ -139,11 +136,8 @@ public class QuantityTest {
 
     @Test
     public synchronized void zeroQuantityDisplayAToast() throws InterruptedException {
+        textClear();
         wait(3000);
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(2000);
-        onView(withId(R.id.quantityinput)).perform(clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withText("The quantity can't be 0"))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
@@ -159,66 +153,39 @@ public class QuantityTest {
     }
 
     @Test
-    public synchronized void writtingNothingWorks() throws InterruptedException {
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(2000);
-        onView(withId(R.id.quantityinput)).perform(clearText());
+    public synchronized void writingNothingWorks(){
+        textClear();
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         assertEquals(1, currentFragment.getCurrentRecipe().getPersonNumber());
     }
 
     @Test
-    public synchronized void changeQuantityActuallyChangeQuantity() throws InterruptedException {
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(2000);
-        onView(withId(R.id.quantityinput)).perform(clearText());
+    public synchronized void changeQuantityActuallyChangeQuantity(){
+        textClear();
         onView(withId(R.id.quantityinput)).perform(typeText("" + 9));
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + currentFragment.getCurrentRecipe().getPersonNumber())));
     }
 
     @Test
-    public synchronized void exceedQuantityChangeInputToMaxOne() throws InterruptedException {
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(2000);
-        onView(withId(R.id.quantityinput)).perform(clearText());
+    public synchronized void exceedQuantityChangeInputToMaxOne(){
+        textClear();
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + FullRecipeFragment.QUANTITY_LIMIT)));
     }
 
     @Test
-    public synchronized void zeroQuantityPutToOne() throws InterruptedException {
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(NestedScrollViewHelper.nestedScrollTo());
-        wait(2000);
-        onView(withId(R.id.quantityinput)).perform(clearText());
+    public synchronized void zeroQuantityPutToOne(){
+        textClear();
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + 1)));
     }
 
-    // Helped by https://stackoverflow.com/questions/47412063/use-espresso-with-custom-edittext to make Cirrus happy with clearing the text
-//    private ViewAction clearText(){
-//        return new ViewAction() {
-//            @Override
-//            public Matcher<View> getConstraints() {
-//                // Check that the editText is displayed and can be assigned to EditText
-//                // or a subclass which is what Cirrus is asking for and the default clearText is not assuring
-//                return allOf(isDisplayed() ,isAssignableFrom(EditText.class));
-//            }
-//
-//            @Override
-//            public String getDescription() {
-//                return "Clear the text in the EditText";
-//            }
-//
-//            @Override
-//            public void perform(UiController uiController, View view) {
-//                ((EditText) view).setText("");
-//            }
-//        };
-//    }
+    private void textClear(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
+        EditText quantityText = currentFragment.getView().findViewById(R.id.quantityinput);
+        quantityText.setText("");
+    }
 
 }
