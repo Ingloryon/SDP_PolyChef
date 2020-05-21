@@ -39,7 +39,7 @@ public class IngredientTests {
     @Test
     public void toStringReturnsFormattedString(){
         Ingredient ingredient1 = new Ingredient("Oil", 0, Ingredient.Unit.NO_UNIT);
-        assertEquals(ingredient1.toString(), "0.0 oil");
+        assertEquals(ingredient1.toString(), "0 oil");
         Ingredient ingredient2 = new Ingredient("Eggs", 6, Ingredient.Unit.NONE);
         assertEquals(ingredient2.toString(), "eggs");
         Ingredient ingredient3 = new Ingredient("Flour", 300, Ingredient.Unit.GRAM);
