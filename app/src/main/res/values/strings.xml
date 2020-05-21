@@ -55,6 +55,7 @@
     <string name="commandRepeat">repeat</string>
 
     <string name="users">users</string>
+    <string name="user_picture">user picture</string>
     <string name="subscribed">subscribed</string>
     <string name="subscribe">subscribe</string>
     <string name="author_name">author name</string>
