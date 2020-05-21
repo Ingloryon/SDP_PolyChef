@@ -324,7 +324,9 @@ public class PostRecipeFragment extends Fragment {
             if(postingAModifiedRecipe){
                 rb.setUuid(originalRecipe.getRecipeUuid());
                 rb.setRating(originalRecipe.getRating());
-                rb.setMiniatureFromPath(originalRecipe.getMiniaturePath().getLeft());
+                if(originalRecipe.getMiniaturePath().isLeft()){
+                    rb.setMiniatureFromPath(originalRecipe.getMiniaturePath().getLeft());
+                }
 
                 for(String path: originalRecipe.getPicturesPath()){
                     rb.addPicturePath(path);
