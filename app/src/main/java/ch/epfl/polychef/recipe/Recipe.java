@@ -63,7 +63,6 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         this.recipeUuid = UUID.randomUUID().toString();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
-        //TODO save deepCopy of ingredients;
         this.ingredients = new ArrayList<>(ingredients);
         this.personNumber = personNumber;
         this.estimatedPreparationTime = estimatedPreparationTime;
@@ -292,7 +291,5 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         return super.clone();
     }
 
-    // TODO: Add setters for needed attributes
     // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
-    // TODO: Or all the UUID setup isn't necessary and just using Object's equals def is enough ?
 }
