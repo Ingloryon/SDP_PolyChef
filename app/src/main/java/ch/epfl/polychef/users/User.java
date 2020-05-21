@@ -19,11 +19,10 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.utils.Preconditions;
 
-//TODO remove serializable
 /**
  * Represents a Polychef User.
  */
-public class User implements Serializable, Miniatures {
+public class User implements Miniatures {
 
     private static final String TAG = "User";
     private String email;
