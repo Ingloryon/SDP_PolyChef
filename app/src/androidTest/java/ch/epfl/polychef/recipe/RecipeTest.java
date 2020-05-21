@@ -184,11 +184,9 @@ public class RecipeTest {
     public void overflowsThrowExceptions(){
         RecipeBuilder recipeBuilder = setStandardRecipe();
         recipeBuilder.setEstimatedPreparationTime(Integer.MAX_VALUE);
-        recipeBuilder.addIngredient("NastyInput", Double.MAX_VALUE, Ingredient.Unit.GRAM);
         Recipe recipe = recipeBuilder.build();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> recipe.getEstimatedTotalTime());
-        //Assertions.assertThrows(UnsupportedOperationException.class, () -> recipe.scalePersonAndIngredientsQuantities(5));
     }
 
     @Test

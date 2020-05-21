@@ -95,9 +95,8 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         personNumber=newPersonNumber;
         for(Ingredient ingredient : ingredients){
             if(ingredient.getUnit() != Ingredient.Unit.NONE) {
-                double newQuantity = ingredient.getQuantity() * ratio;
-                Preconditions.checkArgument(newQuantity >= 0, "Scaling the number of persons leads to the overflow of an ingredient quantity !");
-                ingredient.setQuantity(newQuantity);
+                // in java, doubles do not overflow but stay stuck on "infinity" value
+                ingredient.setQuantity(ingredient.getQuantity() * ratio);
             }
         }
     }
@@ -300,6 +299,4 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     public Object clone() throws CloneNotSupportedException{
         return super.clone();
     }
-
-    // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
 }
