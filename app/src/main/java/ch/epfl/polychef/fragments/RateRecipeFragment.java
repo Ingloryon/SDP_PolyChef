@@ -105,15 +105,11 @@ public class RateRecipeFragment extends Fragment {
         // The index returned is the same as the nb of stars
         int starNb = spinner.getSelectedItemPosition();
 
-        //TODO: remove -> the index returned = nb of stars
-        /*String txt = Integer.toString(starNb);
-        */
         String commentString = comment.getText().toString().trim();
 
         String userKey = userStorage.getPolyChefUser().getKey();
 
-        int oldRating = commentString.isEmpty()
-                ? recipe.getRating().addOpinion(userKey, starNb)
+        int oldRating = commentString.isEmpty() ? recipe.getRating().addOpinion(userKey, starNb)
                 : recipe.getRating().addOpinion(userKey, starNb, commentString);
 
         if(oldRating == -1 || oldRating==starNb) {
@@ -123,6 +119,21 @@ public class RateRecipeFragment extends Fragment {
             String newRatingText =  "Your new rating is " + starNb +" stars. Your previous rating was "+oldRating;
             Toast.makeText(getActivity(), newRatingText , Toast.LENGTH_LONG).show();
         }
+
+        CallHandler<User> callHandler = new CallHandler<User>() {
+            @Override
+            public void onSuccess(User data) {
+                data.getRating().addOpinion(recipe.getRecipeUuid()+userKey, starNb);
+                userStorage.updateUserInfo(data);
+            }
+
+            @Override
+            public void onFailure() {
+                Log.w(TAG,"No user found");
+            }
+        };
+
+        userStorage.getUserByEmail(recipe.getAuthor(),callHandler);
 
         recipeStorage.updateRecipe(recipe);
 
