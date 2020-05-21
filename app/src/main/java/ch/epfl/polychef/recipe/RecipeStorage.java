@@ -77,8 +77,7 @@ public class RecipeStorage implements Serializable  {
      *
      * @param recipe the recipe to update
      */
-    public void updateRecipe(Recipe recipe) {
-        Preconditions.checkArgument(recipe != null, "Can not update an empty recipe");
+    public void updateRecipe(@NonNull Recipe recipe) {
         getFirebaseDatabase()
                 .getReference(RecipeStorage.DB_NAME).child(recipe.getKey())
                 .setValue(recipe);
@@ -89,18 +88,18 @@ public class RecipeStorage implements Serializable  {
      *
      * @param recipe the {@code Recipe to add}
      */
-    public void addRecipe(Recipe recipe) {
-        Preconditions.checkArgument(recipe != null);
-
+    public void addRecipe(@NonNull Recipe recipe) {
         DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
         recipe.setKey(ref.getKey());
         ref.setValue(recipe);
     }
 
-    public void readRecipeFromUuid(String uuid, CallHandler<Recipe> ch){
-        Preconditions.checkArgument(uuid != null, "Uuid should not be null");
-        Preconditions.checkArgument(ch != null, "Call handler should not be null");
-
+    /**
+     * Reads the Recipe with the given uuid.
+     * @param uuid the uuid of the recipe to read, must be non null
+     * @param ch the call handler of the recipe
+     */
+    public void readRecipeFromUuid(@NonNull String uuid, @NonNull CallHandler<Recipe> ch){
         getFirebaseDatabase()
                 .getReference(DB_NAME)
                 .orderByChild("recipeUuid")
@@ -154,7 +153,12 @@ public class RecipeStorage implements Serializable  {
         listenerForListOfRecipes(query, caller);
     }
 
-    public void listenerForListOfRecipes(Query query, CallHandler<List<Miniatures>> ch){
+    /**
+     * Adds a listener for the given query.
+     * @param query the query to add a listener to, must be non null
+     * @param ch the caller of this method
+     */
+    public void listenerForListOfRecipes(@NonNull Query query,@NonNull CallHandler<List<Miniatures>> ch){
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -168,7 +172,12 @@ public class RecipeStorage implements Serializable  {
         });
     }
 
-    public void getSingleRecipeFromSnapshot(DataSnapshot snapshot, CallHandler<Recipe> ch){
+    /**
+     * Gets a single recipe from the given data snapshot.
+     * @param snapshot the data snapshot
+     * @param ch the call handler of the recipe
+     */
+    public void getSingleRecipeFromSnapshot(@NonNull DataSnapshot snapshot,@NonNull CallHandler<Recipe> ch){
         Recipe recipe = snapshot.getValue(Recipe.class);
         if (recipe == null) {
             ch.onFailure();
@@ -178,7 +187,12 @@ public class RecipeStorage implements Serializable  {
         }
     }
 
-    public void getManyRecipeFromSnapshot(DataSnapshot dataSnapshot, CallHandler<List<Miniatures>> ch){
+    /**
+     * Gets a multiple recipes from the given data snapshot.
+     * @param dataSnapshot the data snapshot
+     * @param ch the call handler of the recipe
+     */
+    public void getManyRecipeFromSnapshot(@NonNull DataSnapshot dataSnapshot,@NonNull CallHandler<List<Miniatures>> ch){
         if(dataSnapshot.getChildrenCount() == 0){
             ch.onFailure();
 
@@ -187,7 +201,7 @@ public class RecipeStorage implements Serializable  {
             for(DataSnapshot child : dataSnapshot.getChildren()){
                 Recipe recipe = child.getValue(Recipe.class);
                 recipe.setKey(child.getKey());
-                recipes.add((Miniatures)recipe);
+                recipes.add(recipe);
             }
 
             ch.onSuccess(recipes);
