@@ -91,9 +91,7 @@ public class RecipeStorage implements Serializable  {
      * @param recipe the {@code Recipe to add}
      */
     public void addRecipe(@NonNull Recipe recipe) {
-        Preconditions.checkArgument(recipe != null);
-
-
+        
         CallHandler<Recipe> callHandler =new CallHandler<Recipe>(){
             @Override
             public void onSuccess(Recipe data) {//if the recipe exist, then override it
