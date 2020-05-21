@@ -73,7 +73,7 @@ public class LoginPageTest {
     }
 
     @Test
-    public void wrongResultCodeShouldDisplayToast(){
+    public void wrongResultCodeShouldDisplayToast() throws InterruptedException {
         FakeLogin fakeLogin=(FakeLogin)activityTestRule.getActivity();
         fakeLogin.setResultCodeOnActivityResult(Activity.RESULT_CANCELED);
 
@@ -83,10 +83,11 @@ public class LoginPageTest {
                 .inRoot(withDecorView(not(is(activityTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        wait(3000);
     }
 
     @Test
-    public void wrongRequestCodeShouldDisplayToast(){
+    public void wrongRequestCodeShouldDisplayToast() throws InterruptedException {
         FakeLogin fakeLogin=(FakeLogin)activityTestRule.getActivity();
         fakeLogin.setRequestCodeOnActivityResult(1);
 
@@ -96,6 +97,7 @@ public class LoginPageTest {
                 .inRoot(withDecorView(not(is(activityTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        wait(3000);
     }
 
     private class FakeLogin extends LoginPage {
