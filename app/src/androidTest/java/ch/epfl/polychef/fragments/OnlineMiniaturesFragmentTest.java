@@ -254,7 +254,7 @@ public class OnlineMiniaturesFragmentTest {
         onView(withId(R.id.miniaturesOnlineList))
                 .perform(RecyclerViewActions.scrollToPosition(((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount() - 1));
         wait(1000);
-        //TODO:fix the exception
+
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
         wait(1000);
         assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());

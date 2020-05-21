@@ -19,7 +19,6 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.utils.Preconditions;
 
-//TODO remove serializable
 /**
  * Represents a Polychef User.
  */
@@ -36,7 +35,17 @@ public class User implements Serializable, Miniatures {
     private List<String> subscribers;
     private List<String> subscriptions;
 
-    //TODO: There are no sanitization of the given inputs in all the methods below, ideally they should be added
+    /**
+     * Construct empty User for Firebase.
+     */
+    public User() {
+        setProfilePictureId(0);
+        recipes = new ArrayList<>();
+        favourites = new ArrayList<>();
+        subscribers = new ArrayList<>();
+        subscriptions = new ArrayList<>();
+        userRating = new Rating();
+    }
 
     /**
      * Constructs a User from basic information.
@@ -55,18 +64,12 @@ public class User implements Serializable, Miniatures {
     }
 
     /**
-     * Construct empty User for Firebase.
+     * Constructs a User from basic information.
+     * @param email the email address of the user
+     * @param username the username of the user
+     * @param rating an existing Rating to give the user
      */
-    public User() {
-        setProfilePictureId(0);
-        recipes = new ArrayList<>();
-        favourites = new ArrayList<>();
-        subscribers = new ArrayList<>();
-        subscriptions = new ArrayList<>();
-        userRating = new Rating();
-    }
-
-    public User(String email, String username, Rating rating){
+    public User(String email, String username, @NonNull Rating rating){
         this.email = email;
         this.username = username;
         setProfilePictureId(0);
@@ -82,7 +85,6 @@ public class User implements Serializable, Miniatures {
      */
     public void removeNullFromLists(){
         recipes.removeAll(Collections.singleton(null));
-        //TODO remove from others as well?
     }
 
     /**
@@ -198,7 +200,7 @@ public class User implements Serializable, Miniatures {
      * @param email the email of the subscription to remove
      */
     public void removeSubscription(String email) {
-        Preconditions.checkArgument(subscriptions.contains(email), "Can not remove from subscriptions");
+        Preconditions.checkArgument(subscriptions.contains(email), "There are no subscriptions with the given email.");
         subscriptions.remove(email);
     }
 
@@ -215,7 +217,7 @@ public class User implements Serializable, Miniatures {
      * @param email the email of the subscriber to remove
      */
     public void removeSubscriber(String email) {
-        Preconditions.checkArgument(subscribers.contains(email), "Can not remove from subscribers");
+        Preconditions.checkArgument(subscribers.contains(email), "There are no subscribers with the given email.");
         subscribers.remove(email);
     }
 
@@ -230,6 +232,14 @@ public class User implements Serializable, Miniatures {
         String photoName=context.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
         int resourceImage = context.getResources().getIdentifier(photoName, "drawable", context.getPackageName());
         return resourceImage;
+    }
+
+    /**
+     * Gets the rating of the user.
+     * @return the rating of the user
+     */
+    public Rating getRating(){
+        return userRating;
     }
 
     @Exclude
@@ -297,7 +307,4 @@ public class User implements Serializable, Miniatures {
         return false;
     }
 
-    public Rating getRating(){
-        return userRating;
-    }
 }

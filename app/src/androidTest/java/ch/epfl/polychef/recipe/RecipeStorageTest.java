@@ -203,16 +203,15 @@ public class RecipeStorageTest {
         String mockString = "mockString";
         CallHandler mockCallHandler = mock(CallHandler.class);
         RecipeStorage recipeStorage = RecipeStorage.getInstance();
-        assertThrows(IllegalArgumentException.class, () -> recipeStorage.addRecipe(null));
-        assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipeFromUuid(null, mockCallHandler));
-        assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipeFromUuid(mockString, null));
+        assertThrows(NullPointerException.class, () -> recipeStorage.addRecipe(null));
+        assertThrows(IllegalArgumentException.class, () -> recipeStorage.readRecipeFromUuid("", mockCallHandler));
         assertThrows(IllegalArgumentException.class,
                 () -> recipeStorage.getNRecipes(0, mockString, mockString, true, mockCallHandler));
         assertThrows(IllegalArgumentException.class,
                 () -> recipeStorage.getNRecipes(-1, mockString, mockString, true, mockCallHandler));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NullPointerException.class,
                 () -> recipeStorage.getNRecipes(5, null, mockString, true, mockCallHandler));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NullPointerException.class,
                 () -> recipeStorage.getNRecipes(5, mockString, null, true, mockCallHandler));
         assertThrows(IllegalArgumentException.class,
                 () -> recipeStorage.getNRecipes(5, mockString, mockString, true, null));
@@ -220,7 +219,7 @@ public class RecipeStorageTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> recipeStorage.getNRecipes(5, recentDate, oldDate, true, mockCallHandler));
-        assertThrows(IllegalArgumentException.class, () -> recipeStorage.updateRecipe(null));
+        assertThrows(NullPointerException.class, () -> recipeStorage.updateRecipe(null));
     }
 
     @Test
