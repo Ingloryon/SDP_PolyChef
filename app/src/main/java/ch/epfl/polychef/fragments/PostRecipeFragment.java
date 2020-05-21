@@ -25,7 +25,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,7 +36,6 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageHandler;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
@@ -533,8 +531,6 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void hideImageComponents() {
-        //getView().findViewById(R.id.miniature).setVisibility(View.GONE);
-        //getView().findViewById(R.id.pictures).setVisibility(View.GONE);
         getView().findViewById(R.id.postRecipePictures).setVisibility(View.GONE);
     }
 
