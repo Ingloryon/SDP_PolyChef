@@ -183,7 +183,8 @@ public class PostRecipeFragment extends Fragment {
             Uri uri = imageHandler.handleActivityResult(requestCode / MEAL_PICTURES_FACTOR, resultCode, data);
             if(uri != null) {
                 currentMealPictures.add(uri);
-                mealPicturesText.setText(currentMealPictures.size() + " to upload");
+                String mealText = currentMealPictures.size() + " to upload";
+                mealPicturesText.setText(mealText);
             }
         } else {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
