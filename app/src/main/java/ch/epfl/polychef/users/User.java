@@ -35,8 +35,6 @@ public class User implements Serializable, Miniatures {
     private List<String> subscribers;
     private List<String> subscriptions;
 
-    //TODO: There are no sanitization of the given inputs in all the methods below, ideally they should be added
-
     /**
      * Construct empty User for Firebase.
      */
@@ -202,7 +200,7 @@ public class User implements Serializable, Miniatures {
      * @param email the email of the subscription to remove
      */
     public void removeSubscription(String email) {
-        Preconditions.checkArgument(subscriptions.contains(email), "Can not remove from subscriptions");
+        Preconditions.checkArgument(subscriptions.contains(email), "There are no subscriptions with the given email.");
         subscriptions.remove(email);
     }
 
@@ -219,7 +217,7 @@ public class User implements Serializable, Miniatures {
      * @param email the email of the subscriber to remove
      */
     public void removeSubscriber(String email) {
-        Preconditions.checkArgument(subscribers.contains(email), "Can not remove from subscribers");
+        Preconditions.checkArgument(subscribers.contains(email), "There are no subscribers with the given email.");
         subscribers.remove(email);
     }
 
