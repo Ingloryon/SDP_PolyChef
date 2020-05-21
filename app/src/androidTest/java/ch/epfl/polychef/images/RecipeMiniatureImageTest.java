@@ -160,7 +160,7 @@ public class RecipeMiniatureImageTest {
     public static UserStorage getMockUserStorage(User mockUser){
         UserStorage mockUserStorage = mock(UserStorage.class);
         when(mockUserStorage.getAuthenticatedUser()).thenReturn(mock(FirebaseUser.class));
-
+        when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
         return  mockUserStorage;
     }
 }
