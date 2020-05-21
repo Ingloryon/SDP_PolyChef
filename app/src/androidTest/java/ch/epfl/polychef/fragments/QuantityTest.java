@@ -132,6 +132,7 @@ public class QuantityTest {
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        wait(3000);
     }
 
     @Test
@@ -143,6 +144,7 @@ public class QuantityTest {
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        wait(3000);
     }
 
     @Test

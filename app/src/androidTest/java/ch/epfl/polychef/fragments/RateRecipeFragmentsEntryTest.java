@@ -59,11 +59,10 @@ public class RateRecipeFragmentsEntryTest {
     }
 
     @Test
-    public void toastIsDisplayedIfTryToRateWhileNotLoggedIn() throws InterruptedException {
+    public void toastIsDisplayedIfTryToRateWhileNotLoggedIn(){
 
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
-        wait(2000);
         onView(withId(R.id.buttonRate)).perform(click());
         onView(withText(R.string.errorOnlineFeature))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleEntry.getActivity()
