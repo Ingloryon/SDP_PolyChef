@@ -1,7 +1,11 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
+import android.view.View;
+import android.widget.EditText;
 
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
@@ -9,6 +13,7 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -36,11 +41,13 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -128,7 +135,7 @@ public class QuantityTest {
     @Test
     public void writtingNothingWorks(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         assertEquals(1, currentFragment.getCurrentRecipe().getPersonNumber());
     }
@@ -136,7 +143,7 @@ public class QuantityTest {
     @Test
     public void changeQuantityActuallyChangeQuantity(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 9));
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + currentFragment.getCurrentRecipe().getPersonNumber())));
@@ -145,7 +152,7 @@ public class QuantityTest {
     @Test
     public void exceedQuantityChangeInputToMaxOne(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + FullRecipeFragment.QUANTITY_LIMIT)));
     }
@@ -153,7 +160,7 @@ public class QuantityTest {
     @Test
     public void zeroQuantityPutToOne(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + 1)));
     }
@@ -161,7 +168,7 @@ public class QuantityTest {
     @Test
     public void exceedQuantityDisplayAToast(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withText("The quantity limit is : " + FullRecipeFragment.QUANTITY_LIMIT))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
@@ -172,12 +179,33 @@ public class QuantityTest {
     @Test
     public void zeroQuantityDisplayAToast(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withText("The quantity can't be 0"))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+    }
+
+    // Helped by https://stackoverflow.com/questions/47412063/use-espresso-with-custom-edittext to make Cirrus happy with clearing the text
+    private ViewAction clearText(){
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                // check that the editText is displayed and can be assigned to EditText or a subclass
+                return allOf(isDisplayed(), isAssignableFrom(EditText.class));
+            }
+
+            @Override
+            public String getDescription() {
+                return "Clear the text in the EditText";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((EditText) view).setText("");
+            }
+        };
     }
 
 }
