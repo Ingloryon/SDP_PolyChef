@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -61,9 +62,7 @@ public class PostRecipeFragment extends Fragment {
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
-    private String recipeUuid;
     private Recipe.Difficulty recipeDifficulty;
-    private Rating rating;
     private Recipe postedRecipe;
     private LinearLayout instructionLayout;
     private LinearLayout ingredientLayout;
@@ -88,6 +87,8 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
+    private boolean postingAModifiedRecipe=false;
+    private Recipe originalRecipe=null;
 
     private HomePage hostActivity;
 
@@ -193,19 +194,22 @@ public class PostRecipeFragment extends Fragment {
             }
         } else {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
-            if(currentMiniature != null) {
-                try {
-                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
-                    if(oldBitmap != null) {
-                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
-                        double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
-                        Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
-                        imageMiniaturePreview.setImageBitmap(newBitmap);
-                    }
-                } catch (IOException e) {
-                    Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
-                }
+            displayImageMiniatureFromURI(currentMiniature);
+        }
+    }
 
+    private void displayImageMiniatureFromURI(Uri uri){
+        if(uri != null) {
+            try {
+                Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                if(oldBitmap != null) {
+                    double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
+                    double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
+                    Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
+                    imageMiniaturePreview.setImageBitmap(newBitmap);
+                }
+            } catch (IOException e) {
+                Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -251,13 +255,9 @@ public class PostRecipeFragment extends Fragment {
             for(int i = 0; i < currentMealPictures.size(); ++i) {
                 imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), getUserEmail(), postedRecipe.getRecipeUuid());
             }
-            if(postedRecipe.getKey().equals("")){
-                hostActivity.getRecipeStorage().addRecipe(postedRecipe);
-                hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
-                hostActivity.getUserStorage().updateUserInfo();
-            } else {
-                hostActivity.getRecipeStorage().updateRecipe(postedRecipe);
-            }
+            hostActivity.getRecipeStorage().addRecipe(postedRecipe);
+            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
+            hostActivity.getUserStorage().updateUserInfo();
 
             return true;
         }
@@ -311,7 +311,6 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private boolean checkForIllegalInputs(RecipeBuilder rb) {
-
         try {
             rb.setName(name)
                     .setEstimatedCookingTime(estimatedCookingTime)
@@ -324,20 +323,24 @@ public class PostRecipeFragment extends Fragment {
             for (int i = 0; i < ingredients.size(); i++) {
                 rb.addIngredient(ingredients.get(i));
             }
-            if(currentMiniature != null) {
-                rb.setMiniatureFromPath(miniatureName);
-            }
-            String uuidPath = miniatureName + "_";
-            for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                rb.addPicturePath(uuidPath + i);
+            if(postingAModifiedRecipe){
+                rb.setUuid(originalRecipe.getRecipeUuid());
+                rb.setRating(originalRecipe.getRating());
+                rb.setMiniatureFromPath(originalRecipe.getMiniaturePath().getLeft());
+
+                for(String path: originalRecipe.getPicturesPath()){
+                    rb.addPicturePath(path);
+                }
+            }else{
+                if(currentMiniature != null) {
+                    rb.setMiniatureFromPath(miniatureName);
+                }
+                String uuidPath = miniatureName + "_";
+                for(int i = 1; i <= currentMealPictures.size(); ++i) {
+                    rb.addPicturePath(uuidPath + i);
+                }
             }
             rb.setAuthor(getUserEmail()).build();
-            if(recipeUuid!=null){
-                rb.setUuid(recipeUuid);
-            }
-            if(rating!=null){
-                rb.setRating(rating);
-            }
 
         } catch (IllegalArgumentException e) {
             findIllegalInputs(new RecipeBuilder());
@@ -492,8 +495,10 @@ public class PostRecipeFragment extends Fragment {
 
 
     private void initializeFromOriginalRecipe(Recipe originalRecipe) {
-        recipeUuid=originalRecipe.getRecipeUuid();//to be able to replace the old one
-        rating=originalRecipe.getRating();//to be able to replace the old one
+        postingAModifiedRecipe=true;
+        this.originalRecipe=originalRecipe;
+
+        hideImageComponents();
 
         EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
         prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
@@ -525,6 +530,12 @@ public class PostRecipeFragment extends Fragment {
             insertIngredientAtIndex(ingredients.get(i),i);
         }
 
+    }
+
+    private void hideImageComponents() {
+        //getView().findViewById(R.id.miniature).setVisibility(View.GONE);
+        //getView().findViewById(R.id.pictures).setVisibility(View.GONE);
+        getView().findViewById(R.id.postRecipePictures).setVisibility(View.GONE);
     }
 
     private void insertIngredientAtIndex(Ingredient ingredient, int index) {

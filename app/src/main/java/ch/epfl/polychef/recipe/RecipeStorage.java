@@ -59,7 +59,7 @@ public class RecipeStorage implements Serializable  {
      * @param recipe the recipe to update
      */
     public void updateRecipe(Recipe recipe) {
-        Preconditions.checkArgument(recipe != null, "Can not update an empty recipe");
+        Preconditions.checkArgument(recipe != null, "Cannot update an empty recipe");
         getFirebaseDatabase()
                 .getReference(RecipeStorage.DB_NAME).child(recipe.getKey())
                 .setValue(recipe);

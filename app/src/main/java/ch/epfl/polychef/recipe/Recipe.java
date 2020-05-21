@@ -79,9 +79,10 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         }else{
             this.rating=rating;
         }
-        this.miniaturePath = miniaturePath;
-        if(this.miniaturePath == null) {
+        if(miniaturePath==null){
             this.miniaturePath = Either.none();
+        }else{
+            this.miniaturePath = miniaturePath;
         }
         this.picturesPath = picturesPath;
         if(date == null) {
