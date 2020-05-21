@@ -135,7 +135,7 @@ public class QuantityTest {
     @Test
     public void writtingNothingWorks(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
+        onView(withId(R.id.quantityinput)).perform(this.clearText());
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         assertEquals(1, currentFragment.getCurrentRecipe().getPersonNumber());
     }
@@ -143,7 +143,7 @@ public class QuantityTest {
     @Test
     public void changeQuantityActuallyChangeQuantity(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
+        onView(withId(R.id.quantityinput)).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 9));
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + currentFragment.getCurrentRecipe().getPersonNumber())));
@@ -152,7 +152,7 @@ public class QuantityTest {
     @Test
     public void exceedQuantityChangeInputToMaxOne(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
+        onView(withId(R.id.quantityinput)).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + FullRecipeFragment.QUANTITY_LIMIT)));
     }
@@ -160,7 +160,7 @@ public class QuantityTest {
     @Test
     public void zeroQuantityPutToOne(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
+        onView(withId(R.id.quantityinput)).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + 1)));
     }
@@ -168,7 +168,7 @@ public class QuantityTest {
     @Test
     public void exceedQuantityDisplayAToast(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
+        onView(withId(R.id.quantityinput)).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withText("The quantity limit is : " + FullRecipeFragment.QUANTITY_LIMIT))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
@@ -179,7 +179,7 @@ public class QuantityTest {
     @Test
     public void zeroQuantityDisplayAToast(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.quantityinput)).perform(click()).perform(this.clearText());
+        onView(withId(R.id.quantityinput)).perform(this.clearText());
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withText("The quantity can't be 0"))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
@@ -192,7 +192,8 @@ public class QuantityTest {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
-                // check that the editText is displayed and can be assigned to EditText or a subclass
+                // Check that the editText is displayed and can be assigned to EditText
+                // or a subclass which is what Cirrus is asking for and the default clearText is not assuring
                 return allOf(isDisplayed(), isAssignableFrom(EditText.class));
             }
 
