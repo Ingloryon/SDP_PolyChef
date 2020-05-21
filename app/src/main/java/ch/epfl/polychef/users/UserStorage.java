@@ -73,7 +73,7 @@ public class UserStorage {
         String username = getAuthenticatedUser().getDisplayName();
         user = new User(email, username);
 
-        //TODO: Add OnSuccess and OnFailure listener
+        // Add OnSuccess and OnFailure listener ?
         DatabaseReference ref = getDatabase()
                 .getReference(UserStorage.DB_NAME)
                 .push();
