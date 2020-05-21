@@ -30,9 +30,11 @@ public final class Ingredient implements Serializable {
      * @param unit the unit the quantity should be expressed in
      */
     public Ingredient(@NonNull String name, double quantity,@NonNull Unit unit){
-        //TODO should check quantity depending on unit (0 is only ok for NONE and NO_UNIT)
         Preconditions.checkArgument(quantity >= 0, "The quantity should be positive");
         Preconditions.checkArgument(!name.equals(""), "The ingredient's name must be non empty");
+        if(quantity == 0) {
+            Preconditions.checkArgument(unit == Unit.NONE || unit == Unit.NO_UNIT, "The quantity can only be zero for NO_UNIT or NONE units.");
+        }
 
         this.name = name.toLowerCase();
         this.quantity = quantity;
