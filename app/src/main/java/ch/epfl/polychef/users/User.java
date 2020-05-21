@@ -22,7 +22,7 @@ import ch.epfl.polychef.utils.Preconditions;
 /**
  * Represents a Polychef User.
  */
-public class User implements Miniatures {
+public class User implements Serializable, Miniatures {
 
     private static final String TAG = "User";
     private String email;
