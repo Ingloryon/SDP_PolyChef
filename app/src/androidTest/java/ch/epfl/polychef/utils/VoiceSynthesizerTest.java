@@ -39,11 +39,6 @@ public class VoiceSynthesizerTest {
     public ActivityTestRule<EntryPage> intentsTestRule = new ActivityTestRule<>(fakeEntryPage, false,
             false);
 
-    /*
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-    */
-
     @Mock
     TextToSpeech textToSpeech;
 
@@ -69,25 +64,6 @@ public class VoiceSynthesizerTest {
         vs.speak("Test");
         vs.onStop();
     }
-
-
-        /* //TODO: complicated test (hard to mock and get the exception in the right place
-    @Test(expected = UnsupportedOperationException.class)
-    public void voiceSythThrowsExcWhenNoGameEngines()  {
-
-        exceptionRule.expect(UnsupportedOperationException.class);
-        exceptionRule.expectMessage("There is no voice recognition engine.");
-
-        VoiceSynthesizer vs = new VoiceSynthesizer(intentsTestRule.getActivity(), textToSpeech);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            //we don't mind if the sleep is interrupted
-        }
-
-        intentsTestRule.finishActivity();
-        Intents.release();
-    }*/
 
 }
 

@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import ch.epfl.polychef.Miniatures;
@@ -64,7 +65,6 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         this.recipeUuid = UUID.randomUUID().toString();
         this.name = name;
         this.recipeInstructions = recipeInstructions;
-        //TODO save deepCopy of ingredients;
         this.ingredients = new ArrayList<>(ingredients);
         this.personNumber = personNumber;
         this.estimatedPreparationTime = estimatedPreparationTime;
@@ -91,10 +91,12 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     public void scalePersonAndIngredientsQuantities(int newPersonNumber){
         Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
+
         double ratio = (double)newPersonNumber / (double)personNumber;
-        personNumber = newPersonNumber;
+        personNumber=newPersonNumber;
         for(Ingredient ingredient : ingredients){
             if(ingredient.getUnit() != Ingredient.Unit.NONE) {
+                // in java, doubles do not overflow but stay stuck on "infinity" value
                 ingredient.setQuantity(ingredient.getQuantity() * ratio);
             }
         }
@@ -105,6 +107,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      * @return total estimated time in minutes
      */
     public int getEstimatedTotalTime(){
+        Preconditions.checkArgument(estimatedCookingTime + estimatedPreparationTime >= 0, "The added times are too big and lead to an overflow !");
         return estimatedCookingTime + estimatedPreparationTime;
     }
 
@@ -117,12 +120,17 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     }
 
     /**
-     * Returns the list of the ingredients.
-     * @return the ingredients and their amounts
+     * Returns a copy of the list of the ingredients.
+     * @return the ingredients (name, amount, unit)
      */
     public List<Ingredient> getIngredients(){
-        // TODO: Return a deep copy of the Ingredients so they are not modif
-        return Collections.unmodifiableList(ingredients);
+        List<Ingredient> ingredientsDeepCopy = new ArrayList<>();
+        for(int i =0 ; i < ingredients.size() ; ++i){
+            Ingredient ingre = ingredients.get(i);
+            ingredientsDeepCopy.add(new Ingredient(ingre.getName(), ingre.getQuantity(), ingre.getUnit()));
+        }
+
+        return ingredientsDeepCopy;
     }
 
     /**
@@ -278,7 +286,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
             str.append("\n");
             str.append(ingredient.toString());
         }
-        str.append("\n\nThe recipe is " + recipeDifficulty.toString().toLowerCase().replaceAll("_", " ") + ".\n");
+        str.append("\n\nThe recipe is " + recipeDifficulty.toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " ") + ".\n");
         str.append("The recipes takes around " + estimatedPreparationTime + "min of preparation and " + estimatedCookingTime + "min of cooking.\n");
         str.append("The recipe is rated " + rating.toString());
 
@@ -292,8 +300,4 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     public Object clone() throws CloneNotSupportedException{
         return super.clone();
     }
-
-    // TODO: Add setters for needed attributes
-    // TODO: general remark: should we handle overflows ? (for total preparation time / scale quantities / huge strings for example)
-    // TODO: Or all the UUID setup isn't necessary and just using Object's equals def is enough ?
 }

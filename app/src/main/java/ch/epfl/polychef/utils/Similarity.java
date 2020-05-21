@@ -1,5 +1,7 @@
 package ch.epfl.polychef.utils;
 
+import java.util.Locale;
+
 public class Similarity {
     public static double similarity(String s1, String s2) {
         String longer = s1;
@@ -17,8 +19,8 @@ public class Similarity {
 
 
     public static int editDistance(String s1, String s2) {
-        s1 = s1.toLowerCase();
-        s2 = s2.toLowerCase();
+        s1 = s1.toLowerCase(Locale.ENGLISH);
+        s2 = s2.toLowerCase(Locale.ENGLISH);
 
         int[] costs = new int[s2.length() + 1];
         for (int i = 0; i <= s1.length(); i++) {
