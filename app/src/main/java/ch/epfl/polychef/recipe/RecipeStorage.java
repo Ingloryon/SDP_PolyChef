@@ -99,7 +99,9 @@ public class RecipeStorage implements Serializable  {
      * @param uuid the uuid of the recipe to read, must be non null
      * @param ch the call handler of the recipe
      */
-    public void readRecipeFromUuid(@NonNull String uuid, @NonNull CallHandler<Recipe> ch){
+    public void readRecipeFromUuid(String uuid, @NonNull CallHandler<Recipe> ch){
+        Preconditions.checkArgument(!uuid.isEmpty(), "The given uuid must be non empty.");
+
         getFirebaseDatabase()
                 .getReference(DB_NAME)
                 .orderByChild("recipeUuid")
