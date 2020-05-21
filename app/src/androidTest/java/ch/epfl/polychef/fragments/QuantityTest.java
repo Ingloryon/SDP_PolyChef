@@ -127,7 +127,7 @@ public class QuantityTest {
     public synchronized void exceedQuantityDisplayAToast() throws InterruptedException {
         wait(3000);
         textClear();
-        textType("" + FullRecipeFragment.QUANTITY_LIMIT + 1);
+        textType(Integer.toString(FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withText("The quantity limit is : " + FullRecipeFragment.QUANTITY_LIMIT))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
@@ -138,7 +138,7 @@ public class QuantityTest {
     public synchronized void zeroQuantityDisplayAToast() throws InterruptedException {
         wait(3000);
         textClear();
-        textType("" + 0);
+        textType(Integer.toString(0));
         onView(withText("The quantity can't be 0"))
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
@@ -149,7 +149,7 @@ public class QuantityTest {
     public void defaultQuantityNumberIsCorrect(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
-        onView(withId(R.id.quantityinput)).check(matches(withText("" + currentFragment.getCurrentRecipe().getPersonNumber())));
+        onView(withId(R.id.quantityinput)).check(matches(withText(Integer.toString(currentFragment.getCurrentRecipe().getPersonNumber()))));
     }
 
     @Test
@@ -162,23 +162,23 @@ public class QuantityTest {
     @Test
     public void changeQuantityActuallyChangeQuantity(){
         textClear();
-        textType("" + 9);
+        textType(Integer.toString(9));
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
-        onView(withId(R.id.quantityinput)).check(matches(withText("" + currentFragment.getCurrentRecipe().getPersonNumber())));
+        onView(withId(R.id.quantityinput)).check(matches(withText(Integer.toString(currentFragment.getCurrentRecipe().getPersonNumber()))));
     }
 
     @Test
     public void exceedQuantityChangeInputToMaxOne(){
         textClear();
-        textType("" + FullRecipeFragment.QUANTITY_LIMIT + 1);
-        onView(withId(R.id.quantityinput)).check(matches(withText("" + FullRecipeFragment.QUANTITY_LIMIT)));
+        textType(Integer.toString(FullRecipeFragment.QUANTITY_LIMIT + 1));
+        onView(withId(R.id.quantityinput)).check(matches(withText(Integer.toString(FullRecipeFragment.QUANTITY_LIMIT))));
     }
 
     @Test
     public void zeroQuantityPutToOne(){
         textClear();
-        textType("" + 0);
-        onView(withId(R.id.quantityinput)).check(matches(withText("" + 1)));
+        textType(Integer.toString(0));
+        onView(withId(R.id.quantityinput)).check(matches(withText(Integer.toString(1))));
     }
 
     private void textClear(){
@@ -193,6 +193,7 @@ public class QuantityTest {
             e.printStackTrace();
         }
     }
+
     private void textType(String text){
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         try {
