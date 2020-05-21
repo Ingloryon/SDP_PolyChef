@@ -146,6 +146,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             opinionsAdapter.loadNewComments();
         }
     }
+    
     private void displayQuantity(View view){
         quantityInput = view.findViewById(R.id.quantityinput);
         quantityInput.setText("" + currentRecipe.getPersonNumber());
