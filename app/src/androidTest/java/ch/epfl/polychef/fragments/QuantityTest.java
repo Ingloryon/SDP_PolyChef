@@ -33,7 +33,6 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;

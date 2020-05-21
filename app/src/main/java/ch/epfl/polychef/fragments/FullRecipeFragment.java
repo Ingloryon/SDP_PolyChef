@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Switch;
@@ -28,9 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.synnapps.carouselview.CarouselView;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
@@ -39,7 +36,6 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Opinion;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
