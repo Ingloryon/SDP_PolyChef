@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import ch.epfl.polychef.Miniatures;
@@ -285,7 +286,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
             str.append("\n");
             str.append(ingredient.toString());
         }
-        str.append("\n\nThe recipe is " + recipeDifficulty.toString().toLowerCase().replaceAll("_", " ") + ".\n");
+        str.append("\n\nThe recipe is " + recipeDifficulty.toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " ") + ".\n");
         str.append("The recipes takes around " + estimatedPreparationTime + "min of preparation and " + estimatedCookingTime + "min of cooking.\n");
         str.append("The recipe is rated " + rating.toString());
 
