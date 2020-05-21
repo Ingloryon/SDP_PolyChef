@@ -120,13 +120,15 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
                 android:divider="@drawable/empty_tall_divider"
                 android:orientation="horizontal"
                 android:showDividers="middle"
+                app:layout_constraintBottom_toTopOf="@+id/difficulty"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/voiceRecognitionSwitch">
@@ -206,10 +208,11 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredients">
+                app:layout_constraintTop_toBottomOf="@+id/ingredients"
+                android:baselineAligned="false">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="59dp"
                     android:layout_weight="1">
 
@@ -233,7 +236,7 @@
                         android:layout_height="0dp"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="64dp"
+                        android:layout_marginEnd="140dp"
                         android:layout_marginBottom="8dp"
                         android:ems="10"
                         android:inputType="number"
@@ -301,7 +304,7 @@
                 android:checked="false"
                 android:text="@string/VoiceRecognitionSwitch"
                 android:textColor="#272424"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/authorUsername" />
 

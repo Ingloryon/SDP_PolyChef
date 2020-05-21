@@ -67,7 +67,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
 
-    private int QUANTITY_LIMIT = 500;
+    public static int QUANTITY_LIMIT = 500;
 
     private boolean online;
 
@@ -168,11 +168,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                     }else if( newQuantity > QUANTITY_LIMIT){
                         currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
                         quantityInput.setText("" + QUANTITY_LIMIT);
-                        Toast.makeText(getActivity(), "Limite de quantité : 500" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
                     }else{
                         currentRecipe.scalePersonAndIngredientsQuantities(1);
                         quantityInput.setText("" + 1);
-                        Toast.makeText(getActivity(), "La quantité ne peux pas être nulle" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "The quantity can't be 0" , Toast.LENGTH_SHORT).show();
                     }
                 }catch(NumberFormatException e){}
             }

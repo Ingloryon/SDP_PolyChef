@@ -9,6 +9,7 @@ import androidx.test.runner.intercepting.SingleActivityFactory;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,8 +34,12 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -75,6 +80,12 @@ public class QuantityTest {
         mockUser = new User("mock@email.com", "mockUsername");
         Intents.init();
         intentsTestRule.launchActivity(new Intent());
+    }
+
+    @After
+    public void finishActivity(){
+        intentsTestRule.finishActivity();
+        Intents.release();
     }
 
     private class FakeHomePage extends HomePage {
@@ -139,4 +150,40 @@ public class QuantityTest {
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + currentFragment.getCurrentRecipe().getPersonNumber())));
     }
+    @Test
+    public void exceedQuantityChangeInputToMaxOne(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
+        onView(withId(R.id.quantityinput)).check(matches(withText("" + FullRecipeFragment.QUANTITY_LIMIT)));
+    }
+    @Test
+    public void zeroQuantityPutToOne(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
+        onView(withId(R.id.quantityinput)).check(matches(withText("" + 1)));
+    }
+    @Test
+    public void exceedQuantityDisplayAToast(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
+        onView(withText("The quantity limit is : " + FullRecipeFragment.QUANTITY_LIMIT))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+    @Test
+    public void zeroQuantityDisplayAToast(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.quantityinput)).perform(clearText());
+        onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
+        onView(withText("The quantity can't be 0"))
+                .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+    }
+
 }
