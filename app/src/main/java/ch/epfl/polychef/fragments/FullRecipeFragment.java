@@ -98,16 +98,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
         defaultQuantity = currentRecipe.getPersonNumber();
 
-        displayFavouriteButton(view);
-        displayRecipeName(view);
-        displayImage(view);
-        displayRating(view);
-        displayPrepAndCookTime(view);
-        displayDifficulty(view);
-        displayInstructions(view);
-        displayQuantity(view);
-        displayIngredients(view);
-        displayAuthorName(view);
+        displayEverything(view);
 
         voiceRecognizer=new VoiceRecognizer(this);
         try {
@@ -120,6 +111,19 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         containerId = container.getId();
 
         return view;
+    }
+
+    private void displayEverything(View view){
+        displayFavouriteButton(view);
+        displayRecipeName(view);
+        displayImage(view);
+        displayRating(view);
+        displayPrepAndCookTime(view);
+        displayDifficulty(view);
+        displayInstructions(view);
+        displayQuantity(view);
+        displayIngredients(view);
+        displayAuthorName(view);
     }
 
     private void addOpinion(View view) {
@@ -148,36 +152,41 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         quantityInput.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence seq, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence seq, int start, int before, int count) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                int newQuantity = 0;
-                try {
-                    if(quantityInput.getText().toString().equals("")){
-                        currentRecipe.scalePersonAndIngredientsQuantities(1);
-                        displayIngredients(view);
-                    }
-                    newQuantity = Integer.parseInt(quantityInput.getText().toString());
-                    if(newQuantity <= QUANTITY_LIMIT && newQuantity > 0) {
-                        currentRecipe.scalePersonAndIngredientsQuantities(newQuantity);
-                        displayIngredients(view);
-                    }else if( newQuantity > QUANTITY_LIMIT){
-                        currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
-                        quantityInput.setText("" + QUANTITY_LIMIT);
-                        Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
-                    }else{
-                        currentRecipe.scalePersonAndIngredientsQuantities(1);
-                        quantityInput.setText("" + 1);
-                        Toast.makeText(getActivity(), "The quantity can't be 0" , Toast.LENGTH_SHORT).show();
-                    }
-                }catch(NumberFormatException e){}
+            public void afterTextChanged(Editable ed) {
+                handleNewQuantity(view);
             }
         });
 
+    }
+
+    private void handleNewQuantity(View view){
+        int newQuantity = 0;
+        if(quantityInput.getText().toString().equals("")){
+            currentRecipe.scalePersonAndIngredientsQuantities(1);
+            displayIngredients(view);
+            return;
+        }
+        newQuantity = Integer.parseInt(quantityInput.getText().toString());
+        if(newQuantity <= QUANTITY_LIMIT && newQuantity > 0) {
+            currentRecipe.scalePersonAndIngredientsQuantities(newQuantity);
+            displayIngredients(view);
+        }else if( newQuantity > QUANTITY_LIMIT){
+            currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
+            quantityInput.setText("" + QUANTITY_LIMIT);
+            Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
+        }else{
+            currentRecipe.scalePersonAndIngredientsQuantities(1);
+            quantityInput.setText("" + 1);
+            Toast.makeText(getActivity(), "The quantity can't be 0" , Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void displayAuthorName(View view) {

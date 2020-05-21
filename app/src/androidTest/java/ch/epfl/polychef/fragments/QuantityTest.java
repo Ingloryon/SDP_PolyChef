@@ -20,6 +20,7 @@ import java.util.List;
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
+import ch.epfl.polychef.images.RecipeMiniatureImageTest;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
@@ -52,16 +53,6 @@ public class QuantityTest {
 
     private FragmentTestUtils fragUtils = new FragmentTestUtils();
 
-    private RecipeBuilder recipeBuilder = new RecipeBuilder()
-            .addInstruction("test instruction")
-            .setPersonNumber(4)
-            .setEstimatedCookingTime(35)
-            .setEstimatedPreparationTime(40)
-            .addIngredient("test", 1.0, Ingredient.Unit.CUP)
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
-            .setDate("20/05/01 12:00:00")
-            .setAuthor("testAuthor");
-
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
         @Override
@@ -92,11 +83,7 @@ public class QuantityTest {
 
         @Override
         public UserStorage getUserStorage(){
-            UserStorage mockUserStorage = mock(UserStorage.class);
-            when(mockUserStorage.getAuthenticatedUser()).thenReturn(mock(FirebaseUser.class));
-            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
-
-            return mockUserStorage;
+            return RecipeMiniatureImageTest.getMockUserStorage(mockUser);
         }
 
         @Override
@@ -108,7 +95,7 @@ public class QuantityTest {
             doAnswer((call) -> {
                 CallHandler<List<Recipe>> ch = call.getArgument(4);
                 List<Recipe> results = new ArrayList<>();
-                results.add(recipeBuilder.setName("test1").build());
+                results.add(RecipeMiniatureImageTest.recipeBuilder.setName("test1").build());
                 ch.onSuccess(results);
                 return null;
             }).when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
@@ -128,6 +115,7 @@ public class QuantityTest {
         }
 
     }
+
     @Test
     public void defaultQuantityNumberIsCorrect(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -142,6 +130,7 @@ public class QuantityTest {
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         assertEquals(1, currentFragment.getCurrentRecipe().getPersonNumber());
     }
+
     @Test
     public void changeQuantityActuallyChangeQuantity(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -150,6 +139,7 @@ public class QuantityTest {
         FullRecipeFragment currentFragment = ((FullRecipeFragment) fragUtils.getTestedFragment(intentsTestRule));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + currentFragment.getCurrentRecipe().getPersonNumber())));
     }
+
     @Test
     public void exceedQuantityChangeInputToMaxOne(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -157,6 +147,7 @@ public class QuantityTest {
         onView(withId(R.id.quantityinput)).perform(typeText("" + FullRecipeFragment.QUANTITY_LIMIT + 1));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + FullRecipeFragment.QUANTITY_LIMIT)));
     }
+
     @Test
     public void zeroQuantityPutToOne(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -164,6 +155,7 @@ public class QuantityTest {
         onView(withId(R.id.quantityinput)).perform(typeText("" + 0));
         onView(withId(R.id.quantityinput)).check(matches(withText("" + 1)));
     }
+
     @Test
     public void exceedQuantityDisplayAToast(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -174,6 +166,7 @@ public class QuantityTest {
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
+
     @Test
     public void zeroQuantityDisplayAToast(){
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -183,7 +176,6 @@ public class QuantityTest {
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-
     }
 
 }
