@@ -3,6 +3,7 @@ package ch.epfl.polychef.recipe;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import ch.epfl.polychef.utils.Preconditions;
 
@@ -36,7 +37,7 @@ public final class Ingredient implements Serializable {
             Preconditions.checkArgument(unit == Unit.NONE || unit == Unit.NO_UNIT, "The quantity can only be zero for NO_UNIT or NONE units.");
         }
 
-        this.name = name.toLowerCase();
+        this.name = name.toLowerCase(Locale.ENGLISH);
         this.quantity = quantity;
         this.unit = unit;
     }
@@ -70,7 +71,7 @@ public final class Ingredient implements Serializable {
      * Set the name of the ingredient.
      */
     public void setName(String newName){
-        name = newName.toLowerCase();
+        name = newName.toLowerCase(Locale.ENGLISH);
     }
 
     /**
@@ -96,7 +97,7 @@ public final class Ingredient implements Serializable {
             case NO_UNIT:
                 return quantity + " " + name;
             default:
-                String str = quantity + " " + unit.toString().toLowerCase();
+                String str = quantity + " " + unit.toString().toLowerCase(Locale.ENGLISH);
                 return quantity > 1 ? str + "s of " + name : str + " of " + name;
         }
     }
