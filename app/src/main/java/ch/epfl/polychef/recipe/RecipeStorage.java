@@ -26,15 +26,39 @@ import ch.epfl.polychef.utils.Preconditions;
  */
 public class RecipeStorage implements Serializable  {
 
-    private static RecipeStorage INSTANCE=new RecipeStorage();
-
     private static final String TAG = "RecipeStorage";
     public static final String DB_NAME = "recipes";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
     public static final String RECIPE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 
+    private static RecipeStorage INSTANCE = new RecipeStorage();
+
+    private RecipeStorage(){
+    }
+
+    /**
+     * Gets the instance of Recipe Storage.
+     * @return
+     */
     public static RecipeStorage getInstance(){
         return INSTANCE;
+    }
+
+    /**
+     * Get the current instance of the {@code FirebaseDatabase}.
+     *
+     * @return the current instance of the {@code FirebaseDatabase}
+     */
+    public FirebaseDatabase getFirebaseDatabase() {
+        return FirebaseDatabase.getInstance();
+    }
+
+    /**
+     *  Returns the search recipe instance.
+     * @return the search recipe instance
+     */
+    public SearchRecipe getSearch(){
+        return SearchRecipe.getInstance();
     }
 
     /**
@@ -46,10 +70,6 @@ public class RecipeStorage implements Serializable  {
         SimpleDateFormat formatter = new SimpleDateFormat(RECIPE_DATE_FORMAT);
         Date date = new Date();
         return formatter.format(date);
-    }
-
-
-    private RecipeStorage(){
     }
 
     /**
@@ -117,12 +137,9 @@ public class RecipeStorage implements Serializable  {
      * @param newest whether we want recent recipes or older recipes
      * @param caller the caller of this method
      */
-    public void getNRecipes(int nbRecipes, String startDate, String endDate, boolean newest, CallHandler<List<Miniatures>> caller){
+    public void getNRecipes(int nbRecipes,@NonNull String startDate,@NonNull String endDate, boolean newest,@NonNull CallHandler<List<Miniatures>> caller){
         Preconditions.checkArgument(nbRecipes > 0, "Number of recipe to get should "
                 + "be positive");
-        Preconditions.checkArgument(startDate != null);
-        Preconditions.checkArgument(endDate != null);
-        Preconditions.checkArgument(caller != null, "Call handler should not be null");
         Preconditions.checkArgument(startDate.compareTo(endDate) < 0);
 
         Query query = getFirebaseDatabase().getReference(DB_NAME)
@@ -136,17 +153,6 @@ public class RecipeStorage implements Serializable  {
 
         listenerForListOfRecipes(query, caller);
     }
-
-    //TODO Is it ok to pull all the recipes of a user? Or do we want to get them N by N as we scroll?
-    /*public void getAllRecipesByUser(String userEmail, CallHandler<List<Recipe>> caller){
-        Preconditions.checkArgument(userEmail != null);
-        Preconditions.checkArgument(caller != null, "Call handler should not be null");
-
-        Query query = getFirebaseDatabase().getReference(DB_NAME)
-                .orderByChild("author").equalTo(userEmail);
-
-        listenerForListOfRecipes(query, caller);
-    }*/
 
     public void listenerForListOfRecipes(Query query, CallHandler<List<Miniatures>> ch){
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -186,18 +192,5 @@ public class RecipeStorage implements Serializable  {
 
             ch.onSuccess(recipes);
         }
-    }
-
-    /**
-     * Get the current instance of the {@code FirebaseDatabase}.
-     *
-     * @return the current instance of the {@code FirebaseDatabase}
-     */
-    public FirebaseDatabase getFirebaseDatabase() {
-        return FirebaseDatabase.getInstance();
-    }
-
-    public SearchRecipe getSearch(){
-        return SearchRecipe.getInstance();
     }
 }
