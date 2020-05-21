@@ -83,7 +83,9 @@ public class QuantityTest {
 
         @Override
         public UserStorage getUserStorage(){
-            return RecipeMiniatureImageTest.getMockUserStorage(mockUser);
+            UserStorage mockUserStorage = RecipeMiniatureImageTest.getMockUserStorage(mockUser);
+            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
+            return mockUserStorage;
         }
 
         @Override

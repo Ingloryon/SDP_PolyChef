@@ -133,20 +133,17 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
             opinionsRecyclerView.setAdapter(opinionsAdapter);
             topScrollView = view.findViewById(R.id.fullRecipeFragment);
-            topScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if(!opinionsAdapter.isLoading()) {
-                        if (!topScrollView.canScrollVertically(1)) {
-                            opinionsAdapter.loadNewComments();
-                        }
+            topScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (view1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                if(!opinionsAdapter.isLoading()) {
+                    if (!topScrollView.canScrollVertically(1)) {
+                        opinionsAdapter.loadNewComments();
                     }
                 }
             });
             opinionsAdapter.loadNewComments();
         }
     }
-    
+
     private void displayQuantity(View view){
         quantityInput = view.findViewById(R.id.quantityinput);
         quantityInput.setText("" + currentRecipe.getPersonNumber());
@@ -254,14 +251,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     private void setupSwitch(View view) {
         Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
-        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    voiceRecognizer.start(getActivity());
-                }else{
-                    voiceRecognizer.onStop();
-                }
+        onOffSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                voiceRecognizer.start(getActivity());
+            }else{
+                voiceRecognizer.onStop();
             }
         });
     }
