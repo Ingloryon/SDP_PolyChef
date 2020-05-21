@@ -114,8 +114,8 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void zeroPrepTimeDisplaysErrorLogs() {
-        writeRecipe("Cake","a", "1","a","10","0", "0");
-        checkErrorLog("There are errors in the given inputs :\nPreparation time:  The estimated time required must be strictly positive");
+        writeRecipe("Cake","a", "1","a","10","", "0");
+        checkErrorLog("There are errors in the given inputs :\nPreparation Time: should be a positive number.");
     }
 
     @Test

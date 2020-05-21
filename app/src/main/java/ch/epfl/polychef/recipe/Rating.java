@@ -69,6 +69,7 @@ public final class Rating implements Serializable {
         return String.format(Locale.ENGLISH, "%.2f", ratingAverage()) + "/5 stars by " + allOpinion.size() + " users.\n";
     }
 
+
     public int getRatingSum() {
         return ratingSum;
     }

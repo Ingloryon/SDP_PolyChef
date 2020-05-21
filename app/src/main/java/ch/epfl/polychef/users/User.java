@@ -16,6 +16,7 @@ import java.util.Objects;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.R;
+import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.utils.Preconditions;
 
 //TODO remove serializable
@@ -24,15 +25,16 @@ import ch.epfl.polychef.utils.Preconditions;
  */
 public class User implements Serializable, Miniatures {
 
+    private static final String TAG = "User";
     private String email;
     private String username;
+    private String key;
     private int profilePictureId;
+    private Rating userRating;
     private List<String> recipes;
     private List<String> favourites;
     private List<String> subscribers;
     private List<String> subscriptions;
-
-    private String key;
 
     //TODO: There are no sanitization of the given inputs in all the methods below, ideally they should be added
 
@@ -49,6 +51,7 @@ public class User implements Serializable, Miniatures {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
+        userRating = new Rating();
     }
 
     /**
@@ -60,6 +63,18 @@ public class User implements Serializable, Miniatures {
         favourites = new ArrayList<>();
         subscribers = new ArrayList<>();
         subscriptions = new ArrayList<>();
+        userRating = new Rating();
+    }
+
+    public User(String email, String username, Rating rating){
+        this.email = email;
+        this.username = username;
+        setProfilePictureId(0);
+        recipes = new ArrayList<>();
+        favourites = new ArrayList<>();
+        subscribers = new ArrayList<>();
+        subscriptions = new ArrayList<>();
+        this.userRating = rating;
     }
 
     /**
@@ -84,6 +99,11 @@ public class User implements Serializable, Miniatures {
      */
     public String getUsername() {
         return username;
+    }
+
+    @Exclude
+    public String getName(){
+        return getUsername();
     }
 
     /**
@@ -225,11 +245,13 @@ public class User implements Serializable, Miniatures {
         this.key = key;
     }
 
+    @Exclude
     @Override
     public boolean isUser() {
         return true;
     }
 
+    @Exclude
     @Override
     public boolean isRecipe() {
         return false;
@@ -281,5 +303,9 @@ public class User implements Serializable, Miniatures {
         }
 
         return false;
+    }
+
+    public Rating getRating(){
+        return userRating;
     }
 }
