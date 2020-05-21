@@ -89,11 +89,15 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     public void scalePersonAndIngredientsQuantities(int newPersonNumber){
         Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
+
         double ratio = (double)newPersonNumber / (double)personNumber;
+
         personNumber=newPersonNumber;
         for(Ingredient ingredient : ingredients){
             if(ingredient.getUnit() != Ingredient.Unit.NONE) {
-                ingredient.setQuantity(ingredient.getQuantity() * ratio);
+                double newQuantity = ingredient.getQuantity() * ratio;
+                Preconditions.checkArgument(newQuantity >= 0, "Scaling the number of persons leads to the overflow of an ingredient quantity !");
+                ingredient.setQuantity(newQuantity);
             }
         }
     }
@@ -103,6 +107,7 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      * @return total estimated time in minutes
      */
     public int getEstimatedTotalTime(){
+        Preconditions.checkArgument(estimatedCookingTime + estimatedPreparationTime >= 0, "The added times are too big and lead to an overflow !");
         return estimatedCookingTime + estimatedPreparationTime;
     }
 
@@ -115,12 +120,17 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     }
 
     /**
-     * Returns the list of the ingredients.
-     * @return the ingredients and their amounts
+     * Returns a copy of the list of the ingredients.
+     * @return the ingredients (name, amount, unit)
      */
     public List<Ingredient> getIngredients(){
-        // TODO: Return a deep copy of the Ingredients so they are not modif
-        return Collections.unmodifiableList(ingredients);
+        List<Ingredient> ingredientsDeepCopy = new ArrayList<>();
+        for(int i =0 ; i < ingredients.size() ; ++i){
+            Ingredient ingre = ingredients.get(i);
+            ingredientsDeepCopy.add(new Ingredient(ingre.getName(), ingre.getQuantity(), ingre.getUnit()));
+        }
+
+        return ingredientsDeepCopy;
     }
 
     /**
