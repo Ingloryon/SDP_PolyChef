@@ -203,9 +203,10 @@ public class RecipeTest {
                 + endingString;
 
         String str2 = startingString
-                + "75 kilograms of chicken wings\n" 
+                + "75 kilograms of chicken wings\n"
                 + "300 grams of carrots\n"
                 + endingString;
+        
 
         // The ingredients can be displayed in any order so toString() can be either str1 or str2
         // TODO FIX ME PLS, leave it like this for the moment to gain coverage but refactor later
