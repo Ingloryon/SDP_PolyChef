@@ -99,7 +99,7 @@ public final class Ingredient implements Serializable {
             case NO_UNIT:
                 return stringQuantity + " " + name;
             default:
-                String str = quantity + " " + unit.toString().toLowerCase(Locale.ENGLISH);
+                String str = stringQuantity + " " + unit.toString().toLowerCase(Locale.ENGLISH);
                 return quantity > 1 ? str + "s of " + name : str + " of " + name;
         }
     }
