@@ -76,7 +76,7 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
 
     @Override
     public void onFailure() {
-        //TODO fail gracefully
+        // see user story #214
     }
 
     @Override
