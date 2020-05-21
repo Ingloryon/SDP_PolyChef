@@ -148,7 +148,6 @@ public class QuantityTest {
                 .inRoot(withDecorView(not(is(intentsTestRule.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        intentsTestRule.getActivity().getWindow().getDecorView().
     }
 
     @Test
