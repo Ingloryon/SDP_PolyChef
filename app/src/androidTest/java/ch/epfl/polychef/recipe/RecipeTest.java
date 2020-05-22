@@ -67,7 +67,7 @@ public class RecipeTest {
         rb.setRecipeDifficulty(Recipe.Difficulty.EASY);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setMiniatureFromPath(""));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rb.addPicturePath(""));
 
         rb.build();
     }
