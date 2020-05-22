@@ -11,30 +11,21 @@ import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.Search;
 import ch.epfl.polychef.utils.Similarity;
 
+/**
+ * An extension of Search that searches for {@link Recipe}.
+ */
 public class SearchRecipe extends Search<Recipe> {
 
     private static final double MIN_SIMILARITY = 0.3;
-
-    @Override
-    protected String getTag() {
-        return "SearchRecipe";
-    }
-
-    @Override
-    protected String getDbName() {
-        return RecipeStorage.DB_NAME;
-    }
-
-    @Override
-    protected Recipe getValue(DataSnapshot dataSnapshot) {
-        return dataSnapshot.getValue(Recipe.class);
-    }
-
     private static final  SearchRecipe INSTANCE = new SearchRecipe();
 
     private SearchRecipe() {
     }
 
+    /**
+     * Returns the instance of search recipe.
+     * @return the instance of SearchRecipe
+     */
     public static SearchRecipe getInstance() {
         return INSTANCE;
     }
@@ -60,28 +51,6 @@ public class SearchRecipe extends Search<Recipe> {
         search(query, this::compareSimilarity, caller);
     }
 
-    private boolean compareSimilarity(String query, Recipe value) {
-        return Similarity.similarity(query,value.getName())>0.1;
-    }
-
-    /**
-    private boolean compareName(String query, Recipe value) {
-        String searchInput = query;
-        searchInput = searchInput.toLowerCase();
-        String name = value.getName().toLowerCase();
-        return searchInput.contains(name) || name.contains(searchInput);
-    }
-     */
-
-    private boolean compareIngredient(String ingredient, Recipe value) {
-        for (String ing : value.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList())) {
-            if (Similarity.similarity(ingredient,ing)>MIN_SIMILARITY) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Get the current instance of the {@code FirebaseDatabase}.
      *
@@ -90,5 +59,33 @@ public class SearchRecipe extends Search<Recipe> {
     @Override
     public FirebaseDatabase getDatabase() {
         return FirebaseDatabase.getInstance();
+    }
+
+    @Override
+    protected String getTag() {
+        return "SearchRecipe";
+    }
+
+    @Override
+    protected String getDbName() {
+        return RecipeStorage.DB_NAME;
+    }
+
+    @Override
+    protected Recipe getValue(DataSnapshot dataSnapshot) {
+        return dataSnapshot.getValue(Recipe.class);
+    }
+
+    private boolean compareSimilarity(String query, Recipe value) {
+        return Similarity.similarity(query,value.getName())>0.1;
+    }
+
+    private boolean compareIngredient(String ingredient, Recipe value) {
+        for (String ing : value.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList())) {
+            if (Similarity.similarity(ingredient,ing)>MIN_SIMILARITY) {
+                return true;
+            }
+        }
+        return false;
     }
 }
