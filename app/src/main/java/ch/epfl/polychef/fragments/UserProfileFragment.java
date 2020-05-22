@@ -2,7 +2,6 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
@@ -34,7 +31,6 @@ import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
-
 
 public class UserProfileFragment extends Fragment {
 
