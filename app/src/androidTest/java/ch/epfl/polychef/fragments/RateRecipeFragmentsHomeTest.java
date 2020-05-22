@@ -116,13 +116,14 @@ public class RateRecipeFragmentsHomeTest {
     private synchronized void sendRateAndCheckToast(String expectedText) throws InterruptedException {
         onView(withId(R.id.buttonSendRate)).perform(scrollTo(), click());
 
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.MILLISECONDS.sleep(100);
 
         onView(withText(expectedText))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        wait(2000);
+
+        TimeUnit.SECONDS.sleep(2);
 
     }
 
