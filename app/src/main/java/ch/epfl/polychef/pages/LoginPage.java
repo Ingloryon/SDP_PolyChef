@@ -53,13 +53,6 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
     }
 
     /**
-     * Prepares the next activity.
-     */
-    public void prepareNextActivity(){
-        getUserStorage().initializeUserFromAuthenticatedUser(this);
-    }
-
-    /**
      * Gets the instance of the user storage.
      * @return the instance of the user storage
      */
@@ -97,7 +90,8 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         super.onActivityResult(requestCode, resultCode, data);
         FirebaseUser user = getUser();
         if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK && user != null) {
-            prepareNextActivity();
+            //prepares next activity
+            getUserStorage().initializeUserFromAuthenticatedUser(this);
         } else {
             Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
         }
