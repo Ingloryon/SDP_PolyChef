@@ -71,7 +71,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
 
     /**
-     * Required empty public constructor.
+     * Required empty public constructor for Firebase.
      */
     public FullRecipeFragment() {}
 

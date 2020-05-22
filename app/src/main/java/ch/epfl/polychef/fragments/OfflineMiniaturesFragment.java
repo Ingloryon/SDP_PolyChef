@@ -13,9 +13,15 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.recipe.OfflineRecipes;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
+/**
+ * Class that represents the fragment displayed for the offline Miniatures.
+ */
 public final class OfflineMiniaturesFragment extends Fragment {
     private RecyclerView offlineRecyclerView;
 
+    /**
+     * Required empty public constructor for Firebase.
+     */
     public OfflineMiniaturesFragment() {}
 
     @Override
