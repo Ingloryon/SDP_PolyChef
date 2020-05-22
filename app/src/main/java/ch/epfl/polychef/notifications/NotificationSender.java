@@ -21,8 +21,8 @@ import ch.epfl.polychef.utils.SingletonQueue;
  */
 public class NotificationSender {
     private static final String FCM_API = "https://fcm.googleapis.com/fcm/send";
-    private static final String serverKey = "key=" + "AAAAhNJZ4jI:APA91bH8UkEAkTdPDXg2xsiWH7ur8o2lM6Jvd3HPZ-HOluYk6NqmptQthq4O0lil0RchrbuaqkFAJoA1PUMU41AMuQ8i3gEJhcGI--4kxQPqaaryPXO2euObw8mGM98j9qAfEx3MqNwK";
-    private static final String contentType = "application/json";
+    private static final String SERVER_KEY = "key=" + "AAAAhNJZ4jI:APA91bH8UkEAkTdPDXg2xsiWH7ur8o2lM6Jvd3HPZ-HOluYk6NqmptQthq4O0lil0RchrbuaqkFAJoA1PUMU41AMuQ8i3gEJhcGI--4kxQPqaaryPXO2euObw8mGM98j9qAfEx3MqNwK";
+    private static final String CONTENT_TYPE = "application/json";
     private static final String TAG = "NotificationSender";
 
     private static final NotificationSender INSTANCE = new NotificationSender();
@@ -71,8 +71,8 @@ public class NotificationSender {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put("Authorization", serverKey);
-                params.put("Content-Type", contentType);
+                params.put("Authorization", SERVER_KEY);
+                params.put("Content-Type", CONTENT_TYPE);
                 return params;
             }
         };
