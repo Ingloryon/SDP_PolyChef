@@ -14,7 +14,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
@@ -33,7 +33,7 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
      * @param view the current view
      */
     public void createSignInIntent(View view) {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
         startActivityForResult(
