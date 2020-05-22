@@ -42,6 +42,9 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The page fragment that represents the posting recipe UI.
+ */
 public class PostRecipeFragment extends Fragment {
     private static final String TAG = "PostRecipeFragment";
     private static final int MINIATURE_FACTOR = 1;
@@ -92,6 +95,30 @@ public class PostRecipeFragment extends Fragment {
      * Required empty public constructor.
      */
     public PostRecipeFragment() {
+    }
+
+    /**
+     * Gets the email address of the connected user.
+     * @return the email address of the connected user.
+     */
+    public String getUserEmail(){
+        return hostActivity.getUserStorage().getPolyChefUser().getEmail();
+    }
+
+    /**
+     * Gets the instance of the image storage.
+     * @return the instance of the image storage
+     */
+    public RecipeStorage getRecipeStorage() {
+        return RecipeStorage.getInstance();
+    }
+
+    /**
+     * Gets the instance of the user storage.
+     * @return the instance of the user storage
+     */
+    public UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 
     @Override
@@ -210,7 +237,7 @@ public class PostRecipeFragment extends Fragment {
      * Otherwise it will update the View to display to wrong inputs.
      * @param view the current view
      */
-    public synchronized void setPostButton(View view) {
+    private synchronized void setPostButton(View view) {
         getAndCheckEnteredInputs();
         if(!buildRecipeAndPostToFirebase()){
             printWrongInputsToUser();
@@ -479,15 +506,4 @@ public class PostRecipeFragment extends Fragment {
         wrongInputs.put("Ingredients", true);
     }
 
-    public String getUserEmail(){
-        return hostActivity.getUserStorage().getPolyChefUser().getEmail();
-    }
-
-    protected RecipeStorage getRecipeStorage() {
-        return RecipeStorage.getInstance();
-    }
-
-    protected UserStorage getUserStorage() {
-        return UserStorage.getInstance();
-    }
 }
