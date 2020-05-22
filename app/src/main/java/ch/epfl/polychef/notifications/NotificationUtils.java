@@ -16,18 +16,35 @@ import java.util.Random;
 
 import ch.epfl.polychef.R;
 
+/**
+ * A util class for Notifications.
+ */
 public class NotificationUtils {
-
     private String channelID = "User notification";
+    private static final int BOUND = 3000;
     private static final NotificationUtils INSTANCE = new NotificationUtils();
 
+
+    /**
+     * Prevents multiple instances of NotificationUtils to be instantiated.
+     */
     private NotificationUtils() {
     }
 
+    /**
+     * Gets the instance of NotificationUtils.
+     * @return the instance of NotificationUtils
+     */
     public static NotificationUtils getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Sets the notification with the given intent and remote message.
+     * @param context the context of the caller
+     * @param remoteMessage the remote message
+     * @param intent the given intent
+     */
     public void setNotificationWithIntent(Context context, RemoteMessage remoteMessage, Intent intent) {
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         int notificationID = getRandom();
@@ -46,6 +63,10 @@ public class NotificationUtils {
         notificationManager.notify(notificationID, notificationBuilder.build());
     }
 
+    /**
+     * Sets the channel on the given NotificationManager.
+     * @param notificationManager the NotificationManager to set the channel on
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setChannels(NotificationManager notificationManager){
         NotificationChannel adminChannel;
@@ -56,7 +77,11 @@ public class NotificationUtils {
         }
     }
 
+    /**
+     * Returns a random integer between 0 and 3000.
+     * @return a random integer (between 0 and 3000)
+     */
     public int getRandom() {
-        return new Random().nextInt(3000);
+        return new Random().nextInt(BOUND);
     }
 }
