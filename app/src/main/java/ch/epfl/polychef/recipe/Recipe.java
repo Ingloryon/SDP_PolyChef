@@ -17,6 +17,7 @@ import ch.epfl.polychef.utils.Preconditions;
 /**
  * Represents a complete Recipe.
  */
+@SuppressWarnings("WeakerAccess")
 public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>, Miniatures {
     /**
      * Enum representing the possible difficulties of a Recipe.
