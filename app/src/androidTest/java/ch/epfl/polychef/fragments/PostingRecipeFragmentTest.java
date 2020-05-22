@@ -78,7 +78,9 @@ public class PostingRecipeFragmentTest {
     private User mockUser2;
     private List<Recipe> recipeArr = new ArrayList<>();
 
-    private Recipe fakeRecipe = CommentTestOnFullRecipe.fakeRecipeBuilder.setAuthor(email1).build();
+    private Recipe fakeRecipe1 = CommentTestOnFullRecipe.fakeRecipeBuilder.setAuthor(email1).build();
+    //the second recipe is created after
+    private Recipe fakeRecipe2 = CommentTestOnFullRecipe.fakeRecipeBuilder.setDate("20/06/02 13:10:00").setAuthor(email2).build();
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -91,7 +93,8 @@ public class PostingRecipeFragmentTest {
         mockUser2=new User(email2,"user2");
         mockUser2.setKey("test key user2");
         mockRecipeStorage=Mockito.mock(RecipeStorage.class);
-        recipeArr.add(fakeRecipe);
+        recipeArr.add(fakeRecipe1);
+        recipeArr.add(fakeRecipe2);
 
         Intents.init();
         intentsTestRule.launchActivity(new Intent());
@@ -252,13 +255,28 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void testDoNotDisplayImageRelatedButtonWhenModifying() {
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        //click second recipe
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         onView(withId(R.id.modifyButton)).perform(click());
 
         onView(withId(R.id.miniature)).check(matches(not(isDisplayed())));
         onView(withId(R.id.pictures)).check(matches(not(isDisplayed())));
         onView(withId(R.id.miniaturePreview)).check(matches(not(isDisplayed())));
     }
+
+    @Test
+    public void testModifyButtonDoesNotAppearWhenItIsNotYourRecipe(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.modifyButton)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testModifyButtonDoesAppearWhenItIsNotYourRecipe(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.modifyButton)).check(matches(isDisplayed()));
+    }
+
+
 
     private class FakeHomePage extends HomePage {
 
