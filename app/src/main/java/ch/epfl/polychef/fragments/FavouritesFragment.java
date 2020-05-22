@@ -64,7 +64,7 @@ public class FavouritesFragment extends Fragment {
     }
 
     /**
-     * Gets the recycler view of the Homepage
+     * Gets the recycler view of the favorites.
      * @return the recycler view
      */
     public RecyclerView getRecyclerView() {

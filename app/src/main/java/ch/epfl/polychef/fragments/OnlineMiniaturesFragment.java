@@ -33,6 +33,9 @@ import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 import ch.epfl.polychef.utils.Sort;
 
+/**
+ * Class that represents the fragment displayed for the online Miniatures.
+ */
 public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Miniatures>>{
 
     private static final String TAG = "OnlineMiniaturesFrag";
@@ -76,8 +79,18 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private ImageStorage imageStorage;
     private UserStorage userStorage;
 
+    /**
+     * Required empty public constructor for Firebase.
+     */
     public OnlineMiniaturesFragment(){
-        
+    }
+
+    /**
+     * Gets the recycler view of the online miniatures.
+     * @return the online recycler view
+     */
+    public RecyclerView getRecyclerView(){
+        return onlineRecyclerView;
     }
 
     @Override
@@ -191,6 +204,51 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         }
     }
 
+    @Override
+    public void onSuccess(List<Miniatures> data){
+        if(isSearching){
+            searchList.addAll(data);
+            if(isFilterRate) {
+                Sort.sortByRate(searchList);
+            }else if(isFilterIngredient){
+                Sort.sortByIngredientSimilarity(searchList,actualQuery);
+            }else {
+                Sort.sortBySimilarity(searchList,actualQuery);
+            }
+            removeDuplicate(searchList);
+            onlineRecyclerView.getAdapter().notifyDataSetChanged();
+            return;
+        }
+
+        List<Recipe> newRecipes = new ArrayList<>();
+        for(Miniatures recipe : data){
+            newRecipes.add((Recipe) recipe);
+        }
+        //Filter to avoid duplicates at the "edges"
+        newRecipes = newRecipes.stream().filter((recipe) -> !recipe.getDate().equals(currentOldest)
+                        && !recipe.getDate().equals(currentNewest)).collect(Collectors.toList());
+
+        dynamicRecipeList.addAll(newRecipes);
+        dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
+
+        int size = dynamicRecipeList.size();
+        if(size != 0){
+            currentNewest = dynamicRecipeList.get(0).getDate();
+            currentOldest = dynamicRecipeList.get(size - 1).getDate();
+        } else {
+            Log.w(TAG, "The list of recipes is empty despite adding some new recipes");
+        }
+
+        onlineRecyclerView.getAdapter().notifyDataSetChanged();
+        isLoading = false;
+    }
+
+    @Override
+    public void onFailure() {
+        isLoading = false;
+        Log.w(TAG, "No Recipe found");
+    }
+
     private View.OnClickListener setFilter(int filter){
         return v -> {
             searchList.clear();
@@ -243,54 +301,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, currentNewest, recipeStorage.getCurrentDate(), true, this);
     }
 
-    @Override
-    public void onSuccess(List<Miniatures> data){
-        if(isSearching){
-            searchList.addAll(data);
-            if(isFilterRate) {
-                Sort.sortByRate(searchList);
-            }else if(isFilterIngredient){
-                Sort.sortByIngredientSimilarity(searchList,actualQuery);
-            }else {
-                Sort.sortBySimilarity(searchList,actualQuery);
-            }
-            removeDuplicate(searchList);
-            onlineRecyclerView.getAdapter().notifyDataSetChanged();
-            return;
-        }
-
-        List<Recipe> newRecipes = new ArrayList<>();
-        for(Miniatures recipe : data){
-            newRecipes.add((Recipe) recipe);
-        }
-        //Filter to avoid duplicates at the "edges"
-        newRecipes = newRecipes.stream().filter((recipe) -> !recipe.getDate().equals(currentOldest)
-                        && !recipe.getDate().equals(currentNewest)).collect(Collectors.toList());
-
-        dynamicRecipeList.addAll(newRecipes);
-        dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
-
-        int size = dynamicRecipeList.size();
-        if(size != 0){
-            currentNewest = dynamicRecipeList.get(0).getDate();
-            currentOldest = dynamicRecipeList.get(size - 1).getDate();
-        } else {
-            Log.w(TAG, "The list of recipes is empty despite adding some new recipes");
-        }
-
-        onlineRecyclerView.getAdapter().notifyDataSetChanged();
-        isLoading = false;
-    }
-
-    @Override
-    public void onFailure() {
-        isLoading = false;
-        Log.w(TAG, "No Recipe found");
-    }
-
-    public RecyclerView getRecyclerView(){
-        return onlineRecyclerView;
-    }
 
     private void removeDuplicate(List<Miniatures> miniatures){
         List<Miniatures> toBeRemoved = new ArrayList<>();

@@ -86,7 +86,7 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void rateSpinnerCanBeClickedOn() throws InterruptedException {
+    public synchronized void rateSpinnerCanBeClickedOn() throws InterruptedException {
 
         //Click on the first recipe
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -117,6 +117,8 @@ public class RateRecipeFragmentsHomeTest {
 
     private synchronized void sendRateAndCheckToast(String expectedText) throws InterruptedException {
         onView(withId(R.id.buttonSendRate)).perform(scrollTo(), click());
+
+        wait(500);
 
         onView(withText(expectedText))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
