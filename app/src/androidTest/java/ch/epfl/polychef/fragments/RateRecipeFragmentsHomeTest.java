@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -37,12 +38,15 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -82,7 +86,7 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void rateSpinnerCanBeClickedOn() {
+    public void rateSpinnerCanBeClickedOn() throws InterruptedException {
 
         //Click on the first recipe
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -111,15 +115,15 @@ public class RateRecipeFragmentsHomeTest {
         onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(nbStars+star))));
     }
 
-    private void sendRateAndCheckToast(String expectedText){
+    private synchronized void sendRateAndCheckToast(String expectedText) throws InterruptedException {
         onView(withId(R.id.buttonSendRate)).perform(scrollTo(), click());
 
-        //TODO Fix this test
-//        onView(withText(expectedText))
-//                .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
-//                        .getWindow().getDecorView()))))
-//                .check(matches(isDisplayed()));
-        //wait(2000)
+        onView(withText(expectedText))
+                .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        wait(2000);
+
     }
 
     public static class FakeFakeHomePage extends HomePageTest.FakeHomePage {
