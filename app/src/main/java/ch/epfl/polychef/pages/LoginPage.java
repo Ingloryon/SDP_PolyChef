@@ -22,9 +22,16 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The page where the user can login.
+ */
 public class LoginPage extends AppCompatActivity implements CallHandler<User> {
     private static final int RC_SIGN_IN = 123;
-    
+
+    /**
+     * Creates the intent to sign in.
+     * @param view the current view
+     */
     public void createSignInIntent(View view) {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -37,14 +44,25 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
                 RC_SIGN_IN);
     }
 
+    /**
+     * Gets the firebase authentication current user instance.
+     * @return the current user
+     */
     public FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    /**
+     * Prepares the next activity.
+     */
     public void prepareNextActivity(){
         getUserStorage().initializeUserFromAuthenticatedUser(this);
     }
 
+    /**
+     * Gets the instance of the user storage.
+     * @return the instance of the user storage
+     */
     public UserStorage getUserStorage(){
         return UserStorage.getInstance();
     }
