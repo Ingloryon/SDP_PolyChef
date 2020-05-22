@@ -145,17 +145,13 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button ingredientsFilter;
-        Button usersFilter;
-        Button recipesFilter;
-        Button rateFilter;
 
         searchView = getView().findViewById(R.id.searchBar);
         filters = getView().findViewById(R.id.filters);
-        ingredientsFilter = getView().findViewById(R.id.filter_ingre);
-        recipesFilter = getView().findViewById(R.id.filter_recipe);
-        usersFilter = getView().findViewById(R.id.filter_users);
-        rateFilter = getView().findViewById(R.id.filter_rate);
+        Button ingredientsFilter = getView().findViewById(R.id.filter_ingre);
+        Button recipesFilter = getView().findViewById(R.id.filter_recipe);
+        Button usersFilter = getView().findViewById(R.id.filter_users);
+        Button rateFilter = getView().findViewById(R.id.filter_rate);
 
         ingredientsFilter.setOnClickListener(setFilter(FILTER_INGREDIENT));
         usersFilter.setOnClickListener(setFilter(FILTER_USER));

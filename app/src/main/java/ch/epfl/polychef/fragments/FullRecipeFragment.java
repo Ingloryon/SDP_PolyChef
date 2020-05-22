@@ -76,7 +76,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     public FullRecipeFragment() {}
 
     /**
-     * Gets the instance of the image storage
+     * Gets the instance of the image storage.
      * @return the instance of the image storage
      */
     public ImageStorage getImageStorage() {
@@ -84,7 +84,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     /**
-     * Gets the instance of the user storage
+     * Gets the instance of the user storage.
      * @return the instance of the user storage
      */
     public UserStorage getUserStorage() {
@@ -96,7 +96,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     /**
-     * Gets the opinions recycler view
+     * Gets the opinions recycler view.
      * @return the opinions recycler view
      */
     public RecyclerView getOpinionsRecyclerView(){
