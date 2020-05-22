@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.synnapps.carouselview.CarouselView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,7 +35,6 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Opinion;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
