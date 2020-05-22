@@ -30,8 +30,20 @@ public class NotificationSender {
     private NotificationSender() {
     }
 
+    /**
+     * Returns the unique instance of Notification sender.
+     * @return the instance of Notification sender
+     */
     public static NotificationSender getInstance() {
         return INSTANCE;
+    }
+
+    /**
+     * Gets the singleton of the queue.
+     * @return the singleton of the queue
+     */
+    public SingletonQueue getSingletonQueue() {
+        return SingletonQueue.getInstance();
     }
 
     /**
@@ -79,7 +91,4 @@ public class NotificationSender {
         getSingletonQueue().addToRequestQueue(jsonObjectRequest);
     }
 
-    public SingletonQueue getSingletonQueue() {
-        return SingletonQueue.getInstance();
-    }
 }
