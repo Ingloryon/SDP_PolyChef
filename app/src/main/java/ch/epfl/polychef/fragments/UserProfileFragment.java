@@ -235,7 +235,6 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setAchievementToastOnClick(ImageView image, String achievementLabel) {
-
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
