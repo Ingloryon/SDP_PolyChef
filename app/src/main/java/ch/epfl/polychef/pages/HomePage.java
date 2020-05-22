@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -61,6 +60,7 @@ public class HomePage extends ConnectedActivity {
         NavHostFragment hostFragment = (NavHostFragment)
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
+        //noinspection ConstantConditions (the null case is handled)
         navController = NavHostFragment.findNavController(hostFragment);
         navController.setGraph(R.navigation.nav_graph);
 
@@ -96,12 +96,13 @@ public class HomePage extends ConnectedActivity {
 
         setCurrentItemChecked(false);
 
+
+        //noinspection ConstantConditions (the null case is handled)
         int destination = navController.getCurrentDestination().getId();
 
         if(destination == R.id.userProfileFragment
                 || destination == R.id.fullRecipeFragment
                 || destination == R.id.rateRecipeFragment) {
-
             currentItem = null;
         } else {
             changeItem(navView.getMenu().findItem(getMenuItem(destination)));
@@ -193,6 +194,7 @@ public class HomePage extends ConnectedActivity {
      */
     public Boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        //noinspection ConstantConditions (the null case is handled)
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
