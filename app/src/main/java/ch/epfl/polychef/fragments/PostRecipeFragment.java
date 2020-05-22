@@ -174,6 +174,10 @@ public class PostRecipeFragment extends Fragment {
                 R.array.difficulty_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficultyInput.setAdapter(adapter);
+
+        if(!hostActivity.isOnline()){
+            Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -212,23 +216,27 @@ public class PostRecipeFragment extends Fragment {
      * @param view the current view
      */
     public synchronized void setPostButton(View view) {
-        getAndCheckEnteredInputs();
-        if(!buildRecipeAndPostToFirebase()){
-            printWrongInputsToUser();
-        }else{
-            try{
-                wait(100);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-            if(postedRecipe.getKey().equals("")){
-                // Send notification to all users subscribed to the current user
-                User currentUser = hostActivity.getUserStorage().getPolyChefUser();
-                hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
-            }
+        if(!hostActivity.isOnline()){
+            Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }else {
+            getAndCheckEnteredInputs();
+            if (!buildRecipeAndPostToFirebase()) {
+                printWrongInputsToUser();
+            } else {
+                try {
+                    wait(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (postedRecipe.getKey().equals("")) {
+                    // Send notification to all users subscribed to the current user
+                    User currentUser = hostActivity.getUserStorage().getPolyChefUser();
+                    hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
+                }
 
-            Intent intent = new Intent(getActivity(), HomePage.class);
-            startActivity(intent);
+                Intent intent = new Intent(getActivity(), HomePage.class);
+                startActivity(intent);
+            }
         }
     }
 
