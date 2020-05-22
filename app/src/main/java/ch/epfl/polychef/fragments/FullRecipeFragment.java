@@ -53,7 +53,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private static final String NEW_LINE = System.lineSeparator();
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
-    private ToggleButton favouriteButton;
     private TextView authorName;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
@@ -261,7 +260,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     private void displayFavouriteButton(View view) {
-        favouriteButton = view.findViewById(R.id.favouriteButton);
         FavouritesUtils.getInstance().setFavouriteButton(getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
     }
 
