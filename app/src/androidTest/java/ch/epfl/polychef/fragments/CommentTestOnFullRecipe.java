@@ -64,7 +64,6 @@ public class CommentTestOnFullRecipe {
     private HashMap<String, User> userResults;
 
     private User mockUser;
-    private List<Recipe> recipeArr = new ArrayList<>();
 
     private User mockUser(String userEmail, String userName){
         return new User(userEmail, userName);
@@ -90,7 +89,8 @@ public class CommentTestOnFullRecipe {
         intentsTestRule.launchActivity(new Intent());
     }
 
-    private class FakeHomePage extends RateRecipeFragmentsHomeTest.FakeFakeHomePage {
+    public class FakeHomePage extends RateRecipeFragmentsHomeTest.FakeFakeHomePage {
+        private List<Recipe> recipeArr = new ArrayList<>();
 
         public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
 

@@ -95,6 +95,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
         defaultQuantity = currentRecipe.getPersonNumber();
 
+        view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+
         displayEverything(view);
 
         voiceRecognizer=new VoiceRecognizer(this);
@@ -106,8 +108,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         setupSwitch(view);
         addOpinion(view);
         containerId = container.getId();
-
-        view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
 
         return view;
     }

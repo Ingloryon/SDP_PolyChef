@@ -11,6 +11,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -26,11 +27,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.pages.HomePage;
+import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
+import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
@@ -45,7 +51,10 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -62,8 +71,14 @@ public class PostingRecipeFragmentTest {
     };
 
     private RecipeStorage mockRecipeStorage;
-    private UserStorage mockUserStorage;
-    private User mockUser;
+
+    private String email1="first@gmail.com";
+    private String email2="second@gmail.com";
+    private User mockUser1;
+    private User mockUser2;
+    private List<Recipe> recipeArr = new ArrayList<>();
+
+    private Recipe fakeRecipe = CommentTestOnFullRecipe.fakeRecipeBuilder.setAuthor(email1).build();
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -71,8 +86,18 @@ public class PostingRecipeFragmentTest {
 
     @Before
     public void initActivity(){
+        mockUser1=new User(email1,"user1");
+        mockUser1.setKey("test key user1");
+        mockUser2=new User(email2,"user2");
+        mockUser2.setKey("test key user2");
+        mockRecipeStorage=Mockito.mock(RecipeStorage.class);
+        recipeArr.add(fakeRecipe);
+
         Intents.init();
         intentsTestRule.launchActivity(new Intent());
+    }
+
+    private void openCreateRecipe(){
         onView(ViewMatchers.withId(R.id.drawer)).perform(DrawerActions.open());
         onView(withId(R.id.navigationView)).perform(NavigationViewActions.navigateTo(R.id.nav_recipe));
         onView(withId(R.id.drawer)).perform(DrawerActions.close());
@@ -85,11 +110,13 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void checkThatFragmentIsDisplayed() {
+        openCreateRecipe();
         onView(withId(R.id.postRecipeFragment)).check(matches(isDisplayed()));
     }
 
     @Test
     public void onClickPostRecipeWithEmptyDisplaysErrorLogs() {
+        openCreateRecipe();
         checkErrorLog("There are errors in the given inputs :"
                 + "\nCooking Time: should be a positive number."
                 + "\nIngredient: the number of ingredients can't be 0"
@@ -101,6 +128,7 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void onClickPostRecipeWithEverythingButNameDisplaysErrorLogs() {
+        openCreateRecipe();
         writeRecipe("","a", "1","a","10","10", "10");
         checkErrorLog("There are errors in the given inputs :"
                 + "\nTitle: should be a string between 3 and 80 characters.");
@@ -108,30 +136,35 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void zeroPersonNumberDisplaysErrorLogs() {
+        openCreateRecipe();
         writeRecipe("Cake","a", "1","a","0","10", "10");
         checkErrorLog("There are errors in the given inputs :\nPerson number:  The number of persons must be strictly positive");
     }
 
     @Test
     public void zeroPrepTimeDisplaysErrorLogs() {
+        openCreateRecipe();
         writeRecipe("Cake","a", "1","a","10","", "0");
         checkErrorLog("There are errors in the given inputs :\nPreparation Time: should be a positive number.");
     }
 
     @Test
     public void invalidIngredientsAreRejectedAndPrintErrorLog() {
+        openCreateRecipe();
         writeRecipe("Cake","","1","a","10","10", "10");
         checkErrorLog("There are errors in the given inputs :\nIngredient: the ingredient shouldn't be empty");
     }
 
     @Test
     public void invalidQuantityIsRejectedAndPrintErrorLog() {
+        openCreateRecipe();
         writeRecipe("Cake","a","","a","10","10", "10");
         checkErrorLog("There are errors in the given inputs :\nIngredient: the quantity needs to be a positive number");
     }
 
     @Test
     public void testOnACompleteRecipe() {
+        openCreateRecipe();
         writeRecipe("Cake","a", "1","a","10","10", "10");
         addIngredient();
         addInstruction();
@@ -142,6 +175,7 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void testClickOnMiniatureButtonOpenDialog() {
+        openCreateRecipe();
         onView(withId(R.id.miniature)).perform(scrollTo(), click());
         onView(withText("Add a picture")).check(matches(isDisplayed()));
         onView(withText("Cancel")).perform(click());
@@ -149,16 +183,19 @@ public class PostingRecipeFragmentTest {
 
     @Test
     public void testHandleActivityGallery() {
+        openCreateRecipe();
         setActivityResultGallery(R.id.miniature);
     }
 
     @Test
     public void testHandleActivityGalleryMealPictures() {
+        openCreateRecipe();
         setActivityResultGallery(R.id.pictures);
     }
 
     @Test
     public void testHandleActivityTakePhoto() {
+        openCreateRecipe();
         Intent resultData = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(result);
@@ -212,19 +249,36 @@ public class PostingRecipeFragmentTest {
         doNothing().when(mockRecipeStorage).getNRecipes(any(Integer.class), any(String.class), any(String.class), any(Boolean.class), any(CallHandler.class));
     }
 
+
+    @Test
+    public void testDoNotDisplayImageRelatedButtonWhenModifying() {
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.modifyButton)).perform(click());
+
+        onView(withId(R.id.miniature)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.pictures)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.miniaturePreview)).check(matches(not(isDisplayed())));
+    }
+
     private class FakeHomePage extends HomePage {
+
         @Override
         public FirebaseUser getUser() {
             return Mockito.mock(FirebaseUser.class);
         }
 
         @Override
-        public RecipeStorage getRecipeStorage() {
-            mockRecipeStorage = Mockito.mock(RecipeStorage.class);
+        public RecipeStorage getRecipeStorage(){
+            when(mockRecipeStorage.getCurrentDate()).thenCallRealMethod();
+            doAnswer((call) -> {
+                CallHandler<List<Recipe>> ch =  call.getArgument(4);
+                ch.onSuccess(recipeArr);
+                return null;
+            }).when(mockRecipeStorage).getNRecipes(any(Integer.class),any(String.class),any(String.class),any(Boolean.class),any(CallHandler.class));
             return mockRecipeStorage;
         }
 
-        @Override
+        /*@Override
         public UserStorage getUserStorage() {
             mockUser = Mockito.mock(User.class);
             mockUserStorage = Mockito.mock(UserStorage.class);
@@ -233,6 +287,28 @@ public class PostingRecipeFragmentTest {
             when(mockUser.getEmail()).thenReturn("fake@email.com");
             doNothing().when(mockUser).addRecipe(any(String.class));
             when(mockUser.getKey()).thenReturn("fake_key");
+            return mockUserStorage;
+        }*/
+
+
+        @Override
+        public UserStorage getUserStorage(){
+            UserStorage mockUserStorage = Mockito.mock(UserStorage.class);
+            doAnswer((call) -> {
+                CallHandler<User> ch = call.getArgument(1);
+                String emailReceived=call.getArgument(0);
+                if(email1.equals(emailReceived)){
+                    ch.onSuccess(mockUser1);
+                }else if(email2.equals(emailReceived)){
+                    ch.onSuccess(mockUser2);
+                }else{
+                    ch.onFailure();
+                }
+                return null;
+            }).when(mockUserStorage).getUserByEmail(anyString(), any(CallHandler.class));
+
+            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
+            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser1);
             return mockUserStorage;
         }
 
