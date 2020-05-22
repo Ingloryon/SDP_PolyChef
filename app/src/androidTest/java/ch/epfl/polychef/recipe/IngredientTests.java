@@ -43,9 +43,9 @@ public class IngredientTests {
         Ingredient ingredient2 = new Ingredient("Eggs", 6, Ingredient.Unit.NONE);
         assertEquals(ingredient2.toString(), "eggs");
         Ingredient ingredient3 = new Ingredient("Flour", 300, Ingredient.Unit.GRAM);
-        assertEquals(ingredient3.toString(), "300.0 grams of flour");
+        assertEquals(ingredient3.toString(), "300 grams of flour");
         Ingredient ingredient4 = new Ingredient("Lettuce", 1, Ingredient.Unit.GRAM);
-        assertEquals(ingredient4.toString(), "1.0 gram of lettuce");
+        assertEquals(ingredient4.toString(), "1 gram of lettuce");
     }
 
     @Test
