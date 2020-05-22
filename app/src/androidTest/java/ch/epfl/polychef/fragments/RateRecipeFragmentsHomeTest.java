@@ -96,11 +96,9 @@ public class RateRecipeFragmentsHomeTest {
         sendRateAndCheckToast(s0);
 
         rateCurrentRecipeNStars(1);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        TimeUnit.SECONDS.sleep(1);
+
         String s1="Your new rating is 1 stars. Your previous rating was 0";
         sendRateAndCheckToast(s1);
 
@@ -118,7 +116,7 @@ public class RateRecipeFragmentsHomeTest {
     private synchronized void sendRateAndCheckToast(String expectedText) throws InterruptedException {
         onView(withId(R.id.buttonSendRate)).perform(scrollTo(), click());
 
-        wait(500);
+        TimeUnit.SECONDS.sleep(1);
 
         onView(withText(expectedText))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()

@@ -45,7 +45,7 @@ public class RateRecipeFragment extends Fragment {
     private RecipeStorage recipeStorage;
 
     /**
-     * Required empty public constructor.
+     * Required empty public constructor for Database.
      */
     public RateRecipeFragment() {
     }

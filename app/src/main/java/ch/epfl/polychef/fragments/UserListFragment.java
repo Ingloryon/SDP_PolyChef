@@ -39,9 +39,22 @@ public class UserListFragment extends Fragment {
     private final Function<User, List<String>> userListFunction;
     private final int fragmentId;
 
+    /**
+     * Constructs a UserListFragment.
+     * @param userListFunction the function that maps a user to its corresponding strings
+     * @param fragmentId the id of the fragment
+     */
     public UserListFragment(Function<User, List<String>> userListFunction, int fragmentId) {
         this.userListFunction = userListFunction;
         this.fragmentId = fragmentId;
+    }
+
+    /**
+     * Gets the recycler view of the users.
+     * @return the recycler view of the users
+     */
+    public RecyclerView getRecyclerView() {
+        return usersRecyclerView;
     }
 
     @Override
@@ -81,7 +94,4 @@ public class UserListFragment extends Fragment {
         }
     }
 
-    public RecyclerView getRecyclerView() {
-        return usersRecyclerView;
-    }
 }
