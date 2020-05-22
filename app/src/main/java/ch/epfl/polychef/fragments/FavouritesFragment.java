@@ -40,7 +40,7 @@ public class FavouritesFragment extends Fragment {
 
     private int indexFavourites = 0;
 
-    public static final int nbOfRecipesLoadedAtATime = 5;
+    public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
 
     private boolean isLoading = false;
 
@@ -109,9 +109,9 @@ public class FavouritesFragment extends Fragment {
     }
 
     private <T> boolean getGenericFavourites(List<T> favouritesList, BiConsumer<Integer, List<T>> func) {
-        if(indexFavourites + nbOfRecipesLoadedAtATime < favouritesList.size()) {
-            func.accept(indexFavourites + nbOfRecipesLoadedAtATime, favouritesList);
-            indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
+        if(indexFavourites + NB_OF_RECIPES_LOADED_AT_A_TIME < favouritesList.size()) {
+            func.accept(indexFavourites + NB_OF_RECIPES_LOADED_AT_A_TIME, favouritesList);
+            indexFavourites = indexFavourites + NB_OF_RECIPES_LOADED_AT_A_TIME;
             return true;
         }
         if(indexFavourites < favouritesList.size()) {
