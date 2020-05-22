@@ -49,8 +49,26 @@ public class FavouritesFragment extends Fragment {
     private ImageStorage imageStorage;
     private UserStorage userStorage;
 
+    /**
+     * Required empty constructor for Firebase.
+     */
     public FavouritesFragment() {
-        // Required empty public constructor
+    }
+
+    /**
+     * Returns whether the page is online.
+     * @return true if online
+     */
+    public boolean isOnline() {
+        return homePage.isOnline();
+    }
+
+    /**
+     * Gets the recycler view of the Homepage
+     * @return the recycler view
+     */
+    public RecyclerView getRecyclerView() {
+        return favouriteRecyclerView;
     }
 
     @Override
@@ -141,11 +159,4 @@ public class FavouritesFragment extends Fragment {
         }
     }
 
-    public boolean isOnline() {
-        return homePage.isOnline();
-    }
-
-    public RecyclerView getRecyclerView() {
-        return favouriteRecyclerView;
-    }
 }
