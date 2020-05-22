@@ -21,13 +21,14 @@ import ch.epfl.polychef.fragments.OfflineMiniaturesFragment;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The page where the non-connected user is redirected.
+ */
 public class EntryPage extends AppCompatActivity implements CallHandler<User> {
-
     private Button logButton;
     private OfflineMiniaturesFragment miniFrag = new OfflineMiniaturesFragment();
 
     private static final String TAG = "EntryPage-TAG";
-
     public static final String LOG_IN = "Log in";
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -63,6 +64,62 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         logButton.setText(LOG_IN);
     }
 
+    @Override
+    public void onFailure() {
+        Log.e(TAG, "Unable to initialise the PolyChef User");
+        stopLoading();
+    }
+
+    @Override
+    public synchronized void onSuccess(User data) {
+
+        //Small delay to make it feel intentional
+        try{
+            wait(500);
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        stopLoading();
+
+        startNextActivity();
+    }
+
+    /**
+     * Called when the user taps the log button.
+     * @param view the view
+     */
+    public void login(View view) {
+        Intent intent = new Intent(this, LoginPage.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Starts the new activity, the home page.
+     */
+    public void startNextActivity(){
+        startActivity(new Intent(this, HomePage.class));
+    }
+
+    /**
+     * Returns the instance of the firebase authentication.
+     * @return the instance of the firebase authentication
+     */
+    public FirebaseAuth getFireBaseAuth(){
+        return FirebaseAuth.getInstance();
+    }
+
+    /**
+     * Gets the user storage instance.
+     * @return the user storage instance
+     */
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
+    }
+
+    /**
+     * Navigates towards the home page if the user is connected.
+     */
     protected void goHomeIfConnected() {
         if(getFireBaseAuth().getCurrentUser() != null) {
 
@@ -97,42 +154,4 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
-    /** Called when the user taps the log button. */
-    public void login(View view) {
-        Intent intent = new Intent(this, LoginPage.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onFailure() {
-        Log.e(TAG, "Unable to initialise the PolyChef User");
-        stopLoading();
-    }
-
-    @Override
-    public synchronized void onSuccess(User data) {
-
-        //Small delay to make it feel intentional
-        try{
-            wait(500);
-        } catch(InterruptedException e){
-            e.printStackTrace();
-        }
-
-        stopLoading();
-
-        startNextActivity();
-    }
-
-    public void startNextActivity(){
-        startActivity(new Intent(this, HomePage.class));
-    }
-
-    public FirebaseAuth getFireBaseAuth(){
-        return FirebaseAuth.getInstance();
-    }
-
-    public UserStorage getUserStorage(){
-        return UserStorage.getInstance();
-    }
 }
