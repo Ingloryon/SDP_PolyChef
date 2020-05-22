@@ -68,11 +68,6 @@ public class PostRecipeFragment extends Fragment {
     private LinearLayout instructionLayout;
     private LinearLayout ingredientLayout;
     private EditText instructionText;
-    private Button addIngredientButton;
-    private Button addInstructionButton;
-    private Button postButton;
-    private Button addMiniature;
-    private Button addPictures;
 
     private Uri currentMiniature = null;
     private String miniatureName = UUID.randomUUID().toString();
@@ -145,7 +140,7 @@ public class PostRecipeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        postButton = getView().findViewById(R.id.postRecipe);
+        Button postButton = getView().findViewById(R.id.postRecipe);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,14 +156,14 @@ public class PostRecipeFragment extends Fragment {
         instructionsId.add(instructionText.getId());
 
 
-        addInstructionButton = getView().findViewById(R.id.buttonAddInstr);
+        Button addInstructionButton = getView().findViewById(R.id.buttonAddInstr);
         addInstructionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setAddInstructionButton(view);
             }
         });
-        addIngredientButton = getView().findViewById(R.id.buttonAddIngre);
+        Button addIngredientButton = getView().findViewById(R.id.buttonAddIngre);
         addIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,9 +173,9 @@ public class PostRecipeFragment extends Fragment {
 
         // Image handling
         imageHandler = new ImageHandler(getActivity());
-        addMiniature = getView().findViewById(R.id.miniature);
+        Button addMiniature = getView().findViewById(R.id.miniature);
         imageMiniaturePreview = getView().findViewById(R.id.miniaturePreview);
-        addPictures = getView().findViewById(R.id.pictures);
+        Button addPictures = getView().findViewById(R.id.pictures);
         mealPicturesText = getView().findViewById(R.id.mealPicturesText);
         addMiniature.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -479,7 +474,7 @@ public class PostRecipeFragment extends Fragment {
 
 
     private void getAndCheckIngredients() {
-        Double quantity;
+        double quantity;
         ingredients.clear();
         for (int i = 0; i < numberOfIngredients; i++) {
             ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(i);
