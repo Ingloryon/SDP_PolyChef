@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.synnapps.carouselview.CarouselView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,7 +37,6 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.recipe.Ingredient;
-import ch.epfl.polychef.recipe.Opinion;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
@@ -54,13 +54,17 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private CarouselView carouselView;
     private ToggleButton favouriteButton;
     private TextView authorName;
+    private EditText quantityInput;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
+    private int defaultQuantity;
 
 
     private NestedScrollView topScrollView;
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
+
+    public static int QUANTITY_LIMIT = 500;
 
     private boolean online;
 
@@ -89,16 +93,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         if(bundle != null){
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");
         }
+        defaultQuantity = currentRecipe.getPersonNumber();
 
-        displayFavouriteButton(view);
-        displayRecipeName(view);
-        displayImage(view);
-        displayRating(view);
-        displayPrepAndCookTime(view);
-        displayDifficulty(view);
-        displayInstructions(view);
-        displayIngredients(view);
-        displayAuthorName(view);
+        displayEverything(view);
 
         voiceRecognizer=new VoiceRecognizer(this);
         try {
@@ -106,14 +103,24 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }catch(UnsupportedOperationException e){
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
-
         setupSwitch(view);
-
         addOpinion(view);
-
         containerId = container.getId();
 
         return view;
+    }
+
+    private void displayEverything(View view){
+        displayFavouriteButton(view);
+        displayRecipeName(view);
+        displayImage(view);
+        displayRating(view);
+        displayPrepAndCookTime(view);
+        displayDifficulty(view);
+        displayInstructions(view);
+        displayQuantity(view);
+        displayIngredients(view);
+        displayAuthorName(view);
     }
 
     private void addOpinion(View view) {
@@ -123,17 +130,57 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
             opinionsRecyclerView.setAdapter(opinionsAdapter);
             topScrollView = view.findViewById(R.id.fullRecipeFragment);
-            topScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if(!opinionsAdapter.isLoading()) {
-                        if (!topScrollView.canScrollVertically(1)) {
-                            opinionsAdapter.loadNewComments();
-                        }
+            topScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (view1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                if(!opinionsAdapter.isLoading()) {
+                    if (!topScrollView.canScrollVertically(1)) {
+                        opinionsAdapter.loadNewComments();
                     }
                 }
             });
             opinionsAdapter.loadNewComments();
+        }
+    }
+
+    private void displayQuantity(View view){
+        quantityInput = view.findViewById(R.id.quantityinput);
+        quantityInput.setText("" + currentRecipe.getPersonNumber());
+        quantityInput.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence seq, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence seq, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable ed) {
+                handleNewQuantity(view);
+            }
+        });
+
+    }
+
+    private void handleNewQuantity(View view){
+        int newQuantity = 0;
+        if(quantityInput.getText().toString().equals("")){
+            currentRecipe.scalePersonAndIngredientsQuantities(1);
+            displayIngredients(view);
+            return;
+        }
+        newQuantity = Integer.parseInt(quantityInput.getText().toString());
+        if(newQuantity <= QUANTITY_LIMIT && newQuantity > 0) {
+            currentRecipe.scalePersonAndIngredientsQuantities(newQuantity);
+            displayIngredients(view);
+        }else if( newQuantity > QUANTITY_LIMIT){
+            currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
+            quantityInput.setText("" + QUANTITY_LIMIT);
+            Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
+        }else{
+            currentRecipe.scalePersonAndIngredientsQuantities(1);
+            quantityInput.setText("" + 1);
+            Toast.makeText(getActivity(), "The quantity can't be 0" , Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -201,14 +248,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     private void setupSwitch(View view) {
         Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
-        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    voiceRecognizer.start(getActivity());
-                }else{
-                    voiceRecognizer.onStop();
-                }
+        onOffSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                voiceRecognizer.start(getActivity());
+            }else{
+                voiceRecognizer.onStop();
             }
         });
     }
@@ -355,6 +399,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     public RecyclerView getOpinionsRecyclerView(){
         return opinionsRecyclerView;
+    }
+
+    public Recipe getCurrentRecipe(){
+        return currentRecipe;
     }
 
     @Override

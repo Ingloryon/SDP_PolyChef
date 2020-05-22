@@ -19,7 +19,6 @@ import ch.epfl.polychef.pages.EntryPageTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -59,15 +58,16 @@ public class RateRecipeFragmentsEntryTest {
     }
 
     @Test
-    public void toastIsDisplayedIfTryToRateWhileNotLoggedIn(){
-
+    public synchronized void toastIsDisplayedIfTryToRateWhileNotLoggedIn() throws InterruptedException {
+        wait(3000);
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
+        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo());
         onView(withId(R.id.buttonRate)).perform(click());
         onView(withText(R.string.errorOnlineFeature))
                 .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleEntry.getActivity()
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        wait(3000);
     }
 
 }
