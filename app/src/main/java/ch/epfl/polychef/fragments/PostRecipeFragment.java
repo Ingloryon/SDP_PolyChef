@@ -46,7 +46,7 @@ import ch.epfl.polychef.users.UserStorage;
  * The page fragment that represents the posting recipe UI.
  */
 public class PostRecipeFragment extends Fragment {
-    private static final String TAG = "PostRecipeFragment";
+    public static final String TAG = "PostRecipeFragment";
     private static final int MINIATURE_FACTOR = 1;
     private static final int MEAL_PICTURES_FACTOR = 10;
     private static final int TITLE_MAX_CHAR = 80;

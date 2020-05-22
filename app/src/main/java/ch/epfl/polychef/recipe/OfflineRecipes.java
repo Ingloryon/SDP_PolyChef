@@ -6,7 +6,6 @@ import java.util.List;
 
 import ch.epfl.polychef.R;
 
-
 /**
  * This is a Singleton class of the offline recipes that can't be modified.
  */
@@ -15,11 +14,15 @@ public final class OfflineRecipes {
 
     private List<Recipe> offlineRecipes;
 
+    private RecipeBuilder polychefBuilder = new RecipeBuilder().setAuthor("The Polychef Team");
+
+    /**
+     * Gets the unique instance of the offline recipes.
+     * @return the instance of the offline recipes
+     */
     public static OfflineRecipes getInstance(){
         return offlineRecipesInstance;
     }
-
-    private RecipeBuilder polychefBuilder = new RecipeBuilder().setAuthor("The Polychef Team");
 
     private OfflineRecipes(){
         offlineRecipes = new ArrayList<>();
@@ -30,6 +33,10 @@ public final class OfflineRecipes {
         offlineRecipes.add(recipe5);
     }
 
+    /**
+     * Gets the list of offline recipes.
+     * @return the list of offline recipes
+     */
     public List<Recipe> getOfflineRecipes() {
         List<Recipe> copiedList = new ArrayList<>();
         for(Recipe recipe : offlineRecipes){
@@ -42,6 +49,9 @@ public final class OfflineRecipes {
         return Collections.unmodifiableList(copiedList);
     }
 
+    /**
+     * Below we construct a set of Recipes accessible for everyone, even offline and not connected.
+     */
     private Recipe recipe1 = polychefBuilder
             .setName("Oven-Baked Salmon")
             .setRecipeDifficulty(Recipe.Difficulty.HARD)

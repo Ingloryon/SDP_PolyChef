@@ -22,7 +22,7 @@ public final class Ingredient implements Serializable {
     public enum Unit {
         TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE
     }
-    
+
     /**
      * Required empty public constructor for Firebase.
      */
