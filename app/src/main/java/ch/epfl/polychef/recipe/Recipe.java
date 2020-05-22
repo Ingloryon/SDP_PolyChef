@@ -135,8 +135,8 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     public List<Ingredient> getIngredients(){
         List<Ingredient> ingredientsDeepCopy = new ArrayList<>();
         for(int i =0 ; i < ingredients.size() ; ++i){
-            Ingredient ingre = ingredients.get(i);
-            ingredientsDeepCopy.add(new Ingredient(ingre.getName(), ingre.getQuantity(), ingre.getUnit()));
+            Ingredient ingredient = ingredients.get(i);
+            ingredientsDeepCopy.add(new Ingredient(ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit()));
         }
 
         return ingredientsDeepCopy;

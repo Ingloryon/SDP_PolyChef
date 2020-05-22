@@ -12,10 +12,10 @@ import java.util.List;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.Preconditions;
 
-
+/**
+ * The builder to construct the object {@link Recipe}.
+ */
 public final class RecipeBuilder {
-
-    private static final String TAG = "RecipeBuilder";
 
     private String date;
     private String name = "";
@@ -29,6 +29,7 @@ public final class RecipeBuilder {
 
     private Either<String, Integer> miniaturePath = Either.none();
     private ArrayList<String> picturesName = new ArrayList<>();
+    private static final String TAG = "RecipeBuilder";
 
     /**
      * Builds a Recipe.
@@ -64,7 +65,7 @@ public final class RecipeBuilder {
      * Set the date of the Recipe.
      *
      * @param date date of the recipe, must be not null
-     * @return
+     * @return the modified builder
      */
     public RecipeBuilder setDate(@NonNull String date){
         Preconditions.checkArgument(!date.isEmpty(), "The date can't be empty");
@@ -184,6 +185,7 @@ public final class RecipeBuilder {
      * @param miniatureId id the local miniature
      * @return the modified builder
      */
+    @SuppressWarnings("WeakerAccess")
     public RecipeBuilder setMiniatureFromId(@NonNull Integer miniatureId) {
         this.miniaturePath = Either.right(miniatureId);
         return this;
@@ -196,7 +198,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder addPicturePath(@NonNull String pictureName) {
-        Preconditions.checkArgument(pictureName != null, "Picture path should not be null");
+        Preconditions.checkArgument(!pictureName.isEmpty(), "Picture path should not be empty");
         this.picturesName.add(pictureName);
         return this;
     }
