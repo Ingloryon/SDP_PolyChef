@@ -32,6 +32,9 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
+/**
+ * A simple {@link Fragment} subclass that represents the page of a user profile displayed.
+ */
 public class UserProfileFragment extends Fragment {
 
     private static final String TAG = "UserProfileFragment";
@@ -44,7 +47,7 @@ public class UserProfileFragment extends Fragment {
 
     private ToggleButton toggleButton;
 
-    public static final int nbOfRecipesLoadedAtATime = 5;
+    public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
     private boolean isLoading = false;
 
     private int currentIndex = 0;
@@ -157,7 +160,7 @@ public class UserProfileFragment extends Fragment {
     public void getNextRecipes(){
         isLoading = true;
         int nbRecipes = userToDisplay.getRecipes().size();
-        int threshold = Math.min(nbOfRecipesLoadedAtATime + currentIndex, nbRecipes);
+        int threshold = Math.min(NB_OF_RECIPES_LOADED_AT_A_TIME + currentIndex, nbRecipes);
         int waitingFor = threshold - currentIndex;
 
         MultipleCallHandler handler = new MultipleCallHandler<Recipe>(waitingFor, (recipeList) -> {
