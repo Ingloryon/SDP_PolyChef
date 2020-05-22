@@ -39,7 +39,7 @@ import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 public class UserProfileFragment extends Fragment {
 
     private static final String TAG = "UserProfileFragment";
-    private HomePage hostActivity;  //TODO use ConnectedActivity if possible
+    private HomePage hostActivity;
     private User userToDisplay;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
@@ -71,8 +71,6 @@ public class UserProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-    //TODO add an isLoading variation
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

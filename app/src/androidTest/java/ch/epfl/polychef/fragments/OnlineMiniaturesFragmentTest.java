@@ -351,7 +351,6 @@ public class OnlineMiniaturesFragmentTest {
             return null;
         }).when(fakeRecipeStorage).addRecipe(any(Recipe.class));
 
-        // TODO add support for date !!!!
         doAnswer(invocation -> {
             int numberOfRecipes=invocation.getArgument(0);
             CallHandler<List<Recipe>> caller = invocation.getArgument(4);

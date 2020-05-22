@@ -119,6 +119,7 @@ public class RateRecipeFragmentsHomeTest {
 //                .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
 //                        .getWindow().getDecorView()))))
 //                .check(matches(isDisplayed()));
+        //wait(2000)
     }
 
     public static class FakeFakeHomePage extends HomePageTest.FakeHomePage {
