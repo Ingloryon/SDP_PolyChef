@@ -58,11 +58,6 @@ public class ImageHandlerTest {
     }
 
     @Test
-    public void initWithNullFails() {
-        assertThrows(IllegalArgumentException.class, () -> new ImageHandler(null));
-    }
-
-    @Test
     public void getIntentDoesNotReturnNull() {
         assertNotNull(realImageHandler.getCameraIntent());
         assertNotNull(realImageHandler.getGalleryIntent());
