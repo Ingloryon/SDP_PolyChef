@@ -23,26 +23,8 @@ import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
 public class LoginPage extends AppCompatActivity implements CallHandler<User> {
-
-    SignInButton googleButton;
-
     private static final int RC_SIGN_IN = 123;
-
-    @SuppressLint("SourceLockedOrientationActivity")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_page);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        googleButton = findViewById(R.id.googleButton);
-        googleButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                createSignInIntent(googleButton);
-            }
-        });
-    }
-
+    
     public void createSignInIntent(View view) {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -53,6 +35,43 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);
+    }
+
+    public FirebaseUser getUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public void prepareNextActivity(){
+        getUserStorage().initializeUserFromAuthenticatedUser(this);
+    }
+
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
+    }
+
+    @Override
+    public void onFailure() {
+        // see user story #214
+    }
+
+    @Override
+    public void onSuccess(User data) {
+        startActivity(new Intent(this, HomePage.class));
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login_page);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        SignInButton googleButton = findViewById(R.id.googleButton);
+        googleButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                createSignInIntent(googleButton);
+            }
+        });
     }
 
     @Override
@@ -66,25 +85,4 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         }
     }
 
-    public FirebaseUser getUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    public void prepareNextActivity(){
-        getUserStorage().initializeUserFromAuthenticatedUser(this);
-    }
-
-    @Override
-    public void onFailure() {
-        // see user story #214
-    }
-
-    @Override
-    public void onSuccess(User data) {
-        startActivity(new Intent(this, HomePage.class));
-    }
-
-    public UserStorage getUserStorage(){
-        return UserStorage.getInstance();
-    }
 }
