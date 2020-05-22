@@ -44,6 +44,9 @@ import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
+/**
+ * Class that represents the page fragment displayed for a Recipe.
+ */
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
     private Recipe currentRecipe;
     private static final String TAG = "FullRecipeFragment";
@@ -73,6 +76,34 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Required empty public constructor.
      */
     public FullRecipeFragment() {}
+
+    /**
+     * Gets the instance of the image storage
+     * @return the instance of the image storage
+     */
+    public ImageStorage getImageStorage() {
+        return ImageStorage.getInstance();
+    }
+
+    /**
+     * Gets the instance of the user storage
+     * @return the instance of the user storage
+     */
+    public UserStorage getUserStorage() {
+        if(hostActivity != null) {
+            return hostActivity.getUserStorage();
+        } else {
+            return UserStorage.getInstance();
+        }
+    }
+
+    /**
+     * Gets the opinions recycler view
+     * @return the opinions recycler view
+     */
+    public RecyclerView getOpinionsRecyclerView(){
+        return opinionsRecyclerView;
+    }
 
     /**
      * When the View is created we get the recipe and display its attributes.
@@ -114,6 +145,80 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Button postButton = getView().findViewById(R.id.buttonRate);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() instanceof HomePage) {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("RecipeToRate", currentRecipe);
+
+                    NavController navController = ((HomePage) getActivity()).getNavController();
+                    navController.navigate(R.id.rateRecipeFragment, bundle);
+
+                }else {
+                    Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+            online = true;
+        } else {
+            online = false;
+            hostActivity = null;
+        }
+    }
+
+    @Override
+    public void onSuccess(byte[] data) {
+        imagesToDisplay.add(BitmapFactory.decodeByteArray(data, 0, data.length));
+        carouselView.setPageCount(imagesToDisplay.size());
+    }
+
+    @Override
+    public void notify(String data) {
+        List<String> allInstructions = currentRecipe.getRecipeInstructions();
+
+        if(indexOfInstruction==-1){
+            indexOfInstruction=0;
+        }else if(data.equals(getResources().getString(R.string.commandPrevious))){
+            indexOfInstruction=Math.max(indexOfInstruction-1,0);
+        }else if(data.equals(getResources().getString(R.string.commandNext))){
+            indexOfInstruction=Math.min(indexOfInstruction+1,allInstructions.size());
+        }
+
+        if(indexOfInstruction==allInstructions.size()){
+            voiceSynthesizer.speak("Congratulations you reached the end");
+        }else{
+            voiceSynthesizer.speak(allInstructions.get(indexOfInstruction));
+        }
+    }
+
+    @Override
+    public void onFailure() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        voiceRecognizer.onStop();
+        voiceSynthesizer.onStop();
+    }
+
     private void addOpinion(View view) {
         if(online) {
             opinionsRecyclerView = view.findViewById(R.id.opinionsList);
@@ -153,43 +258,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             public void onFailure() {
             }
         });
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Button postButton = getView().findViewById(R.id.buttonRate);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(getActivity() instanceof HomePage) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("RecipeToRate", currentRecipe);
-
-                    NavController navController = ((HomePage) getActivity()).getNavController();
-                    navController.navigate(R.id.rateRecipeFragment, bundle);
-
-                }else {
-                    Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if(context instanceof HomePage){
-            hostActivity = (HomePage) context;
-            online = true;
-        } else {
-            online = false;
-            hostActivity = null;
-        }
     }
 
     private void displayFavouriteButton(View view) {
@@ -309,56 +377,4 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         instructions.setText(strBuilder.toString());
     }
 
-    @Override
-    public void onSuccess(byte[] data) {
-        imagesToDisplay.add(BitmapFactory.decodeByteArray(data, 0, data.length));
-        carouselView.setPageCount(imagesToDisplay.size());
-    }
-
-    @Override
-    public void notify(String data) {
-        List<String> allInstructions = currentRecipe.getRecipeInstructions();
-
-        if(indexOfInstruction==-1){
-            indexOfInstruction=0;
-        }else if(data.equals(getResources().getString(R.string.commandPrevious))){
-            indexOfInstruction=Math.max(indexOfInstruction-1,0);
-        }else if(data.equals(getResources().getString(R.string.commandNext))){
-            indexOfInstruction=Math.min(indexOfInstruction+1,allInstructions.size());
-        }
-
-        if(indexOfInstruction==allInstructions.size()){
-            voiceSynthesizer.speak("Congratulations you reached the end");
-        }else{
-            voiceSynthesizer.speak(allInstructions.get(indexOfInstruction));
-        }
-    }
-
-    @Override
-    public void onFailure() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
-    }
-
-    public ImageStorage getImageStorage() {
-        return ImageStorage.getInstance();
-    }
-
-    public UserStorage getUserStorage() {
-        if(hostActivity != null) {
-            return hostActivity.getUserStorage();
-        } else {
-            return UserStorage.getInstance();
-        }
-    }
-
-    public RecyclerView getOpinionsRecyclerView(){
-        return opinionsRecyclerView;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        voiceRecognizer.onStop();
-        voiceSynthesizer.onStop();
-    }
 }
