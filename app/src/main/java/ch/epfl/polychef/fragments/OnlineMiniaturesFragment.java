@@ -70,7 +70,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String currentOldest;
     private String currentNewest;
 
-    public static final int nbOfRecipesLoadedAtATime = 5;
+    public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
 
     private boolean isLoading = false;
     private boolean isSearching = false;
@@ -294,11 +294,11 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     }
 
     private void getNextRecipes(){
-        recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, recipeStorage.OLDEST_RECIPE, currentOldest, false, this);
+        recipeStorage.getNRecipes(NB_OF_RECIPES_LOADED_AT_A_TIME, recipeStorage.OLDEST_RECIPE, currentOldest, false, this);
     }
 
     private void getPreviousRecipes(){
-        recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, currentNewest, recipeStorage.getCurrentDate(), true, this);
+        recipeStorage.getNRecipes(NB_OF_RECIPES_LOADED_AT_A_TIME, currentNewest, recipeStorage.getCurrentDate(), true, this);
     }
 
 

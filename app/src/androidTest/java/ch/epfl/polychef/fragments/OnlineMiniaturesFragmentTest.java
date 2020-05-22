@@ -201,24 +201,24 @@ public class OnlineMiniaturesFragmentTest {
 
     @Test
     public synchronized void maxElementAreLoadedOnActivityStart() throws InterruptedException {
-        for(int i = 0; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+        for(int i = 0; i < OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME; i++){
             addNewOlderRecipe();
         }
         initActivity();
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
     public synchronized void maxElementAreLoadedOnActivityStartAndNoMore() throws InterruptedException {
-        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+        for(int i = 0; i < OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME; i++){
             addNewOlderRecipe();
         }
         addNewOlderRecipe();
 
         initActivity();
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
@@ -245,7 +245,7 @@ public class OnlineMiniaturesFragmentTest {
 
     @Test
     public synchronized void scrollingDownDownLoadANewRecipe() throws InterruptedException {
-        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+        for(int i = 0; i < OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME; i++){
             addNewOlderRecipe();
         }
         addNewOlderRecipe();
@@ -257,12 +257,12 @@ public class OnlineMiniaturesFragmentTest {
 
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME + 1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
     public synchronized void scrollingUpDownLoadANewRecipe() throws InterruptedException {
-        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+        for(int i = 0; i < OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME; i++){
             addNewOlderRecipe();
         }
         addNewYoungerRecipe();
@@ -270,12 +270,12 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeDown());
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime + 1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME + 1, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
     public synchronized void scrollingDownLoadANewRecipeOnceButNotMore() throws InterruptedException {
-        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+        for(int i = 0; i < OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME; i++){
             addNewOlderRecipe();
             addNewOlderRecipe();
         }
@@ -287,12 +287,12 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeUp());
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
     public synchronized void scrollingUpLoadANewRecipeOnceButNotMore() throws InterruptedException {
-        for(int i = 0 ; i < OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime; i++){
+        for(int i = 0; i < OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME; i++){
             addNewOlderRecipe();
             addNewYoungerRecipe();
         }
@@ -301,7 +301,7 @@ public class OnlineMiniaturesFragmentTest {
         wait(1000);
         onView(ViewMatchers.withId(R.id.miniaturesOnlineList)).perform(ViewActions.swipeDown());
         wait(1000);
-        assertEquals(OnlineMiniaturesFragment.nbOfRecipesLoadedAtATime * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
+        assertEquals(OnlineMiniaturesFragment.NB_OF_RECIPES_LOADED_AT_A_TIME * 2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     private synchronized void search(String query) throws InterruptedException {
