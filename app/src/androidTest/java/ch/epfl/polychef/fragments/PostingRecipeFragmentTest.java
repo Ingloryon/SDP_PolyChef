@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
+import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.notifications.NotificationSender;
 import ch.epfl.polychef.pages.HomePage;
@@ -40,6 +41,7 @@ import ch.epfl.polychef.recipe.RecipeBuilder;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import io.opencensus.resource.Resource;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -50,6 +52,7 @@ import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.ArgumentMatchers.any;
@@ -276,6 +279,31 @@ public class PostingRecipeFragmentTest {
         onView(withId(R.id.modifyButton)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testWhenModifyingARecipeTheFieldsAreCopied() {
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.modifyButton)).perform(click());
+
+        onView(withId(R.id.nameInput)).check(matches(withText(fakeRecipe1.getName())));
+
+        onView(withId(R.id.ingredient0)).check(matches(withText(fakeRecipe1.getIngredients().get(0).getName())));
+        onView(withId(R.id.quantity0)).check(matches(withText(Double.toString(fakeRecipe1.getIngredients().get(0).getQuantity()))));
+
+        onView(withId(R.id.instruction0)).check(matches(withText(fakeRecipe1.getRecipeInstructions().get(0))));
+
+        onView(withId(R.id.personNbInput)).check(matches(withText(Integer.toString(fakeRecipe1.getPersonNumber()))));
+        onView(withId(R.id.prepTimeInput)).check(matches(withText(Integer.toString(fakeRecipe1.getEstimatedPreparationTime()))));
+        onView(withId(R.id.cookTimeInput)).check(matches(withText(Integer.toString(fakeRecipe1.getEstimatedCookingTime()))));
+
+        onView(withId(R.id.difficultyInput)).check(matches(withSpinnerText(GlobalApplication
+                .getAppContext().getResources().getStringArray(R.array.difficulty_array)
+                        [fakeRecipe1.getRecipeDifficulty().ordinal()])));
+    }
+
+        @Test
+    public void testModifyingARecipeReallyModifyARecipe(){
+
+    }
 
 
     private class FakeHomePage extends HomePage {
@@ -295,19 +323,6 @@ public class PostingRecipeFragmentTest {
             }).when(mockRecipeStorage).getNRecipes(any(Integer.class),any(String.class),any(String.class),any(Boolean.class),any(CallHandler.class));
             return mockRecipeStorage;
         }
-
-        /*@Override
-        public UserStorage getUserStorage() {
-            mockUser = Mockito.mock(User.class);
-            mockUserStorage = Mockito.mock(UserStorage.class);
-            when(mockUserStorage.getAuthenticatedUser()).thenReturn(Mockito.mock(FirebaseUser.class));
-            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
-            when(mockUser.getEmail()).thenReturn("fake@email.com");
-            doNothing().when(mockUser).addRecipe(any(String.class));
-            when(mockUser.getKey()).thenReturn("fake_key");
-            return mockUserStorage;
-        }*/
-
 
         @Override
         public UserStorage getUserStorage(){
