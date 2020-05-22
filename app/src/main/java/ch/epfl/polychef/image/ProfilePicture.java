@@ -57,6 +57,7 @@ public class ProfilePicture {
         this.picturePath = picturePath;
     }
 
+    @NonNull
     @Override
     public String toString()  {
         return "The picture has name " + this.picturePath + " in drawable. Its label is " + this.pictureLabel;
