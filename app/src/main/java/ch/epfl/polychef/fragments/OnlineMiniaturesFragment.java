@@ -56,10 +56,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
     private SearchView searchView;
     private LinearLayout filters;
-    private Button ingredientsFilter;
-    private Button usersFilter;
-    private Button recipesFilter;
-    private Button rateFilter;
 
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
     private List<Miniatures> searchList = new ArrayList<>();
@@ -149,6 +145,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Button ingredientsFilter;
+        Button usersFilter;
+        Button recipesFilter;
+        Button rateFilter;
 
         searchView = getView().findViewById(R.id.searchBar);
         filters = getView().findViewById(R.id.filters);
