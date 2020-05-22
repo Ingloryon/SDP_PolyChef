@@ -53,7 +53,7 @@ public class RecipeMiniatureImageTest {
     private FragmentTestUtils fragUtils = new FragmentTestUtils();
     private ImageStorage mockImageStorage;
 
-    private RecipeBuilder recipeBuilder = new RecipeBuilder()
+    public static RecipeBuilder recipeBuilder = new RecipeBuilder()
                 .addInstruction("test instruction")
             .setPersonNumber(4)
             .setEstimatedCookingTime(35)
@@ -120,15 +120,11 @@ public class RecipeMiniatureImageTest {
     }
 
 
-    class FakeHomePage extends HomePage {
+    private class FakeHomePage extends HomePage {
 
         @Override
         public UserStorage getUserStorage(){
-            UserStorage mockUserStorage = mock(UserStorage.class);
-            when(mockUserStorage.getAuthenticatedUser()).thenReturn(mock(FirebaseUser.class));
-            when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
-
-            return mockUserStorage;
+            return getMockUserStorage(mockUser);
         }
 
         @Override
@@ -159,5 +155,12 @@ public class RecipeMiniatureImageTest {
             FirebaseUser mockUser = mock(FirebaseUser.class);
             return mockUser;
         }
+    }
+
+    public static UserStorage getMockUserStorage(User mockUser){
+        UserStorage mockUserStorage = mock(UserStorage.class);
+        when(mockUserStorage.getAuthenticatedUser()).thenReturn(mock(FirebaseUser.class));
+        when(mockUserStorage.getPolyChefUser()).thenReturn(mockUser);
+        return  mockUserStorage;
     }
 }

@@ -91,13 +91,15 @@ public final class Ingredient implements Serializable {
 
     @Override
     public String toString(){
+        double formattedQuantity = Math.round(quantity * 1000.0) / 1000.0;
+        String stringQuantity = Math.round(formattedQuantity) == formattedQuantity ? "" + (int) formattedQuantity : "" + formattedQuantity;
         switch (unit){
             case NONE:
                 return name;
             case NO_UNIT:
-                return quantity + " " + name;
+                return stringQuantity + " " + name;
             default:
-                String str = quantity + " " + unit.toString().toLowerCase(Locale.ENGLISH);
+                String str = stringQuantity + " " + unit.toString().toLowerCase(Locale.ENGLISH);
                 return quantity > 1 ? str + "s of " + name : str + " of " + name;
         }
     }

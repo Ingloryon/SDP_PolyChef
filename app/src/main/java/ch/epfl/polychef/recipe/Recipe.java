@@ -3,6 +3,7 @@ package ch.epfl.polychef.recipe;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -102,7 +103,6 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
 
         double ratio = (double)newPersonNumber / (double)personNumber;
-
         personNumber=newPersonNumber;
         for(Ingredient ingredient : ingredients){
             if(ingredient.getUnit() != Ingredient.Unit.NONE) {
