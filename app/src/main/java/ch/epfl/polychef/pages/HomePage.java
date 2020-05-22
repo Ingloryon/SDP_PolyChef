@@ -41,7 +41,7 @@ public class HomePage extends ConnectedActivity {
     private MenuItem currentItem;
 
     public static final String LOG_OUT = "Log out";
-    private static final String TAG = "HomePage-TAG";
+    public static final String TAG = "HomePage-TAG";
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -84,11 +84,9 @@ public class HomePage extends ConnectedActivity {
 
         Button logButton = findViewById(R.id.logButton);
         logButton.setText(LOG_OUT);
-        logButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                getUserStorage().updateUserInfo();
-                signOut();
-            }
+        logButton.setOnClickListener( view -> {
+            getUserStorage().updateUserInfo();
+            signOut();
         });
     }
 
@@ -267,24 +265,18 @@ public class HomePage extends ConnectedActivity {
     }
 
     private void setupNavigation(){
+        navView.setNavigationItemSelectedListener(selectedItem -> {
+            changeItem(selectedItem);
+            invalidateOptionsMenu();
 
-        navView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem selectedItem) {
+            int itemId = selectedItem.getItemId();
+            navController.navigate(getFragmentId(itemId));
 
-                        changeItem(selectedItem);
-                        invalidateOptionsMenu();
+            drawer.closeDrawer(GravityCompat.START, true);
 
-                        int itemId = selectedItem.getItemId();
-                        navController.navigate(getFragmentId(itemId));
+            return false;
+        } );
 
-                        drawer.closeDrawer(GravityCompat.START, true);
-
-                        return false;
-                    }
-                }
-        );
         //Home should be checked initially
         currentItem = navView.getMenu().findItem(R.id.nav_home);
         currentItem.setChecked(true);

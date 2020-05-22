@@ -78,7 +78,7 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         SignInButton googleButton = findViewById(R.id.googleButton);
-        googleButton.setOnClickListener( view -> createSignInIntent(googleButton) );                
+        googleButton.setOnClickListener( view -> createSignInIntent(googleButton) );
     }
 
     @Override
