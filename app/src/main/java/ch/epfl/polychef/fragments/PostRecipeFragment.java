@@ -87,7 +87,7 @@ public class PostRecipeFragment extends Fragment {
     private HomePage hostActivity;
 
     /**
-     * Required empty public constructor.
+     * Required empty public constructor for Firebase.
      */
     public PostRecipeFragment() {
     }

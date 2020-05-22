@@ -28,7 +28,6 @@ public class ProfilePictChoice extends Fragment {
 
     private HomePage hostActivity;
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

@@ -12,16 +12,22 @@ import ch.epfl.polychef.utils.Preconditions;
  */
 public final class Ingredient implements Serializable {
 
-    public Ingredient(){
-    }
-
-    public enum Unit {
-        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE
-    }
-
     private String name;
     private double quantity;
     private Unit unit;
+
+    /**
+     * An enum representing possible units for the ingredients.
+     */
+    public enum Unit {
+        TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE
+    }
+    
+    /**
+     * Required empty public constructor for Firebase.
+     */
+    public Ingredient(){
+    }
 
     /**
      * This is the ingredient of a recipe described by a name, a quantity and a unit.

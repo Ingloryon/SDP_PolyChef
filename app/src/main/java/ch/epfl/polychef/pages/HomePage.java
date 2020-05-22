@@ -60,7 +60,7 @@ public class HomePage extends ConnectedActivity {
         NavHostFragment hostFragment = (NavHostFragment)
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
-        //noinspection ConstantConditions (the null case is handled)
+        //noinspection ConstantConditions (the null case is handled, there is always a navController)
         navController = NavHostFragment.findNavController(hostFragment);
         navController.setGraph(R.navigation.nav_graph);
 
