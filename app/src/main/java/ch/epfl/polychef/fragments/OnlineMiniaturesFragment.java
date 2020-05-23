@@ -251,30 +251,38 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private View.OnClickListener setFilter(int filter){
         return v -> {
             searchList.clear();
-            if(filter == FILTER_RECIPE){
-                resetFilters();
-                isFilterRecipe = true;
-                recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
-            }else if(filter == FILTER_USER){
-                resetFilters();
-                isFilterUser = true;
-                userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
-            }else if (filter == FILTER_INGREDIENT){
-                resetFilters();
-                isFilterIngredient = true;
-                recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
-            }else {
-                isFilterRate = true;
-                if(isFilterUser){
-                    userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
-                }else if(isFilterRecipe){
+
+            switch(filter){
+                case FILTER_RECIPE:
+                    resetFilters();
+                    isFilterRecipe = true;
                     recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
-                }else if(isFilterIngredient){
+                    break;
+                case FILTER_USER:
+                    resetFilters();
+                    isFilterUser = true;
+                    userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+                    break;
+                case FILTER_INGREDIENT:
+                    resetFilters();
+                    isFilterIngredient = true;
                     recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
-                }else {
-                    userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
-                    recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
-                }
+                    break;
+                case FILTER_RATE:
+                    isFilterRate = true;
+                    if(isFilterUser){
+                        userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+                    }else if(isFilterRecipe){
+                        recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+                    }else if(isFilterIngredient){
+                        recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
+                    }else {
+                        userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+                        recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("There are no such filter !");
             }
         };
     }
