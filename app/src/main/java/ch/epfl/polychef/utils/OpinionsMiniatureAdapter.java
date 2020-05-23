@@ -1,5 +1,6 @@
 package ch.epfl.polychef.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,9 +44,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         this.displayedOpinions = new ArrayList<>();
         this.userOp = new HashMap<>();
         allOpinions = new ArrayList<>();
-        for(Opinion opinion : recipe.getRating().getAllOpinion().values()){
-            allOpinions.add(opinion);
-        }
+        allOpinions.addAll(recipe.getRating().getAllOpinion().values());
         this.recipe = recipe;
         this.userStorage = userStorage;
     }
@@ -54,15 +53,11 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         return isLoading;
     }
 
-    public int getNbOfOpinionsLoadedAtATime(){
-        return NB_OF_OPINIONS_LOADED_AT_A_TIME;
-    }
-
     @NonNull
     @Override
     public MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mainContext);
-        View view = inflater.inflate(R.layout.comment_layout, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.comment_layout, null);
         view.setOnClickListener(new OpinionsMiniatureAdapter.MiniatureOnClickListener(recyclerView));
         return new OpinionsMiniatureAdapter.MiniatureViewHolder(view);
     }
@@ -73,9 +68,11 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         User user = userOp.get(opinion);
         holder.rate.setRating(opinion.getRate());
         holder.commentText.setText(opinion.getComment());
-        holder.commentUsername.setText(user.getUsername());
-        int imageID = User.getResourceImageFromUser(user);
-        holder.profilePict.setImageResource(imageID);
+        if(user != null) {
+            holder.commentUsername.setText(user.getUsername());
+            int imageID = User.getResourceImageFromUser(user);
+            holder.profilePict.setImageResource(imageID);
+        }
     }
 
     @Override
@@ -90,7 +87,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         TextView commentText;
         TextView commentUsername;
 
-        public MiniatureViewHolder(@NonNull View itemView) {
+        MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             rate = itemView.findViewById(R.id.ratingCommentBar);
             profilePict = itemView.findViewById(R.id.profilePicture);
@@ -106,7 +103,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
 
         RecyclerView recyclerView;
 
-        public MiniatureOnClickListener(RecyclerView recyclerView) {
+        MiniatureOnClickListener(RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
         }
 
