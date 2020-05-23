@@ -9,7 +9,6 @@ import java.util.List;
 import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.recipe.Rating;
 import ch.epfl.polychef.recipe.Recipe;
-import ch.epfl.polychef.users.User;
 
 public class Sort {
     private static String actualQuery;
