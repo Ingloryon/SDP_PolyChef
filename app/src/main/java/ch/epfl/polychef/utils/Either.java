@@ -65,7 +65,7 @@ public final class Either<L, R> implements Serializable {
      * @return the new none defined {@code Either}
      */
     public static <L, R> Either<L, R> none() {
-        return new Either<>();
+        return new Either<>(null, null);
     }
 
     /**
@@ -73,7 +73,6 @@ public final class Either<L, R> implements Serializable {
      *
      * @return whether this is a left {@code Either}
      */
-    @SuppressWarnings("WeakerAccess")
     @Exclude
     public boolean isLeft() {
         return left != null;

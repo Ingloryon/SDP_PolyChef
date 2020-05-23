@@ -37,6 +37,8 @@ public class EitherTest {
 
     @Test
     public void testEqualityNone() {
+        Either<String, Integer> either = new Either<>();
+        assertTrue( either.isNone() );
         Either<String, Integer> e1 = Either.none();
         Either<String, Integer> e2 = Either.none();
         assertTrue(e1.equals(e2));
