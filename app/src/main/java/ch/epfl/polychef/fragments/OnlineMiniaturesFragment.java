@@ -36,6 +36,7 @@ import ch.epfl.polychef.utils.Sort;
 /**
  * Class that represents the fragment displayed for the online Miniatures.
  */
+@SuppressWarnings("ConstantConditions") //the null cases are handled locally
 public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Miniatures>>{
 
     private static final String TAG = "OnlineMiniaturesFrag";
@@ -66,14 +67,15 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String currentOldest;
     private String currentNewest;
 
-    public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
-
     private boolean isLoading = false;
     private boolean isSearching = false;
 
     private RecipeStorage recipeStorage;
     private ImageStorage imageStorage;
     private UserStorage userStorage;
+
+    //package protected is enough for this constant
+    static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
 
     /**
      * Required empty public constructor for Firebase.
@@ -186,18 +188,16 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
                 return true;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                filters.setVisibility(View.GONE);
-                searchList.clear();
-                onlineRecyclerView.setAdapter(adapter);
-                ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(dynamicRecipeList);
-                onlineRecyclerView.getAdapter().notifyDataSetChanged();
-                isSearching = false;
-                return false;
-            }
+        searchView.setOnCloseListener( () -> {
+            filters.setVisibility(View.GONE);
+            searchList.clear();
+            onlineRecyclerView.setAdapter(adapter);
+            ((RecipeMiniatureAdapter) onlineRecyclerView.getAdapter()).changeList(dynamicRecipeList);
+            onlineRecyclerView.getAdapter().notifyDataSetChanged();
+            isSearching = false;
+            return false;
         });
+
         if(dynamicRecipeList.isEmpty()) {
             initFirstNRecipes();
         }
@@ -293,7 +293,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     }
 
     private void getNextRecipes(){
-        recipeStorage.getNRecipes(NB_OF_RECIPES_LOADED_AT_A_TIME, recipeStorage.OLDEST_RECIPE, currentOldest, false, this);
+        recipeStorage.getNRecipes(NB_OF_RECIPES_LOADED_AT_A_TIME, RecipeStorage.OLDEST_RECIPE, currentOldest, false, this);
     }
 
     private void getPreviousRecipes(){
