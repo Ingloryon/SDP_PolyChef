@@ -97,20 +97,6 @@ public class UserStorage {
     }
 
     /**
-     * Update another {@code User}, even if this is not the connected user.
-     * <p>
-     * Warning: this method assume that {@link User#getKey()} will not return null <br>
-     * (see {@link #getUserByEmail(String email, CallHandler caller)})
-     * </p>
-     *
-     * @param other the other user
-     */
-    public void updateUserInfo(User other) {
-        Preconditions.checkArgument(other != null, "User can not be null");
-        updateUserInfo(other, other.getKey());
-    }
-
-    /**
      * Get a {@code User} from an email.
      *
      * @param email  the email of the user
@@ -176,6 +162,20 @@ public class UserStorage {
      */
     public SearchUser getSearch() {
         return SearchUser.getInstance();
+    }
+
+    /**
+     * Update another {@code User}, even if this is not the connected user.
+     * <p>
+     * Warning: this method assume that {@link User#getKey()} will not return null <br>
+     * (see {@link #getUserByEmail(String email, CallHandler caller)})
+     * </p>
+     *
+     * @param other the other user
+     */
+    public void updateUserInfo(User other) {
+        Preconditions.checkArgument(other != null, "User can not be null");
+        updateUserInfo(other, other.getKey());
     }
 
     private void updateUserInfo(User userToUpdate, String userToUpdateKey) {

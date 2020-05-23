@@ -63,7 +63,7 @@ public class FavouritesUtils {
             button.setVisibility(View.GONE);
         }
     }
-    
+
     /**
      * Get the locally saved favourites.
      *
