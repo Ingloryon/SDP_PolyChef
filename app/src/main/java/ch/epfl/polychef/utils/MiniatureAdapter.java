@@ -27,6 +27,9 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The miniature adapter to display the different miniatures.
+ */
 public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.MiniatureViewHolder>{
 
     private static final int RECIPE_TYPE=0;
@@ -40,10 +43,15 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
     private ImageStorage imageStorage;
     private UserStorage userStorage;
 
-    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
-        this(mainContext, miniaturesList, recyclerView, fragmentContainerID, storage, null);
-    }
-
+    /**
+     * Constructs a miniature adapter with the given arguments.
+     * @param mainContext the main context
+     * @param miniaturesList the list of the Miniatures
+     * @param recyclerView the recycler view where we display
+     * @param fragmentContainerID the id of the fragment container
+     * @param storage the image storage
+     * @param userStorage the user storage
+     */
     public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage, UserStorage userStorage) {
         this.mainContext = mainContext;
         this.miniaturesList = miniaturesList;
@@ -53,9 +61,33 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         this.userStorage = userStorage;
     }
 
+    /**
+     * Constructs a miniature adapter with the given arguments and null user storage.
+     * @param mainContext the main context
+     * @param miniaturesList the list of the Miniatures
+     * @param recyclerView the recycler view where we display
+     * @param fragmentContainerID the id of the fragment container
+     * @param storage the image storage
+     */
+    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
+        this(mainContext, miniaturesList, recyclerView, fragmentContainerID, storage, null);
+    }
+
+    /**
+     * Sets a new list of Miniatures to the MiniatureAdapter.
+     * @param miniatures the new list of Miniatures
+     */
     public void changeList(List<Miniatures> miniatures){
         this.miniaturesList = miniatures;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Gets the image storage of the adapter.
+     * @return the image storage
+     */
+    public ImageStorage getImageStorage() {
+        return imageStorage;
     }
 
     @Override
@@ -71,32 +103,6 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
             holder.username.setText(user.getUsername());
             holder.imageView.setImageResource(User.getResourceImageFromUser(user));
         }
-    }
-
-    private void getImageFor(MiniatureAdapter.MiniatureViewHolder holder, Recipe recipe) {
-        Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
-        if(miniatureMeta.isNone()) {
-            holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
-        } else if(miniatureMeta.isRight()) {
-            holder.image.setImageResource(miniatureMeta.getRight());
-        } else {
-            getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
-                @Override
-                public void onSuccess(byte[] data) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    holder.image.setImageBitmap(bmp);
-                }
-
-                @Override
-                public void onFailure() {
-                    Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-    }
-
-    public ImageStorage getImageStorage() {
-        return imageStorage;
     }
 
     @Override
@@ -129,6 +135,28 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         return miniaturesList.size();
     }
 
+    private void getImageFor(MiniatureAdapter.MiniatureViewHolder holder, Recipe recipe) {
+        Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
+        if(miniatureMeta.isNone()) {
+            holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
+        } else if(miniatureMeta.isRight()) {
+            holder.image.setImageResource(miniatureMeta.getRight());
+        } else {
+            getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
+                @Override
+                public void onSuccess(byte[] data) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    holder.image.setImageBitmap(bmp);
+                }
+
+                @Override
+                public void onFailure() {
+                    Toast.makeText(mainContext, mainContext.getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
     class MiniatureViewHolder extends RecyclerView.ViewHolder {
 
         TextView recipeTitle;
@@ -139,7 +167,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         TextView username;
         ImageView imageView;
 
-        public MiniatureViewHolder(@NonNull View itemView) {
+        MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById(R.id.recipeNameMiniature);
             ratingBar = itemView.findViewById(R.id.miniatureRatingBar);
@@ -154,7 +182,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
         RecyclerView recyclerView;
 
-        public MiniatureOnClickListener(RecyclerView recyclerView) {
+        MiniatureOnClickListener(RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
         }
 
