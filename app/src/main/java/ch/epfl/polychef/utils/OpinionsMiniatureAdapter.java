@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,18 +24,17 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
-public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMiniatureAdapter.MiniatureViewHolder>
-{
+public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMiniatureAdapter.MiniatureViewHolder> {
 
+    private static final int NB_OF_OPINIONS_LOADED_AT_A_TIME = 5;
     private Context mainContext;
     private RecyclerView recyclerView;
     private HashMap<Opinion, User> userOp;
-    List<Opinion> displayedOpinions;
-    List<Opinion> allOpinions;
+    private List<Opinion> displayedOpinions;
+    private List<Opinion> allOpinions;
     private int currentIndex = 0;
-    public static final int nbOfOpinionsLoadedAtATime = 5;
     private Recipe recipe;
-    UserStorage userStorage;
+    private UserStorage userStorage;
     private boolean isLoading = false;
 
     public OpinionsMiniatureAdapter(Context mainContext, RecyclerView recyclerView, Recipe recipe, UserStorage userStorage){
@@ -57,7 +55,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
     }
 
     public int getNbOfOpinionsLoadedAtATime(){
-        return nbOfOpinionsLoadedAtATime;
+        return NB_OF_OPINIONS_LOADED_AT_A_TIME;
     }
 
     @NonNull
@@ -129,7 +127,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
 
     public void loadNewComments(){
         isLoading = true;
-        MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(Math.min(nbOfOpinionsLoadedAtATime, allOpinions.size() - currentIndex), (newUser) -> {
+        MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(Math.min(NB_OF_OPINIONS_LOADED_AT_A_TIME, allOpinions.size() - currentIndex), (newUser) -> {
             isLoading = false;
             for(int i = 0; i < newUser.size(); i++){
                 userOp.put(allOpinions.get(currentIndex), newUser.get(i));
@@ -138,7 +136,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
             }
             notifyDataSetChanged();
         });
-        for(int i = currentIndex; i < Math.min(currentIndex + nbOfOpinionsLoadedAtATime, allOpinions.size()); i++){
+        for(int i = currentIndex; i < Math.min(currentIndex + NB_OF_OPINIONS_LOADED_AT_A_TIME, allOpinions.size()); i++){
             userStorage.getUserByID(recipe.getRating().getUserIdFromOpinion(allOpinions.get(i)), multipleCallHandler);
         }
     }
