@@ -11,7 +11,7 @@ import ch.epfl.polychef.Search;
 import ch.epfl.polychef.utils.Similarity;
 
 /**
- * A class representing the search of users, subclass of Search<T>.
+ * A class representing the search of users, subclass of Search.
  */
 public class SearchUser extends Search<User> {
 

@@ -90,13 +90,6 @@ public class UserStorage {
     }
 
     /**
-     * Forces the update of the stored user.
-     */
-    public void updateUserInfo() {
-        updateUserInfo(user, userKey);
-    }
-
-    /**
      * Get a {@code User} from an email.
      *
      * @param email  the email of the user
@@ -162,6 +155,13 @@ public class UserStorage {
      */
     public SearchUser getSearch() {
         return SearchUser.getInstance();
+    }
+
+    /**
+     * Forces the update of the stored user.
+     */
+    public void updateUserInfo() {
+        updateUserInfo(user, userKey);
     }
 
     /**
