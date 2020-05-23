@@ -40,6 +40,7 @@ import ch.epfl.polychef.recipe.Ingredient;
 import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.CustomRatingBar;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
@@ -58,6 +59,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
     private int defaultQuantity;
+    private CustomRatingBar ratingBar;
 
 
     private NestedScrollView topScrollView;
@@ -293,8 +295,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Display the rating of the recipe in the correct field in the activity.
      */
     private void displayRating(View view){
-        final RatingBar ratingBar = view.findViewById(R.id.ratingBar);
-        ratingBar.setRating((float) currentRecipe.getRating().ratingAverage());
+        ratingBar = new CustomRatingBar(view.findViewById(R.id.recipeRatingBar), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, false);
+        ratingBar.setRate((float) currentRecipe.getRating().ratingAverage());
     }
 
     /**
