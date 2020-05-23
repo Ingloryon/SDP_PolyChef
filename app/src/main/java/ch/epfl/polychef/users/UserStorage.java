@@ -20,6 +20,7 @@ import ch.epfl.polychef.utils.Preconditions;
 /**
  * The storage for users associated with Firebase.
  */
+@SuppressWarnings("WeakerAccess")
 public class UserStorage {
 
     private static UserStorage INSTANCE = new UserStorage();
@@ -205,7 +206,9 @@ public class UserStorage {
         Preconditions.checkArgument(snap.exists(), "Unable to reconstruct the user from the JSON.");
 
         user = snap.getValue(User.class);
-        user.removeNullFromLists();
+        if (user != null) {
+            user.removeNullFromLists();
+        }
         userKey = snap.getKey();
         user.setKey(snap.getKey());
         FavouritesUtils.getInstance().setOfflineFavourites(user);
