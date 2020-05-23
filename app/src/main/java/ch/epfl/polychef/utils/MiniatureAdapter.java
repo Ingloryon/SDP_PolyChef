@@ -1,5 +1,6 @@
 package ch.epfl.polychef.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +39,6 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
     private Context mainContext;
     private List<Miniatures> miniaturesList;
     private RecyclerView recyclerview;
-    private int fragmentContainerID;
 
     private ImageStorage imageStorage;
     private UserStorage userStorage;
@@ -48,29 +48,15 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
      * @param mainContext the main context
      * @param miniaturesList the list of the Miniatures
      * @param recyclerView the recycler view where we display
-     * @param fragmentContainerID the id of the fragment container
      * @param storage the image storage
      * @param userStorage the user storage
      */
-    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage, UserStorage userStorage) {
+    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, ImageStorage storage, UserStorage userStorage) {
         this.mainContext = mainContext;
         this.miniaturesList = miniaturesList;
         this.recyclerview = recyclerView;
-        this.fragmentContainerID = fragmentContainerID;
         this.imageStorage = storage;
         this.userStorage = userStorage;
-    }
-
-    /**
-     * Constructs a miniature adapter with the given arguments and null user storage.
-     * @param mainContext the main context
-     * @param miniaturesList the list of the Miniatures
-     * @param recyclerView the recycler view where we display
-     * @param fragmentContainerID the id of the fragment container
-     * @param storage the image storage
-     */
-    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
-        this(mainContext, miniaturesList, recyclerView, fragmentContainerID, storage, null);
     }
 
     /**
@@ -115,6 +101,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         }
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public MiniatureAdapter.MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
