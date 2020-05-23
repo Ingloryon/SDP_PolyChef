@@ -19,6 +19,28 @@ import ch.epfl.polychef.pages.EntryPage;
  * It can also log out a user.
  */
 public abstract class ConnectedActivity extends AppCompatActivity {
+
+    /**
+     * Gets the currently connected user.
+     * @return the connected user
+     */
+    public FirebaseUser getUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    /**
+     * Signs out the user, brings back on Entry page.
+     */
+    public void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        startActivity(new Intent(getApplicationContext(), EntryPage.class));
+                    }
+                });
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,20 +51,6 @@ public abstract class ConnectedActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         isConnected();
-    }
-
-    public FirebaseUser getUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    public void signOut() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), EntryPage.class));
-                    }
-                });
     }
 
     private void isConnected() {
