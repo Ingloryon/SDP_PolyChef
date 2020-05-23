@@ -15,6 +15,7 @@ import java.io.Serializable;
  * @param <L> type of the left element
  * @param <R> type of the right element
  */
+@SuppressWarnings("WeakerAccess")
 public final class Either<L, R> implements Serializable {
     private final L left;
     private final R right;
