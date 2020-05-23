@@ -109,6 +109,10 @@ public class UserProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if(!hostActivity.isOnline()){
+            Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }
+
         currentIndex = 0;
 
         if (userToDisplay == null || userToDisplay.equals(hostActivity.getUserStorage().getPolyChefUser())) {
@@ -196,13 +200,17 @@ public class UserProfileFragment extends Fragment {
         profilePict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userID = context.getUserStorage().getPolyChefUser().getKey();
-                if(userToDisplay.getKey() == userID) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("UserDisplayed", userToDisplay);
+                if(!hostActivity.isOnline()){
+                    Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+                }else {
+                    String userID = context.getUserStorage().getPolyChefUser().getKey();
+                    if (userToDisplay.getKey() == userID) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("UserDisplayed", userToDisplay);
 
-                    NavController navController = ((HomePage) getActivity()).getNavController();
-                    navController.navigate(R.id.userProfilePictureChoice, bundle);
+                        NavController navController = ((HomePage) getActivity()).getNavController();
+                        navController.navigate(R.id.userProfilePictureChoice, bundle);
+                    }
                 }
             }
         });
