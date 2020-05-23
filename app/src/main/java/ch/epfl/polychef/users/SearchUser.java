@@ -10,7 +10,29 @@ import ch.epfl.polychef.Miniatures;
 import ch.epfl.polychef.Search;
 import ch.epfl.polychef.utils.Similarity;
 
+/**
+ * A class representing the search of users, subclass of {@link Search<User>}.
+ */
 public class SearchUser extends Search<User> {
+
+    private static final SearchUser INSTANCE = new SearchUser();
+
+    /**
+     * Gets the instance of the search user.
+     * @return the instance of the search user
+     */
+    public static SearchUser getInstance() {
+        return INSTANCE;
+    }
+
+    /**
+     * Action that searches for the users corresponding to the query.
+     * @param query the searched keywords
+     * @param caller the caller of the method
+     */
+    public void searchForUser(String query, CallHandler<List<Miniatures>> caller) {
+        search(query, this::compareSimilarity, caller);
+    }
 
     @Override
     protected String getTag() {
@@ -27,32 +49,6 @@ public class SearchUser extends Search<User> {
         return dataSnapshot.getValue(User.class);
     }
 
-    private static final SearchUser INSTANCE = new SearchUser();
-
-    private SearchUser() {
-    }
-
-    public static SearchUser getInstance() {
-        return INSTANCE;
-    }
-
-    public void searchForUser(String query, CallHandler<List<Miniatures>> caller) {
-        search(query, this::compareSimilarity, caller);
-    }
-
-    private boolean compareSimilarity(String query, User value) {
-        return Similarity.similarity(query,value.getUsername())>0.1;
-    }
-
-    /**
-    private boolean compareName(String query, User value) {
-        String searchInput = query;
-        searchInput = searchInput.toLowerCase();
-        String name = value.getUsername().toLowerCase();
-        return searchInput.contains(name) || name.contains(searchInput);
-    }
-     */
-
     /**
      * Get the current instance of the {@code FirebaseDatabase}.
      *
@@ -61,5 +57,12 @@ public class SearchUser extends Search<User> {
     @Override
     public FirebaseDatabase getDatabase() {
         return FirebaseDatabase.getInstance();
+    }
+
+    private SearchUser() {
+    }
+
+    private boolean compareSimilarity(String query, User value) {
+        return Similarity.similarity(query,value.getUsername())>0.1;
     }
 }
