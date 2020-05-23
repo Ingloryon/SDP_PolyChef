@@ -25,6 +25,9 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * A miniature adapter to display the opinions given by users on Recipes.
+ */
 public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMiniatureAdapter.MiniatureViewHolder> {
 
     private static final int NB_OF_OPINIONS_LOADED_AT_A_TIME = 5;
@@ -38,6 +41,13 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
     private UserStorage userStorage;
     private boolean isLoading = false;
 
+    /**
+     * Constructs an opinion adapter.
+     * @param mainContext the context
+     * @param recyclerView the recycler view
+     * @param recipe the concerned recipe
+     * @param userStorage the corresponding user storage
+     */
     public OpinionsMiniatureAdapter(Context mainContext, RecyclerView recyclerView, Recipe recipe, UserStorage userStorage){
         this.mainContext = mainContext;
         this.recyclerView = recyclerView;
@@ -49,8 +59,47 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
         this.userStorage = userStorage;
     }
 
+    /**
+     * Tells whether the adapter is loading.
+     * @return whether the adapter is loading
+     */
     public boolean isLoading(){
         return isLoading;
+    }
+
+    /**
+     * Loads the newly posted comments.
+     */
+    public void loadNewComments(){
+        isLoading = true;
+        MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(Math.min(NB_OF_OPINIONS_LOADED_AT_A_TIME, allOpinions.size() - currentIndex), (newUser) -> {
+            isLoading = false;
+            for(int i = 0; i < newUser.size(); i++){
+                userOp.put(allOpinions.get(currentIndex), newUser.get(i));
+                displayedOpinions.add(allOpinions.get(currentIndex));
+                currentIndex += 1;
+            }
+            notifyDataSetChanged();
+        });
+        for(int i = currentIndex; i < Math.min(currentIndex + NB_OF_OPINIONS_LOADED_AT_A_TIME, allOpinions.size()); i++){
+            userStorage.getUserByID(recipe.getRating().getUserIdFromOpinion(allOpinions.get(i)), multipleCallHandler);
+        }
+    }
+
+    /**
+     * Gets the list of displayed opinions.
+     * @return the list of displayed opinions
+     */
+    public List<Opinion> getDisplayedOpinions(){
+        return displayedOpinions;
+    }
+
+    /**
+     * Gets the mapping between Opinions and corresponding User.
+     * @return the map between opinion and user
+     */
+    public HashMap<Opinion, User> getOpinionToUserMap(){
+        return userOp;
     }
 
     @NonNull
@@ -120,29 +169,5 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
                     .getNavController()
                     .navigate(R.id.userProfileFragment, bundle);
         }
-    }
-
-    public void loadNewComments(){
-        isLoading = true;
-        MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(Math.min(NB_OF_OPINIONS_LOADED_AT_A_TIME, allOpinions.size() - currentIndex), (newUser) -> {
-            isLoading = false;
-            for(int i = 0; i < newUser.size(); i++){
-                userOp.put(allOpinions.get(currentIndex), newUser.get(i));
-                displayedOpinions.add(allOpinions.get(currentIndex));
-                currentIndex += 1;
-            }
-            notifyDataSetChanged();
-        });
-        for(int i = currentIndex; i < Math.min(currentIndex + NB_OF_OPINIONS_LOADED_AT_A_TIME, allOpinions.size()); i++){
-            userStorage.getUserByID(recipe.getRating().getUserIdFromOpinion(allOpinions.get(i)), multipleCallHandler);
-        }
-    }
-
-    public List<Opinion> getDisplayedOpinions(){
-        return displayedOpinions;
-    }
-
-    public HashMap<Opinion, User>  getMap(){
-        return userOp;
     }
 }
