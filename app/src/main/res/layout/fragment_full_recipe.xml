@@ -105,55 +105,69 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rate_author" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <TextView
+                android:id="@+id/prepTime"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/cookTime"
+                app:layout_constraintEnd_toStartOf="@+id/clock1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/voiceRecognitionSwitch" />
+
+            <ImageView
+                android:id="@+id/clock1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/clock"
+                app:layout_constraintBottom_toTopOf="@+id/clock2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/voiceRecognitionSwitch" />
+
+            <TextView
+                android:id="@+id/cookTime"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/difficulty"
+                app:layout_constraintEnd_toStartOf="@+id/clock2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/prepTime" />
+
+            <ImageView
+                android:id="@+id/clock2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
-                android:divider="@drawable/empty_tall_divider"
-                android:orientation="horizontal"
-                android:showDividers="middle"
+                android:src="@drawable/clock"
                 app:layout_constraintBottom_toTopOf="@+id/difficulty"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/voiceRecognitionSwitch">
-
-                <TextView
-                    android:id="@+id/prepTime"
-                    android:layout_width="190dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="sans-serif-black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/cookTime"
-                    android:layout_width="190dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="sans-serif-black"
-                    android:textAlignment="textStart"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/clock1" />
 
             <TextView
                 android:id="@+id/difficulty"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="23dp"
                 android:fontFamily="sans-serif-black"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/recipeImages"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/cookTime" />
 
             <com.synnapps.carouselview.CarouselView
                 android:id="@+id/recipeImages"
