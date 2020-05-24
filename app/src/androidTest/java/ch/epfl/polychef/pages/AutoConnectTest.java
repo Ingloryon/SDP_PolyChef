@@ -59,10 +59,6 @@ public class AutoConnectTest {
             doAnswer(invocation -> {
                 wasCalled = true;
 
-                //Espresso is unable to test progress bars because of animations
-//                onView(withId(R.id.autoLoginProgress)).check(matches(isDisplayed()));
-//                onView(withId(R.id.autoLoginBackground)).check(matches(isDisplayed()));
-
                 CallHandler<User> caller = invocation.getArgument(0);
                 caller.onSuccess((mock(User.class)));
 
@@ -73,9 +69,7 @@ public class AutoConnectTest {
         }
 
         @Override
-        public void startNextActivity() {
-//            onView(withId(R.id.autoLoginProgress)).check(matches(not(isDisplayed())));
-//            onView(withId(R.id.autoLoginBackground)).check(matches(not(isDisplayed())));
+        public void startHomePage() {
         }
     }
 }

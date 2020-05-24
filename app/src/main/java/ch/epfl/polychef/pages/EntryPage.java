@@ -105,8 +105,7 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
     /** Called when the user taps the log button. */
     public void login(View view) {
-        Intent intent = new Intent(this, LoginPage.class);
-        startActivity(intent);
+        startActivity(new Intent(this, LoginPage.class));
     }
 
     @Override
@@ -127,7 +126,7 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
 
         stopLoading();
 
-        startNextActivity();
+        startHomePage();
     }
 
     private boolean isNetworkConnected() {
@@ -135,7 +134,7 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    public void startNextActivity(){
+    public void startHomePage(){
         startActivity(new Intent(this, HomePage.class));
     }
 

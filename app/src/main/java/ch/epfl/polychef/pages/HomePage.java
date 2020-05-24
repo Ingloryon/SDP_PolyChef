@@ -1,6 +1,8 @@
 package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
@@ -39,6 +41,7 @@ public class HomePage extends ConnectedActivity {
     private NavController navController;
     private NavigationView navView;
     private MenuItem currentItem;
+    private NavHostFragment hostFragment;
 
     public static final String LOG_OUT = "Log out";
     private static final String TAG = "HomePage-TAG";
@@ -58,7 +61,7 @@ public class HomePage extends ConnectedActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        NavHostFragment hostFragment = (NavHostFragment)
+        hostFragment = (NavHostFragment)
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
         navController = NavHostFragment.findNavController(hostFragment);
@@ -126,23 +129,28 @@ public class HomePage extends ConnectedActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        FragmentManager fm = hostFragment.getChildFragmentManager();
 
-        setCurrentItemChecked(false);
+        if(fm.getBackStackEntryCount() != 0){
+            super.onBackPressed();
 
-        int destination = navController.getCurrentDestination().getId();
+            setCurrentItemChecked(false);
 
-        if(destination == R.id.userProfileFragment
-                || destination == R.id.fullRecipeFragment
-                || destination == R.id.rateRecipeFragment) {
+            int destination = navController.getCurrentDestination().getId();
 
-            currentItem = null;
-        } else {
-            changeItem(navView.getMenu().findItem(getMenuItem(destination)));
+            if(destination == R.id.userProfileFragment
+                    || destination == R.id.fullRecipeFragment
+                    || destination == R.id.rateRecipeFragment) {
+
+                currentItem = null;
+            } else {
+                changeItem(navView.getMenu().findItem(getMenuItem(destination)));
+            }
+
+            drawer.closeDrawer(GravityCompat.START, true);
         }
-
-        drawer.closeDrawer(GravityCompat.START, true);
     }
+
 
     public void changeItem(MenuItem newItem){
         setCurrentItemChecked(false);
