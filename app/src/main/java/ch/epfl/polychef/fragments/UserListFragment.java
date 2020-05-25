@@ -65,7 +65,7 @@ public class UserListFragment extends Fragment {
         usersRecyclerView = view.findViewById(R.id.miniatureUserList);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         UserMiniatureAdapter adapter = new UserMiniatureAdapter(this.getActivity(),
-                dynamicUserList, usersRecyclerView, container.getId(), imageStorage, userStorage);
+                dynamicUserList, usersRecyclerView);
 
         usersRecyclerView.setAdapter(adapter);
         return view;
