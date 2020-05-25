@@ -28,7 +28,7 @@ import ch.epfl.polychef.utils.Preconditions;
 public class RecipeStorage implements Serializable  {
 
     private static final String TAG = "RecipeStorage";
-    public static final String DB_NAME = "recipes_DO_NOT_DESTROY_THE_REAL_ONE";
+    public static final String DB_NAME = "recipes";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
     public static final String RECIPE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 
