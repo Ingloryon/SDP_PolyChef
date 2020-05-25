@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import ch.epfl.polychef.MultipleCallHandler;
@@ -27,21 +28,17 @@ import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
+@SuppressWarnings("WeakerAccess")
 public class FavouritesFragment extends Fragment {
-
-    private static final String TAG = "FavouritesFragment";
-    private RecyclerView favouriteRecyclerView;
-
-    private List<Recipe> dynamicRecipeList = new ArrayList<>();
-
-    private int indexFavourites = 0;
-
+    public static final String TAG = "FavouritesFragment";
     public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
 
+    private RecyclerView favouriteRecyclerView;
+    private List<Recipe> dynamicRecipeList = new ArrayList<>();
+    private int indexFavourites = 0;
     private boolean isLoading = false;
 
     private HomePage homePage;
@@ -118,6 +115,7 @@ public class FavouritesFragment extends Fragment {
         addNextRecipes();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     private boolean addNextRecipes() {
         if(isOnline()) {
             return getGenericFavourites(userStorage.getPolyChefUser().getFavourites(), this::setFavouriteOnline);
@@ -143,7 +141,7 @@ public class FavouritesFragment extends Fragment {
     private void setFavouriteOffline(int end, List<Recipe> favouritesList) {
         for(int i = indexFavourites; i < end; ++i) {
             dynamicRecipeList.add(favouritesList.get(i));
-            favouriteRecyclerView.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(favouriteRecyclerView.getAdapter()).notifyDataSetChanged();
         }
         isLoading = false;
     }
@@ -152,7 +150,7 @@ public class FavouritesFragment extends Fragment {
         MultipleCallHandler<Recipe> multipleCallHandler = new MultipleCallHandler<>(end - indexFavourites, (newFavourites) -> {
             isLoading = false;
             dynamicRecipeList.addAll(newFavourites);
-            favouriteRecyclerView.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(favouriteRecyclerView.getAdapter()).notifyDataSetChanged();
         });
         for(int i = indexFavourites; i < end; ++i) {
             recipeStorage.readRecipeFromUuid(favouritesList.get(i), multipleCallHandler);
