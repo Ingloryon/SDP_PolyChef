@@ -131,7 +131,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             opinionsRecyclerView.setAdapter(opinionsAdapter);
             topScrollView = view.findViewById(R.id.fullRecipeFragment);
             topScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (view1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                if (!opinionsAdapter.isLoading()) {
+                if(!opinionsAdapter.isLoading()) {
                     if (!topScrollView.canScrollVertically(1)) {
                         opinionsAdapter.loadNewComments();
                     }
