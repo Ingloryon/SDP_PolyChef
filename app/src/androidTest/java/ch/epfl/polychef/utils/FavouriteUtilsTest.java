@@ -63,7 +63,6 @@ public class FavouriteUtilsTest {
                 .setEstimatedCookingTime(35)
                 .setEstimatedPreparationTime(40)
                 .addIngredient("test", 1.0, Ingredient.Unit.CUP)
-                .setMiniatureFromPath("test_path")
                 .setRecipeDifficulty(Recipe.Difficulty.EASY)
                 .build();
     }
@@ -90,6 +89,7 @@ public class FavouriteUtilsTest {
     public void initIntent() {
         Intents.init();
         when(fakeFavouritesUtils.getRecipeStorage()).thenReturn(fakeRecipeStorage);
+        setSharedPref(new ArrayList<>());
         intentsTestRule.launchActivity(new Intent());
     }
 
@@ -200,7 +200,6 @@ public class FavouriteUtilsTest {
         ToggleButton toggleButton2 = new ToggleButton(intentsTestRule.getActivity().getApplicationContext());
         toggleButton2.setText("TEST2");
         when(fakeUserStorage.getPolyChefUser()).thenReturn(fakeUser);
-        setSharedPref(new ArrayList<>());
         intentsTestRule.getActivity().runOnUiThread(() -> {
             assertThat(FavouritesUtils.getInstance().getOfflineFavourites(), is(empty()));
             ConstraintLayout constraintLayout = intentsTestRule.getActivity().findViewById(R.id.offlineMiniaturesFragment);
