@@ -36,6 +36,7 @@ public class MultipleCallHandler<T> implements CallHandler<T> {
      * @param doOnSingleFailure  the function to accept every time {@link CallHandler#onFailure()} is called on this handler
      * @param incrementOnFailure whether this multiple call handler should consider call to {@link CallHandler#onFailure()} as one more call or not
      */
+    @SuppressWarnings("WeakerAccess")
     public MultipleCallHandler(int numberData, Consumer<List<T>> doOnLast, Consumer<MultipleCallHandler> doOnSingleFailure, boolean incrementOnFailure) {
         this.numberData = numberData;
         this.dataList = new ArrayList<>(numberData);
