@@ -175,9 +175,13 @@ public class PostRecipeFragment extends Fragment {
         difficultyInput.setAdapter(adapter);
 
         Bundle bundle = this.getArguments();
-        if(bundle!=null){
+        if(bundle!=null) {
             Recipe originalRecipe = (Recipe) bundle.getSerializable("ModifyRecipe");
             initializeFromOriginalRecipe(originalRecipe);
+        }
+
+        if(!hostActivity.isOnline()){
+            Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -219,24 +223,28 @@ public class PostRecipeFragment extends Fragment {
      * Otherwise it will update the View to display to wrong inputs.
      * @param view the current view
      */
-    public synchronized void setPostButton(View view) {
-        getAndCheckEnteredInputs();
-        if(!buildRecipeAndPostToFirebase()){
-            printWrongInputsToUser();
-        }else{
-            try{
-                wait(100);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-            if(!postingAModifiedRecipe){
-                // Send notification to all users subscribed to the current user
-                User currentUser = hostActivity.getUserStorage().getPolyChefUser();
-                hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
-            }
+    public synchronized void setPostButton(View view){
+        if (!hostActivity.isOnline()) {
+            Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        } else {
+            getAndCheckEnteredInputs();
+            if (!buildRecipeAndPostToFirebase()) {
+                printWrongInputsToUser();
+            } else {
+                try {
+                    wait(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (!postingAModifiedRecipe) {
+                    // Send notification to all users subscribed to the current user
+                    User currentUser = hostActivity.getUserStorage().getPolyChefUser();
+                    hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
+                }
 
-            Intent intent = new Intent(getActivity(), HomePage.class);
-            startActivity(intent);
+                Intent intent = new Intent(getActivity(), HomePage.class);
+                startActivity(intent);
+            }
         }
     }
 

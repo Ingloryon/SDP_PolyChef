@@ -1,8 +1,10 @@
 package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -44,15 +46,19 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
     }
 
     public void createSignInIntent(View view) {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+        if(!isNetworkConnected()){
+            Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }else {
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.GoogleBuilder().build());
 
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    RC_SIGN_IN);
+        }
     }
 
     @Override
@@ -86,5 +92,10 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
 
     public UserStorage getUserStorage(){
         return UserStorage.getInstance();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

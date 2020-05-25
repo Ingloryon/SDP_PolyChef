@@ -1,8 +1,10 @@
 package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -64,13 +66,17 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
     }
 
     protected void goHomeIfConnected() {
-        if(getFireBaseAuth().getCurrentUser() != null) {
+        if(!isNetworkConnected()){
+            Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }else {
+            if (getFireBaseAuth().getCurrentUser() != null) {
 
-            startLoading();
+                startLoading();
 
-            Toast.makeText(this, "Auto connect" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Auto connect", Toast.LENGTH_SHORT).show();
 
-            getUserStorage().initializeUserFromAuthenticatedUser(this);
+                getUserStorage().initializeUserFromAuthenticatedUser(this);
+            }
         }
     }
 
@@ -122,6 +128,11 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         stopLoading();
 
         startNextActivity();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
     public void startNextActivity(){
