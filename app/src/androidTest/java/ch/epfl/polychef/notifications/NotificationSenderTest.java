@@ -24,7 +24,7 @@ public class NotificationSenderTest {
 
     private NotificationSender notificationSender = Mockito.mock(NotificationSender.class, CALLS_REAL_METHODS);
     private SingletonQueue singletonQueue = mock(SingletonQueue.class);
-    public static Recipe fakeRecipe = CommentTestOnFullRecipe.fakeRecipeBuilder.build();
+    public static Recipe fakeRecipe = CommentTestOnFullRecipe.returnFreshFakeRecipeBuilder().build();
 
     @Before
     public void initMock() {

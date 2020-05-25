@@ -89,13 +89,13 @@ public class PostingRecipeFragmentTest {
     private User mockUser2;
     private List<Recipe> recipeArr = new ArrayList<>();
 
-    private Recipe fakeRecipe1 = CommentTestOnFullRecipe.fakeRecipeBuilder
+    private Recipe fakeRecipe1 = CommentTestOnFullRecipe.returnFreshFakeRecipeBuilder()
             .addIngredient("Ingredient 2",1.0, Ingredient.Unit.CUP)
             .addInstruction("second instruction")
             .setName("User1Recipe")
             .setDate("20/05/01 13:10:00").setAuthor(email1).build();
     //the second recipe is created after
-    private Recipe fakeRecipe2 = CommentTestOnFullRecipe.fakeRecipeBuilder.setName("User2Recipe").setDate("20/05/02 13:10:00").setAuthor(email2).build();
+    private Recipe fakeRecipe2 = CommentTestOnFullRecipe.returnFreshFakeRecipeBuilder().setName("User2Recipe").setDate("20/05/02 13:10:00").setAuthor(email2).build();
 
     private Recipe fakeNewRecipe1 = new RecipeBuilder()
             .setName("Another title")
@@ -336,7 +336,7 @@ public class PostingRecipeFragmentTest {
         onData(allOf(is(instanceOf(String.class)),
                 is(getUnitStringFromRecipeAndIngredientsIndex(fakeNewRecipe1,1))))
                 .perform(scrollTo(),click());
-        
+
         replaceTextWhereTextIs(fakeRecipe1.getRecipeInstructions().get(0),fakeNewRecipe1.getRecipeInstructions().get(0));
         replaceTextWhereTextIs(fakeRecipe1.getRecipeInstructions().get(1),fakeNewRecipe1.getRecipeInstructions().get(1));
 

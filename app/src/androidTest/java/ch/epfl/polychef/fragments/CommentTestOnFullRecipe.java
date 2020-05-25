@@ -50,17 +50,6 @@ import static org.mockito.Mockito.when;
 @LargeTest
 public class CommentTestOnFullRecipe {
 
-    public static RecipeBuilder fakeRecipeBuilder = new RecipeBuilder()
-            .setName("Fake recipe")
-            .addInstruction("Instruction 1")
-            .addIngredient("ingredient", 2, Ingredient.Unit.NONE)
-            .setPersonNumber(1)
-            .setEstimatedCookingTime(1)
-            .setEstimatedPreparationTime(1)
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
-            .setDate("20/06/01 13:10:00")
-            .setAuthor("author name");
-
     private HashMap<String, User> userResults;
 
     private User mockUser;
@@ -95,12 +84,12 @@ public class CommentTestOnFullRecipe {
         public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
 
         public FakeHomePage() {
-            Recipe testRecipe = fakeRecipeBuilder.build();
+            Recipe testRecipe = returnFreshFakeRecipeBuilder().build();
             recipeArr.add(testRecipe);
-            testRecipe = fakeRecipeBuilder.build();
+            testRecipe = returnFreshFakeRecipeBuilder().build();
             testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
             recipeArr.add(testRecipe);
-            testRecipe = fakeRecipeBuilder.build();
+            testRecipe = returnFreshFakeRecipeBuilder().build();
             testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
             testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
             testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
@@ -196,6 +185,19 @@ public class CommentTestOnFullRecipe {
         onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
         onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
         assertEquals(6, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+    }
+
+    public static RecipeBuilder returnFreshFakeRecipeBuilder(){
+        return new RecipeBuilder()
+                .setName("Fake recipe")
+                .addInstruction("Instruction 1")
+                .addIngredient("ingredient", 2, Ingredient.Unit.NONE)
+                .setPersonNumber(1)
+                .setEstimatedCookingTime(1)
+                .setEstimatedPreparationTime(1)
+                .setRecipeDifficulty(Recipe.Difficulty.EASY)
+                .setDate("20/06/01 13:10:00")
+                .setAuthor("author name");
     }
 
 }
