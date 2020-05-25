@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -47,28 +46,23 @@ import ch.epfl.polychef.utils.VoiceSynthesizer;
  * Class that represents the page fragment displayed for a Recipe.
  */
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
-    private Recipe currentRecipe;
-    private static final String TAG = "FullRecipeFragment";
+    public static final String TAG = "FullRecipeFragment";
+
     private static final String NEW_LINE = System.lineSeparator();
+    private Recipe currentRecipe;
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
     private TextView authorName;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
 
-
     private NestedScrollView topScrollView;
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
-
-    private boolean online;
-
     private HomePage hostActivity;
 
+    private boolean online;
     private int indexOfInstruction=-1;
-
-    private int containerId;
-
 
     /**
      * Required empty public constructor for Firebase.
@@ -99,6 +93,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Gets the opinions recycler view.
      * @return the opinions recycler view
      */
+    @SuppressWarnings("WeakerAccess")
     public RecyclerView getOpinionsRecyclerView(){
         return opinionsRecyclerView;
     }
@@ -138,8 +133,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         addOpinion(view);
 
-        containerId = container.getId();
-
         return view;
     }
 
@@ -147,21 +140,18 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button postButton = getView().findViewById(R.id.buttonRate);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(getActivity() instanceof HomePage) {
+        Button postButton = requireView().findViewById(R.id.buttonRate);
+        postButton.setOnClickListener(view1 -> {
+            if(getActivity() instanceof HomePage) {
 
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("RecipeToRate", currentRecipe);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("RecipeToRate", currentRecipe);
 
-                    NavController navController = ((HomePage) getActivity()).getNavController();
-                    navController.navigate(R.id.rateRecipeFragment, bundle);
+                NavController navController = ((HomePage) getActivity()).getNavController();
+                navController.navigate(R.id.rateRecipeFragment, bundle);
 
-                }else {
-                    Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
-                }
+            }else {
+                Toast.makeText(getActivity(),requireActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -207,7 +197,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     @Override
     public void onFailure() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), requireActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -224,13 +214,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
             opinionsRecyclerView.setAdapter(opinionsAdapter);
             topScrollView = view.findViewById(R.id.fullRecipeFragment);
-            topScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(NestedScrollView view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    if(!opinionsAdapter.isLoading()) {
-                        if (!topScrollView.canScrollVertically(1)) {
-                            opinionsAdapter.loadNewComments();
-                        }
+            topScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (view1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                if(!opinionsAdapter.isLoading()) {
+                    if (!topScrollView.canScrollVertically(1)) {
+                        opinionsAdapter.loadNewComments();
                     }
                 }
             });
@@ -245,7 +232,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             public void onSuccess(User data) {
                 authorName.setText(data.getUsername());
                 authorName.setOnClickListener(v -> {
-                    NavController navController = ((HomePage) getActivity()).getNavController();
+                    NavController navController = ((HomePage) requireActivity()).getNavController();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("User", data);
                     navController.navigate(R.id.userProfileFragment, bundle);
@@ -264,14 +251,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     private void setupSwitch(View view) {
         Switch onOffSwitch = view.findViewById(R.id.voiceRecognitionSwitch);
-        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    voiceRecognizer.start(getActivity());
-                }else{
-                    voiceRecognizer.onStop();
-                }
+        onOffSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                voiceRecognizer.start(getActivity());
+            }else{
+                voiceRecognizer.onStop();
             }
         });
     }
@@ -287,10 +271,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         Either<String, Integer> miniatureMeta = currentRecipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
-            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
+            imagesToDisplay.add(BitmapFactory.decodeResource(requireActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
             carouselView.setPageCount(imagesToDisplay.size());
         } else if(miniatureMeta.isRight()) {
-            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), miniatureMeta.getRight()));
+            imagesToDisplay.add(BitmapFactory.decodeResource(requireActivity().getResources(), miniatureMeta.getRight()));
             carouselView.setPageCount(imagesToDisplay.size());
         } else {
             getImageStorage().getImage(miniatureMeta.getLeft(), this);
@@ -320,10 +304,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Display both the preparation time and the cooking time in the correct field in the activity.
      */
     private void displayPrepAndCookTime(View view){
-        String prepText = "Prep time : "+currentRecipe.getEstimatedPreparationTime()+" mins";
+        String prepText = "Prep time : "+currentRecipe.getEstimatedPreparationTime()+" min";
         TextView prepTime = view.findViewById(R.id.prepTime);
         prepTime.setText(prepText);
-        String cookText = "Cook time : "+currentRecipe.getEstimatedCookingTime()+" mins";
+        String cookText = "Cook time : "+currentRecipe.getEstimatedCookingTime()+" min";
         TextView cookTime = view.findViewById(R.id.cookTime);
         cookTime.setText(cookText);
     }
@@ -334,7 +318,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private void displayDifficulty(View view){
         TextView difficulty = view.findViewById(R.id.difficulty);
         String diff = currentRecipe.getRecipeDifficulty().toString();
-        String finalDiffStr = "Difficulty : " + diff.substring(0, 1).toUpperCase(Locale.ENGLISH).concat(diff.substring(1, diff.length()).toLowerCase(Locale.ENGLISH).replaceAll("_", " "));
+        String finalDiffStr = "Difficulty : " + diff.substring(0, 1).toUpperCase(Locale.ENGLISH).concat(diff.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("_", " "));
         difficulty.setText(finalDiffStr);
     }
 
