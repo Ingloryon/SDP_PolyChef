@@ -20,8 +20,9 @@ import ch.epfl.polychef.utils.SingletonQueue;
  * Class to send notification to all the users subscribed to a topic.
  */
 public class NotificationSender {
-    private static final String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    @SuppressWarnings("SpellCheckingInspection")
     private static final String SERVER_KEY = "key=" + "AAAAhNJZ4jI:APA91bH8UkEAkTdPDXg2xsiWH7ur8o2lM6Jvd3HPZ-HOluYk6NqmptQthq4O0lil0RchrbuaqkFAJoA1PUMU41AMuQ8i3gEJhcGI--4kxQPqaaryPXO2euObw8mGM98j9qAfEx3MqNwK";
+    private static final String FCM_API = "https://fcm.googleapis.com/fcm/send";
     private static final String CONTENT_TYPE = "application/json";
     private static final String TAG = "NotificationSender";
 
@@ -42,6 +43,7 @@ public class NotificationSender {
      * Gets the singleton of the queue.
      * @return the singleton of the queue
      */
+    @SuppressWarnings("WeakerAccess")
     public SingletonQueue getSingletonQueue() {
         return SingletonQueue.getInstance();
     }
