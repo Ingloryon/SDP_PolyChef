@@ -22,11 +22,16 @@ import ch.epfl.polychef.users.User;
  * This class is an adapter that take a list of users and update the fields of each user inside the miniature list in the recyclerView that is in the activity where the miniatures are shown.
  */
 public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdapter.MiniatureViewHolder>  {
-
     private final Context mainContext;
     private final List<User> userList;
     private final RecyclerView recyclerview;
 
+    /**
+     * Constructs a UserMiniatureAdapter of a list of users.
+     * @param mainContext the context of the corresponding activity
+     * @param userList the list of user miniatures to display
+     * @param recyclerView the recyclerView that is in the activity where the user miniatures are shown
+     */
     public UserMiniatureAdapter(Context mainContext, List<User> userList, RecyclerView recyclerView) {
         this.mainContext = mainContext;
         this.userList = userList;
