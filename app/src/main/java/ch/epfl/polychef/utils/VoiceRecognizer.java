@@ -14,9 +14,11 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
+/**
+ * A class representing the interface a voice recognition system.
+ */
 @SuppressWarnings("WeakerAccess")
 public class VoiceRecognizer implements RecognitionListener {
-
     private static final String KWS_SEARCH = "wakeup";//keyword to start recognition
     private static final String MENU_SEARCH = "menu";//name of the recognition set of words
     private static final String KEYPHRASE = "poly chef"; // Keyword we are looking for to activate recognition

@@ -6,10 +6,17 @@ import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
 
+/**
+ * Class representing the voice synthesizer that will read the recipes' instructions.
+ */
 public class VoiceSynthesizer {
     private TextToSpeech textToSpeech;
     private Activity activity;
 
+    /**
+     * Constructs the Voice Synthesizer in a given activity.
+     * @param activity the activity where the VoiceSynthesizer takes place
+     */
     public VoiceSynthesizer(Activity activity) {
         this.activity=activity;
 
@@ -22,6 +29,13 @@ public class VoiceSynthesizer {
      */
     public void speak(String message){
         textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,null,null);
+    }
+
+    /**
+     * Shutdown the textToSpeech object when the activity is on pause.
+     */
+    public void onStop(){
+        textToSpeech.shutdown();
     }
 
     /**
@@ -38,12 +52,5 @@ public class VoiceSynthesizer {
                 }
             }
         });
-    }
-
-    /**
-     * Shutdown the textToSpeech object when the activity is on pause.
-     */
-    public void onStop(){
-        textToSpeech.shutdown();
     }
 }
