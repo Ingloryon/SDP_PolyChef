@@ -43,8 +43,10 @@ import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 import io.opencensus.resource.Resource;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -55,6 +57,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -81,9 +86,19 @@ public class PostingRecipeFragmentTest {
     private User mockUser2;
     private List<Recipe> recipeArr = new ArrayList<>();
 
-    private Recipe fakeRecipe1 = CommentTestOnFullRecipe.fakeRecipeBuilder.setAuthor(email1).build();
+    private Recipe fakeRecipe1 = CommentTestOnFullRecipe.fakeRecipeBuilder.setName("User1Recipe").setDate("20/05/01 13:10:00").setAuthor(email1).build();
     //the second recipe is created after
-    private Recipe fakeRecipe2 = CommentTestOnFullRecipe.fakeRecipeBuilder.setDate("20/06/02 13:10:00").setAuthor(email2).build();
+    private Recipe fakeRecipe2 = CommentTestOnFullRecipe.fakeRecipeBuilder.setName("User2Recipe").setDate("20/05/02 13:10:00").setAuthor(email2).build();
+
+    private Recipe fakeNewRecipe1 = new RecipeBuilder()
+            .setName("Another title")
+            .setAuthor(email1)
+            .addInstruction("Instruction 1 modified")
+            .addIngredient("ingredient modified", 4, Ingredient.Unit.KILOGRAM)
+            .setPersonNumber(2)
+            .setEstimatedCookingTime(2)
+            .setEstimatedPreparationTime(2)
+            .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE).build();
 
     @Rule
     public ActivityTestRule<HomePage> intentsTestRule = new ActivityTestRule<>(fakeHomePage, false,
@@ -96,6 +111,7 @@ public class PostingRecipeFragmentTest {
         mockUser2=new User(email2,"user2");
         mockUser2.setKey("test key user2");
         mockRecipeStorage=Mockito.mock(RecipeStorage.class);
+        recipeArr.clear();
         recipeArr.add(fakeRecipe1);
         recipeArr.add(fakeRecipe2);
 
@@ -284,26 +300,65 @@ public class PostingRecipeFragmentTest {
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         onView(withId(R.id.modifyButton)).perform(click());
 
-        onView(withId(R.id.nameInput)).check(matches(withText(fakeRecipe1.getName())));
-
-        onView(withId(R.id.ingredient0)).check(matches(withText(fakeRecipe1.getIngredients().get(0).getName())));
-        onView(withId(R.id.quantity0)).check(matches(withText(Double.toString(fakeRecipe1.getIngredients().get(0).getQuantity()))));
-
-        onView(withId(R.id.instruction0)).check(matches(withText(fakeRecipe1.getRecipeInstructions().get(0))));
-
-        onView(withId(R.id.personNbInput)).check(matches(withText(Integer.toString(fakeRecipe1.getPersonNumber()))));
-        onView(withId(R.id.prepTimeInput)).check(matches(withText(Integer.toString(fakeRecipe1.getEstimatedPreparationTime()))));
-        onView(withId(R.id.cookTimeInput)).check(matches(withText(Integer.toString(fakeRecipe1.getEstimatedCookingTime()))));
-
-        onView(withId(R.id.difficultyInput)).check(matches(withSpinnerText(GlobalApplication
-                .getAppContext().getResources().getStringArray(R.array.difficulty_array)
-                        [fakeRecipe1.getRecipeDifficulty().ordinal()])));
+        checkDisplayedRecipeMatchGivenRecipe(fakeRecipe1);
     }
 
         @Test
     public void testModifyingARecipeReallyModifyARecipe(){
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.modifyButton)).perform(click());
 
+        onView(withId(R.id.nameInput)).perform(replaceText(fakeNewRecipe1.getName()));
+
+        onView(withId(R.id.ingredient0)).perform(replaceText(fakeNewRecipe1.getIngredients().get(0).getName()));
+        onView(withId(R.id.quantity0)).perform(replaceText(Double.toString(fakeNewRecipe1.getIngredients().get(0).getQuantity())));
+
+        onView(withId(R.id.unit0)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(GlobalApplication
+                .getAppContext().getResources().getStringArray(R.array.unit)
+                [fakeNewRecipe1.getIngredients().get(0).getUnit().ordinal()]))).perform(click());
+
+        onView(withId(R.id.instruction0)).perform(replaceText(fakeNewRecipe1.getRecipeInstructions().get(0)));
+
+        onView(withId(R.id.personNbInput)).perform(replaceText(Integer.toString(fakeNewRecipe1.getPersonNumber())));
+        onView(withId(R.id.prepTimeInput)).perform(replaceText(Integer.toString(fakeNewRecipe1.getEstimatedPreparationTime())));
+        onView(withId(R.id.cookTimeInput)).perform(replaceText(Integer.toString(fakeNewRecipe1.getEstimatedCookingTime())));
+
+        onView(withId(R.id.difficultyInput)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(GlobalApplication
+                    .getAppContext().getResources().getStringArray(R.array.difficulty_array)
+                    [fakeNewRecipe1.getRecipeDifficulty().ordinal()]))).perform(click());
+
+        onView(withId(R.id.postRecipe)).perform(click());
+
+        //click on the recipe in index 0 because it has been given a more recent date
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.modifyButton)).perform(click());
+
+        checkDisplayedRecipeMatchGivenRecipe(fakeNewRecipe1);
     }
+
+    private void checkDisplayedRecipeMatchGivenRecipe(Recipe expectedRecipe){
+        onView(withId(R.id.nameInput)).check(matches(withText(expectedRecipe.getName())));
+
+        onView(withId(R.id.ingredient0)).check(matches(withText(expectedRecipe.getIngredients().get(0).getName())));
+        onView(withId(R.id.quantity0)).check(matches(withText(Double.toString(expectedRecipe.getIngredients().get(0).getQuantity()))));
+
+        onView(withId(R.id.unit0)).check(matches(withSpinnerText(GlobalApplication
+                .getAppContext().getResources().getStringArray(R.array.unit)
+                [expectedRecipe.getIngredients().get(0).getUnit().ordinal()])));
+
+        onView(withId(R.id.instruction0)).check(matches(withText(expectedRecipe.getRecipeInstructions().get(0))));
+
+        onView(withId(R.id.personNbInput)).check(matches(withText(Integer.toString(expectedRecipe.getPersonNumber()))));
+        onView(withId(R.id.prepTimeInput)).check(matches(withText(Integer.toString(expectedRecipe.getEstimatedPreparationTime()))));
+        onView(withId(R.id.cookTimeInput)).check(matches(withText(Integer.toString(expectedRecipe.getEstimatedCookingTime()))));
+
+        onView(withId(R.id.difficultyInput)).check(matches(withSpinnerText(GlobalApplication
+                .getAppContext().getResources().getStringArray(R.array.difficulty_array)
+                [expectedRecipe.getRecipeDifficulty().ordinal()])));
+    }
+
 
 
     private class FakeHomePage extends HomePage {
@@ -316,6 +371,19 @@ public class PostingRecipeFragmentTest {
         @Override
         public RecipeStorage getRecipeStorage(){
             when(mockRecipeStorage.getCurrentDate()).thenCallRealMethod();
+            doAnswer((call) -> {
+                Recipe recipe =  call.getArgument(0);
+                //remove recipe with same uuid
+                int idxSameRecipe=recipeArr.indexOf(recipe);//equal method of recipe only compares uuid
+                if(idxSameRecipe==-1){
+                    recipeArr.add(recipe);
+                }else{
+                    recipeArr.set(idxSameRecipe,recipe);
+                }
+
+                return null;
+            }).when(mockRecipeStorage).addRecipe(any(Recipe.class));
+
             doAnswer((call) -> {
                 CallHandler<List<Recipe>> ch =  call.getArgument(4);
                 ch.onSuccess(recipeArr);
