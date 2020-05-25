@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Objects;
 import java.util.Random;
 
 import ch.epfl.polychef.R;
@@ -19,6 +20,7 @@ import ch.epfl.polychef.R;
 /**
  * A util class for Notifications.
  */
+@SuppressWarnings("WeakerAccess")
 public class NotificationUtils {
     private String channelID = "User notification";
     private static final int BOUND = 3000;
@@ -60,7 +62,7 @@ public class NotificationUtils {
                 .setContentText(remoteMessage.getData().get("message"))
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
-        notificationManager.notify(notificationID, notificationBuilder.build());
+        Objects.requireNonNull(notificationManager).notify(notificationID, notificationBuilder.build());
     }
 
     /**
