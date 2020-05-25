@@ -197,22 +197,18 @@ public class PostRecipeFragment extends Fragment {
             }
         } else {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
-            displayImageMiniatureFromUri(currentMiniature);
-        }
-    }
-
-    private void displayImageMiniatureFromUri(Uri uri){
-        if(uri != null) {
-            try {
-                Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-                if(oldBitmap != null) {
-                    double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
-                    double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
-                    Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
-                    imageMiniaturePreview.setImageBitmap(newBitmap);
+            if(currentMiniature != null) {
+                try {
+                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
+                    if(oldBitmap != null) {
+                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
+                        double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
+                        Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
+                        imageMiniaturePreview.setImageBitmap(newBitmap);
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
                 }
-            } catch (IOException e) {
-                Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
             }
         }
     }

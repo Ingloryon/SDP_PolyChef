@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
+import android.widget.LinearLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
@@ -54,6 +56,7 @@ import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
@@ -86,7 +89,11 @@ public class PostingRecipeFragmentTest {
     private User mockUser2;
     private List<Recipe> recipeArr = new ArrayList<>();
 
-    private Recipe fakeRecipe1 = CommentTestOnFullRecipe.fakeRecipeBuilder.setName("User1Recipe").setDate("20/05/01 13:10:00").setAuthor(email1).build();
+    private Recipe fakeRecipe1 = CommentTestOnFullRecipe.fakeRecipeBuilder
+            .addIngredient("Ingredient 2",1.0, Ingredient.Unit.CUP)
+            .addInstruction("second instruction")
+            .setName("User1Recipe")
+            .setDate("20/05/01 13:10:00").setAuthor(email1).build();
     //the second recipe is created after
     private Recipe fakeRecipe2 = CommentTestOnFullRecipe.fakeRecipeBuilder.setName("User2Recipe").setDate("20/05/02 13:10:00").setAuthor(email2).build();
 
@@ -94,7 +101,9 @@ public class PostingRecipeFragmentTest {
             .setName("Another title")
             .setAuthor(email1)
             .addInstruction("Instruction 1 modified")
-            .addIngredient("ingredient modified", 4, Ingredient.Unit.KILOGRAM)
+            .addInstruction("Instruction 2 modified")
+            .addIngredient("ingredient 1 modified", 4, Ingredient.Unit.KILOGRAM)
+            .addIngredient("ingredient 2 modified", 6, Ingredient.Unit.GRAM)
             .setPersonNumber(2)
             .setEstimatedCookingTime(2)
             .setEstimatedPreparationTime(2)
@@ -308,23 +317,34 @@ public class PostingRecipeFragmentTest {
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         onView(withId(R.id.modifyButton)).perform(click());
 
-        onView(withId(R.id.nameInput)).perform(replaceText(fakeNewRecipe1.getName()));
+        onView(withId(R.id.nameInput)).perform(scrollTo(),replaceText(fakeNewRecipe1.getName()));
 
-        onView(withId(R.id.ingredient0)).perform(replaceText(fakeNewRecipe1.getIngredients().get(0).getName()));
-        onView(withId(R.id.quantity0)).perform(replaceText(Double.toString(fakeNewRecipe1.getIngredients().get(0).getQuantity())));
+        replaceTextWhereTextIs(fakeRecipe1.getIngredients().get(0).getName(),fakeNewRecipe1.getIngredients().get(0).getName());
+        replaceTextWhereTextIs(fakeRecipe1.getIngredients().get(1).getName(),fakeNewRecipe1.getIngredients().get(1).getName());
 
-        onView(withId(R.id.unit0)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(GlobalApplication
-                .getAppContext().getResources().getStringArray(R.array.unit)
-                [fakeNewRecipe1.getIngredients().get(0).getUnit().ordinal()]))).perform(click());
+        replaceTextWhereTextIs(Double.toString(fakeRecipe1.getIngredients().get(0).getQuantity()),
+                Double.toString(fakeNewRecipe1.getIngredients().get(0).getQuantity()));
+        replaceTextWhereTextIs(Double.toString(fakeRecipe1.getIngredients().get(1).getQuantity()),
+                Double.toString(fakeNewRecipe1.getIngredients().get(1).getQuantity()));
 
-        onView(withId(R.id.instruction0)).perform(replaceText(fakeNewRecipe1.getRecipeInstructions().get(0)));
+        onView(withText(getUnitStringFromRecipeAndIngredientsIndex(fakeRecipe1,0))).perform(scrollTo(),click());
+        onData(allOf(is(instanceOf(String.class)),
+                is(getUnitStringFromRecipeAndIngredientsIndex(fakeNewRecipe1,0))))
+                .perform(scrollTo(),click());
 
-        onView(withId(R.id.personNbInput)).perform(replaceText(Integer.toString(fakeNewRecipe1.getPersonNumber())));
-        onView(withId(R.id.prepTimeInput)).perform(replaceText(Integer.toString(fakeNewRecipe1.getEstimatedPreparationTime())));
-        onView(withId(R.id.cookTimeInput)).perform(replaceText(Integer.toString(fakeNewRecipe1.getEstimatedCookingTime())));
+        onView(withText(getUnitStringFromRecipeAndIngredientsIndex(fakeRecipe1,1))).perform(scrollTo(),click());
+        onData(allOf(is(instanceOf(String.class)),
+                is(getUnitStringFromRecipeAndIngredientsIndex(fakeNewRecipe1,1))))
+                .perform(scrollTo(),click());
+        
+        replaceTextWhereTextIs(fakeRecipe1.getRecipeInstructions().get(0),fakeNewRecipe1.getRecipeInstructions().get(0));
+        replaceTextWhereTextIs(fakeRecipe1.getRecipeInstructions().get(1),fakeNewRecipe1.getRecipeInstructions().get(1));
 
-        onView(withId(R.id.difficultyInput)).perform(click());
+        onView(withId(R.id.personNbInput)).perform(scrollTo(),replaceText(Integer.toString(fakeNewRecipe1.getPersonNumber())));
+        onView(withId(R.id.prepTimeInput)).perform(scrollTo(),replaceText(Integer.toString(fakeNewRecipe1.getEstimatedPreparationTime())));
+        onView(withId(R.id.cookTimeInput)).perform(scrollTo(),replaceText(Integer.toString(fakeNewRecipe1.getEstimatedCookingTime())));
+
+        onView(withId(R.id.difficultyInput)).perform(scrollTo(),click());
         onData(allOf(is(instanceOf(String.class)), is(GlobalApplication
                     .getAppContext().getResources().getStringArray(R.array.difficulty_array)
                     [fakeNewRecipe1.getRecipeDifficulty().ordinal()]))).perform(click());
@@ -341,12 +361,17 @@ public class PostingRecipeFragmentTest {
     private void checkDisplayedRecipeMatchGivenRecipe(Recipe expectedRecipe){
         onView(withId(R.id.nameInput)).check(matches(withText(expectedRecipe.getName())));
 
-        onView(withId(R.id.ingredient0)).check(matches(withText(expectedRecipe.getIngredients().get(0).getName())));
-        onView(withId(R.id.quantity0)).check(matches(withText(Double.toString(expectedRecipe.getIngredients().get(0).getQuantity()))));
+        for(Ingredient ingredient:expectedRecipe.getIngredients()){
+            onView(withText(ingredient.getName())).check(matches(isDisplayed()));
+            onView(withText(Double.toString(ingredient.getQuantity()))).check(matches(isDisplayed()));
+            onView(withText(GlobalApplication
+                    .getAppContext().getResources().getStringArray(R.array.unit)
+                    [ingredient.getUnit().ordinal()])).check(matches(isDisplayed()));
+        }
 
-        onView(withId(R.id.unit0)).check(matches(withSpinnerText(GlobalApplication
-                .getAppContext().getResources().getStringArray(R.array.unit)
-                [expectedRecipe.getIngredients().get(0).getUnit().ordinal()])));
+        for(String instruction:expectedRecipe.getRecipeInstructions()) {
+            onView(withText(instruction)).check(matches(isDisplayed()));
+        }
 
         onView(withId(R.id.instruction0)).check(matches(withText(expectedRecipe.getRecipeInstructions().get(0))));
 
@@ -359,7 +384,15 @@ public class PostingRecipeFragmentTest {
                 [expectedRecipe.getRecipeDifficulty().ordinal()])));
     }
 
+    private String getUnitStringFromRecipeAndIngredientsIndex(Recipe recipe,int idx){
+        return GlobalApplication
+                .getAppContext().getResources().getStringArray(R.array.unit)
+                [recipe.getIngredients().get(idx).getUnit().ordinal()];
+    }
 
+    private void replaceTextWhereTextIs(String targetText,String newText){
+        onView(withText(targetText)).perform(scrollTo(),replaceText(newText));
+    }
 
     private class FakeHomePage extends HomePage {
 
