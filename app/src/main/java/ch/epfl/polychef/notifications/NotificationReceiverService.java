@@ -53,7 +53,7 @@ public class NotificationReceiverService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if(Objects.equals(remoteMessage.getData().get("type"), "recipe")) {
-            getRecipeStorage().readRecipeFromUuid(remoteMessage.getData().get("recipe"), new CallHandler<Recipe>() {
+            getRecipeStorage().readRecipeFromUuid(Objects.requireNonNull(remoteMessage.getData().get("recipe")), new CallHandler<Recipe>() {
                 @Override
                 public void onSuccess(Recipe data) {
                     Intent intent = new Intent(NotificationReceiverService.this.getContext(), HomePage.class);
