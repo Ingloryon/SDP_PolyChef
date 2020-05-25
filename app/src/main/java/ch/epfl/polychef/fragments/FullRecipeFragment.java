@@ -66,7 +66,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     public static int QUANTITY_LIMIT = 500;
 
-    private boolean online;
+    private boolean isHomePage;
 
     private HomePage hostActivity;
 
@@ -124,14 +124,14 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     }
 
     private void addOpinion(View view) {
-        if(online) {
+        if(isHomePage) {
             opinionsRecyclerView = view.findViewById(R.id.opinionsList);
             opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
             opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
             opinionsRecyclerView.setAdapter(opinionsAdapter);
             topScrollView = view.findViewById(R.id.fullRecipeFragment);
             topScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (view1, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                if(!opinionsAdapter.isLoading()) {
+                if (!opinionsAdapter.isLoading()) {
                     if (!topScrollView.canScrollVertically(1)) {
                         opinionsAdapter.loadNewComments();
                     }
@@ -159,7 +159,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                 handleNewQuantity(view);
             }
         });
-
     }
 
     private void handleNewQuantity(View view){
@@ -212,14 +211,16 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity() instanceof HomePage) {
+                if(isHomePage) {
+                    if(!hostActivity.isOnline()){
+                        Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("RecipeToRate", currentRecipe);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("RecipeToRate", currentRecipe);
-
-                    NavController navController = ((HomePage) getActivity()).getNavController();
-                    navController.navigate(R.id.rateRecipeFragment, bundle);
-
+                        NavController navController = ((HomePage) getActivity()).getNavController();
+                        navController.navigate(R.id.rateRecipeFragment, bundle);
+                    }
                 }else {
                     Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
                 }
@@ -234,9 +235,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         if(context instanceof HomePage){
             hostActivity = (HomePage) context;
-            online = true;
+            isHomePage = true;
         } else {
-            online = false;
+            isHomePage = false;
             hostActivity = null;
         }
     }

@@ -54,7 +54,7 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
     @Override
     public void onBackPressed() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.nav_entry_fragment, miniFrag)
+                .add(R.id.nav_entry_fragment, miniFrag)
                 .commit();
     }
 
