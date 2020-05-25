@@ -52,6 +52,7 @@ public final class Ingredient implements Serializable {
      * Returns the quantity needed corresponding to the ingredient.
      * @return the quantity, a positive double
      */
+    @SuppressWarnings("WeakerAccess")
     public double getQuantity(){
         return quantity;
     }
@@ -60,6 +61,7 @@ public final class Ingredient implements Serializable {
      * Set the ingredient's corresponding quantity.
      * @param quantity the new quantity, must be positive
      */
+    @SuppressWarnings("WeakerAccess")
     public void setQuantity(double quantity){
         Preconditions.checkArgument(quantity >= 0, "The quantity should be positive");
         this.quantity = quantity;
@@ -95,6 +97,7 @@ public final class Ingredient implements Serializable {
         unit= newUnit;
     }
 
+    @NonNull
     @Override
     public String toString(){
         switch (unit){
