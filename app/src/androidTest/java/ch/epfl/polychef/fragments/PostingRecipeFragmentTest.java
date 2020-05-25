@@ -329,7 +329,7 @@ public class PostingRecipeFragmentTest {
                     .getAppContext().getResources().getStringArray(R.array.difficulty_array)
                     [fakeNewRecipe1.getRecipeDifficulty().ordinal()]))).perform(click());
 
-        onView(withId(R.id.postRecipe)).perform(click());
+        onView(withId(R.id.postRecipe)).perform(scrollTo(),click());
 
         //click on the recipe in index 0 because it has been given a more recent date
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
