@@ -1,5 +1,6 @@
 package ch.epfl.polychef.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 
@@ -13,7 +14,7 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
-
+@SuppressWarnings("WeakerAccess")
 public class VoiceRecognizer implements RecognitionListener {
 
     private static final String KWS_SEARCH = "wakeup";//keyword to start recognition
@@ -30,6 +31,8 @@ public class VoiceRecognizer implements RecognitionListener {
         this.callNotifier=callNotifier;
     }
 
+
+    @SuppressLint("StaticFieldLeak")
     public void start(Activity activity){
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
