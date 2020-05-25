@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.polychef.utils.Preconditions;
 
@@ -49,7 +50,7 @@ public final class Rating implements Serializable {
         if (allOpinion.containsKey(userID)) {
             Opinion oldOpinion = allOpinion.get(userID);
             allOpinion.replace(userID, new Opinion(rate, comment));
-            ratingSum = ratingSum - oldOpinion.getRate() + rate;
+            ratingSum = ratingSum - Objects.requireNonNull(oldOpinion).getRate() + rate;
             return oldOpinion.getRate();
         } else {
             allOpinion.put(userID, new Opinion(rate, comment));
@@ -71,6 +72,7 @@ public final class Rating implements Serializable {
      * Gets the sum of all the ratings.
      * @return the total rating sum
      */
+    @SuppressWarnings("WeakerAccess")
     public int getRatingSum() {
         return ratingSum;
     }
@@ -93,7 +95,7 @@ public final class Rating implements Serializable {
             return null;
         }
         for(String userId : allOpinion.keySet()){
-            if(allOpinion.get(userId).equals(opinion)){
+            if(Objects.requireNonNull(allOpinion.get(userId)).equals(opinion)){
                 return userId;
             }
         }
