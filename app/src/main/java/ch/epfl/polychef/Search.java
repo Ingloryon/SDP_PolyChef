@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
 
 /**
  * An abstract class that represents the search in some Miniatures.
- * @param <S>
+ * @param <S> a {@link Miniatures} subclass
  */
 public abstract class Search<S extends Miniatures> {
 
