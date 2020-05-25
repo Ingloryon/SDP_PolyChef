@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -52,14 +51,11 @@ public class ProfilePictChoice extends Fragment {
         listView.setAdapter(new ProfilePictureAdapter(getContext(), imageDetails));
 
         // When the user clicks on the ListItem
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adaptor, View view, int position, long id) {
-                User updatedUser=hostActivity.getUserStorage().getPolyChefUser();
-                updatedUser.setProfilePictureId(position);
-                hostActivity.setupProfilePicture();
-                hostActivity.getUserStorage().updateUserInfo(updatedUser);
-            }
+        listView.setOnItemClickListener((adaptor, view1, position, id) -> {
+            User updatedUser=hostActivity.getUserStorage().getPolyChefUser();
+            updatedUser.setProfilePictureId(position);
+            hostActivity.setupProfilePicture();
+            hostActivity.getUserStorage().updateUserInfo(updatedUser);
         });
 
         return view;
@@ -71,7 +67,7 @@ public class ProfilePictChoice extends Fragment {
     }
 
     private  List<ProfilePicture> getListData() {
-        List<ProfilePicture> list = new ArrayList<ProfilePicture>();
+        List<ProfilePicture> list = new ArrayList<>();
 
         String[] photoNames=getResources().getStringArray(R.array.profilePicturesNames);
         String[] photoLabels=getResources().getStringArray(R.array.profilePicturesLabels);
