@@ -14,11 +14,5 @@ public final class Preconditions {
             throw new IllegalArgumentException();
         }
     }
-
-    public static int checkIndex(int index, int size) {
-        if (! (0 <= index && index < size)) {
-            throw new IndexOutOfBoundsException();
-        }
-        return index;
-    }
+    
 }
