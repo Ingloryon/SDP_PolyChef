@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
@@ -28,12 +29,11 @@ import ch.epfl.polychef.utils.UserMiniatureAdapter;
 /**
  * Represent a fragment with a list of {@code User} to show the miniature.
  */
+@SuppressWarnings("WeakerAccess")
 public class UserListFragment extends Fragment {
 
     private RecyclerView usersRecyclerView;
     private List<User> dynamicUserList = new ArrayList<>();
-
-    private ImageStorage imageStorage;
     private UserStorage userStorage;
 
     private final Function<User, List<String>> userListFunction;
@@ -76,7 +76,7 @@ public class UserListFragment extends Fragment {
         super.onAttach(context);
         Preconditions.checkArgument(context instanceof HomePage, "The favourite miniature fragment wasn't attached properly!");
         HomePage homePage = (HomePage) context;
-        imageStorage = homePage.getImageStorage();
+        ImageStorage imageStorage = homePage.getImageStorage();
         userStorage = homePage.getUserStorage();
         Preconditions.checkArgument(imageStorage != null && userStorage != null);
     }
@@ -87,7 +87,7 @@ public class UserListFragment extends Fragment {
         dynamicUserList.clear();
         MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(userListFunction.apply(userStorage.getPolyChefUser()).size(), (dataList) -> {
             dynamicUserList.addAll(dataList);
-            usersRecyclerView.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(usersRecyclerView.getAdapter()).notifyDataSetChanged();
         });
         for(String userUuid: userListFunction.apply(userStorage.getPolyChefUser())) {
             userStorage.getUserByEmail(userUuid, multipleCallHandler);
