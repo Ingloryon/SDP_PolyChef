@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * A class representing an opinion of a recipe (composed of a rate and a comment).
  */
+@SuppressWarnings("WeakerAccess")
 public class Opinion implements Serializable {
 
     private String comment;
@@ -16,6 +17,7 @@ public class Opinion implements Serializable {
     /**
      * Empty constructor for Firebase.
      */
+    @SuppressWarnings("unused")
     public Opinion() {
     }
 
