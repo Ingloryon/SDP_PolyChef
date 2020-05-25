@@ -42,14 +42,11 @@ public class VoiceSynthesizer {
      * initialize the object TextToSpeech.
      */
     private void initializeTextToSpeech() {
-        textToSpeech= new TextToSpeech(activity, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(textToSpeech.getEngines().size()==0){
-                    throw new UnsupportedOperationException("There is no voice recognition engine.");
-                }else{
-                    textToSpeech.setLanguage(Locale.UK);
-                }
+        textToSpeech= new TextToSpeech(activity, status -> {
+            if(textToSpeech.getEngines().size()==0){
+                throw new UnsupportedOperationException("There is no voice recognition engine.");
+            }else{
+                textToSpeech.setLanguage(Locale.UK);
             }
         });
     }
