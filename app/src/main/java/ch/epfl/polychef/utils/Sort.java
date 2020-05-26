@@ -55,25 +55,20 @@ public class Sort {
         String s1 = o1.getName();
         String s2 = o2.getName();
 
-        //noinspection UseCompareMethod (here we want to return exactly -1 or 1)
-        return Similarity.similarity(s1,actualQuery)>Similarity.similarity(s2,actualQuery) ? -1 :
-                Similarity.similarity(s1,actualQuery)==Similarity.similarity(s2,actualQuery) ? 0 : 1;
+        return Double.compare(Similarity.similarity(s2, actualQuery), Similarity.similarity(s1, actualQuery));
     };
 
     private static Comparator<Miniatures> similarityIngredientComparator = (o1, o2) -> {
         List<Double> sim1 = Lists.transform(((Recipe)o1).getIngredients(), x-> Similarity.similarity(Objects.requireNonNull(x).getName(),actualQuery));
         List<Double> sim2 = Lists.transform(((Recipe)o2).getIngredients(), x-> Similarity.similarity(Objects.requireNonNull(x).getName(),actualQuery));
-        Double max1 = Collections.max(sim1);
-        Double max2 = Collections.max(sim2);
 
-        return max1>max2 ? -1 : max1.equals(max2) ? 0 : 1;
+        return Double.compare(Collections.max(sim2), Collections.max(sim1));
     };
 
     private static Comparator<Miniatures> rateComparator = (o1, o2) -> {
         Rating r1 = o1.getRating();
         Rating r2 = o2.getRating();
 
-        //noinspection UseCompareMethod (here we want to return exactly -1 or 1)
-        return r1.ratingAverage()>r2.ratingAverage() ? -1 : r1.ratingAverage()==r2.ratingAverage() ? 0 : 1;
+        return Double.compare(r2.ratingAverage(), r1.ratingAverage());
     };
 }
