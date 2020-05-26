@@ -32,7 +32,7 @@ public interface Miniatures {
     void setKey(String key);
 
     /**
-     * Gets the name the miniature describes.
+     * Gets the name of the object the miniature describes.
      * @return the name the miniature describes
      */
     String getName();

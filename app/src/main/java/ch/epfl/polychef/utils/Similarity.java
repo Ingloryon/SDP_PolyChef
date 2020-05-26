@@ -3,7 +3,7 @@ package ch.epfl.polychef.utils;
 import java.util.Locale;
 
 /**
- * An utility class containing similarity methods.
+ * A utility class computing the similarity between Strings.
  */
 public class Similarity {
 

@@ -1,19 +1,19 @@
 package ch.epfl.polychef;
 
 /**
- * The interface of a CallNotifier, will notify or fail.
+ * Interface to notify the caller or signal failure.
  * @param <T> the result type
  */
 public interface CallNotifier<T> {
 
     /**
-     * What happens if manages to notify.
+     * What to do when notifying.
      * @param data the required data
      */
     void notify(T data);
 
     /**
-     * What happens if the CallNotifier fails.
+     * wWat to do when the callee fails.
      */
     void onFailure();
 }

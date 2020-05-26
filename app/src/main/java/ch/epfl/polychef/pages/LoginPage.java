@@ -51,7 +51,7 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
     }
 
     /**
-     * Gets the firebase authentication current user instance.
+     * Gets the current authenticated user from FirebaseAuth.
      * @return the current user
      */
     public FirebaseUser getUser() {

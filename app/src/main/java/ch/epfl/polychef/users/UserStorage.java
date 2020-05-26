@@ -90,7 +90,7 @@ public class UserStorage {
     }
 
     /**
-     * Get a {@code User} from an email.
+     * Get a {@code User} by its email in Firebase database.
      *
      * @param email  the email of the user
      * @param caller the caller to call on success and failure

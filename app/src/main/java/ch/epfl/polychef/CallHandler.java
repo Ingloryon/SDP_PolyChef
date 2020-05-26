@@ -1,19 +1,20 @@
 package ch.epfl.polychef;
 
 /**
- * The interface of a CallHandler, can either success or fail its call.
+ * Interface handling two types of callbacks: Success and Failure"
  * @param <T> the result type
  */
 public interface CallHandler<T> {
 
     /**
-     * What happens if the callHandler successes.
+     * What to do when the callee is successful.
      * @param data the required data
      */
     void onSuccess(T data);
 
     /**
-     * What happens if the callHandler fails.
+     * What to do when the callee fails.
      */
     void onFailure();
+
 }

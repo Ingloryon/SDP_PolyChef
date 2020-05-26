@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 /**
- * An abstract class that represents the search in some Miniatures.
+ * An abstract class that represents the search of some type of Miniatures in Firebase.
  * @param <S> a {@link Miniatures} subclass
  */
 public abstract class Search<S extends Miniatures> {
@@ -46,7 +46,7 @@ public abstract class Search<S extends Miniatures> {
     protected abstract FirebaseDatabase getDatabase();
 
     /**
-     * The main search method that sets listener for data changes.
+     * The main search method.
      * @param query the searching query
      * @param comparator a given comparator to search with
      * @param caller the caller of the method giving a list of Miniatures

@@ -20,7 +20,6 @@ import java.util.Objects;
 
 import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
-import ch.epfl.polychef.image.ImageStorage;
 import ch.epfl.polychef.pages.HomePage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
@@ -79,9 +78,8 @@ public class UserListFragment extends Fragment {
         super.onAttach(context);
         Preconditions.checkArgument(context instanceof HomePage, "The favourite miniature fragment wasn't attached properly!");
         hostActivity = (HomePage) context;
-        ImageStorage imageStorage = hostActivity.getImageStorage();
         userStorage = hostActivity.getUserStorage();
-        Preconditions.checkArgument(imageStorage != null && userStorage != null, "One of the storage is null !");
+        Preconditions.checkArgument(userStorage != null, "One of the storage is null !");
     }
 
     @Override

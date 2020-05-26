@@ -16,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.Objects;
 
 import ch.epfl.polychef.CallHandler;
@@ -42,7 +40,7 @@ public class RateRecipeFragment extends Fragment {
     private EditText comment;
 
     /**
-     * Required empty public constructor for Database.
+     * Required empty public constructor for Firebase.
      */
     public RateRecipeFragment() {
     }
@@ -137,10 +135,9 @@ public class RateRecipeFragment extends Fragment {
 
         if(context instanceof HomePage){
             HomePage homePage = (HomePage) context;
-            FirebaseDatabase fireDatabase = homePage.getFireDatabase();
             userStorage = homePage.getUserStorage();
             recipeStorage = homePage.getRecipeStorage();
-            Preconditions.checkArgument(fireDatabase != null && userStorage!=null );
+            Preconditions.checkArgument(userStorage!=null );
         } else {
             throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");
         }
