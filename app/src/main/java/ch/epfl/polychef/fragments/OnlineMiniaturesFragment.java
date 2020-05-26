@@ -74,18 +74,14 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private RecipeStorage recipeStorage;
     private ImageStorage imageStorage;
     private UserStorage userStorage;
+    private HomePage hostActivity;
 
-<<<<<<< HEAD
     //package protected is enough for this constant
     static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
 
     /**
      * Required empty public constructor for Firebase.
      */
-=======
-    private HomePage hostActivity;
-
->>>>>>> master
     public OnlineMiniaturesFragment(){
     }
 
