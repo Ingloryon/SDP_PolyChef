@@ -406,6 +406,12 @@ public class PostingRecipeFragmentTest {
             when(mockRecipeStorage.getCurrentDate()).thenCallRealMethod();
             doAnswer((call) -> {
                 Recipe recipe =  call.getArgument(0);
+                recipeArr.add(recipe);
+                return null;
+            }).when(mockRecipeStorage).addRecipe(any(Recipe.class));
+
+            doAnswer((call) -> {
+                Recipe recipe =  call.getArgument(0);
                 //remove recipe with same uuid
                 int idxSameRecipe=recipeArr.indexOf(recipe);//equal method of recipe only compares uuid
                 if(idxSameRecipe==-1){
@@ -413,9 +419,8 @@ public class PostingRecipeFragmentTest {
                 }else{
                     recipeArr.set(idxSameRecipe,recipe);
                 }
-
                 return null;
-            }).when(mockRecipeStorage).addRecipe(any(Recipe.class));
+            }).when(mockRecipeStorage).updateRecipe(any(Recipe.class));
 
             doAnswer((call) -> {
                 CallHandler<List<Recipe>> ch =  call.getArgument(4);
