@@ -194,32 +194,18 @@ public class UserProfileFragment extends Fragment {
         ImageView profilePict = requireView().findViewById(R.id.profilePicture);
         HomePage context = (HomePage) requireContext();
 
-<<<<<<< HEAD
         profilePict.setOnClickListener(view -> {
-            String userID = context.getUserStorage().getPolyChefUser().getKey();
-            if(userToDisplay.getKey().equals(userID)) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("UserDisplayed", userToDisplay);
+            if(!hostActivity.isOnline()){
+                Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+            }else {
+                String userID = context.getUserStorage().getPolyChefUser().getKey();
+                if (userToDisplay.getKey().equals(userID)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("UserDisplayed", userToDisplay);
 
-                NavController navController = ((HomePage) requireActivity()).getNavController();
-                navController.navigate(R.id.userProfilePictureChoice, bundle);
-=======
-        profilePict.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!hostActivity.isOnline()){
-                    Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
-                }else {
-                    String userID = context.getUserStorage().getPolyChefUser().getKey();
-                    if (userToDisplay.getKey() == userID) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("UserDisplayed", userToDisplay);
-
-                        NavController navController = ((HomePage) getActivity()).getNavController();
-                        navController.navigate(R.id.userProfilePictureChoice, bundle);
-                    }
+                    NavController navController = ((HomePage) requireActivity()).getNavController();
+                    navController.navigate(R.id.userProfilePictureChoice, bundle);
                 }
->>>>>>> master
             }
         });
     }
