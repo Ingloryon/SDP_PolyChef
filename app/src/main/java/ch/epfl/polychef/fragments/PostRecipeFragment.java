@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -504,6 +503,7 @@ public class PostRecipeFragment extends Fragment {
         wrongInputs.put("Ingredients", true);
     }
 
+    @SuppressLint("SetTextI18n")
     private void initializeFromOriginalRecipe(Recipe originalRecipe) {
         postingAModifiedRecipe=true;
         this.originalRecipe=originalRecipe;
@@ -511,15 +511,12 @@ public class PostRecipeFragment extends Fragment {
         hideImageComponents();
 
         EditText prepTimeInput = requireView().findViewById(R.id.prepTimeInput);
-        //prepTimeInput.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getEstimatedPreparationTime()));
         prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
 
         EditText cookTimeInput = requireView().findViewById(R.id.cookTimeInput);
-        //cookTimeInput.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getEstimatedCookingTime()));
         cookTimeInput.setText(Integer.toString(originalRecipe.getEstimatedCookingTime()));
 
         EditText personNb = requireView().findViewById(R.id.personNbInput);
-        //personNb.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getPersonNumber()));
         personNb.setText(Integer.toString(originalRecipe.getPersonNumber()));
 
         EditText title=requireView().findViewById(R.id.nameInput);
@@ -549,11 +546,11 @@ public class PostRecipeFragment extends Fragment {
         requireView().findViewById(R.id.postRecipePictures).setVisibility(View.GONE);
     }
 
+    @SuppressLint("SetTextI18n")
     private void insertIngredientAtIndex(Ingredient ingredient, int index) {
         ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(index);
 
         ((TextView) currentIngredient.getChildAt(0)).setText(ingredient.getName());
-        //((TextView) currentIngredient.getChildAt(1)).setText(String.format(Locale.ENGLISH, "%.1f", ingredient.getQuantity()));
         ((TextView) currentIngredient.getChildAt(1)).setText(Double.toString(ingredient.getQuantity()));
         ((Spinner) currentIngredient.getChildAt(2)).setSelection(ingredient.getUnit().ordinal());
     }

@@ -293,7 +293,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             displayIngredients(view);
         }else if( newQuantity > QUANTITY_LIMIT){
             currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
-            quantityInput.setText(QUANTITY_LIMIT);
+            quantityInput.setText(Integer.toString(QUANTITY_LIMIT));
             Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
         }else{
             currentRecipe.scalePersonAndIngredientsQuantities(1);
