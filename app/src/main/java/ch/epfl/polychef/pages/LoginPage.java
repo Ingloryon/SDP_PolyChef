@@ -35,21 +35,10 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
      * @param view the current view
      */
     public void createSignInIntent(View view) {
-<<<<<<< HEAD
-        List<AuthUI.IdpConfig> providers = Collections.singletonList(
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-=======
         if(!isNetworkConnected()){
             Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
         }else {
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
+            List<AuthUI.IdpConfig> providers = Collections.singletonList(
                     new AuthUI.IdpConfig.GoogleBuilder().build());
 
             startActivityForResult(
@@ -59,7 +48,6 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
                             .build(),
                     RC_SIGN_IN);
         }
->>>>>>> master
     }
 
     /**
@@ -99,7 +87,6 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         googleButton.setOnClickListener( view -> createSignInIntent(googleButton) );
     }
 
-<<<<<<< HEAD
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -112,10 +99,9 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         }
     }
 
-=======
+    @SuppressWarnings("ConstantConditions") //the null case is handled
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
->>>>>>> master
 }
