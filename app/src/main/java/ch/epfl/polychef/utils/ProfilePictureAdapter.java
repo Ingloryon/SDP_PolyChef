@@ -1,5 +1,6 @@
 package ch.epfl.polychef.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,36 @@ public class ProfilePictureAdapter extends BaseAdapter {
         layoutInflater = LayoutInflater.from(context);
     }
 
+
+    /**
+     * Returns the updated view with the profile picture choice.
+     * @param position the position on the display
+     * @param convertView the initial view
+     * @param parent the viewGroup the activity belongs to
+     * @return the updated view
+     */
+    @SuppressLint("InflateParams")
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.profile_pict_item, null);
+            holder = new ViewHolder();
+            holder.flagView = convertView.findViewById(R.id.profilePicture);
+            holder.pictureName = convertView.findViewById(R.id.profile_picture_label);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        ProfilePicture currentPicture = this.listPictures.get(position);
+        holder.pictureName.setText(currentPicture.getPictureLabel());
+
+        int pictureId = context.getResources().getIdentifier(currentPicture.getPicturePath(), "drawable", context.getPackageName());
+        holder.flagView.setImageResource(pictureId);
+
+        return convertView;
+    }
+
     @Override
     public int getCount() {
         return listPictures.size();
@@ -54,34 +85,6 @@ public class ProfilePictureAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    /**
-     * Returns the updated view with the profile picture choice.
-     * @param position the position on the display
-     * @param convertView the initial view
-     * @param parent the viewGroup the activity belongs to
-     * @return the updated view
-     */
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.profile_pict_item, null);
-            holder = new ViewHolder();
-            holder.flagView = (ImageView) convertView.findViewById(R.id.profilePicture);
-            holder.pictureName = (TextView) convertView.findViewById(R.id.profile_picture_label);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        ProfilePicture currentPicture = this.listPictures.get(position);
-        holder.pictureName.setText(currentPicture.getPictureLabel());
-
-        int pictureId = context.getResources().getIdentifier(currentPicture.getPicturePath(), "drawable", context.getPackageName());
-        holder.flagView.setImageResource(pictureId);
-
-        return convertView;
     }
 
     static class ViewHolder {

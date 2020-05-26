@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,7 +16,6 @@ import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,39 +46,72 @@ import ch.epfl.polychef.utils.OpinionsMiniatureAdapter;
 import ch.epfl.polychef.utils.VoiceRecognizer;
 import ch.epfl.polychef.utils.VoiceSynthesizer;
 
+/**
+ * Class that represents the page fragment displayed for a Recipe.
+ */
+@SuppressWarnings("WeakerAccess")
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
-    private Recipe currentRecipe;
-    private static final String TAG = "FullRecipeFragment";
+    public static int QUANTITY_LIMIT = 500;
+    public static final String TAG = "FullRecipeFragment";
+    private int indexOfInstruction=-1;
+
     private static final String NEW_LINE = System.lineSeparator();
+    private Recipe currentRecipe;
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
-    private ToggleButton favouriteButton;
     private TextView authorName;
     private EditText quantityInput;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
-    private int defaultQuantity;
-
 
     private NestedScrollView topScrollView;
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
 
-    public static int QUANTITY_LIMIT = 500;
-
     private boolean isHomePage;
-
     private HomePage hostActivity;
 
-    private int indexOfInstruction=-1;
-
-    private int containerId;
-
-
     /**
-     * Required empty public constructor.
+     * Required empty public constructor for Firebase.
      */
     public FullRecipeFragment() {}
+
+    /**
+     * Gets the instance of the image storage.
+     * @return the instance of the image storage
+     */
+    public ImageStorage getImageStorage() {
+        return ImageStorage.getInstance();
+    }
+
+    /**
+     * Gets the current recipe.
+     * @return the current recipe
+     */
+    public Recipe getCurrentRecipe(){
+        return currentRecipe;
+    }
+
+    /**
+     * Gets the instance of the user storage.
+     * @return the instance of the user storage
+     */
+    public UserStorage getUserStorage() {
+        if(hostActivity != null) {
+            return hostActivity.getUserStorage();
+        } else {
+            return UserStorage.getInstance();
+        }
+    }
+
+    /**
+     * Gets the opinions recycler view.
+     * @return the opinions recycler view
+     */
+    @SuppressWarnings("WeakerAccess")
+    public RecyclerView getOpinionsRecyclerView(){
+        return opinionsRecyclerView;
+    }
 
     /**
      * When the View is created we get the recipe and display its attributes.
@@ -93,7 +126,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         if(bundle != null){
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");
         }
-        defaultQuantity = currentRecipe.getPersonNumber();
 
         view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
 
@@ -107,9 +139,93 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
         setupSwitch(view);
         addOpinion(view);
-        containerId = container.getId();
-
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Button postButton = requireView().findViewById(R.id.buttonRate);
+        postButton.setOnClickListener(view12 -> {
+            if(isHomePage) {
+                if(!hostActivity.isOnline()){
+                    Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("RecipeToRate", currentRecipe);
+
+                    NavController navController = ((HomePage) requireActivity()).getNavController();
+                    navController.navigate(R.id.rateRecipeFragment, bundle);
+                }
+            }else {
+                Toast.makeText(getActivity(),requireActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button modifyButton = requireView().findViewById(R.id.modifyButton);
+        modifyButton.setOnClickListener(view1 -> {
+            if(getActivity() instanceof HomePage) {
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("ModifyRecipe", currentRecipe);
+
+                NavController navController = ((HomePage) getActivity()).getNavController();
+                navController.navigate(R.id.postRecipeFragment, bundle);
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof HomePage){
+            hostActivity = (HomePage) context;
+            isHomePage = true;
+        } else {
+            isHomePage = false;
+            hostActivity = null;
+        }
+    }
+
+    @Override
+    public void onSuccess(byte[] data) {
+        imagesToDisplay.add(BitmapFactory.decodeByteArray(data, 0, data.length));
+        carouselView.setPageCount(imagesToDisplay.size());
+    }
+
+    @Override
+    public void notify(String data) {
+        List<String> allInstructions = currentRecipe.getRecipeInstructions();
+
+        if(indexOfInstruction==-1){
+            indexOfInstruction=0;
+        }else if(data.equals(getResources().getString(R.string.commandPrevious))){
+            indexOfInstruction=Math.max(indexOfInstruction-1,0);
+        }else if(data.equals(getResources().getString(R.string.commandNext))){
+            indexOfInstruction=Math.min(indexOfInstruction+1,allInstructions.size());
+        }
+
+        if(indexOfInstruction==allInstructions.size()){
+            voiceSynthesizer.speak("Congratulations you reached the end");
+        }else{
+            voiceSynthesizer.speak(allInstructions.get(indexOfInstruction));
+        }
+    }
+
+    @Override
+    public void onFailure() {
+        Toast.makeText(getActivity(), requireActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        voiceRecognizer.onStop();
+        voiceSynthesizer.onStop();
     }
 
     private void displayEverything(View view){
@@ -143,9 +259,11 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
     }
 
+    @SuppressLint("SetTextI18n") //Cirrus does not handle well the fix
     private void displayQuantity(View view){
         quantityInput = view.findViewById(R.id.quantityinput);
-        quantityInput.setText("" + currentRecipe.getPersonNumber());
+        quantityInput.setText(Integer.toString(currentRecipe.getPersonNumber()));
+
         quantityInput.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -163,8 +281,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         });
     }
 
+    @SuppressLint("SetTextI18n") //Cirrus does not handle well the fix
     private void handleNewQuantity(View view){
-        int newQuantity = 0;
+        int newQuantity;
         if(quantityInput.getText().toString().equals("")){
             currentRecipe.scalePersonAndIngredientsQuantities(1);
             displayIngredients(view);
@@ -176,11 +295,12 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             displayIngredients(view);
         }else if( newQuantity > QUANTITY_LIMIT){
             currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
-            quantityInput.setText("" + QUANTITY_LIMIT);
+            quantityInput.setText(Integer.toString(QUANTITY_LIMIT));
             Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
         }else{
             currentRecipe.scalePersonAndIngredientsQuantities(1);
-            quantityInput.setText("" + 1);
+            quantityInput.setText(Integer.toString(1));
+
             Toast.makeText(getActivity(), "The quantity can't be 0" , Toast.LENGTH_SHORT).show();
         }
     }
@@ -192,13 +312,13 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             public void onSuccess(User data) {
                 authorName.setText(data.getUsername());
                 authorName.setOnClickListener(v -> {
-                    NavController navController = ((HomePage) getActivity()).getNavController();
+                    NavController navController = ((HomePage) requireActivity()).getNavController();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("User", data);
                     navController.navigate(R.id.userProfileFragment, bundle);
                 });
 
-                if(data!=null && data.equals(getUserStorage().getPolyChefUser())) {
+                if(data.equals(getUserStorage().getPolyChefUser())) {
                     view.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
                 }
             }
@@ -209,60 +329,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         });
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Button postButton = getView().findViewById(R.id.buttonRate);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isHomePage) {
-                    if(!hostActivity.isOnline()){
-                        Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("RecipeToRate", currentRecipe);
-
-                        NavController navController = ((HomePage) getActivity()).getNavController();
-                        navController.navigate(R.id.rateRecipeFragment, bundle);
-                    }
-                }else {
-                    Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        Button modifyButton = getView().findViewById(R.id.modifyButton);
-        modifyButton.setOnClickListener(view1 -> {
-            if(getActivity() instanceof HomePage) {
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("ModifyRecipe", currentRecipe);
-
-                NavController navController = ((HomePage) getActivity()).getNavController();
-                navController.navigate(R.id.postRecipeFragment, bundle);
-
-            }
-        });
-
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if(context instanceof HomePage){
-            hostActivity = (HomePage) context;
-            isHomePage = true;
-        } else {
-            isHomePage = false;
-            hostActivity = null;
-        }
-    }
-
     private void displayFavouriteButton(View view) {
-        favouriteButton = view.findViewById(R.id.favouriteButton);
         FavouritesUtils.getInstance().setFavouriteButton(getUserStorage(), view.findViewById(R.id.favouriteButton), currentRecipe);
     }
 
@@ -288,10 +355,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         Either<String, Integer> miniatureMeta = currentRecipe.getMiniaturePath();
         if(miniatureMeta.isNone()) {
-            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
+            imagesToDisplay.add(BitmapFactory.decodeResource(requireActivity().getResources(), Recipe.DEFAULT_MINIATURE_PATH));
             carouselView.setPageCount(imagesToDisplay.size());
         } else if(miniatureMeta.isRight()) {
-            imagesToDisplay.add(BitmapFactory.decodeResource(getActivity().getResources(), miniatureMeta.getRight()));
+            imagesToDisplay.add(BitmapFactory.decodeResource(requireActivity().getResources(), miniatureMeta.getRight()));
             carouselView.setPageCount(imagesToDisplay.size());
         } else {
             getImageStorage().getImage(miniatureMeta.getLeft(), this);
@@ -321,10 +388,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      * Display both the preparation time and the cooking time in the correct field in the activity.
      */
     private void displayPrepAndCookTime(View view){
-        String prepText = "Prep time : "+currentRecipe.getEstimatedPreparationTime()+" mins";
+        String prepText = "Prep time : "+currentRecipe.getEstimatedPreparationTime()+" min";
         TextView prepTime = view.findViewById(R.id.prepTime);
         prepTime.setText(prepText);
-        String cookText = "Cook time : "+currentRecipe.getEstimatedCookingTime()+" mins";
+        String cookText = "Cook time : "+currentRecipe.getEstimatedCookingTime()+" min";
         TextView cookTime = view.findViewById(R.id.cookTime);
         cookTime.setText(cookText);
     }
@@ -335,7 +402,7 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     private void displayDifficulty(View view){
         TextView difficulty = view.findViewById(R.id.difficulty);
         String diff = currentRecipe.getRecipeDifficulty().toString();
-        String finalDiffStr = "Difficulty : " + diff.substring(0, 1).toUpperCase(Locale.ENGLISH).concat(diff.substring(1, diff.length()).toLowerCase(Locale.ENGLISH).replaceAll("_", " "));
+        String finalDiffStr = "Difficulty : " + diff.substring(0, 1).toUpperCase(Locale.ENGLISH).concat(diff.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("_", " "));
         difficulty.setText(finalDiffStr);
     }
 
@@ -373,62 +440,5 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         strBuilder.deleteCharAt(strBuilder.length() - 1);
         TextView instructions = view.findViewById(R.id.instruction0);
         instructions.setText(strBuilder.toString());
-    }
-
-    @Override
-    public void onSuccess(byte[] data) {
-        imagesToDisplay.add(BitmapFactory.decodeByteArray(data, 0, data.length));
-        carouselView.setPageCount(imagesToDisplay.size());
-    }
-
-    @Override
-    public void notify(String data) {
-        List<String> allInstructions = currentRecipe.getRecipeInstructions();
-
-        if(indexOfInstruction==-1){
-            indexOfInstruction=0;
-        }else if(data.equals(getResources().getString(R.string.commandPrevious))){
-            indexOfInstruction=Math.max(indexOfInstruction-1,0);
-        }else if(data.equals(getResources().getString(R.string.commandNext))){
-            indexOfInstruction=Math.min(indexOfInstruction+1,allInstructions.size());
-        }
-
-        if(indexOfInstruction==allInstructions.size()){
-            voiceSynthesizer.speak("Congratulations you reached the end");
-        }else{
-            voiceSynthesizer.speak(allInstructions.get(indexOfInstruction));
-        }
-    }
-
-    @Override
-    public void onFailure() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.errorImageRetrieve), Toast.LENGTH_LONG).show();
-    }
-
-    public ImageStorage getImageStorage() {
-        return ImageStorage.getInstance();
-    }
-
-    public UserStorage getUserStorage() {
-        if(hostActivity != null) {
-            return hostActivity.getUserStorage();
-        } else {
-            return UserStorage.getInstance();
-        }
-    }
-
-    public RecyclerView getOpinionsRecyclerView(){
-        return opinionsRecyclerView;
-    }
-
-    public Recipe getCurrentRecipe(){
-        return currentRecipe;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        voiceRecognizer.onStop();
-        voiceSynthesizer.onStop();
     }
 }

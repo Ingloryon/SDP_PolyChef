@@ -24,7 +24,7 @@ import ch.epfl.polychef.utils.Preconditions;
  */
 public class User implements Serializable, Miniatures {
 
-    private static final String TAG = "User";
+    public static final String TAG = "User";
     private String email;
     private String username;
     private String key;
@@ -83,6 +83,7 @@ public class User implements Serializable, Miniatures {
     /**
      * Removes the null values in the list of recipes.
      */
+    @SuppressWarnings("WeakerAccess")
     public void removeNullFromLists(){
         recipes.removeAll(Collections.singleton(null));
     }
@@ -144,6 +145,7 @@ public class User implements Serializable, Miniatures {
      * Gets the id of the user profile picture.
      * @return the id of the user profile picture
      */
+    @SuppressWarnings("WeakerAccess")
     public int getProfilePictureId() {
         return profilePictureId;
     }
@@ -171,7 +173,8 @@ public class User implements Serializable, Miniatures {
         if(recipeUuid!=null){
             recipes.forEach(uuid->{
                 if(uuid.equals(recipeUuid)){
-                    return;//do not add it twice if existing
+                    //noinspection UnnecessaryReturnStatement
+                    return; //do not add it twice if existing
                 }
             });
             recipes.add(recipeUuid);
@@ -238,8 +241,9 @@ public class User implements Serializable, Miniatures {
         Context context=GlobalApplication.getAppContext();
         int profilePictureId=userToDisplay.getProfilePictureId();
         String photoName=context.getResources().getStringArray(R.array.profilePicturesNames)[profilePictureId];
-        int resourceImage = context.getResources().getIdentifier(photoName, "drawable", context.getPackageName());
-        return resourceImage;
+
+        //we return the resource image
+        return context.getResources().getIdentifier(photoName, "drawable", context.getPackageName());
     }
 
     /**

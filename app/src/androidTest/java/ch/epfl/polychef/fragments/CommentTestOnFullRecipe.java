@@ -156,8 +156,8 @@ public class CommentTestOnFullRecipe {
         userResults.put("id1", mockUser("testEmail", "test"));
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
-        assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
-        assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
+        assertEquals("testEmail", adapter.getOpinionToUserMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
+        assertEquals("test", adapter.getOpinionToUserMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
     }
 
     @Test

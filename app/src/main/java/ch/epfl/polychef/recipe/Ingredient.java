@@ -12,16 +12,22 @@ import ch.epfl.polychef.utils.Preconditions;
  */
 public final class Ingredient implements Serializable {
 
-    public Ingredient(){
-    }
+    private String name;
+    private double quantity;
+    private Unit unit;
 
+    /**
+     * An enum representing possible units for the ingredients.
+     */
     public enum Unit {
         TEASPOON, TABLESPOON, POUND, KILOGRAM, GRAM, CUP, OUNCE, NO_UNIT, NONE
     }
 
-    private String name;
-    private double quantity;
-    private Unit unit;
+    /**
+     * Required empty public constructor for Firebase.
+     */
+    public Ingredient(){
+    }
 
     /**
      * This is the ingredient of a recipe described by a name, a quantity and a unit.
@@ -54,6 +60,7 @@ public final class Ingredient implements Serializable {
      * Set the ingredient's corresponding quantity.
      * @param quantity the new quantity, must be positive
      */
+    @SuppressWarnings("WeakerAccess")
     public void setQuantity(double quantity){
         Preconditions.checkArgument(quantity >= 0, "The quantity should be positive");
         this.quantity = quantity;
@@ -89,6 +96,7 @@ public final class Ingredient implements Serializable {
         unit= newUnit;
     }
 
+    @NonNull
     @Override
     public String toString(){
         double formattedQuantity = Math.round(quantity * 1000.0) / 1000.0;

@@ -6,10 +6,17 @@ import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
 
+/**
+ * Class representing the voice synthesizer that will read the recipes' instructions.
+ */
 public class VoiceSynthesizer {
     private TextToSpeech textToSpeech;
     private Activity activity;
 
+    /**
+     * Constructs the Voice Synthesizer in a given activity.
+     * @param activity the activity where the VoiceSynthesizer takes place
+     */
     public VoiceSynthesizer(Activity activity) {
         this.activity=activity;
 
@@ -25,25 +32,22 @@ public class VoiceSynthesizer {
     }
 
     /**
-     * initialize the object TextToSpeech.
-     */
-    private void initializeTextToSpeech() {
-        textToSpeech= new TextToSpeech(activity, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(textToSpeech.getEngines().size()==0){
-                    throw new UnsupportedOperationException("There is no voice recognition engine.");
-                }else{
-                    textToSpeech.setLanguage(Locale.UK);
-                }
-            }
-        });
-    }
-
-    /**
      * Shutdown the textToSpeech object when the activity is on pause.
      */
     public void onStop(){
         textToSpeech.shutdown();
+    }
+
+    /**
+     * initialize the object TextToSpeech.
+     */
+    private void initializeTextToSpeech() {
+        textToSpeech= new TextToSpeech(activity, status -> {
+            if(textToSpeech.getEngines().size()==0){
+                throw new UnsupportedOperationException("There is no voice recognition engine.");
+            }else{
+                textToSpeech.setLanguage(Locale.UK);
+            }
+        });
     }
 }

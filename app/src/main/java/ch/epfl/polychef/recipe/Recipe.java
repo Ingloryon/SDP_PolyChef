@@ -3,7 +3,6 @@ package ch.epfl.polychef.recipe;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,13 +14,14 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.Preconditions;
 
+/**
+ * Represents a complete Recipe.
+ */
+@SuppressWarnings("WeakerAccess")
 public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>, Miniatures {
-
-    public Recipe(){
-        recipeUuid=null;
-        rating=null;
-    }
-
+    /**
+     * Enum representing the possible difficulties of a Recipe.
+     */
     public enum Difficulty {
         VERY_EASY, EASY, INTERMEDIATE, HARD, VERY_HARD
     }
@@ -47,7 +47,15 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     public static final int DEFAULT_MINIATURE_PATH = R.drawable.default_miniature;
 
     /**
-     * Creates a new Recipe.
+     * Empty constructor for Firebase.
+     */
+    public Recipe(){
+        recipeUuid=null;
+        rating=null;
+    }
+
+    /**
+     * Creates a new Recipe with the given attributes.
      * @param name the title of the recipe, must be non empty
      * @param recipeInstructions the instructions to follow the recipe, must be non empty
      * @param ingredients a list of the ingredients the recipe needs and their corresponding quantities
@@ -134,8 +142,8 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     public List<Ingredient> getIngredients(){
         List<Ingredient> ingredientsDeepCopy = new ArrayList<>();
         for(int i =0 ; i < ingredients.size() ; ++i){
-            Ingredient ingre = ingredients.get(i);
-            ingredientsDeepCopy.add(new Ingredient(ingre.getName(), ingre.getQuantity(), ingre.getUnit()));
+            Ingredient ingredient = ingredients.get(i);
+            ingredientsDeepCopy.add(new Ingredient(ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit()));
         }
 
         return ingredientsDeepCopy;
@@ -283,20 +291,21 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
-        str.append("\nRecipe name: " + name + "\n");
-        str.append("\nRecipe author: " + author + "\n");
+        str.append("\nRecipe name: ").append(name).append("\n");
+        str.append("\nRecipe author: ").append(author).append("\n");
         str.append("\nRecipe instructions:");
         for(int i = 0 ; i < recipeInstructions.size() ; ++i){
-            str.append("\n" + (i+1) + "- " + recipeInstructions.get(i));
+            str.append("\n").append(i+1).append("- ").append(recipeInstructions.get(i));
         }
-        str.append("\n\nFor " + personNumber + " persons, the needed ingredients are:");
+        str.append("\n\nFor ").append(personNumber).append(" persons, the needed ingredients are:");
         for (Ingredient ingredient : ingredients){
             str.append("\n");
             str.append(ingredient.toString());
         }
-        str.append("\n\nThe recipe is " + recipeDifficulty.toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " ") + ".\n");
-        str.append("The recipes takes around " + estimatedPreparationTime + "min of preparation and " + estimatedCookingTime + "min of cooking.\n");
-        str.append("The recipe is rated " + rating.toString());
+        str.append("\n\nThe recipe is ").append(recipeDifficulty.toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " "));
+        str.append(".\nThe recipes takes around ").append(estimatedPreparationTime).append("min of preparation and ");
+        str.append(estimatedCookingTime).append("min of cooking.\n");
+        str.append("The recipe is rated ").append(rating.toString());
 
         return str.toString();
     }

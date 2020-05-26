@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,16 +30,17 @@ import ch.epfl.polychef.users.ConnectedActivity;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The main activity (HomePage) the user is on once connected.
+ */
 public class HomePage extends ConnectedActivity {
-
     private DrawerLayout drawer;
-
     private NavController navController;
     private NavigationView navView;
     private MenuItem currentItem;
 
     public static final String LOG_OUT = "Log out";
-    private static final String TAG = "HomePage-TAG";
+    public static final String TAG = "HomePage-TAG";
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -61,6 +60,7 @@ public class HomePage extends ConnectedActivity {
         NavHostFragment hostFragment = (NavHostFragment)
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
+        //noinspection ConstantConditions (the null case is handled, there is always a navController)
         navController = NavHostFragment.findNavController(hostFragment);
         navController.setGraph(R.navigation.nav_graph);
 
@@ -76,6 +76,135 @@ public class HomePage extends ConnectedActivity {
                 navController.navigate(R.id.fullRecipeFragment, bundle);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Button logButton = findViewById(R.id.logButton);
+        logButton.setText(LOG_OUT);
+        logButton.setOnClickListener( view -> {
+            getUserStorage().updateUserInfo();
+            signOut();
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        setCurrentItemChecked(false);
+
+
+        //noinspection ConstantConditions (the null case is handled)
+        int destination = navController.getCurrentDestination().getId();
+
+        if(destination == R.id.userProfileFragment
+                || destination == R.id.fullRecipeFragment
+                || destination == R.id.rateRecipeFragment) {
+            currentItem = null;
+        } else {
+            changeItem(navView.getMenu().findItem(getMenuItem(destination)));
+        }
+
+        drawer.closeDrawer(GravityCompat.START, true);
+    }
+
+    /**
+     * Sets the profile picture of the connected user.
+     */
+    public void setupProfilePicture(){
+        ImageView profileImage = navView.getHeaderView(0).findViewById(R.id.profilePicture);
+
+        profileImage.setImageResource(User.getResourceImageFromUser(getPolychefUser()));
+    }
+
+    /**
+     * Change the current item to the given menu item.
+     * @param newItem the new menu item
+     */
+    public void changeItem(MenuItem newItem){
+        setCurrentItemChecked(false);
+        currentItem = newItem;
+        setCurrentItemChecked(true);
+    }
+
+    /**
+     * Check or uncheck the current menu item (depending on given boolean).
+     * @param bool whether to check or uncheck the current menu item
+     */
+    public void setCurrentItemChecked(Boolean bool){
+        if(currentItem != null) {
+            currentItem.setChecked(bool);
+        }
+    }
+
+    /**
+     * Gets the instance of the user storage.
+     * @return the instance of the user storage
+     */
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
+    }
+
+    /**
+     * Gets the instance of the recipe storage.
+     * @return the instance of the recipe storage
+     */
+    public RecipeStorage getRecipeStorage(){
+        return RecipeStorage.getInstance();
+    }
+
+    /**
+     * Gets the instance of firebase.
+     * @return the instance of firebase
+     */
+    @SuppressWarnings("unused")
+    public FirebaseDatabase getFireDatabase(){
+        return FirebaseDatabase.getInstance();
+    }
+
+    /**
+     * Gets the instance of the image storage.
+     * @return the instance of the image storage
+     */
+    public ImageStorage getImageStorage(){
+        return ImageStorage.getInstance();
+    }
+
+    /**
+     * Gets the current connected user.
+     * @return the current connected user
+     */
+    public User getPolychefUser(){
+        return getUserStorage().getPolyChefUser();
+    }
+
+    /**
+     * Gets the navigation controller.
+     * @return the navigation controller
+     */
+    public NavController getNavController() {
+        return navController;
+    }
+
+    /**
+     * Determines whether the connection is active.
+     * @return the connection state
+     */
+    public Boolean isOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        //noinspection ConstantConditions (the null case is handled)
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    /**
+     * Gets the instance of the notification sender.
+     * @return the instance of the notification sender
+     */
+    public NotificationSender getNotificationSender() {
+        return NotificationSender.getInstance();
     }
 
     private void setupDrawer(){
@@ -104,58 +233,6 @@ public class HomePage extends ConnectedActivity {
         });
     }
 
-    public void setupProfilePicture(){
-        ImageView profileImage = navView.getHeaderView(0).findViewById(R.id.profilePicture);
-
-        profileImage.setImageResource(User.getResourceImageFromUser(getPolychefUser()));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Button logButton = findViewById(R.id.logButton);
-        logButton.setText(LOG_OUT);
-        logButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                getUserStorage().updateUserInfo();
-                signOut();
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        setCurrentItemChecked(false);
-
-        int destination = navController.getCurrentDestination().getId();
-
-        if(destination == R.id.userProfileFragment
-                || destination == R.id.fullRecipeFragment
-                || destination == R.id.rateRecipeFragment) {
-
-            currentItem = null;
-        } else {
-            changeItem(navView.getMenu().findItem(getMenuItem(destination)));
-        }
-
-        drawer.closeDrawer(GravityCompat.START, true);
-    }
-
-    public void changeItem(MenuItem newItem){
-        setCurrentItemChecked(false);
-        currentItem = newItem;
-        setCurrentItemChecked(true);
-    }
-
-    public void setCurrentItemChecked(Boolean bool){
-        if(currentItem != null) {
-            currentItem.setChecked(bool);
-        }
-    }
-
     private int getFragmentId(int itemId) {
         switch(itemId){
             case R.id.nav_home:
@@ -177,81 +254,35 @@ public class HomePage extends ConnectedActivity {
         switch(fragmentId){
             case R.id.onlineMiniaturesFragment:
                 return R.id.nav_home;
-
             case R.id.favouritesFragment:
                 return R.id.nav_fav;
-
             case R.id.subscribersFragment:
                 return R.id.nav_subscribers;
-
             case R.id.subscriptionsFragment:
                 return R.id.nav_subscriptions;
-
             case R.id.postRecipeFragment:
                 return R.id.nav_recipe;
-
             default:
                 throw new IllegalArgumentException();
         }
     }
 
     private void setupNavigation(){
+        navView.setNavigationItemSelectedListener(selectedItem -> {
+            changeItem(selectedItem);
+            invalidateOptionsMenu();
 
-        navView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem selectedItem) {
+            int itemId = selectedItem.getItemId();
+            navController.navigate(getFragmentId(itemId));
 
-                        changeItem(selectedItem);
+            drawer.closeDrawer(GravityCompat.START, true);
 
-                        invalidateOptionsMenu();
-
-                        int itemId = selectedItem.getItemId();
-                        navController.navigate(getFragmentId(itemId));
-
-                        drawer.closeDrawer(GravityCompat.START, true);
-
-                        return false;
-                    }
-                }
-        );
+            return false;
+        } );
 
         //Home should be checked initially
         currentItem = navView.getMenu().findItem(R.id.nav_home);
         currentItem.setChecked(true);
-    }
-
-    public UserStorage getUserStorage(){
-        return UserStorage.getInstance();
-    }
-
-    public RecipeStorage getRecipeStorage(){
-        return RecipeStorage.getInstance();
-    }
-
-    public FirebaseDatabase getFireDatabase(){
-        return FirebaseDatabase.getInstance();
-    }
-
-    public ImageStorage getImageStorage(){
-        return ImageStorage.getInstance();
-    }
-
-    public User getPolychefUser(){
-        return getUserStorage().getPolyChefUser();
-    }
-
-    public NavController getNavController() {
-        return navController;
-    }
-
-    public Boolean isOnline() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
-
-    public NotificationSender getNotificationSender() {
-        return NotificationSender.getInstance();
     }
 
 }

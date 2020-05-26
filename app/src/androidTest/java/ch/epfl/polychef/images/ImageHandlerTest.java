@@ -37,16 +37,14 @@ public class ImageHandlerTest {
     @Rule
     public IntentsTestRule<EntryPage> intentsTestRule = new IntentsTestRule<>(EntryPage.class);
 
-    ImageView imageView;
-
     @Mock
     UploadTask task;
 
     @Mock
     ImageStorage mockImageStorage;
 
-    ImageHandler realImageHandler;
-    ImageHandler fakeImageHandler;
+    private ImageHandler realImageHandler;
+    private ImageHandler fakeImageHandler;
 
     @Before
     public void setImagesAndMock() {
@@ -55,11 +53,6 @@ public class ImageHandlerTest {
         when(mockImageStorage.upload(any(byte[].class), any(String.class), isNull(), isNull())).thenReturn(task);
         realImageHandler = new ImageHandler(intentsTestRule.getActivity());
         fakeImageHandler = new FakeImageHandler(intentsTestRule.getActivity());
-    }
-
-    @Test
-    public void initWithNullFails() {
-        assertThrows(IllegalArgumentException.class, () -> new ImageHandler(null));
     }
 
     @Test
@@ -76,7 +69,7 @@ public class ImageHandlerTest {
 
     @Test
     public void canUploadFromImageView() {
-        imageView = new ImageView(intentsTestRule.getActivity());
+        ImageView imageView = new ImageView(intentsTestRule.getActivity());
         imageView.setImageResource(R.drawable.meatballs);
         fakeImageHandler.prepareImageAndUpload(imageView, "image_name", null, null);
     }

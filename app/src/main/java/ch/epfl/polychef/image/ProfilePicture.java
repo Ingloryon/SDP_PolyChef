@@ -17,7 +17,7 @@ public class ProfilePicture {
     /**
      * Constructor of a new profile picture.
      * @param pictureLabel the label of the picture
-     * @param picturePath the name of the drawable image, must be non-empty
+     * @param picturePath the name of the drawable image (without extension), must be non-empty
      */
     public ProfilePicture(@NonNull String pictureLabel, @NonNull String picturePath) {
         Preconditions.checkArgument(!picturePath.isEmpty(), "The image name must be non empty");
@@ -57,6 +57,7 @@ public class ProfilePicture {
         this.picturePath = picturePath;
     }
 
+    @NonNull
     @Override
     public String toString()  {
         return "The picture has name " + this.picturePath + " in drawable. Its label is " + this.pictureLabel;

@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.epfl.polychef.R;
@@ -44,8 +44,11 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The page fragment that represents the posting recipe UI.
+ */
 public class PostRecipeFragment extends Fragment {
-    private static final String TAG = "PostRecipeFragment";
+    public static final String TAG = "PostRecipeFragment";
     private static final int MINIATURE_FACTOR = 1;
     private static final int MEAL_PICTURES_FACTOR = 10;
     private static final int TITLE_MAX_CHAR = 80;
@@ -67,11 +70,6 @@ public class PostRecipeFragment extends Fragment {
     private LinearLayout instructionLayout;
     private LinearLayout ingredientLayout;
     private EditText instructionText;
-    private Button addIngredientButton;
-    private Button addInstructionButton;
-    private Button postButton;
-    private Button addMiniature;
-    private Button addPictures;
 
     private Uri currentMiniature = null;
     private String miniatureName = UUID.randomUUID().toString();
@@ -93,9 +91,34 @@ public class PostRecipeFragment extends Fragment {
     private HomePage hostActivity;
 
     /**
-     * Required empty public constructor.
+     * Required empty public constructor for Firebase.
      */
     public PostRecipeFragment() {
+    }
+
+    /**
+     * Gets the email address of the connected user.
+     * @return the email address of the connected user.
+     */
+    @SuppressWarnings("WeakerAccess")
+    public String getUserEmail(){
+        return hostActivity.getUserStorage().getPolyChefUser().getEmail();
+    }
+
+    /**
+     * Gets the instance of the image storage.
+     * @return the instance of the image storage
+     */
+    public RecipeStorage getRecipeStorage() {
+        return RecipeStorage.getInstance();
+    }
+
+    /**
+     * Gets the instance of the user storage.
+     * @return the instance of the user storage
+     */
+    public UserStorage getUserStorage() {
+        return UserStorage.getInstance();
     }
 
     @Override
@@ -122,56 +145,31 @@ public class PostRecipeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        postButton = getView().findViewById(R.id.postRecipe);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setPostButton(view);
-            }
-        });
+        Button postButton = requireView().findViewById(R.id.postRecipe);
+        postButton.setOnClickListener(view1 -> setPostButton());
 
-        instructionLayout = getView().findViewById(R.id.listOfInstructions);
-        ingredientLayout = getView().findViewById(R.id.listOfIngredients);
-        instructionText = getView().findViewById(R.id.instruction0);
+        instructionLayout = requireView().findViewById(R.id.listOfInstructions);
+        ingredientLayout = requireView().findViewById(R.id.listOfIngredients);
+        instructionText = requireView().findViewById(R.id.instruction0);
         instructionsId.add(instructionText.getId());
 
 
-        addInstructionButton = getView().findViewById(R.id.buttonAddInstr);
-        addInstructionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setAddInstructionButton(view);
-            }
-        });
-        addIngredientButton = getView().findViewById(R.id.buttonAddIngre);
-        addIngredientButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setAddIngredientButton(view);
-            }
-        });
+        Button addInstructionButton = requireView().findViewById(R.id.buttonAddInstr);
+        addInstructionButton.setOnClickListener(view12 -> setAddInstructionButton());
+        Button addIngredientButton = requireView().findViewById(R.id.buttonAddIngre);
+        addIngredientButton.setOnClickListener(view13 -> setAddIngredientButton());
 
         // Image handling
-        imageHandler = new ImageHandler(getActivity());
-        addMiniature = getView().findViewById(R.id.miniature);
-        imageMiniaturePreview = getView().findViewById(R.id.miniaturePreview);
-        addPictures = getView().findViewById(R.id.pictures);
-        mealPicturesText = getView().findViewById(R.id.mealPicturesText);
-        addMiniature.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPictureDialog(MINIATURE_FACTOR);
-            }
-        });
-        addPictures.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPictureDialog(MEAL_PICTURES_FACTOR);
-            }
-        });
+        imageHandler = new ImageHandler(requireActivity());
+        Button addMiniature = requireView().findViewById(R.id.miniature);
+        imageMiniaturePreview = requireView().findViewById(R.id.miniaturePreview);
+        Button addPictures = requireView().findViewById(R.id.pictures);
+        mealPicturesText = requireView().findViewById(R.id.mealPicturesText);
+        addMiniature.setOnClickListener(view12 -> addPictureDialog(MINIATURE_FACTOR));
+        addPictures.setOnClickListener(view13 -> addPictureDialog(MEAL_PICTURES_FACTOR));
 
-        difficultyInput = getView().findViewById(R.id.difficultyInput);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+        difficultyInput = requireView().findViewById(R.id.difficultyInput);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireActivity(),
                 R.array.difficulty_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficultyInput.setAdapter(adapter);
@@ -179,7 +177,7 @@ public class PostRecipeFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle!=null) {
             Recipe originalRecipe = (Recipe) bundle.getSerializable("ModifyRecipe");
-            initializeFromOriginalRecipe(originalRecipe);
+            initializeFromOriginalRecipe(Objects.requireNonNull(originalRecipe));
         }
 
         if(!hostActivity.isOnline()){
@@ -201,9 +199,9 @@ public class PostRecipeFragment extends Fragment {
             currentMiniature = imageHandler.handleActivityResult(requestCode, resultCode, data);
             if(currentMiniature != null) {
                 try {
-                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), currentMiniature);
+                    Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), currentMiniature);
                     if(oldBitmap != null) {
-                        double newWidth = getView().findViewById(R.id.miniatureLayout).getWidth();
+                        double newWidth = requireView().findViewById(R.id.miniatureLayout).getWidth();
                         double newHeight = oldBitmap.getHeight() * (newWidth / oldBitmap.getWidth());
                         Bitmap newBitmap = Bitmap.createScaledBitmap(oldBitmap, (int)newWidth, (int)newHeight, true);
                         imageMiniaturePreview.setImageBitmap(newBitmap);
@@ -219,9 +217,8 @@ public class PostRecipeFragment extends Fragment {
      * Called when user presses "post recipe", will parse and check the entered inputs.
      * If the inputs are correct it will post the corresponding Recipe on Firebase.
      * Otherwise it will update the View to display to wrong inputs.
-     * @param view the current view
      */
-    public synchronized void setPostButton(View view){
+    private synchronized void setPostButton(){
         if (!hostActivity.isOnline()) {
             Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
         } else {
@@ -274,7 +271,7 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void getAndCheckEnteredInputs() {
-        String inputName = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
+        String inputName = ((EditText)requireView().findViewById(R.id.nameInput)).getText().toString();
         if(inputName.length() > TITLE_MAX_CHAR || inputName.length() < TITLE_MIN_CHAR) {
             errorLogs.add("Title: should be a string between " + TITLE_MIN_CHAR + " and " + TITLE_MAX_CHAR + " characters.");
         } else {
@@ -286,7 +283,7 @@ public class PostRecipeFragment extends Fragment {
 
         getAndCheckIngredients();
 
-        EditText personNb = getView().findViewById(R.id.personNbInput);
+        EditText personNb = requireView().findViewById(R.id.personNbInput);
         String persNb = personNb.getText().toString();
 
         // checks are applied in order so parseInt is always valid
@@ -298,11 +295,11 @@ public class PostRecipeFragment extends Fragment {
             errorLogs.add("Number of Person: should be a number between 0 and " + MAX_PERSON_NUMBER + ".");
         }
 
-        EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
+        EditText prepTimeInput = requireView().findViewById(R.id.prepTimeInput);
         String prep = prepTimeInput.getText().toString();
         estimatedPreparationTime = getAndCheckTime(prep,"Preparation Time");
 
-        EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
+        EditText cookTimeInput = requireView().findViewById(R.id.cookTimeInput);
         String cook = cookTimeInput.getText().toString();
         estimatedCookingTime = getAndCheckTime(cook,"Cooking Time");
 
@@ -410,7 +407,7 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private void printWrongInputsToUser(){
-        TextView errorLog =  getView().findViewById(R.id.errorLogs);
+        TextView errorLog =  requireView().findViewById(R.id.errorLogs);
         errorLog.setText(createErrorMessage());
         errorLog.setVisibility(View.VISIBLE);
         initializeWrongInputs();
@@ -433,13 +430,13 @@ public class PostRecipeFragment extends Fragment {
         builder.show();
     }
 
-    private void setAddInstructionButton(View view) {
+    private void setAddInstructionButton() {
         if(numberOfInstruction >= MAX_INSTRUCTIONS){
             Toast.makeText(getActivity(), "Max instructions nb reached" , Toast.LENGTH_SHORT).show();
         } else {
-            final ViewGroup.LayoutParams lparams = instructionText.getLayoutParams();
+            final ViewGroup.LayoutParams layoutParams = instructionText.getLayoutParams();
             final EditText textView = new EditText(getActivity());
-            textView.setLayoutParams(lparams);
+            textView.setLayoutParams(layoutParams);
             numberOfInstruction++;
             textView.setHint("Instruction " + numberOfInstruction);
             int id = View.generateViewId();
@@ -449,13 +446,13 @@ public class PostRecipeFragment extends Fragment {
         }
     }
 
-    private void setAddIngredientButton(View view) {
+    private void setAddIngredientButton() {
         if(numberOfIngredients >= MAX_INGREDIENTS) {
             Toast.makeText(getActivity(), "Max ingredients nb reached" , Toast.LENGTH_SHORT).show();
         } else {
             numberOfIngredients++;
 
-            ConstraintLayout newIngredient = (ConstraintLayout) LayoutInflater.from(getContext()).inflate(R.layout.ingredient_field, null);
+            @SuppressLint("InflateParams") ConstraintLayout newIngredient = (ConstraintLayout) LayoutInflater.from(getContext()).inflate(R.layout.ingredient_field, null);
             ((TextView) newIngredient.getChildAt(0)).setHint("Ingredient " + numberOfIngredients);
 
             ingredientLayout.addView(newIngredient);
@@ -465,7 +462,7 @@ public class PostRecipeFragment extends Fragment {
     private void getAndCheckInstructions(){
         recipeInstructions.clear();
         for (int i = 0; i < numberOfInstruction; i++) {
-            String instruction1 = ((EditText) getView().findViewById(instructionsId.get(i))).getText().toString();
+            String instruction1 = ((EditText) requireView().findViewById(instructionsId.get(i))).getText().toString();
             if (instruction1.length() != 0) {
                 recipeInstructions.add(instruction1);
             }
@@ -477,9 +474,9 @@ public class PostRecipeFragment extends Fragment {
         wrongInputs.put("Instructions", true);
     }
 
-
+    @SuppressWarnings("ConstantConditions")
     private void getAndCheckIngredients() {
-        Double quantity;
+        double quantity;
         ingredients.clear();
         for (int i = 0; i < numberOfIngredients; i++) {
             ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(i);
@@ -506,23 +503,23 @@ public class PostRecipeFragment extends Fragment {
         wrongInputs.put("Ingredients", true);
     }
 
-
+    @SuppressLint("SetTextI18n")
     private void initializeFromOriginalRecipe(Recipe originalRecipe) {
         postingAModifiedRecipe=true;
         this.originalRecipe=originalRecipe;
 
         hideImageComponents();
 
-        EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
+        EditText prepTimeInput = requireView().findViewById(R.id.prepTimeInput);
         prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
 
-        EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
+        EditText cookTimeInput = requireView().findViewById(R.id.cookTimeInput);
         cookTimeInput.setText(Integer.toString(originalRecipe.getEstimatedCookingTime()));
 
-        EditText personNb = getView().findViewById(R.id.personNbInput);
+        EditText personNb = requireView().findViewById(R.id.personNbInput);
         personNb.setText(Integer.toString(originalRecipe.getPersonNumber()));
 
-        EditText title=getView().findViewById(R.id.nameInput);
+        EditText title=requireView().findViewById(R.id.nameInput);
         title.setText(originalRecipe.getName());
 
         difficultyInput.setSelection(originalRecipe.getRecipeDifficulty().ordinal());
@@ -531,41 +528,30 @@ public class PostRecipeFragment extends Fragment {
         instructionText.setText(instructions.get(0));
 
         for (int i=1;i<instructions.size();++i){
-            setAddInstructionButton(getView());
-            ((TextView)getView().findViewById(instructionsId.get(i))).setText(instructions.get(i));
+            setAddInstructionButton();
+            ((TextView)requireView().findViewById(instructionsId.get(i))).setText(instructions.get(i));
         }
 
         List<Ingredient> ingredients=originalRecipe.getIngredients();
 
         insertIngredientAtIndex(ingredients.get(0),0);
         for (int i=1;i<ingredients.size();++i){
-            setAddIngredientButton(getView());
+            setAddIngredientButton();
             insertIngredientAtIndex(ingredients.get(i),i);
         }
 
     }
 
     private void hideImageComponents() {
-        getView().findViewById(R.id.postRecipePictures).setVisibility(View.GONE);
+        requireView().findViewById(R.id.postRecipePictures).setVisibility(View.GONE);
     }
 
+    @SuppressLint("SetTextI18n")
     private void insertIngredientAtIndex(Ingredient ingredient, int index) {
         ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(index);
 
         ((TextView) currentIngredient.getChildAt(0)).setText(ingredient.getName());
         ((TextView) currentIngredient.getChildAt(1)).setText(Double.toString(ingredient.getQuantity()));
         ((Spinner) currentIngredient.getChildAt(2)).setSelection(ingredient.getUnit().ordinal());
-    }
-
-    public String getUserEmail(){
-        return hostActivity.getUserStorage().getPolyChefUser().getEmail();
-    }
-
-    protected RecipeStorage getRecipeStorage() {
-        return RecipeStorage.getInstance();
-    }
-
-    protected UserStorage getUserStorage() {
-        return UserStorage.getInstance();
     }
 }

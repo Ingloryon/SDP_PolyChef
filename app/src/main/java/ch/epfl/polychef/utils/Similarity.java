@@ -2,7 +2,23 @@ package ch.epfl.polychef.utils;
 
 import java.util.Locale;
 
+/**
+ * A utility class computing the similarity between Strings.
+ */
 public class Similarity {
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Similarity(){
+    }
+
+    /**
+     * Calculates the similarity between the two given strings.
+     * @param s1 some string
+     * @param s2 another string to compare to
+     * @return the similarity between the two given strings
+     */
     public static double similarity(String s1, String s2) {
         String longer = s1;
         String shorter = s2;
@@ -17,8 +33,7 @@ public class Similarity {
         return (longerLength - editDistance(longer, shorter)) / (double) longerLength;
     }
 
-
-    public static int editDistance(String s1, String s2) {
+    private static int editDistance(String s1, String s2) {
         s1 = s1.toLowerCase(Locale.ENGLISH);
         s2 = s2.toLowerCase(Locale.ENGLISH);
 

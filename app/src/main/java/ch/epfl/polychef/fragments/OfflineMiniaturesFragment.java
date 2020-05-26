@@ -18,9 +18,14 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
+/**
+ * Class that represents the fragment displayed for the offline Miniatures.
+ */
 public final class OfflineMiniaturesFragment extends Fragment {
-    private RecyclerView offlineRecyclerView;
 
+    /**
+     * Required empty public constructor for Firebase.
+     */
     public OfflineMiniaturesFragment() {}
 
     @Override
@@ -29,7 +34,7 @@ public final class OfflineMiniaturesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_miniatures_offline, container, false);
 
         // Instantiate the recyclerView with the adapter and the layout manager
-        offlineRecyclerView = view.findViewById(R.id.miniaturesOfflineList);
+        RecyclerView offlineRecyclerView = view.findViewById(R.id.miniaturesOfflineList);
         offlineRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         List<Recipe> recipeList = new ArrayList<>(FavouritesUtils.getInstance().getOfflineFavourites());
         recipeList.addAll(OfflineRecipes.getInstance().getOfflineRecipes());
