@@ -550,7 +550,7 @@ public class PostRecipeFragment extends Fragment {
         ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(index);
 
         ((TextView) currentIngredient.getChildAt(0)).setText(ingredient.getName());
-        ((TextView) currentIngredient.getChildAt(1)).setText(String.format(Locale.ENGLISH, "%f", ingredient.getQuantity()));
+        ((TextView) currentIngredient.getChildAt(1)).setText(String.format(Locale.ENGLISH, "%.1f", ingredient.getQuantity()));
         ((Spinner) currentIngredient.getChildAt(2)).setSelection(ingredient.getUnit().ordinal());
     }
 }
