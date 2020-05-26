@@ -91,26 +91,9 @@ public class RecipeStorage implements Serializable  {
      * @param recipe the {@code Recipe to add}
      */
     public void addRecipe(@NonNull Recipe recipe) {
-        
-        CallHandler<Recipe> callHandler =new CallHandler<Recipe>(){
-            @Override
-            public void onSuccess(Recipe data) {//if the recipe exist, then override it
-                if(data!=null) {
-                    getFirebaseDatabase()
-                            .getReference(RecipeStorage.DB_NAME + "/" + data.getKey())
-                            .setValue(recipe);
-                }
-            }
-
-            @Override
-            public void onFailure() {//if the recipe does not exist, add it
-                DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
-                recipe.setKey(ref.getKey());
-                ref.setValue(recipe);
-            }
-        };
-
-        readRecipeFromUuid(recipe.getRecipeUuid(),callHandler);
+        DatabaseReference ref = getFirebaseDatabase().getReference(DB_NAME).push();
+        recipe.setKey(ref.getKey());
+        ref.setValue(recipe);
     }
 
     /**
