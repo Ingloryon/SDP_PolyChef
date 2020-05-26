@@ -160,50 +160,10 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
-<<<<<<< HEAD
-=======
-    /** Called when the user taps the log button. */
-    public void login(View view) {
-        Intent intent = new Intent(this, LoginPage.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onFailure() {
-        Log.e(TAG, "Unable to initialise the PolyChef User");
-        stopLoading();
-    }
-
-    @Override
-    public synchronized void onSuccess(User data) {
-
-        //Small delay to make it feel intentional
-        try{
-            wait(500);
-        } catch(InterruptedException e){
-            e.printStackTrace();
-        }
-
-        stopLoading();
-
-        startNextActivity();
-    }
-
+    @SuppressWarnings("ConstantConditions") //the null case is handled
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    public void startNextActivity(){
-        startActivity(new Intent(this, HomePage.class));
-    }
-
-    public FirebaseAuth getFireBaseAuth(){
-        return FirebaseAuth.getInstance();
-    }
-
-    public UserStorage getUserStorage(){
-        return UserStorage.getInstance();
-    }
->>>>>>> master
 }
