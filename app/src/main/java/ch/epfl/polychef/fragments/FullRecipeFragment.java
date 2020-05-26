@@ -95,6 +95,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
         defaultQuantity = currentRecipe.getPersonNumber();
 
+        view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+
         displayEverything(view);
 
         voiceRecognizer=new VoiceRecognizer(this);
@@ -195,6 +197,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                     bundle.putSerializable("User", data);
                     navController.navigate(R.id.userProfileFragment, bundle);
                 });
+
+                if(data!=null && data.equals(getUserStorage().getPolyChefUser())) {
+                    view.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -224,6 +230,19 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                 }else {
                     Toast.makeText(getActivity(),getActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        Button modifyButton = getView().findViewById(R.id.modifyButton);
+        modifyButton.setOnClickListener(view1 -> {
+            if(getActivity() instanceof HomePage) {
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("ModifyRecipe", currentRecipe);
+
+                NavController navController = ((HomePage) getActivity()).getNavController();
+                navController.navigate(R.id.postRecipeFragment, bundle);
+
             }
         });
 

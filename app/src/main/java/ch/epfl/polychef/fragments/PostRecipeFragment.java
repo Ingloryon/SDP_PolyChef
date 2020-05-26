@@ -1,5 +1,6 @@
 package ch.epfl.polychef.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -86,6 +87,8 @@ public class PostRecipeFragment extends Fragment {
 
     private Spinner difficultyInput;
 
+    private boolean postingAModifiedRecipe=false;
+    private Recipe originalRecipe=null;
 
     private HomePage hostActivity;
 
@@ -126,8 +129,6 @@ public class PostRecipeFragment extends Fragment {
                 setPostButton(view);
             }
         });
-
-
 
         instructionLayout = getView().findViewById(R.id.listOfInstructions);
         ingredientLayout = getView().findViewById(R.id.listOfIngredients);
@@ -175,6 +176,12 @@ public class PostRecipeFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficultyInput.setAdapter(adapter);
 
+        Bundle bundle = this.getArguments();
+        if(bundle!=null) {
+            Recipe originalRecipe = (Recipe) bundle.getSerializable("ModifyRecipe");
+            initializeFromOriginalRecipe(originalRecipe);
+        }
+
         if(!hostActivity.isOnline()){
             Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
         }
@@ -204,7 +211,6 @@ public class PostRecipeFragment extends Fragment {
                 } catch (IOException e) {
                     Toast.makeText(getActivity(), getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
                 }
-
             }
         }
     }
@@ -215,10 +221,10 @@ public class PostRecipeFragment extends Fragment {
      * Otherwise it will update the View to display to wrong inputs.
      * @param view the current view
      */
-    public synchronized void setPostButton(View view) {
-        if(!hostActivity.isOnline()){
+    public synchronized void setPostButton(View view){
+        if (!hostActivity.isOnline()) {
             Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             getAndCheckEnteredInputs();
             if (!buildRecipeAndPostToFirebase()) {
                 printWrongInputsToUser();
@@ -228,7 +234,7 @@ public class PostRecipeFragment extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (postedRecipe.getKey().equals("")) {
+                if (!postingAModifiedRecipe) {
                     // Send notification to all users subscribed to the current user
                     User currentUser = hostActivity.getUserStorage().getPolyChefUser();
                     hostActivity.getNotificationSender().sendNewRecipe(currentUser.getKey(), currentUser.getUsername(), postedRecipe);
@@ -254,13 +260,14 @@ public class PostRecipeFragment extends Fragment {
             for(int i = 0; i < currentMealPictures.size(); ++i) {
                 imageHandler.uploadFromUri(currentMealPictures.get(i), postedRecipe.getPicturesPath().get(i), getUserEmail(), postedRecipe.getRecipeUuid());
             }
-            if(postedRecipe.getKey().equals("")){
-                hostActivity.getRecipeStorage().addRecipe(postedRecipe);
-                hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid());
-                hostActivity.getUserStorage().updateUserInfo();
-            } else {
+            if(postingAModifiedRecipe){
+                postedRecipe.setKey(originalRecipe.getKey());
                 hostActivity.getRecipeStorage().updateRecipe(postedRecipe);
+            }else{
+                hostActivity.getRecipeStorage().addRecipe(postedRecipe);
             }
+            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
+            hostActivity.getUserStorage().updateUserInfo();
 
             return true;
         }
@@ -314,7 +321,6 @@ public class PostRecipeFragment extends Fragment {
     }
 
     private boolean checkForIllegalInputs(RecipeBuilder rb) {
-
         try {
             rb.setName(name)
                     .setEstimatedCookingTime(estimatedCookingTime)
@@ -327,12 +333,24 @@ public class PostRecipeFragment extends Fragment {
             for (int i = 0; i < ingredients.size(); i++) {
                 rb.addIngredient(ingredients.get(i));
             }
-            if(currentMiniature != null) {
-                rb.setMiniatureFromPath(miniatureName);
-            }
-            String uuidPath = miniatureName + "_";
-            for(int i = 1; i <= currentMealPictures.size(); ++i) {
-                rb.addPicturePath(uuidPath + i);
+            if(postingAModifiedRecipe){
+                rb.setUuid(originalRecipe.getRecipeUuid());
+                rb.setRating(originalRecipe.getRating());
+                if(originalRecipe.getMiniaturePath().isLeft()){
+                    rb.setMiniatureFromPath(originalRecipe.getMiniaturePath().getLeft());
+                }
+
+                for(String path: originalRecipe.getPicturesPath()){
+                    rb.addPicturePath(path);
+                }
+            }else{
+                if(currentMiniature != null) {
+                    rb.setMiniatureFromPath(miniatureName);
+                }
+                String uuidPath = miniatureName + "_";
+                for(int i = 1; i <= currentMealPictures.size(); ++i) {
+                    rb.addPicturePath(uuidPath + i);
+                }
             }
             rb.setAuthor(getUserEmail()).build();
 
@@ -486,6 +504,57 @@ public class PostRecipeFragment extends Fragment {
             return;
         }
         wrongInputs.put("Ingredients", true);
+    }
+
+
+    private void initializeFromOriginalRecipe(Recipe originalRecipe) {
+        postingAModifiedRecipe=true;
+        this.originalRecipe=originalRecipe;
+
+        hideImageComponents();
+
+        EditText prepTimeInput = getView().findViewById(R.id.prepTimeInput);
+        prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
+
+        EditText cookTimeInput = getView().findViewById(R.id.cookTimeInput);
+        cookTimeInput.setText(Integer.toString(originalRecipe.getEstimatedCookingTime()));
+
+        EditText personNb = getView().findViewById(R.id.personNbInput);
+        personNb.setText(Integer.toString(originalRecipe.getPersonNumber()));
+
+        EditText title=getView().findViewById(R.id.nameInput);
+        title.setText(originalRecipe.getName());
+
+        difficultyInput.setSelection(originalRecipe.getRecipeDifficulty().ordinal());
+
+        List<String> instructions=originalRecipe.getRecipeInstructions();
+        instructionText.setText(instructions.get(0));
+
+        for (int i=1;i<instructions.size();++i){
+            setAddInstructionButton(getView());
+            ((TextView)getView().findViewById(instructionsId.get(i))).setText(instructions.get(i));
+        }
+
+        List<Ingredient> ingredients=originalRecipe.getIngredients();
+
+        insertIngredientAtIndex(ingredients.get(0),0);
+        for (int i=1;i<ingredients.size();++i){
+            setAddIngredientButton(getView());
+            insertIngredientAtIndex(ingredients.get(i),i);
+        }
+
+    }
+
+    private void hideImageComponents() {
+        getView().findViewById(R.id.postRecipePictures).setVisibility(View.GONE);
+    }
+
+    private void insertIngredientAtIndex(Ingredient ingredient, int index) {
+        ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(index);
+
+        ((TextView) currentIngredient.getChildAt(0)).setText(ingredient.getName());
+        ((TextView) currentIngredient.getChildAt(1)).setText(Double.toString(ingredient.getQuantity()));
+        ((Spinner) currentIngredient.getChildAt(2)).setSelection(ingredient.getUnit().ordinal());
     }
 
     public String getUserEmail(){

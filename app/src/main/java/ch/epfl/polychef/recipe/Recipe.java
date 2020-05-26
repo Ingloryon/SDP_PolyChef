@@ -60,9 +60,14 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients,
                      int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty,
-                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date){
+                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date,String recipeUuid,
+                     Rating rating){
 
-        this.recipeUuid = UUID.randomUUID().toString();
+        if(recipeUuid==null){
+            this.recipeUuid = UUID.randomUUID().toString();
+        }else{
+            this.recipeUuid=recipeUuid;
+        }
         this.name = name;
         this.recipeInstructions = recipeInstructions;
         this.ingredients = new ArrayList<>(ingredients);
@@ -70,10 +75,13 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         this.estimatedPreparationTime = estimatedPreparationTime;
         this.estimatedCookingTime = estimatedCookingTime;
         this.recipeDifficulty = recipeDifficulty;
-        this.rating = new Rating();
-        this.miniaturePath = miniaturePath;
-        if(this.miniaturePath == null) {
-            this.miniaturePath = Either.none();
+        if(rating==null) {
+            this.rating = new Rating();
+        }else{
+            this.rating=rating;
+        }
+        if(miniaturePath!=null){
+            this.miniaturePath = miniaturePath;
         }
         this.picturesPath = picturesPath;
         if(date == null) {
