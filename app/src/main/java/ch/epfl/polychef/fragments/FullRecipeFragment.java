@@ -262,7 +262,6 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
     @SuppressLint("SetTextI18n") //Cirrus does not handle well the fix
     private void displayQuantity(View view){
         quantityInput = view.findViewById(R.id.quantityinput);
-        //quantityInput.setText(String.format(Locale.ENGLISH, "%d", currentRecipe.getPersonNumber()));
         quantityInput.setText(Integer.toString(currentRecipe.getPersonNumber()));
 
         quantityInput.addTextChangedListener(new TextWatcher() {

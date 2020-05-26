@@ -1,7 +1,7 @@
 package ch.epfl.polychef;
 
 /**
- * Interface handling two types of callbacks: Success and Failure"
+ * Interface handling two types of callbacks: Success and Failure.
  * @param <T> the result type
  */
 public interface CallHandler<T> {
