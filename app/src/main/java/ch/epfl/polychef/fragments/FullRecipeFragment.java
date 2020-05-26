@@ -48,8 +48,8 @@ import ch.epfl.polychef.utils.VoiceSynthesizer;
 /**
  * Class that represents the page fragment displayed for a Recipe.
  */
+@SuppressWarnings("WeakerAccess")
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
-    @SuppressWarnings("WeakerAccess")
     public static int QUANTITY_LIMIT = 500;
     public static final String TAG = "FullRecipeFragment";
     private int indexOfInstruction=-1;
@@ -81,6 +81,14 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
      */
     public ImageStorage getImageStorage() {
         return ImageStorage.getInstance();
+    }
+
+    /**
+     * Gets the current recipe.
+     * @return the current recipe
+     */
+    public Recipe getCurrentRecipe(){
+        return currentRecipe;
     }
 
     /**
