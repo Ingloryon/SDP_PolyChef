@@ -1,8 +1,10 @@
 package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -33,6 +35,7 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
      * @param view the current view
      */
     public void createSignInIntent(View view) {
+<<<<<<< HEAD
         List<AuthUI.IdpConfig> providers = Collections.singletonList(
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
@@ -42,6 +45,21 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);
+=======
+        if(!isNetworkConnected()){
+            Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }else {
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.GoogleBuilder().build());
+
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    RC_SIGN_IN);
+        }
+>>>>>>> master
     }
 
     /**
@@ -81,6 +99,7 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         googleButton.setOnClickListener( view -> createSignInIntent(googleButton) );
     }
 
+<<<<<<< HEAD
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -93,4 +112,10 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         }
     }
 
+=======
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+>>>>>>> master
 }

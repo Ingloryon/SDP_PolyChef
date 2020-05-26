@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,11 +40,16 @@ public class UserListFragment extends Fragment {
     private final Function<User, List<String>> userListFunction;
     private final int fragmentId;
 
+<<<<<<< HEAD
     /**
      * Constructs a UserListFragment.
      * @param userListFunction the function that maps a user to its corresponding strings
      * @param fragmentId the id of the fragment
      */
+=======
+    private HomePage hostActivity;
+
+>>>>>>> master
     public UserListFragment(Function<User, List<String>> userListFunction, int fragmentId) {
         this.userListFunction = userListFunction;
         this.fragmentId = fragmentId;
@@ -75,15 +81,26 @@ public class UserListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Preconditions.checkArgument(context instanceof HomePage, "The favourite miniature fragment wasn't attached properly!");
+<<<<<<< HEAD
         HomePage homePage = (HomePage) context;
         ImageStorage imageStorage = homePage.getImageStorage();
         userStorage = homePage.getUserStorage();
+=======
+        hostActivity = (HomePage) context;
+        imageStorage = hostActivity.getImageStorage();
+        userStorage = hostActivity.getUserStorage();
+>>>>>>> master
         Preconditions.checkArgument(imageStorage != null && userStorage != null);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(!hostActivity.isOnline()){
+            Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }
+
         dynamicUserList.clear();
         MultipleCallHandler<User> multipleCallHandler = new MultipleCallHandler<>(userListFunction.apply(userStorage.getPolyChefUser()).size(), (dataList) -> {
             dynamicUserList.addAll(dataList);

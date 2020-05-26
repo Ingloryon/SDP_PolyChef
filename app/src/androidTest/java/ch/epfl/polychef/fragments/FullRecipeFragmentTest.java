@@ -1,9 +1,11 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
+import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -27,8 +29,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
+
 @RunWith(AndroidJUnit4.class)
 public class FullRecipeFragmentTest {
+
+    private FullRecipeFragment fragment;
 
     private SingleActivityFactory<EntryPage> fakeEntryPage = new SingleActivityFactory<EntryPage>(
             EntryPage.class) {
@@ -82,4 +87,5 @@ public class FullRecipeFragmentTest {
         fullRecipeFragment.notify("next");
         fullRecipeFragment.notify("next");
     }
+
 }

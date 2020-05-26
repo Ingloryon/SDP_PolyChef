@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,12 +75,17 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private ImageStorage imageStorage;
     private UserStorage userStorage;
 
+<<<<<<< HEAD
     //package protected is enough for this constant
     static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
 
     /**
      * Required empty public constructor for Firebase.
      */
+=======
+    private HomePage hostActivity;
+
+>>>>>>> master
     public OnlineMiniaturesFragment(){
     }
 
@@ -134,10 +140,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         super.onAttach(context);
 
         if(context instanceof HomePage){
-            HomePage homePage = (HomePage) context;
-            recipeStorage = homePage.getRecipeStorage();
-            imageStorage = homePage.getImageStorage();
-            userStorage = homePage.getUserStorage();
+            hostActivity = (HomePage) context;
+            recipeStorage = hostActivity.getRecipeStorage();
+            imageStorage = hostActivity.getImageStorage();
+            userStorage = hostActivity.getUserStorage();
             Preconditions.checkArgument(recipeStorage != null && imageStorage != null && userStorage != null);
         } else {
             throw new IllegalArgumentException("The online miniature fragment wasn't attached properly!");
@@ -147,6 +153,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(!hostActivity.isOnline()){
+            Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }
 
         searchView = getView().findViewById(R.id.searchBar);
         filters = getView().findViewById(R.id.filters);

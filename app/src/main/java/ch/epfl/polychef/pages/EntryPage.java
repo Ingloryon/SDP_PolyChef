@@ -1,8 +1,10 @@
 package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -121,13 +123,17 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
      * Navigates towards the home page if the user is connected.
      */
     protected void goHomeIfConnected() {
-        if(getFireBaseAuth().getCurrentUser() != null) {
+        if(!isNetworkConnected()){
+            Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+        }else {
+            if (getFireBaseAuth().getCurrentUser() != null) {
 
-            startLoading();
+                startLoading();
 
-            Toast.makeText(this, "Auto connect" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Auto connect", Toast.LENGTH_SHORT).show();
 
-            getUserStorage().initializeUserFromAuthenticatedUser(this);
+                getUserStorage().initializeUserFromAuthenticatedUser(this);
+            }
         }
     }
 
@@ -154,4 +160,50 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
+<<<<<<< HEAD
+=======
+    /** Called when the user taps the log button. */
+    public void login(View view) {
+        Intent intent = new Intent(this, LoginPage.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onFailure() {
+        Log.e(TAG, "Unable to initialise the PolyChef User");
+        stopLoading();
+    }
+
+    @Override
+    public synchronized void onSuccess(User data) {
+
+        //Small delay to make it feel intentional
+        try{
+            wait(500);
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        stopLoading();
+
+        startNextActivity();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    public void startNextActivity(){
+        startActivity(new Intent(this, HomePage.class));
+    }
+
+    public FirebaseAuth getFireBaseAuth(){
+        return FirebaseAuth.getInstance();
+    }
+
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
+    }
+>>>>>>> master
 }

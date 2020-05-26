@@ -3,6 +3,7 @@ package ch.epfl.polychef.recipe;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,9 +69,14 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
      */
     protected Recipe(String name, List<String> recipeInstructions, List<Ingredient> ingredients,
                      int personNumber, int estimatedPreparationTime, int estimatedCookingTime, Difficulty recipeDifficulty,
-                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date){
+                     Either<String, Integer> miniaturePath, List<String> picturesPath, String author, String date,String recipeUuid,
+                     Rating rating){
 
-        this.recipeUuid = UUID.randomUUID().toString();
+        if(recipeUuid==null){
+            this.recipeUuid = UUID.randomUUID().toString();
+        }else{
+            this.recipeUuid=recipeUuid;
+        }
         this.name = name;
         this.recipeInstructions = recipeInstructions;
         this.ingredients = new ArrayList<>(ingredients);
@@ -78,10 +84,13 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         this.estimatedPreparationTime = estimatedPreparationTime;
         this.estimatedCookingTime = estimatedCookingTime;
         this.recipeDifficulty = recipeDifficulty;
-        this.rating = new Rating();
-        this.miniaturePath = miniaturePath;
-        if(this.miniaturePath == null) {
-            this.miniaturePath = Either.none();
+        if(rating==null) {
+            this.rating = new Rating();
+        }else{
+            this.rating=rating;
+        }
+        if(miniaturePath!=null){
+            this.miniaturePath = miniaturePath;
         }
         this.picturesPath = picturesPath;
         if(date == null) {
@@ -101,7 +110,6 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
         Preconditions.checkArgument(newPersonNumber > 0, "The number of persons must be strictly positive");
 
         double ratio = (double)newPersonNumber / (double)personNumber;
-
         personNumber=newPersonNumber;
         for(Ingredient ingredient : ingredients){
             if(ingredient.getUnit() != Ingredient.Unit.NONE) {

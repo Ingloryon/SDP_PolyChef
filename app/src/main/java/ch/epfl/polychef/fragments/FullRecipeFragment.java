@@ -4,10 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -46,23 +49,26 @@ import ch.epfl.polychef.utils.VoiceSynthesizer;
  * Class that represents the page fragment displayed for a Recipe.
  */
 public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>, CallNotifier<String> {
+    @SuppressWarnings("WeakerAccess")
+    public static int QUANTITY_LIMIT = 500;
     public static final String TAG = "FullRecipeFragment";
+    private int indexOfInstruction=-1;
 
     private static final String NEW_LINE = System.lineSeparator();
     private Recipe currentRecipe;
     private final List<Bitmap> imagesToDisplay = new ArrayList<>();
     private CarouselView carouselView;
     private TextView authorName;
+    private EditText quantityInput;
     private VoiceRecognizer voiceRecognizer;
     private VoiceSynthesizer voiceSynthesizer;
 
     private NestedScrollView topScrollView;
     private RecyclerView opinionsRecyclerView;
     private OpinionsMiniatureAdapter opinionsAdapter;
-    private HomePage hostActivity;
 
-    private boolean online;
-    private int indexOfInstruction=-1;
+    private boolean isHomePage;
+    private HomePage hostActivity;
 
     /**
      * Required empty public constructor for Firebase.
@@ -112,15 +118,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             currentRecipe = (Recipe) bundle.getSerializable("Recipe");
         }
 
-        displayFavouriteButton(view);
-        displayRecipeName(view);
-        displayImage(view);
-        displayRating(view);
-        displayPrepAndCookTime(view);
-        displayDifficulty(view);
-        displayInstructions(view);
-        displayIngredients(view);
-        displayAuthorName(view);
+        view.findViewById(R.id.modifyButton).setVisibility(View.GONE);
+
+        displayEverything(view);
 
         voiceRecognizer=new VoiceRecognizer(this);
         try {
@@ -128,11 +128,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }catch(UnsupportedOperationException e){
             Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
-
         setupSwitch(view);
-
         addOpinion(view);
-
         return view;
     }
 
@@ -141,17 +138,32 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         super.onViewCreated(view, savedInstanceState);
 
         Button postButton = requireView().findViewById(R.id.buttonRate);
-        postButton.setOnClickListener(view1 -> {
+        postButton.setOnClickListener(view12 -> {
+            if(isHomePage) {
+                if(!hostActivity.isOnline()){
+                    Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("RecipeToRate", currentRecipe);
+
+                    NavController navController = ((HomePage) requireActivity()).getNavController();
+                    navController.navigate(R.id.rateRecipeFragment, bundle);
+                }
+            }else {
+                Toast.makeText(getActivity(),requireActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button modifyButton = requireView().findViewById(R.id.modifyButton);
+        modifyButton.setOnClickListener(view1 -> {
             if(getActivity() instanceof HomePage) {
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("RecipeToRate", currentRecipe);
+                bundle.putSerializable("ModifyRecipe", currentRecipe);
 
                 NavController navController = ((HomePage) getActivity()).getNavController();
-                navController.navigate(R.id.rateRecipeFragment, bundle);
+                navController.navigate(R.id.postRecipeFragment, bundle);
 
-            }else {
-                Toast.makeText(getActivity(),requireActivity().getString(R.string.errorOnlineFeature), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -163,9 +175,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
         if(context instanceof HomePage){
             hostActivity = (HomePage) context;
-            online = true;
+            isHomePage = true;
         } else {
-            online = false;
+            isHomePage = false;
             hostActivity = null;
         }
     }
@@ -207,8 +219,21 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         voiceSynthesizer.onStop();
     }
 
+    private void displayEverything(View view){
+        displayFavouriteButton(view);
+        displayRecipeName(view);
+        displayImage(view);
+        displayRating(view);
+        displayPrepAndCookTime(view);
+        displayDifficulty(view);
+        displayInstructions(view);
+        displayQuantity(view);
+        displayIngredients(view);
+        displayAuthorName(view);
+    }
+
     private void addOpinion(View view) {
-        if(online) {
+        if(isHomePage) {
             opinionsRecyclerView = view.findViewById(R.id.opinionsList);
             opinionsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
             opinionsAdapter = new OpinionsMiniatureAdapter(this.getActivity(), opinionsRecyclerView, currentRecipe, hostActivity.getUserStorage());
@@ -225,6 +250,48 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         }
     }
 
+    private void displayQuantity(View view){
+        quantityInput = view.findViewById(R.id.quantityinput);
+        quantityInput.setText(String.format(Locale.ENGLISH, "%d", currentRecipe.getPersonNumber()));
+        quantityInput.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence seq, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence seq, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable ed) {
+                handleNewQuantity(view);
+            }
+        });
+    }
+
+    private void handleNewQuantity(View view){
+        int newQuantity;
+        if(quantityInput.getText().toString().equals("")){
+            currentRecipe.scalePersonAndIngredientsQuantities(1);
+            displayIngredients(view);
+            return;
+        }
+        newQuantity = Integer.parseInt(quantityInput.getText().toString());
+        if(newQuantity <= QUANTITY_LIMIT && newQuantity > 0) {
+            currentRecipe.scalePersonAndIngredientsQuantities(newQuantity);
+            displayIngredients(view);
+        }else if( newQuantity > QUANTITY_LIMIT){
+            currentRecipe.scalePersonAndIngredientsQuantities(QUANTITY_LIMIT);
+            quantityInput.setText(QUANTITY_LIMIT);
+            Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
+        }else{
+            currentRecipe.scalePersonAndIngredientsQuantities(1);
+            quantityInput.setText(String.format(Locale.ENGLISH,"%d",1));
+            Toast.makeText(getActivity(), "The quantity can't be 0" , Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void displayAuthorName(View view) {
         authorName = view.findViewById(R.id.authorUsername);
         getUserStorage().getUserByEmail(currentRecipe.getAuthor(), new CallHandler<User>() {
@@ -237,6 +304,10 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
                     bundle.putSerializable("User", data);
                     navController.navigate(R.id.userProfileFragment, bundle);
                 });
+
+                if(data.equals(getUserStorage().getPolyChefUser())) {
+                    view.findViewById(R.id.modifyButton).setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -357,5 +428,4 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         TextView instructions = view.findViewById(R.id.instruction0);
         instructions.setText(strBuilder.toString());
     }
-
 }
