@@ -3,7 +3,6 @@ package ch.epfl.polychef.recipe;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

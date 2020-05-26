@@ -1,7 +1,6 @@
 package ch.epfl.polychef.recipe;
 
 import android.icu.text.SimpleDateFormat;
-import android.telecom.Call;
 import android.util.Log;
 
 import androidx.annotation.NonNull;

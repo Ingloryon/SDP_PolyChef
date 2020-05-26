@@ -52,7 +52,6 @@ public final class Ingredient implements Serializable {
      * Returns the quantity needed corresponding to the ingredient.
      * @return the quantity, a positive double
      */
-    @SuppressWarnings("WeakerAccess")
     public double getQuantity(){
         return quantity;
     }

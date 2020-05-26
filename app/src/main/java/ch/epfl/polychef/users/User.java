@@ -173,7 +173,8 @@ public class User implements Serializable, Miniatures {
         if(recipeUuid!=null){
             recipes.forEach(uuid->{
                 if(uuid.equals(recipeUuid)){
-                    return;//do not add it twice if existing
+                    //noinspection UnnecessaryReturnStatement
+                    return; //do not add it twice if existing
                 }
             });
             recipes.add(recipeUuid);

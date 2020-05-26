@@ -236,6 +236,7 @@ public final class RecipeBuilder {
      * @param uuid the uuid of the recipe, must be non empty
      * @return the modified builder
      */
+    @SuppressWarnings("UnusedReturnValue")
     public RecipeBuilder setUuid(@NonNull String uuid) {
         Preconditions.checkArgument(!uuid.isEmpty(), "The uuid must be non empty");
         this.uuid = uuid;

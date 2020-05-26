@@ -160,6 +160,7 @@ public class HomePage extends ConnectedActivity {
      * Gets the instance of firebase.
      * @return the instance of firebase
      */
+    @SuppressWarnings("unused")
     public FirebaseDatabase getFireDatabase(){
         return FirebaseDatabase.getInstance();
     }
