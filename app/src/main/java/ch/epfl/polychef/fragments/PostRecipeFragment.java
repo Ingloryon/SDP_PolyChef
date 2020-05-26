@@ -511,13 +511,16 @@ public class PostRecipeFragment extends Fragment {
         hideImageComponents();
 
         EditText prepTimeInput = requireView().findViewById(R.id.prepTimeInput);
-        prepTimeInput.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getEstimatedPreparationTime()));
+        //prepTimeInput.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getEstimatedPreparationTime()));
+        prepTimeInput.setText(Integer.toString(originalRecipe.getEstimatedPreparationTime()));
 
         EditText cookTimeInput = requireView().findViewById(R.id.cookTimeInput);
-        cookTimeInput.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getEstimatedCookingTime()));
+        //cookTimeInput.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getEstimatedCookingTime()));
+        cookTimeInput.setText(Integer.toString(originalRecipe.getEstimatedCookingTime()));
 
         EditText personNb = requireView().findViewById(R.id.personNbInput);
-        personNb.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getPersonNumber()));
+        //personNb.setText(String.format(Locale.ENGLISH, "%d",originalRecipe.getPersonNumber()));
+        personNb.setText(Integer.toString(originalRecipe.getPersonNumber()));
 
         EditText title=requireView().findViewById(R.id.nameInput);
         title.setText(originalRecipe.getName());
@@ -550,7 +553,8 @@ public class PostRecipeFragment extends Fragment {
         ConstraintLayout currentIngredient = (ConstraintLayout) ingredientLayout.getChildAt(index);
 
         ((TextView) currentIngredient.getChildAt(0)).setText(ingredient.getName());
-        ((TextView) currentIngredient.getChildAt(1)).setText(String.format(Locale.ENGLISH, "%.1f", ingredient.getQuantity()));
+        //((TextView) currentIngredient.getChildAt(1)).setText(String.format(Locale.ENGLISH, "%.1f", ingredient.getQuantity()));
+        ((TextView) currentIngredient.getChildAt(1)).setText(Double.toString(ingredient.getQuantity()));
         ((Spinner) currentIngredient.getChildAt(2)).setSelection(ingredient.getUnit().ordinal());
     }
 }

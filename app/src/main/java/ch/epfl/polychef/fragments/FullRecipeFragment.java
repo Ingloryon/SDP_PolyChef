@@ -260,7 +260,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
 
     private void displayQuantity(View view){
         quantityInput = view.findViewById(R.id.quantityinput);
-        quantityInput.setText(String.format(Locale.ENGLISH, "%d", currentRecipe.getPersonNumber()));
+        //quantityInput.setText(String.format(Locale.ENGLISH, "%d", currentRecipe.getPersonNumber()));
+        quantityInput.setText(Integer.toString(currentRecipe.getPersonNumber()));
+
         quantityInput.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -295,7 +297,9 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
             Toast.makeText(getActivity(), "The quantity limit is : " + QUANTITY_LIMIT , Toast.LENGTH_SHORT).show();
         }else{
             currentRecipe.scalePersonAndIngredientsQuantities(1);
-            quantityInput.setText(String.format(Locale.ENGLISH,"%d",1));
+            //quantityInput.setText(String.format(Locale.ENGLISH,"%d",1));
+            quantityInput.setText(Integer.toString(1));
+
             Toast.makeText(getActivity(), "The quantity can't be 0" , Toast.LENGTH_SHORT).show();
         }
     }
