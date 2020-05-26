@@ -36,20 +36,17 @@ public class UserListFragment extends Fragment {
     private RecyclerView usersRecyclerView;
     private List<User> dynamicUserList = new ArrayList<>();
     private UserStorage userStorage;
+    private HomePage hostActivity;
 
     private final Function<User, List<String>> userListFunction;
     private final int fragmentId;
 
-<<<<<<< HEAD
+
     /**
      * Constructs a UserListFragment.
      * @param userListFunction the function that maps a user to its corresponding strings
      * @param fragmentId the id of the fragment
      */
-=======
-    private HomePage hostActivity;
-
->>>>>>> master
     public UserListFragment(Function<User, List<String>> userListFunction, int fragmentId) {
         this.userListFunction = userListFunction;
         this.fragmentId = fragmentId;
@@ -81,16 +78,10 @@ public class UserListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Preconditions.checkArgument(context instanceof HomePage, "The favourite miniature fragment wasn't attached properly!");
-<<<<<<< HEAD
-        HomePage homePage = (HomePage) context;
-        ImageStorage imageStorage = homePage.getImageStorage();
-        userStorage = homePage.getUserStorage();
-=======
         hostActivity = (HomePage) context;
-        imageStorage = hostActivity.getImageStorage();
+        ImageStorage imageStorage = hostActivity.getImageStorage();
         userStorage = hostActivity.getUserStorage();
->>>>>>> master
-        Preconditions.checkArgument(imageStorage != null && userStorage != null);
+        Preconditions.checkArgument(imageStorage != null && userStorage != null, "One of the storage is null !");
     }
 
     @Override
