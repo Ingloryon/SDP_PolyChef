@@ -102,7 +102,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         List<Miniatures> listToDisplay = searchList.isEmpty() ? dynamicRecipeList : searchList;
 
         MiniatureAdapter searchAdapter = new MiniatureAdapter(this.getActivity(),
-                listToDisplay, onlineRecyclerView, container.getId(), imageStorage, userStorage);
+                listToDisplay, onlineRecyclerView, imageStorage, userStorage);
 
         onlineRecyclerView.setAdapter(searchAdapter);
 

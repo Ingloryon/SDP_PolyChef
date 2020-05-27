@@ -69,7 +69,8 @@ public class AutoConnectTest {
         }
 
         @Override
-        public void startHomePage() {
+        public void startNextActivity() {
+            
         }
     }
 }
