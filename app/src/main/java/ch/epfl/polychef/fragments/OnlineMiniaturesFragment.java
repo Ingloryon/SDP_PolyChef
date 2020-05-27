@@ -40,6 +40,10 @@ import ch.epfl.polychef.utils.Sort;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 
+/**
+ * Class that represents the fragment displayed for the online Miniatures.
+ */
+@SuppressWarnings("ConstantConditions") //the null cases are handled locally
 public class OnlineMiniaturesFragment extends Fragment implements CallHandler<List<Miniatures>>{
 
     private static final String TAG = "OnlineMiniaturesFrag";
@@ -63,19 +67,29 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String currentOldest;
     private String currentNewest;
 
-    public static final int nbOfRecipesLoadedAtATime = 5;
-
     private boolean isLoading = false;
     private boolean isSearching = false;
 
     private RecipeStorage recipeStorage;
     private ImageStorage imageStorage;
     private UserStorage userStorage;
-
     private HomePage hostActivity;
 
+    //package protected is enough for this constant
+    static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
+
+    /**
+     * Required empty public constructor for Firebase.
+     */
     public OnlineMiniaturesFragment(){
-        
+    }
+
+    /**
+     * Gets the recycler view of the online miniatures.
+     * @return the online recycler view
+     */
+    public RecyclerView getRecyclerView(){
+        return onlineRecyclerView;
     }
 
     @Override
@@ -179,23 +193,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
             initFirstNRecipes();
         }
     }
-    private void refreshButtons(){
 
-        filterButtons.put(FILTER.RECIPE, requireView().findViewById(R.id.filter_recipe));
-        filterButtons.put(FILTER.USER, requireView().findViewById(R.id.filter_users));
-        filterButtons.put(FILTER.INGREDIENT, requireView().findViewById(R.id.filter_ingre));
-        filterButtons.put(FILTER.RATE, requireView().findViewById(R.id.filter_rate));
-
-        if(filterStates.isEmpty()) {
-            for(FILTER filter : FILTER.values()){
-                filterStates.put(filter, false);
-            }
-        } else {
-            for(FILTER filter: FILTER.values()){
-                setButton(filter, filterStates.get(filter));
-            }
-        }
-    }
     private void setupFilters(){
 
         refreshButtons();
@@ -217,23 +215,32 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         });
     }
 
-    @NonNull private Button getFilterButton(FILTER filter){
-        return Objects.requireNonNull(filterButtons.get(filter));
+    private void refreshButtons(){
+
+        filterButtons.put(FILTER.RECIPE, requireView().findViewById(R.id.filter_recipe));
+        filterButtons.put(FILTER.USER, requireView().findViewById(R.id.filter_users));
+        filterButtons.put(FILTER.INGREDIENT, requireView().findViewById(R.id.filter_ingre));
+        filterButtons.put(FILTER.RATE, requireView().findViewById(R.id.filter_rate));
+
+        if(filterStates.isEmpty()) {
+            for(FILTER filter : FILTER.values()){
+                filterStates.put(filter, false);
+            }
+        } else {
+            for(FILTER filter: FILTER.values()){
+                setButton(filter, filterStates.get(filter));
+            }
+        }
     }
 
-    @NonNull private Boolean getFilterState(FILTER filter){
-        return Objects.requireNonNull(filterStates.get(filter));
-    }
-
-    private void setButton(FILTER filter, Boolean setEnabled){
-        Button filterButton = getFilterButton(filter);
-
-        int nextColor = setEnabled ? R.color.enabled : R.color.black;
-        int nextFlag = setEnabled ? Paint.UNDERLINE_TEXT_FLAG | Paint.FAKE_BOLD_TEXT_FLAG : 0;
-
-        filterButton.setTextColor(getResources().getColor(nextColor, null));
-        filterButton.setPaintFlags(nextFlag);
-        filterStates.replace(filter, setEnabled);
+    private void setFilterOnClick(FILTER filter){
+        getFilterButton(filter).setOnClickListener(listener -> {
+            if(!isLoading){
+                resetOthers(filter);
+                setButton(filter, !getFilterState(filter));
+                search();
+            }
+        });
     }
 
     private void search(){
@@ -251,36 +258,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         }
     }
 
-    private void setFilterOnClick(FILTER filter){
-        getFilterButton(filter).setOnClickListener(listener -> {
-            if(!isLoading){
-                resetOthers(filter);
-                setButton(filter, !getFilterState(filter));
-                search();
-            }
-        });
-    }
 
-    private void initFirstNRecipes() {
-        isLoading = true;
-        dynamicRecipeList.clear();
-
-        initDate();
-        getNextRecipes();
-    }
-
-    private void initDate(){
-        currentOldest = recipeStorage.getCurrentDate();
-        currentNewest = recipeStorage.getCurrentDate();
-    }
-
-    private void getNextRecipes(){
-        recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, RecipeStorage.OLDEST_RECIPE, currentOldest, false, this);
-    }
-
-    private void getPreviousRecipes(){
-        recipeStorage.getNRecipes(nbOfRecipesLoadedAtATime, currentNewest, recipeStorage.getCurrentDate(), true, this);
-    }
 
     @Override
     public void onSuccess(List<Miniatures> data){
@@ -323,9 +301,27 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         Log.w(TAG, "No Recipe found");
     }
 
-    public RecyclerView getRecyclerView(){
-        return onlineRecyclerView;
+    private void initFirstNRecipes() {
+        isLoading = true;
+        dynamicRecipeList.clear();
+
+        initDate();
+        getNextRecipes();
     }
+
+    private void initDate(){
+        currentOldest = recipeStorage.getCurrentDate();
+        currentNewest = recipeStorage.getCurrentDate();
+    }
+
+    private void getNextRecipes(){
+        recipeStorage.getNRecipes(NB_OF_RECIPES_LOADED_AT_A_TIME, RecipeStorage.OLDEST_RECIPE, currentOldest, false, this);
+    }
+
+    private void getPreviousRecipes(){
+        recipeStorage.getNRecipes(NB_OF_RECIPES_LOADED_AT_A_TIME, currentNewest, recipeStorage.getCurrentDate(), true, this);
+    }
+
 
     private void removeDuplicate(List<Miniatures> miniatures){
         List<Miniatures> toBeRemoved = new ArrayList<>();
@@ -349,6 +345,25 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         }else {
             Sort.sortBySimilarity(searchList,actualQuery);
         }
+    }
+
+    @NonNull private Button getFilterButton(FILTER filter){
+        return Objects.requireNonNull(filterButtons.get(filter));
+    }
+
+    @NonNull private Boolean getFilterState(FILTER filter){
+        return Objects.requireNonNull(filterStates.get(filter));
+    }
+
+    private void setButton(FILTER filter, Boolean setEnabled){
+        Button filterButton = getFilterButton(filter);
+
+        int nextColor = setEnabled ? R.color.enabled : R.color.black;
+        int nextFlag = setEnabled ? Paint.UNDERLINE_TEXT_FLAG | Paint.FAKE_BOLD_TEXT_FLAG : 0;
+
+        filterButton.setTextColor(getResources().getColor(nextColor, null));
+        filterButton.setPaintFlags(nextFlag);
+        filterStates.replace(filter, setEnabled);
     }
 
     private void resetOthers(FILTER except){

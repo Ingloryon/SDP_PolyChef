@@ -82,7 +82,7 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void rateSpinnerCanBeClickedOn() {
+    public synchronized void rateSpinnerCanBeClickedOn() throws InterruptedException {
 
         //Click on the first recipe
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -92,11 +92,9 @@ public class RateRecipeFragmentsHomeTest {
         sendRateAndCheckToast(s0);
 
         rateCurrentRecipeNStars(1);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        TimeUnit.SECONDS.sleep(1);
+
         String s1="Your new rating is 1 stars. Your previous rating was 0";
         sendRateAndCheckToast(s1);
 
@@ -111,14 +109,20 @@ public class RateRecipeFragmentsHomeTest {
         onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(nbStars+star))));
     }
 
-    private void sendRateAndCheckToast(String expectedText){
+    private synchronized void sendRateAndCheckToast(String expectedText) throws InterruptedException {
         onView(withId(R.id.buttonSendRate)).perform(scrollTo(), click());
 
-        //TODO Fix this test
-//        onView(withText(expectedText))
-//                .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
-//                        .getWindow().getDecorView()))))
-//                .check(matches(isDisplayed()));
+        /* This test is quite flaky on Travis, we comment it for now
+        TimeUnit.MILLISECONDS.sleep(100);
+
+        onView(withText(expectedText))
+                .inRoot(RootMatchers.withDecorView(not(is(intentsTestRuleHome.getActivity()
+                        .getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        TimeUnit.SECONDS.sleep(2);
+         */
+
     }
 
     public static class FakeFakeHomePage extends HomePageTest.FakeHomePage {

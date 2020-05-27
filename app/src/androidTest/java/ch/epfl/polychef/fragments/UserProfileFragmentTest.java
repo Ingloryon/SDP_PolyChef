@@ -103,12 +103,12 @@ public class UserProfileFragmentTest {
 
     @Test
     public synchronized void recipesAreDisplayedWhenUserHasFewOfThem() throws InterruptedException {
-        testUserRecipes(0, UserProfileFragment.nbOfRecipesLoadedAtATime + 1);
+        testUserRecipes(0, UserProfileFragment.NB_OF_RECIPES_LOADED_AT_A_TIME + 1);
     }
 
     @Test
     public synchronized void recipesAreDisplayedWhenUserHasManyOfThem() throws InterruptedException {
-        testUserRecipes(UserProfileFragment.nbOfRecipesLoadedAtATime + 1, 20);
+        testUserRecipes(UserProfileFragment.NB_OF_RECIPES_LOADED_AT_A_TIME + 1, 20);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class UserProfileFragmentTest {
 
         startTest();
 
-        int recipeLoaded = UserProfileFragment.nbOfRecipesLoadedAtATime;
+        int recipeLoaded = UserProfileFragment.NB_OF_RECIPES_LOADED_AT_A_TIME;
         assertEquals(Math.min(recipeLoaded, nbr), ((UserProfileFragment) fragUtils.getTestedFragment(intentsTestRule)).getUserRecyclerView().getAdapter().getItemCount());
 
         for(int i = 0; i < nbr/recipeLoaded; ++i){

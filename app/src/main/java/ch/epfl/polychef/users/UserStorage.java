@@ -17,6 +17,10 @@ import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.utils.Preconditions;
 
+/**
+ * The storage for users associated with Firebase.
+ */
+@SuppressWarnings("WeakerAccess")
 public class UserStorage {
 
     private static UserStorage INSTANCE = new UserStorage();
@@ -25,13 +29,29 @@ public class UserStorage {
     private User user = null;
     private String userKey = null;
 
+    private UserStorage() {
+    }
+
+    /**
+     * Gets the instance of UserStorage.
+     * @return the instance of UserStorage
+     */
     public static UserStorage getInstance() {
         return INSTANCE;
     }
 
-    private UserStorage() {
+    /**
+     * Gets the current polychef chef in storage.
+     * @return the current polychef chef in storage
+     */
+    public User getPolyChefUser() {
+        return user;
     }
 
+    /**
+     * Initializes all the user information from the authenticated user.
+     * @param caller the caller of the method
+     */
     public void initializeUserFromAuthenticatedUser(CallHandler<User> caller) {
         String email = getAuthenticatedUser().getEmail();
 
@@ -69,72 +89,8 @@ public class UserStorage {
                 });
     }
 
-    private void initializeNewUser(String email) {
-        String username = getAuthenticatedUser().getDisplayName();
-        user = new User(email, username);
-
-        // Add OnSuccess and OnFailure listener ?
-        DatabaseReference ref = getDatabase()
-                .getReference(UserStorage.DB_NAME)
-                .push();
-
-        userKey = ref.getKey();
-        user.setKey(ref.getKey());
-        ref.setValue(user);
-    }
-
-    private void initializeExistingUser(DataSnapshot snap) {
-
-        if (snap.exists()) {
-            user = snap.getValue(User.class);
-            user.removeNullFromLists();
-            userKey = snap.getKey();
-            user.setKey(snap.getKey());
-            FavouritesUtils.getInstance().setOfflineFavourites(user);
-            FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        } else {
-            throw new IllegalArgumentException("Unable to reconstruct the user from the JSON.");
-        }
-    }
-
-    public void updateUserInfo() {
-        updateUserInfo(user, userKey);
-    }
-
     /**
-     * Update another {@code User}, even if this is not the connected user.
-     * <p>
-     * Warning: this method assume that {@link User#getKey()} will not return null <br>
-     * (see {@link #getUserByEmail(String email, CallHandler caller)})
-     * </p>
-     *
-     * @param other the other user
-     */
-    public void updateUserInfo(User other) {
-        Preconditions.checkArgument(other != null, "User can not be null");
-        updateUserInfo(other, other.getKey());
-    }
-
-    private void updateUserInfo(User userToUpdate, String userToUpdateKey) {
-        if (userToUpdate != null && userToUpdateKey != null) {
-            getDatabase()
-                    .getReference(UserStorage.DB_NAME + "/" + userToUpdateKey)
-                    .setValue(userToUpdate);
-        } else {
-            throw new IllegalStateException("The user has not been initialized");
-        }
-    }
-
-    public FirebaseUser getAuthenticatedUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    public User getPolyChefUser() {
-        return user;
-    }
-
-    /**
-     * Get a {@code User} from an email.
+     * Get a {@code User} by its email in Firebase database.
      *
      * @param email  the email of the user
      * @param caller the caller to call on success and failure
@@ -157,6 +113,108 @@ public class UserStorage {
                 .addListenerForSingleValueEvent(getUniqueUser(caller));
     }
 
+    /**
+     * Gets the unique user from the given data snapshot.
+     * @param dataSnapshot the data snapshot to get the user from
+     * @param caller the caller of the method
+     */
+    public void getUniqueUserFromDataSnapshot(@NonNull DataSnapshot dataSnapshot,@NonNull CallHandler<User> caller) {
+        if (dataSnapshot.getChildrenCount() == 1) {
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                if (child.exists()) {
+                    getUserFromDataSnapshot(child, caller);
+                } else {
+                    caller.onFailure();
+                }
+            }
+        } else {
+            getUserFromDataSnapshot(dataSnapshot, caller);
+        }
+    }
+
+    /**
+     * Get the current instance of the {@code FirebaseDatabase}.
+     *
+     * @return the current instance of the {@code FirebaseDatabase}
+     */
+    public FirebaseDatabase getDatabase() {
+        return FirebaseDatabase.getInstance();
+    }
+
+    /**
+     * Gets the current authenticated user in Firebase authentication.
+     * @return the current authenticated user in Firebase authentication
+     */
+    public FirebaseUser getAuthenticatedUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    /**
+     * Gets the search user instance.
+     * @return the search user instance
+     */
+    public SearchUser getSearch() {
+        return SearchUser.getInstance();
+    }
+
+    /**
+     * Forces the update of the stored user.
+     */
+    public void updateUserInfo() {
+        updateUserInfo(user, userKey);
+    }
+
+    /**
+     * Update another {@code User}, even if this is not the connected user.
+     * <p>
+     * Warning: this method assume that {@link User#getKey()} will not return null <br>
+     * (see {@link #getUserByEmail(String email, CallHandler caller)})
+     * </p>
+     *
+     * @param other the other user
+     */
+    public void updateUserInfo(User other) {
+        Preconditions.checkArgument(other != null, "User can not be null");
+        updateUserInfo(other, other.getKey());
+    }
+
+    private void updateUserInfo(User userToUpdate, String userToUpdateKey) {
+        if (userToUpdate == null || userToUpdateKey == null) {
+            throw new IllegalStateException("The user has not been initialized");
+        }
+
+        getDatabase()
+                .getReference(UserStorage.DB_NAME + "/" + userToUpdateKey)
+                .setValue(userToUpdate);
+    }
+
+    private void initializeNewUser(String email) {
+        String username = getAuthenticatedUser().getDisplayName();
+        user = new User(email, username);
+
+        // Add OnSuccess and OnFailure listener ?
+        DatabaseReference ref = getDatabase()
+                .getReference(UserStorage.DB_NAME)
+                .push();
+
+        userKey = ref.getKey();
+        user.setKey(ref.getKey());
+        ref.setValue(user);
+    }
+
+    private void initializeExistingUser(DataSnapshot snap) {
+        Preconditions.checkArgument(snap.exists(), "Unable to reconstruct the user from the JSON.");
+
+        user = snap.getValue(User.class);
+        if (user != null) {
+            user.removeNullFromLists();
+        }
+        userKey = snap.getKey();
+        user.setKey(snap.getKey());
+        FavouritesUtils.getInstance().setOfflineFavourites(user);
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+    }
+
     private ValueEventListener getUniqueUser(CallHandler<User> caller) {
         return new ValueEventListener() {
             @Override
@@ -171,20 +229,6 @@ public class UserStorage {
         };
     }
 
-    public void getUniqueUserFromDataSnapshot(DataSnapshot dataSnapshot, CallHandler<User> caller) {
-        if (dataSnapshot.getChildrenCount() == 1) {
-            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                if (child.exists()) {
-                    getUserFromDataSnapshot(child, caller);
-                } else {
-                    caller.onFailure();
-                }
-            }
-        } else {
-            getUserFromDataSnapshot(dataSnapshot, caller);
-        }
-    }
-
     private void getUserFromDataSnapshot(DataSnapshot dataSnapshot, CallHandler<User> caller) {
         User user = dataSnapshot.getValue(User.class);
         if(user != null) {
@@ -193,18 +237,5 @@ public class UserStorage {
         } else {
             caller.onFailure();
         }
-    }
-
-    /**
-     * Get the current instance of the {@code FirebaseDatabase}.
-     *
-     * @return the current instance of the {@code FirebaseDatabase}
-     */
-    public FirebaseDatabase getDatabase() {
-        return FirebaseDatabase.getInstance();
-    }
-
-    public SearchUser getSearch() {
-        return SearchUser.getInstance();
     }
 }

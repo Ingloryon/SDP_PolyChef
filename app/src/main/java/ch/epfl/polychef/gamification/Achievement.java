@@ -11,7 +11,7 @@ import ch.epfl.polychef.utils.Preconditions;
  * An Achievement that can be obtained by Users.
  */
 public final class Achievement {
-    public static final int MAX_ACHIEVEMENT_LEVEL = 5;
+    private static final int MAX_ACHIEVEMENT_LEVEL = 5;
     private final List<Integer> levelSteps;
     private final List<String> picturesLabels;
     private final List<String> picturesPaths;
@@ -28,6 +28,7 @@ public final class Achievement {
      * @param levelSteps the required steps needed to achieve the given levels
      * @param evaluatedCriteria the function returning the number of the evaluated criteria for the user
      */
+    @SuppressWarnings("WeakerAccess")
     public Achievement(String name, int nbOfLevels, ArrayList<String> picturesPaths, ArrayList<String> picturesLabels, ArrayList<Integer> levelSteps, Function<User, Integer> evaluatedCriteria){
         Preconditions.checkArgument(0 < nbOfLevels && nbOfLevels <= MAX_ACHIEVEMENT_LEVEL, "The number of levelSteps must be strictly positive and less than the maximum number of levelSteps (" + MAX_ACHIEVEMENT_LEVEL + ")");
         Preconditions.checkArgument(picturesPaths.size() == nbOfLevels+1 && picturesLabels.size() == nbOfLevels+1 && levelSteps.size() == nbOfLevels);

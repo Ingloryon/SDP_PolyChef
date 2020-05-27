@@ -16,7 +16,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.polychef.CallHandler;
@@ -24,32 +24,21 @@ import ch.epfl.polychef.R;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The page where the user can login.
+ */
 public class LoginPage extends AppCompatActivity implements CallHandler<User> {
-
-    SignInButton googleButton;
-
     private static final int RC_SIGN_IN = 123;
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_page);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        googleButton = findViewById(R.id.googleButton);
-        googleButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
-                createSignInIntent(googleButton);
-            }
-        });
-    }
-
+    /**
+     * Creates the intent to sign in.
+     * @param view the current view
+     */
     public void createSignInIntent(View view) {
         if(!isNetworkConnected()){
             Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
         }else {
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
+            List<AuthUI.IdpConfig> providers = Collections.singletonList(
                     new AuthUI.IdpConfig.GoogleBuilder().build());
 
             startActivityForResult(
@@ -61,23 +50,20 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        FirebaseUser user = getUser();
-        if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK && user != null) {
-            prepareNextActivity();
-        } else {
-            Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
-        }
-    }
-
+    /**
+     * Gets the current authenticated user from FirebaseAuth.
+     * @return the current user
+     */
     public FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public void prepareNextActivity(){
-        getUserStorage().initializeUserFromAuthenticatedUser(this);
+    /**
+     * Gets the instance of the user storage.
+     * @return the instance of the user storage
+     */
+    public UserStorage getUserStorage(){
+        return UserStorage.getInstance();
     }
 
     @Override
@@ -90,10 +76,30 @@ public class LoginPage extends AppCompatActivity implements CallHandler<User> {
         startActivity(new Intent(this, HomePage.class));
     }
 
-    public UserStorage getUserStorage(){
-        return UserStorage.getInstance();
+    @SuppressLint("SourceLockedOrientationActivity")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login_page);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        SignInButton googleButton = findViewById(R.id.googleButton);
+        googleButton.setOnClickListener( view -> createSignInIntent(googleButton) );
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        FirebaseUser user = getUser();
+        if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK && user != null) {
+            //prepares next activity
+            getUserStorage().initializeUserFromAuthenticatedUser(this);
+        } else {
+            Toast.makeText(this, getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @SuppressWarnings("ConstantConditions") //the null case is handled
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import ch.epfl.polychef.MultipleCallHandler;
@@ -27,21 +28,17 @@ import ch.epfl.polychef.utils.FavouritesUtils;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
+@SuppressWarnings("WeakerAccess")
 public class FavouritesFragment extends Fragment {
+    public static final String TAG = "FavouritesFragment";
+    public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
 
-    private static final String TAG = "FavouritesFragment";
     private RecyclerView favouriteRecyclerView;
-
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
-
     private int indexFavourites = 0;
-
-    public static final int nbOfRecipesLoadedAtATime = 5;
-
     private boolean isLoading = false;
 
     private HomePage homePage;
@@ -49,8 +46,26 @@ public class FavouritesFragment extends Fragment {
     private ImageStorage imageStorage;
     private UserStorage userStorage;
 
+    /**
+     * Required empty constructor for Firebase.
+     */
     public FavouritesFragment() {
-        // Required empty public constructor
+    }
+
+    /**
+     * Returns whether the page is online.
+     * @return true if online
+     */
+    public boolean isOnline() {
+        return homePage.isOnline();
+    }
+
+    /**
+     * Gets the recycler view of the favorites.
+     * @return the recycler view
+     */
+    public RecyclerView getRecyclerView() {
+        return favouriteRecyclerView;
     }
 
     @Override
@@ -100,6 +115,7 @@ public class FavouritesFragment extends Fragment {
         addNextRecipes();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     private boolean addNextRecipes() {
         if(isOnline()) {
             return getGenericFavourites(userStorage.getPolyChefUser().getFavourites(), this::setFavouriteOnline);
@@ -109,9 +125,9 @@ public class FavouritesFragment extends Fragment {
     }
 
     private <T> boolean getGenericFavourites(List<T> favouritesList, BiConsumer<Integer, List<T>> func) {
-        if(indexFavourites + nbOfRecipesLoadedAtATime < favouritesList.size()) {
-            func.accept(indexFavourites + nbOfRecipesLoadedAtATime, favouritesList);
-            indexFavourites = indexFavourites + nbOfRecipesLoadedAtATime;
+        if(indexFavourites + NB_OF_RECIPES_LOADED_AT_A_TIME < favouritesList.size()) {
+            func.accept(indexFavourites + NB_OF_RECIPES_LOADED_AT_A_TIME, favouritesList);
+            indexFavourites = indexFavourites + NB_OF_RECIPES_LOADED_AT_A_TIME;
             return true;
         }
         if(indexFavourites < favouritesList.size()) {
@@ -125,7 +141,7 @@ public class FavouritesFragment extends Fragment {
     private void setFavouriteOffline(int end, List<Recipe> favouritesList) {
         for(int i = indexFavourites; i < end; ++i) {
             dynamicRecipeList.add(favouritesList.get(i));
-            favouriteRecyclerView.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(favouriteRecyclerView.getAdapter()).notifyDataSetChanged();
         }
         isLoading = false;
     }
@@ -134,18 +150,11 @@ public class FavouritesFragment extends Fragment {
         MultipleCallHandler<Recipe> multipleCallHandler = new MultipleCallHandler<>(end - indexFavourites, (newFavourites) -> {
             isLoading = false;
             dynamicRecipeList.addAll(newFavourites);
-            favouriteRecyclerView.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(favouriteRecyclerView.getAdapter()).notifyDataSetChanged();
         });
         for(int i = indexFavourites; i < end; ++i) {
             recipeStorage.readRecipeFromUuid(favouritesList.get(i), multipleCallHandler);
         }
     }
 
-    public boolean isOnline() {
-        return homePage.isOnline();
-    }
-
-    public RecyclerView getRecyclerView() {
-        return favouriteRecyclerView;
-    }
 }

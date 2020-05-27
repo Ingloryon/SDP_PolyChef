@@ -21,9 +21,15 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * A subclass of FirebaseMessagingService that handles the notifications at the receiver part.
+ */
 public class NotificationReceiverService extends FirebaseMessagingService {
     private static final String TAG = "MessagingService";
 
+    /**
+     * Required empty public constructor for Firebase.
+     */
     public NotificationReceiverService() {
     }
 
@@ -47,7 +53,7 @@ public class NotificationReceiverService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if(Objects.equals(remoteMessage.getData().get("type"), "recipe")) {
-            getRecipeStorage().readRecipeFromUuid(remoteMessage.getData().get("recipe"), new CallHandler<Recipe>() {
+            getRecipeStorage().readRecipeFromUuid(Objects.requireNonNull(remoteMessage.getData().get("recipe")), new CallHandler<Recipe>() {
                 @Override
                 public void onSuccess(Recipe data) {
                     Intent intent = new Intent(NotificationReceiverService.this.getContext(), HomePage.class);
@@ -67,22 +73,42 @@ public class NotificationReceiverService extends FirebaseMessagingService {
 
     }
 
+    /**
+     * Returns the instance of the recipe storage.
+     * @return the recipe storage instance
+     */
     public RecipeStorage getRecipeStorage() {
         return RecipeStorage.getInstance();
     }
 
+    /**
+     * Gets the instance of the user storage.
+     * @return the instance of the user storage
+     */
     public UserStorage getUserStorage() {
         return UserStorage.getInstance();
     }
 
+    /**
+     * Gets the instance of firebase messaging associated to this receiver.
+     * @return the firebase messaging
+     */
     public FirebaseMessaging getFirebaseMessaging() {
         return FirebaseMessaging.getInstance();
     }
 
+    /**
+     * Gets the current context.
+     * @return the current context
+     */
     public Context getContext() {
         return this;
     }
 
+    /**
+     * Gets the instance of Notification utils class.
+     * @return the instance of Notification utils
+     */
     public NotificationUtils getNotificationUtils() {
         return NotificationUtils.getInstance();
     }

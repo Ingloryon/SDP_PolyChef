@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import java.io.ByteArrayOutputStream;
@@ -31,8 +32,11 @@ public class ImageHandler {
     private Uri fileUri;
     private final Context context;
 
-    public ImageHandler(Context context) {
-        Preconditions.checkArgument(context != null, "Context should not be null");
+    /**
+     * Creates an ImageHandler given a context.
+     * @param context the context of the caller
+     */
+    public ImageHandler(@NonNull Context context) {
         this.context = context;
     }
 
@@ -99,17 +103,6 @@ public class ImageHandler {
         }
     }
 
-    private void uploadFromBitMap(Bitmap bitmap, String imageName, String user, String recipeUId) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] imageInByte = stream.toByteArray();
-
-        ImageStorage uploader = getImageStorage();
-        uploader.upload(imageInByte, imageName, user, recipeUId).addOnSuccessListener(taskSnapshot -> Log.d("IMAGE-UPLOAD",
-                "Success")).addOnFailureListener(e -> Log.d("IMAGE-UPLOAD",
-                "Error"));
-    }
-
     /**
      * Handle result, should be called by activity's {@code onActivityResult} method.
      *
@@ -132,7 +125,23 @@ public class ImageHandler {
         }
     }
 
+    /**
+     * Returns the instance of the image storage.
+     * @return the instance of the image storage
+     */
     public ImageStorage getImageStorage() {
         return ImageStorage.getInstance();
     }
+
+    private void uploadFromBitMap(Bitmap bitmap, String imageName, String user, String recipeUId) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] imageInByte = stream.toByteArray();
+
+        ImageStorage uploader = getImageStorage();
+        uploader.upload(imageInByte, imageName, user, recipeUId).addOnSuccessListener(taskSnapshot -> Log.d("IMAGE-UPLOAD",
+                "Success")).addOnFailureListener(e -> Log.d("IMAGE-UPLOAD",
+                "Error"));
+    }
+
 }

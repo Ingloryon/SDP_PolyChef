@@ -21,9 +21,12 @@ import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * An utility class to manage favorites.
+ */
 public class FavouritesUtils {
 
-    private static final String TAG = "FavouritesUtils";
+    public static final String TAG = "FavouritesUtils";
     private static final Gson gson = new Gson();
     private static final String favouriteKey = "favourites";
     private static final FavouritesUtils INSTANCE = new FavouritesUtils();
@@ -31,6 +34,10 @@ public class FavouritesUtils {
     private FavouritesUtils() {
     }
 
+    /**
+     * Gets the instance of the utility favorites.
+     * @return the instance of the utility favorites
+     */
     public static FavouritesUtils getInstance() {
         return INSTANCE;
     }
@@ -45,6 +52,7 @@ public class FavouritesUtils {
     public void setFavouriteButton(UserStorage userStorage, ToggleButton button, Recipe recipe) {
         Preconditions.checkArgument(recipe != null, "The recipe can not be null");
         Preconditions.checkArgument(button != null, "The button can not be null");
+
         if (userStorage != null && userStorage.getPolyChefUser() != null && !recipe.getAuthor().equals(userStorage.getPolyChefUser().getEmail())) {
             List<String> favouritesList = userStorage.getPolyChefUser().getFavourites();
             button.setVisibility(View.VISIBLE);
@@ -54,35 +62,6 @@ public class FavouritesUtils {
         } else {
             button.setVisibility(View.GONE);
         }
-    }
-
-    private void onClickToggleButton(UserStorage userStorage, ToggleButton button, Recipe recipe) {
-        setButton(button);
-        setOrRemoveRecipe(userStorage, recipe, button.isChecked());
-    }
-
-    private void setButton(ToggleButton button) {
-        if(button.isChecked()) {
-            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_yellow));
-        } else {
-            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_grey));
-        }
-    }
-
-    private void setOrRemoveRecipe(UserStorage userStorage, Recipe recipe, boolean shouldAdd) {
-        List<Recipe> recipes = getOfflineFavourites();
-        if(shouldAdd) {
-            userStorage.getPolyChefUser().addFavourite(recipe.getRecipeUuid());
-        } else {
-            userStorage.getPolyChefUser().removeFavourite(recipe.getRecipeUuid());
-        }
-        userStorage.updateUserInfo();
-        if(shouldAdd) {
-            recipes.add(recipe);
-        } else {
-            recipes.remove(recipe);
-        }
-        putFavouriteList(recipes);
     }
 
     /**
@@ -118,6 +97,35 @@ public class FavouritesUtils {
      */
     public RecipeStorage getRecipeStorage() {
         return RecipeStorage.getInstance();
+    }
+
+    private void onClickToggleButton(UserStorage userStorage, ToggleButton button, Recipe recipe) {
+        setButton(button);
+        setOrRemoveRecipe(userStorage, recipe, button.isChecked());
+    }
+
+    private void setButton(ToggleButton button) {
+        if(button.isChecked()) {
+            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_yellow));
+        } else {
+            button.setBackgroundDrawable(ContextCompat.getDrawable(GlobalApplication.getAppContext(), R.drawable.ic_star_black_grey));
+        }
+    }
+
+    private void setOrRemoveRecipe(UserStorage userStorage, Recipe recipe, boolean shouldAdd) {
+        List<Recipe> recipes = getOfflineFavourites();
+        if(shouldAdd) {
+            userStorage.getPolyChefUser().addFavourite(recipe.getRecipeUuid());
+        } else {
+            userStorage.getPolyChefUser().removeFavourite(recipe.getRecipeUuid());
+        }
+        userStorage.updateUserInfo();
+        if(shouldAdd) {
+            recipes.add(recipe);
+        } else {
+            recipes.remove(recipe);
+        }
+        putFavouriteList(recipes);
     }
 
     private void putFavouriteList(List<Recipe> recipes) {

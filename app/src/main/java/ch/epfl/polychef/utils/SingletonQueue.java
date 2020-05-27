@@ -10,28 +10,37 @@ import ch.epfl.polychef.GlobalApplication;
  * Singleton queue for sending request for sending notification to other user.
  */
 public class SingletonQueue {
-    private static SingletonQueue instance;
+    private static SingletonQueue INSTANCE;
     private RequestQueue requestQueue;
 
     private SingletonQueue() {
         requestQueue = getRequestQueue();
     }
 
+    /**
+     * Gets the instance of the singleton queue for sending request for sending notification.
+     * @return the singleton queue
+     */
     public static synchronized SingletonQueue getInstance() {
-        if (instance == null) {
-            instance = new SingletonQueue();
+        if (INSTANCE == null) {
+            INSTANCE = new SingletonQueue();
         }
-        return instance;
+        return INSTANCE;
     }
 
-    public RequestQueue getRequestQueue() {
+    /**
+     * Adds a notification request to the singleton queue.
+     * @param req the notification request to add
+     * @param <T> the type of the request
+     */
+    public <T> void addToRequestQueue(Request<T> req) {
+        getRequestQueue().add(req);
+    }
+
+    private RequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(GlobalApplication.getAppContext());
         }
         return requestQueue;
-    }
-
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
     }
 }

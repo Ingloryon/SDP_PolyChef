@@ -27,6 +27,9 @@
     <string name="EnterPrepTime">Preparation time:</string>
     <string name="EnterCookTime">Cooking time:</string>
     <string name="PostRecipe">Post your Recipe !</string>
+    <string name="ModifyButton">Modify</string>
+
+
     <string name="plus">+</string>
     <string name="hintInstr">Instruction 1</string>
     <string name="EnterIngr">Ingredient 1</string>
@@ -43,6 +46,7 @@
     <string name="VoiceRecognitionSwitch">Voice Recognition</string>
     <string name="commandPrevious">previous</string>
     <string name="commandNext">next</string>
+
 
     <string name="users">users</string>
     <string name="user_picture">user picture</string>

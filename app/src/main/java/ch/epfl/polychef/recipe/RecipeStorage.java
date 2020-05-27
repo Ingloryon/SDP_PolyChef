@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.Miniatures;
@@ -24,9 +25,10 @@ import ch.epfl.polychef.utils.Preconditions;
 /**
  * Uploader and downloader of {@code Recipe} from the storage.
  */
+@SuppressWarnings("WeakerAccess")
 public class RecipeStorage implements Serializable  {
 
-    private static final String TAG = "RecipeStorage";
+    public static final String TAG = "RecipeStorage";
     public static final String DB_NAME = "recipes";
     public static final String OLDEST_RECIPE = "2020/01/01 00:00:00";
     public static final String RECIPE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
@@ -38,7 +40,7 @@ public class RecipeStorage implements Serializable  {
 
     /**
      * Gets the instance of Recipe Storage.
-     * @return
+     * @return the recipe storage instance
      */
     public static RecipeStorage getInstance(){
         return INSTANCE;
@@ -77,6 +79,7 @@ public class RecipeStorage implements Serializable  {
      *
      * @param recipe the recipe to update
      */
+
     public void updateRecipe(@NonNull Recipe recipe) {
         getFirebaseDatabase()
                 .getReference(RecipeStorage.DB_NAME).child(recipe.getKey())
@@ -202,7 +205,7 @@ public class RecipeStorage implements Serializable  {
             List<Miniatures> recipes = new ArrayList<>();
             for(DataSnapshot child : dataSnapshot.getChildren()){
                 Recipe recipe = child.getValue(Recipe.class);
-                recipe.setKey(child.getKey());
+                Objects.requireNonNull(recipe).setKey(child.getKey());
                 recipes.add(recipe);
             }
 
