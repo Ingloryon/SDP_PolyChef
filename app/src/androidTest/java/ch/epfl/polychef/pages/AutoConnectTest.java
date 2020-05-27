@@ -70,7 +70,7 @@ public class AutoConnectTest {
 
         @Override
         public void startNextActivity() {
-            
+
         }
     }
 }
