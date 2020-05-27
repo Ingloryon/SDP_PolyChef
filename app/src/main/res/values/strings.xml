@@ -56,6 +56,7 @@
     <string name="recipeNotificationMessage">See \"%1$s\" from %2$s</string>
 
     <string name="difficulty_prompt">Select difficulty (…, &#8230;)</string>
+    <string name="dark_theme">dark theme</string>
     <string-array name="difficulty_array">
         <item>Very easy</item>
         <item>Easy</item>

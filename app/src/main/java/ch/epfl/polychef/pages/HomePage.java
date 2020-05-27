@@ -2,6 +2,7 @@ package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -9,8 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -212,11 +215,32 @@ public class HomePage extends ConnectedActivity {
 
         setupUserInfo(headerView);
 
+        setupDarkModeSwitch(headerView);
+
         setupProfilePicture();
 
         setupProfileNavigation(headerView);
 
         setupNavigation();
+    }
+
+    private void setupDarkModeSwitch(View parentView) {
+        Switch darkModeSwitch = parentView.findViewById(R.id.nightModeSwitch);
+        darkModeSwitch.setChecked(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES);
+        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences sharedPref = getSharedPreferences("darkMode", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            String darkMode;
+            if(isChecked) {
+                darkMode = "true";
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                darkMode = "false";
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            editor.putString("darkMode", darkMode);
+            editor.apply();
+        });
     }
 
     private void setupUserInfo(View parentView) {
