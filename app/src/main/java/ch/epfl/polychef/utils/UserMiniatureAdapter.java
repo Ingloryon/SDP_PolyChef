@@ -51,6 +51,7 @@ public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdap
     public void onBindViewHolder(@NonNull MiniatureViewHolder holder, int position) {
         User user = userList.get(position);
         holder.username.setText(user.getUsername());
+        holder.email.setText(user.getEmail());
         holder.imageView.setImageResource(User.getResourceImageFromUser(user));
     }
 
@@ -62,12 +63,14 @@ public class UserMiniatureAdapter extends RecyclerView.Adapter<UserMiniatureAdap
     class MiniatureViewHolder extends RecyclerView.ViewHolder {
 
         TextView username;
+        TextView email;
         ImageView imageView;
 
         MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.userName);
             imageView = itemView.findViewById(R.id.profilePicture);
+            email = itemView.findViewById(R.id.userEmail);
         }
     }
 
