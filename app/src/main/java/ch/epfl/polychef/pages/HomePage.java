@@ -1,6 +1,8 @@
 package ch.epfl.polychef.pages;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -41,6 +43,7 @@ public class HomePage extends ConnectedActivity {
     private NavController navController;
     private NavigationView navView;
     private MenuItem currentItem;
+    private NavHostFragment hostFragment;
 
     public static final String LOG_OUT = "Log out";
     public static final String TAG = "HomePage-TAG";
@@ -60,7 +63,7 @@ public class HomePage extends ConnectedActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        NavHostFragment hostFragment = (NavHostFragment)
+        hostFragment = (NavHostFragment)
                 fragmentManager.findFragmentById(R.id.nav_host_fragment);
 
         //noinspection ConstantConditions (the null case is handled, there is always a navController)
@@ -95,23 +98,27 @@ public class HomePage extends ConnectedActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        FragmentManager fm = hostFragment.getChildFragmentManager();
 
-        setCurrentItemChecked(false);
+        if(fm.getBackStackEntryCount() != 0){
+            super.onBackPressed();
 
+            setCurrentItemChecked(false);
 
-        //noinspection ConstantConditions (the null case is handled)
-        int destination = navController.getCurrentDestination().getId();
+            //noinspection ConstantConditions (the null case is handled)
+            int destination = navController.getCurrentDestination().getId();
 
-        if(destination == R.id.userProfileFragment
-                || destination == R.id.fullRecipeFragment
-                || destination == R.id.rateRecipeFragment) {
-            currentItem = null;
-        } else {
-            changeItem(navView.getMenu().findItem(getMenuItem(destination)));
+            if(destination == R.id.userProfileFragment
+                    || destination == R.id.fullRecipeFragment
+                    || destination == R.id.rateRecipeFragment) {
+
+                currentItem = null;
+            } else {
+                changeItem(navView.getMenu().findItem(getMenuItem(destination)));
+            }
+
+            drawer.closeDrawer(GravityCompat.START, true);
         }
-
-        drawer.closeDrawer(GravityCompat.START, true);
     }
 
     /**
