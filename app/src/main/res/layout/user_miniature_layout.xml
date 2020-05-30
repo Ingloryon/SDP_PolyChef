@@ -22,46 +22,54 @@
             android:layout_height="@dimen/user_miniatures_height">
 
             <include
+                android:id="@+id/user_miniature_picture"
                 layout="@layout/profile_picture_layout"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="90sp"
+                android:layout_height="90sp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.3" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/userName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="22sp"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="2sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guideline9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/user_miniature_picture"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/userEmail"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="21dp"
                 android:fontFamily="sans-serif-medium"
-                android:textSize="15sp"
+
                 android:textColor="#787272"
-                app:layout_constraintStart_toEndOf="@id/guideline9"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="1sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/user_miniature_picture"
                 app:layout_constraintTop_toBottomOf="@+id/userName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
