@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -55,7 +57,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String actualQuery;
 
     private SearchView searchView;
-    private ConstraintLayout filters;
+    private LinearLayout filters;
 
     private Map<Filter, Button> filterButtons = new HashMap<>(4);
     private Map<Filter, Boolean> filterStates = new HashMap<>(4);

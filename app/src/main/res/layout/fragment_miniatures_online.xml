@@ -28,7 +28,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/filters"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -43,72 +43,44 @@
 
                 <Button
                     android:id="@+id/filter_recipe"
-                    android:layout_width="0dp"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/Recipes"
-                    app:autoSizeMaxTextSize="24sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/filter_users"
-                    app:layout_constraintHorizontal_weight="0.23"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center_vertical"
                     android:maxLines="1"/>
 
                 <Button
                     android:id="@+id/filter_users"
-                    android:layout_width="0dp"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/users"
-                    app:autoSizeMaxTextSize="24sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/filter_ingre"
-                    app:layout_constraintHorizontal_weight="0.23"
-                    app:layout_constraintStart_toEndOf="@+id/filter_recipe"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center_vertical"
                     android:maxLines="1"/>
 
                 <Button
                     android:id="@+id/filter_ingre"
-                    android:layout_width="0dp"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/disabled"
                     android:text="@string/Ingredients"
-                    app:autoSizeMaxTextSize="24sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/filter_rate"
-                    app:layout_constraintHorizontal_weight="0.34"
-                    app:layout_constraintStart_toEndOf="@+id/filter_users"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center_vertical"
                     android:maxLines="1"/>
 
                 <Button
                     android:id="@+id/filter_rate"
-                    android:layout_width="0dp"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/disabled"
                     android:text="@string/Rate"
-                    app:autoSizeMaxTextSize="24sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_weight="0.2"
-                    app:layout_constraintStart_toEndOf="@+id/filter_ingre"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center_vertical"
                     android:maxLines="1"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/miniaturesOnlineList"
