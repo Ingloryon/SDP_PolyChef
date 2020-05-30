@@ -254,6 +254,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         } else {
             recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
             userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+            getFilterButton(Filter.RECIPE).setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
+            getFilterButton(Filter.USER).setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
+            getFilterButton(Filter.RECIPE).setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+            getFilterButton(Filter.USER).setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         }
     }
 
@@ -357,10 +361,10 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private void setButton(Filter filter, Boolean setEnabled){
         Button filterButton = getFilterButton(filter);
 
-        int nextColor = setEnabled ? R.color.enabled : R.color.black;
+        int nextColor = setEnabled ? R.color.colorPrimary : R.color.disabled;
         int nextFlag = setEnabled ? Paint.UNDERLINE_TEXT_FLAG | Paint.FAKE_BOLD_TEXT_FLAG : 0;
 
-        filterButton.setTextColor(getResources().getColor(nextColor, null));
+        filterButton.setBackgroundColor(getResources().getColor(nextColor, null));
         filterButton.setPaintFlags(nextFlag);
         filterStates.replace(filter, setEnabled);
     }

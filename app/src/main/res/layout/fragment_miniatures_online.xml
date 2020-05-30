@@ -50,7 +50,8 @@
                     app:layout_constraintEnd_toStartOf="@+id/filter_users"
                     app:layout_constraintHorizontal_weight="0.23"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:maxLines="1"/>
 
                 <Button
                     android:id="@+id/filter_users"
@@ -61,13 +62,14 @@
                     app:layout_constraintEnd_toStartOf="@+id/filter_ingre"
                     app:layout_constraintHorizontal_weight="0.23"
                     app:layout_constraintStart_toEndOf="@+id/filter_recipe"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:maxLines="1"/>
 
                 <Button
                     android:id="@+id/filter_ingre"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:backgroundTint="#D6D7D7"
+                    android:backgroundTint="@color/disabled"
                     android:text="@string/Ingredients"
                     app:autoSizeMaxTextSize="24sp"
                     app:autoSizeMinTextSize="12sp"
@@ -77,7 +79,8 @@
                     app:layout_constraintEnd_toStartOf="@+id/filter_rate"
                     app:layout_constraintHorizontal_weight="0.34"
                     app:layout_constraintStart_toEndOf="@+id/filter_users"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:maxLines="1"/>
 
                 <Button
                     android:id="@+id/filter_rate"
@@ -90,7 +93,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="0.2"
                     app:layout_constraintStart_toEndOf="@+id/filter_ingre"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:maxLines="1"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

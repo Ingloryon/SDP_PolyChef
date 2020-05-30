@@ -29,9 +29,9 @@
             android:onClick="login"
             tools:layout_editor_absoluteX="291dp"
             tools:layout_editor_absoluteY="4dp"
-            tools:text="Placeholder" />
+            tools:text="Placeholder"
+            android:layout_marginEnd="10dp"/>
 
     </androidx.appcompat.widget.Toolbar>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
