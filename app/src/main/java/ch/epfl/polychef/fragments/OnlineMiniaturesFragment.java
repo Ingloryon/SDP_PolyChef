@@ -199,12 +199,6 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
         refreshButtons();
 
-        float ingredientsFilterSize = getFilterButton(Filter.INGREDIENT).getTextSize();
-
-        getFilterButton(Filter.USER).setTextSize(COMPLEX_UNIT_PX, ingredientsFilterSize);
-        getFilterButton(Filter.RECIPE).setTextSize(COMPLEX_UNIT_PX, ingredientsFilterSize);
-        getFilterButton(Filter.RATE).setTextSize(COMPLEX_UNIT_PX, ingredientsFilterSize);
-
         setFilterOnClick(Filter.RECIPE);
         setFilterOnClick(Filter.USER);
         setFilterOnClick(Filter.INGREDIENT);
@@ -256,8 +250,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         } else {
             recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
             userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
-            getFilterButton(Filter.RECIPE).setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
-            getFilterButton(Filter.USER).setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
+            getFilterButton(Filter.RECIPE).setBackgroundColor(getResources().getColor(R.color.colorPrimaryTransparent, null));
+            getFilterButton(Filter.USER).setBackgroundColor(getResources().getColor(R.color.colorPrimaryTransparent, null));
             getFilterButton(Filter.RECIPE).setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
             getFilterButton(Filter.USER).setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         }
