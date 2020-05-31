@@ -40,61 +40,66 @@
                 app:layout_constraintBottom_toTopOf="@+id/miniaturesOnlineList"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchBar">
+                app:layout_constraintTop_toBottomOf="@id/searchBar"
+                android:weightSum="4.3">
 
                 <Button
                     android:id="@+id/filter_recipe"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:text="@string/Recipes"
                     android:layout_gravity="center_vertical"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:layout_weight="1"/>
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="0.1"/>
 
                 <Button
                     android:id="@+id/filter_users"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:text="@string/users"
                     android:layout_gravity="center_vertical"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:layout_weight="1"/>
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="0.1"/>
 
                 <Button
                     android:id="@+id/filter_ingre"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/disabled"
                     android:text="@string/Ingredients"
                     android:layout_gravity="center_vertical"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:layout_weight="1"/>
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="0.1"/>
 
                 <Button
                     android:id="@+id/filter_rate"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/disabled"
                     android:text="@string/Rate"
                     android:visibility="visible"
                     android:layout_gravity="center_vertical"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 

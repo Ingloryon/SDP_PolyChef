@@ -160,9 +160,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
         setupFilters();
 
-        searchView.setOnClickListener(listener -> {
-            searchView.setIconified(false);
-        });
+        searchView.setOnClickListener(listener -> searchView.setIconified(false));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -376,8 +374,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         filters.remove(Filter.RATE);
 
         for(Filter filter: filters){
-            if(isEnabled(filter))
+            if(isEnabled(filter)) {
                 return false;
+            }
         }
 
         return true;
