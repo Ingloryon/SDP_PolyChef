@@ -1,7 +1,9 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
+import android.widget.ImageView;
 
+import androidx.fragment.app.Fragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -31,6 +33,7 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.recipe.RecipeTest;
 import ch.epfl.polychef.utils.CallHandlerChecker;
+import ch.epfl.polychef.utils.CustomRatingBar;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -43,6 +46,8 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -51,6 +56,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class RateRecipeFragmentsHomeTest {
+
+    private CustomRatingBar ratingBar;
+
+    private FragmentTestUtils fragUtils = new FragmentTestUtils();
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
@@ -66,9 +75,14 @@ public class RateRecipeFragmentsHomeTest {
             false);
 
     @Before
-    public void startTest() {
+    public synchronized void startTest(){
         Intents.init();
         intentsTestRuleHome.launchActivity(new Intent());
+        //Click on the first recipe
+        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
+        RateRecipeFragment rateFragment = (RateRecipeFragment) fragUtils.getTestedFragment(intentsTestRuleHome);
+        ratingBar = rateFragment.getRatingBar();
     }
 
     @After
@@ -82,33 +96,117 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void rateSpinnerCanBeClickedOn() {
-
-        //Click on the first recipe
-        onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        rateCurrentRecipeNStars(0);
-        String s0="Your rating is 0 stars.";
-        sendRateAndCheckToast(s0);
+    public void rateBarCanBeClickedOn() {
 
         rateCurrentRecipeNStars(1);
+        String s0="Your rating is 1 stars.";
+        sendRateAndCheckToast(s0);
+        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
+
+        rateCurrentRecipeNStars(2);
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String s1="Your new rating is 1 stars. Your previous rating was 0";
+        String s1="Your new rating is 2 stars. Your previous rating was 1";
         sendRateAndCheckToast(s1);
 
     }
 
-    private void rateCurrentRecipeNStars(int nbStars){
+    @Test
+    public void clickOnRateRegisterCorrectRate(){
+        for(int i = 0; i < 5; i++){
+            rateCurrentRecipeNStars(i + 1);
+            assertEquals(i + 1, ratingBar.getRate());
+        }
+    }
+    @Test
+    public void nonClickableRatingBarIsIndeedUnClickable(){
+        // Change the page rating bar by a non clickable one for test purpose
+        RateRecipeFragment rateFragment = (RateRecipeFragment) fragUtils.getTestedFragment(intentsTestRuleHome);
+        rateFragment.setRatingBar(new CustomRatingBar(rateFragment.getView().findViewById(R.id.RateChoices), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, false));
+        ratingBar = rateFragment.getRatingBar();
+        ratingBar.setRate(0);
+        //This should do nothing since the click is disable
+        rateCurrentRecipeNStars(3);
+        assertEquals(0, ratingBar.getRate());
+    }
+    @Test
+    public void correctImageResourceAreDisplayedWithoutHalf(){
+        rateCurrentRecipeNStars(3);
+        ArrayList<ImageView> images = ratingBar.getAllStarsImage();
 
-        onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
-        onView(withId(R.id.RateChoices)).perform(click());
-        String star= nbStars<2?" star":" stars";
-        onData(allOf(is(instanceOf(String.class)), is(nbStars+star))).perform(click());
-        onView(withId(R.id.RateChoices)).check(matches(withSpinnerText(containsString(nbStars+star))));
+        assertNotNull(images);
+        assertEquals((int)images.get(0).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(1).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(2).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(3).getTag(), ratingBar.getEmptyImageResource());
+        assertEquals((int)images.get(4).getTag(), ratingBar.getEmptyImageResource());
+    }
+
+    @Test
+    public void correctImageResourceAreDisplayedWithHalf(){
+        //Not possible to rate half but here we force it to test for other display place of the rating bar
+        ratingBar.setRate(2.5);
+        ArrayList<ImageView> images = ratingBar.getAllStarsImage();
+        assertNotNull(images);
+        assertEquals((int)images.get(0).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(1).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(2).getTag(), ratingBar.getHalfImageResource());
+        assertEquals((int)images.get(3).getTag(), ratingBar.getEmptyImageResource());
+        assertEquals((int)images.get(4).getTag(), ratingBar.getEmptyImageResource());
+    }
+
+    @Test
+    public void correctImageResourceAreDisplayedWithLessThanZero(){
+        ratingBar.setRate(-5);
+        ArrayList<ImageView> images = ratingBar.getAllStarsImage();
+        assertNotNull(images);
+        assertEquals(0, ratingBar.getRate());
+        assertEquals((int)images.get(0).getTag(), ratingBar.getEmptyImageResource());
+        assertEquals((int)images.get(1).getTag(), ratingBar.getEmptyImageResource());
+        assertEquals((int)images.get(2).getTag(), ratingBar.getEmptyImageResource());
+        assertEquals((int)images.get(3).getTag(), ratingBar.getEmptyImageResource());
+        assertEquals((int)images.get(4).getTag(), ratingBar.getEmptyImageResource());
+    }
+
+    @Test
+    public void correctImageResourceAreDisplayedWithMoreThanFive(){
+        ratingBar.setRate(10);
+        ArrayList<ImageView> images = ratingBar.getAllStarsImage();
+        assertNotNull(images);
+        assertEquals(5, ratingBar.getRate());
+        assertEquals((int)images.get(0).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(1).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(2).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(3).getTag(), ratingBar.getFullImageResource());
+        assertEquals((int)images.get(4).getTag(), ratingBar.getFullImageResource());
+    }
+
+    private void rateCurrentRecipeNStars(int nbStars){
+        if(nbStars < 1 || nbStars > 5){
+            return;
+        }
+        switch(nbStars){
+            case 1:
+                onView(withId(R.id.star0)).perform(click());
+                break;
+            case 2:
+                onView(withId(R.id.star1)).perform(click());
+                break;
+            case 3:
+                onView(withId(R.id.star2)).perform(click());
+                break;
+            case 4:
+                onView(withId(R.id.star3)).perform(click());
+                break;
+            case 5:
+                onView(withId(R.id.star4)).perform(click());
+                break;
+            default:
+                break;
+        }
     }
 
     private void sendRateAndCheckToast(String expectedText){
@@ -125,7 +223,7 @@ public class RateRecipeFragmentsHomeTest {
 
         ArrayList<Recipe> arr=new ArrayList<>();
 
-        FakeFakeHomePage(){
+        public FakeFakeHomePage(){
             super();
             arr.add(RecipeTest.setStandardRecipe().setDate("2020/04/01 12:00:01").build());
         }
@@ -162,7 +260,6 @@ public class RateRecipeFragmentsHomeTest {
 
                 return null;
             }).when(mockRecipeStorage).getNRecipes(any(Integer.class),any(String.class),any(String.class),any(Boolean.class),any(CallHandler.class));
-
 
             return mockRecipeStorage;
         }

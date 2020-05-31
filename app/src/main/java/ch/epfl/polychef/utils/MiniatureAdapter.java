@@ -63,7 +63,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         if(miniaturesList.get(position).isRecipe()) {
             Recipe recipe = (Recipe) miniaturesList.get(position);
             holder.recipeTitle.setText(recipe.getName());
-            holder.ratingBar.setRating((float) recipe.getRating().ratingAverage());
+            holder.ratingBar.setRate((float) recipe.getRating().ratingAverage());
             FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
             getImageFor(holder, recipe);
         }else if(miniaturesList.get(position).isUser()){
@@ -133,7 +133,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
         TextView recipeTitle;
         ImageView image;
-        RatingBar ratingBar;
+        CustomRatingBar ratingBar;
         ToggleButton favouriteButton;
 
         TextView username;
@@ -142,7 +142,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         public MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById(R.id.recipeNameMiniature);
-            ratingBar = itemView.findViewById(R.id.miniatureRatingBar);
+            ratingBar = new CustomRatingBar(itemView.findViewById(R.id.miniatureRatingBar), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, false);
             image = itemView.findViewById(R.id.miniatureRecipeImage);
             favouriteButton = itemView.findViewById(R.id.favouriteButton);
             username = itemView.findViewById(R.id.userName);

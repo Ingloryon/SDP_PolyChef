@@ -27,6 +27,7 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.CustomRatingBar;
 import ch.epfl.polychef.utils.Preconditions;
 
 /**
@@ -38,7 +39,7 @@ public class RateRecipeFragment extends Fragment {
     private Button postButton;
     private Recipe recipe;
 
-    Spinner spinner;
+    private CustomRatingBar ratingBar;
     EditText comment;
 
     private FirebaseDatabase fireDatabase;
@@ -76,15 +77,18 @@ public class RateRecipeFragment extends Fragment {
 
         recipe = (Recipe) bundle.getSerializable("RecipeToRate");
 
-        spinner = getView().findViewById(R.id.RateChoices);
+        ratingBar = new CustomRatingBar(getView().findViewById(R.id.RateChoices), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, true);
+
         comment = getView().findViewById(R.id.CommentText);
 
         if(recipe.getRating().getAllOpinion().containsKey(userStorage.getPolyChefUser().getKey())) {
             Opinion previousOpinion = recipe.getRating().getAllOpinion().get(userStorage.getPolyChefUser().getKey());
-            spinner.setSelection(previousOpinion.getRate());
+            ratingBar.setRate(previousOpinion.getRate());
             if(previousOpinion.getComment() != null && !previousOpinion.getComment().isEmpty()) {
                 comment.setText(previousOpinion.getComment());
             }
+        }else{
+            ratingBar.setRate(5);
         }
 
         String text = getActivity().getString(R.string.RateText) + " \"" + recipe.getName() + "\" ?";
@@ -103,7 +107,7 @@ public class RateRecipeFragment extends Fragment {
 
     private void checkAndSendOpinion(){
         // The index returned is the same as the nb of stars
-        int starNb = spinner.getSelectedItemPosition();
+        int starNb = (int) ratingBar.getRate();
 
         String commentString = comment.getText().toString().trim();
 
@@ -153,5 +157,14 @@ public class RateRecipeFragment extends Fragment {
         } else {
             throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");
         }
+    }
+
+    public CustomRatingBar getRatingBar(){
+        return ratingBar;
+    }
+
+    public void setRatingBar(CustomRatingBar bar){
+        this.ratingBar = bar;
+        bar.drawBar();
     }
 }
