@@ -20,7 +20,7 @@ public class CustomRatingBar {
 
 
     /**
-     * Create a new customRatingBar
+     * Create a new customRatingBar.
      * @param ratingView the view where the rating bar will be displayed
      * @param starFullSource the image source of a star that is full
      * @param starHalfSource the image source of a star that is half full
@@ -39,7 +39,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Make all the images clickable and change the rate according to where we have clicked
+     * Make all the images clickable and change the rate according to where we have clicked.
      */
     private void makeImageClickable() {
         ArrayList<ImageView> stars = getAllStarsImage();
@@ -56,7 +56,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Draw the bar in the layout depending on the current rate
+     * Draw the bar in the layout depending on the current rate.
      */
     public void drawBar(){
 
@@ -77,7 +77,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Set a new rate and draw the layout accordingly
+     * Set a new rate and draw the layout accordingly.
      * @param rate the rate to change to
      */
     public void setRate(double rate){
@@ -92,7 +92,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Get all the ImageView of the rating bar
+     * Get all the ImageView of the rating bar.
      * @return the image views
      */
     public ArrayList<ImageView> getAllStarsImage(){
@@ -106,7 +106,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Get the current rate of the rating bar
+     * Get the current rate of the rating bar.
      * @return the rate
      */
     public double getRate(){
@@ -114,7 +114,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Get the full image resource of the rating bar
+     * Get the full image resource of the rating bar.
      * @return the id
      */
     public int getFullImageResource(){
@@ -122,7 +122,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Get the half image resource of the rating bar
+     * Get the half image resource of the rating bar.
      * @return the id
      */
     public int getHalfImageResource(){
@@ -130,7 +130,7 @@ public class CustomRatingBar {
     }
 
     /**
-     * Get the empty image resource of the rating bar
+     * Get the empty image resource of the rating bar.
      * @return the id
      */
     public int getEmptyImageResource(){

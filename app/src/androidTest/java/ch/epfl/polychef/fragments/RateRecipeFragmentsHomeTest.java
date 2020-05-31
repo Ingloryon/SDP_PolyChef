@@ -121,6 +121,7 @@ public class RateRecipeFragmentsHomeTest {
             assertEquals(i + 1, ratingBar.getRate());
         }
     }
+
     @Test
     public void nonClickableRatingBarIsIndeedUnClickable(){
         // Change the page rating bar by a non clickable one for test purpose
@@ -132,6 +133,7 @@ public class RateRecipeFragmentsHomeTest {
         rateCurrentRecipeNStars(3);
         assertEquals(0, ratingBar.getRate());
     }
+
     @Test
     public void correctImageResourceAreDisplayedWithoutHalf(){
         rateCurrentRecipeNStars(3);
