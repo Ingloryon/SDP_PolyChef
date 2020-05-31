@@ -67,7 +67,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String currentOldest;
     private String currentNewest;
 
-    private boolean isLoading = false;
+    public boolean isLoading = false;
     private boolean isSearching = false;
 
     private RecipeStorage recipeStorage;

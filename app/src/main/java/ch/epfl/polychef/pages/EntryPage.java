@@ -66,11 +66,20 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
-        } else if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+        } else if((getUIMode() & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+    }
+
+    /**
+     * Get the current UI mode configuration.
+     *
+     * @return the current UI mode configuration
+     */
+    protected int getUIMode() {
+        return getResources().getConfiguration().uiMode;
     }
 
     @Override

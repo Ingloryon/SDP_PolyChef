@@ -1,10 +1,12 @@
 package ch.epfl.polychef.fragments;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.icu.text.SimpleDateFormat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -47,10 +49,14 @@ import ch.epfl.polychef.users.UserStorage;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
@@ -165,14 +171,43 @@ public class OnlineMiniaturesFragmentTest {
         initActivity();
 
         search("test");
-        wait(100);
+        ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).isLoading = false;
         onView(withId(R.id.filter_ingre)).perform(click());
-        wait(100);
+        ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).isLoading = false;
         onView(withId(R.id.filter_users)).perform(click());
-        wait(100);
+        ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).isLoading = false;
         onView(withId(R.id.filter_recipe)).perform(click());
-        wait(100);
+        ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).isLoading = false;
         onView(withId(R.id.filter_rate)).perform(click());
+        checkSelected(R.id.filter_users, true);
+        checkSelected(R.id.filter_recipe, true);
+        checkSelected(R.id.filter_ingre, false);
+        checkSelected(R.id.filter_rate, true);
+    }
+
+    @Test
+    public synchronized void removeAllFilterResetFilters() throws InterruptedException {
+        initActivity();
+
+        search("test");
+        ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).isLoading = false;
+        onView(withId(R.id.filter_ingre)).perform(click());
+        ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).isLoading = false;
+        onView(withId(R.id.filter_ingre)).perform(click());
+        ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).isLoading = false;
+        checkSelected(R.id.filter_users, true);
+        checkSelected(R.id.filter_recipe, true);
+        checkSelected(R.id.filter_ingre, false);
+        checkSelected(R.id.filter_rate, false);
+    }
+
+    private void checkSelected(int resId, boolean isSelected) {
+        TextView textView = intentsTestRule.getActivity().findViewById(resId);
+        if(isSelected) {
+            assertThat(textView.getPaintFlags(), is(Paint.UNDERLINE_TEXT_FLAG | Paint.FAKE_BOLD_TEXT_FLAG));
+        } else {
+            assertThat(textView.getPaintFlags(), is(0));
+        }
     }
 
     @Test
