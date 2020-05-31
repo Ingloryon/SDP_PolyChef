@@ -57,6 +57,7 @@
 
     <string name="difficulty_prompt">Select difficulty (…, &#8230;)</string>
     <string name="dark_theme">dark theme</string>
+    <string name="nav_app_bar_close_drawer_description">Close navigation drawer</string>
     <string-array name="difficulty_array">
         <item>Very easy</item>
         <item>Easy</item>

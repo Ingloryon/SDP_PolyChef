@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -44,6 +46,7 @@ public class HomePage extends ConnectedActivity {
     private NavigationView navView;
     private MenuItem currentItem;
     private NavHostFragment hostFragment;
+    private Toolbar toolbar;
 
     public static final String LOG_OUT = "Log out";
     public static final String TAG = "HomePage-TAG";
@@ -56,7 +59,7 @@ public class HomePage extends ConnectedActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Attaching the layout to the toolbar object
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer);
@@ -299,6 +302,12 @@ public class HomePage extends ConnectedActivity {
     }
 
     private void setupNavigation(){
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_close_drawer_description);
+        drawer.addDrawerListener(toggle);
+        toggle.setDrawerIndicatorEnabled(true);
+        toggle.syncState();
         navView.setNavigationItemSelectedListener(selectedItem -> {
             changeItem(selectedItem);
             invalidateOptionsMenu();

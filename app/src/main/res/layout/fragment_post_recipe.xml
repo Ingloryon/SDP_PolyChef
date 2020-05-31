@@ -306,7 +306,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/post_recipe_spacing" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/postRecipePictures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -321,7 +321,6 @@
                     android:id="@+id/miniatureLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
@@ -334,7 +333,12 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
                         android:text="@string/UploadMiniature"
-                        android:textSize="12sp" />
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
+                        android:maxLines="1"/>
 
                     <ImageView
                         android:id="@+id/miniaturePreview"
@@ -343,12 +347,14 @@
 
                 </LinearLayout>
 
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="1dp" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -361,8 +367,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
                         android:text="@string/UploadPictures"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
                         android:textSize="12sp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:maxLines="1"/>
 
                     <TextView
                         android:id="@+id/mealPicturesText"
@@ -373,7 +384,7 @@
 
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
 
             <RelativeLayout
