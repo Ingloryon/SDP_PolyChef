@@ -74,7 +74,7 @@ public class DarkLightThemeModeTest {
         }
 
         @Override
-        protected int getUIMode() {
+        protected int getUiMode() {
             return 17;
         }
     }
