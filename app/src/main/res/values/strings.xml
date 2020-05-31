@@ -58,6 +58,11 @@
     <string name="difficulty_prompt">Select difficulty (…, &#8230;)</string>
     <string name="dark_theme">dark theme</string>
     <string name="nav_app_bar_close_drawer_description">Close navigation drawer</string>
+    <string name="email">Email</string>
+    <string name="cuistot_achievement">cuistot achievement</string>
+    <string name="followed_achievement">followed achievement</string>
+    <string name="favourite_achievement">favourite achievement</string>
+    <string name="username">Username</string>
     <string-array name="difficulty_array">
         <item>Very easy</item>
         <item>Easy</item>
