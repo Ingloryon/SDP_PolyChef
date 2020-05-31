@@ -41,7 +41,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/searchBar"
-                android:weightSum="4.3">
+                android:weightSum="5">
 
                 <Button
                     android:id="@+id/filter_recipe"
@@ -51,6 +51,7 @@
                     android:text="@string/Recipes"
                     android:layout_gravity="center_vertical"
                     android:maxLines="1"
+                    android:textSize="12sp"
                     android:layout_weight="1"/>
 
                 <View
@@ -66,6 +67,7 @@
                     android:text="@string/users"
                     android:layout_gravity="center_vertical"
                     android:maxLines="1"
+                    android:textSize="12sp"
                     android:layout_weight="1"/>
 
                 <View
@@ -82,7 +84,8 @@
                     android:text="@string/Ingredients"
                     android:layout_gravity="center_vertical"
                     android:maxLines="1"
-                    android:layout_weight="1"/>
+                    android:textSize="12sp"
+                    android:layout_weight="1.7"/>
 
                 <View
                     android:layout_width="0dp"
@@ -99,6 +102,7 @@
                     android:visibility="visible"
                     android:layout_gravity="center_vertical"
                     android:maxLines="1"
+                    android:textSize="12sp"
                     android:layout_weight="1"/>
 
             </LinearLayout>
