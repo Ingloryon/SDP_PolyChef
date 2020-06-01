@@ -59,7 +59,6 @@ public class CustomRatingBar {
      * Draw the bar in the layout depending on the current rate.
      */
     public void drawBar(){
-
         ArrayList<ImageView> stars = getAllStarsImage();
         double roundedRate = ((double)Math.round(rate * 2)) / 2;
         for(int i = 0; i < stars.size(); i++){

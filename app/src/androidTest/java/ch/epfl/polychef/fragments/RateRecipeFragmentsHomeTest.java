@@ -42,6 +42,7 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
+import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -135,7 +136,7 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void correctImageResourceAreDisplayedWithoutHalf(){
+    public void correctImageResourceAreDisplayedWithoutHalf() throws Throwable {
         rateCurrentRecipeNStars(3);
         ArrayList<ImageView> images = ratingBar.getAllStarsImage();
 
@@ -148,9 +149,9 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void correctImageResourceAreDisplayedWithHalf(){
+    public void correctImageResourceAreDisplayedWithHalf() throws Throwable {
         //Not possible to rate half but here we force it to test for other display place of the rating bar
-        ratingBar.setRate(2.5);
+        runOnUiThread(() -> ratingBar.setRate(2.5));
         ArrayList<ImageView> images = ratingBar.getAllStarsImage();
         assertNotNull(images);
         assertEquals((int)images.get(0).getTag(), ratingBar.getFullImageResource());
@@ -161,8 +162,8 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void correctImageResourceAreDisplayedWithLessThanZero(){
-        ratingBar.setRate(-5);
+    public void correctImageResourceAreDisplayedWithLessThanZero() throws Throwable {
+        runOnUiThread(() -> ratingBar.setRate(-5));
         ArrayList<ImageView> images = ratingBar.getAllStarsImage();
         assertNotNull(images);
         assertEquals(0, ratingBar.getRate());
@@ -174,8 +175,8 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void correctImageResourceAreDisplayedWithMoreThanFive(){
-        ratingBar.setRate(10);
+    public void correctImageResourceAreDisplayedWithMoreThanFive() throws Throwable {
+        runOnUiThread(() -> ratingBar.setRate(10));
         ArrayList<ImageView> images = ratingBar.getAllStarsImage();
         assertNotNull(images);
         assertEquals(5, ratingBar.getRate());
