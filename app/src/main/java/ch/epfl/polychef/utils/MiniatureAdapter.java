@@ -87,6 +87,8 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         }else if(miniaturesList.get(position).isUser()){
             User user = (User) miniaturesList.get(position);
             holder.username.setText(user.getUsername());
+            holder.email.setText(user.getEmail());
+            String test = user.getEmail();
             holder.imageView.setImageResource(User.getResourceImageFromUser(user));
         }
     }
@@ -152,6 +154,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         ToggleButton favouriteButton;
 
         TextView username;
+        TextView email;
         ImageView imageView;
 
         MiniatureViewHolder(@NonNull View itemView) {
@@ -161,6 +164,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
             image = itemView.findViewById(R.id.miniatureRecipeImage);
             favouriteButton = itemView.findViewById(R.id.favouriteButton);
             username = itemView.findViewById(R.id.userName);
+            email = itemView.findViewById(R.id.userEmail);
             imageView = itemView.findViewById(R.id.profilePicture);
         }
     }

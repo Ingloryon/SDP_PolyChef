@@ -10,67 +10,77 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp">
 
             <RelativeLayout
-                android:id="@+id/titleBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageLayout">
 
-                <TextView
-                    android:id="@+id/recipeNameMiniature"
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/miniatureRecipeImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:layout_marginTop="0dp"
+                    android:contentDescription="@string/Instructions"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <RelativeLayout
+                    android:id="@+id/titleBar"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/favouriteButton"
-                    android:textSize="36sp" />
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:layout_alignEnd="@id/miniatureRecipeImage"
+                    android:layout_alignStart="@id/miniatureRecipeImage"
+                    android:layout_alignBottom="@id/miniatureRecipeImage"
+                    android:background="@drawable/blurry_background">
 
-                <ToggleButton
-                    android:id="@+id/favouriteButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@color/fui_bgTwitter"
-                    android:textOff=""
-                    android:textOn="" />
+                    <TextView
+                        android:id="@+id/recipeNameMiniature"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/favouriteButton"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"/>
 
+                    <ToggleButton
+                        android:id="@+id/favouriteButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:textOff=""
+                        android:textOn="" />
+                </RelativeLayout>
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/miniatureRecipeImage"
-                android:layout_width="0dp"
-                android:layout_height="230dp"
-                android:layout_marginTop="40dp"
-                android:contentDescription="@string/Instructions"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleBar" />
 
-            <include
-                android:id="@+id/miniatureRatingBar"
-                layout="@layout/rating_layout"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/miniatureRecipeImage" />
+    <include
+        android:id="@+id/miniatureRatingBar"
+        layout="@layout/rating_layout"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

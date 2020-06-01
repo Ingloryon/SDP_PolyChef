@@ -43,9 +43,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Username"
+                android:text="@string/username"
                 app:autoSizeMaxTextSize="100sp"
-                app:autoSizeMinTextSize="12sp"
+                app:autoSizeMinTextSize="2sp"
                 app:autoSizeStepGranularity="2sp"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintStart_toEndOf="@+id/usersImage"
@@ -57,9 +57,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="Email"
+                android:text="@string/email"
                 app:autoSizeMaxTextSize="100sp"
-                app:autoSizeMinTextSize="12sp"
+                app:autoSizeMinTextSize="2sp"
                 app:autoSizeStepGranularity="2sp"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintStart_toEndOf="@+id/usersImage"
@@ -69,57 +69,65 @@
                 android:id="@+id/subscribeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="5dp"
                 android:textOff="@string/subscribe"
                 android:textOn="@string/subscribed"
-                app:layout_constraintStart_toEndOf="@+id/usersImage"
-                app:layout_constraintTop_toBottomOf="@+id/UserEmailDisplay" />
-
-            <ImageView
-                android:id="@+id/cuistot_achievement"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/followed_achievement"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/usersImage"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/cuistot_none" />
-
-            <ImageView
-                android:id="@+id/followed_achievement"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/favorite_achievement"
-                app:layout_constraintStart_toEndOf="@+id/cuistot_achievement"
-                app:layout_constraintTop_toBottomOf="@+id/usersImage"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/followed_none" />
-
-            <ImageView
-                android:id="@+id/favorite_achievement"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:minHeight="30dp"
+                android:background="@drawable/subscribe_button_background"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/followed_achievement"
-                app:layout_constraintTop_toBottomOf="@+id/usersImage"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/favorite_none" />
+                app:layout_constraintBottom_toBottomOf="@+id/usersImage" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/usersImage">
+
+                <ImageView
+                    android:id="@+id/cuistot_achievement"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/followed_achievement"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/cuistot_none"
+                    android:contentDescription="@string/cuistot_achievement" />
+
+                <ImageView
+                    android:id="@+id/followed_achievement"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/favorite_achievement"
+                    app:layout_constraintStart_toEndOf="@+id/cuistot_achievement"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/followed_none"
+                    android:contentDescription="@string/followed_achievement" />
+
+                <ImageView
+                    android:id="@+id/favorite_achievement"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/followed_achievement"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/favorite_none"
+                    android:contentDescription="@string/favourite_achievement" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -127,7 +135,6 @@
             android:id="@+id/UserRecipesList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

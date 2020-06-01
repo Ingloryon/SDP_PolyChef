@@ -29,7 +29,8 @@
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:labelFor="@+id/nameInput"/>
 
             <EditText
                 android:id="@+id/nameInput"
@@ -46,7 +47,8 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipeName" />
+                app:layout_constraintTop_toBottomOf="@+id/recipeName"
+                android:inputType="text" />
 
             <Space
                 android:layout_width="match_parent"
@@ -143,7 +145,8 @@
                     android:maxLines="20"
                     android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints="@string/hintInstr" />
 
             </LinearLayout>
 
@@ -186,7 +189,8 @@
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-black"
                         android:text="@string/EnterPersonNb"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:labelFor="@+id/personNbInput"/>
 
                     <EditText
                         android:id="@+id/personNbInput"
@@ -194,7 +198,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:autofillHints="1" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -219,7 +224,8 @@
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-black"
                         android:text="@string/EnterPrepTime"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:labelFor="@+id/prepTimeInput"/>
 
                     <EditText
                         android:id="@+id/prepTimeInput"
@@ -227,7 +233,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:autofillHints="1" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -251,7 +258,8 @@
                         android:layout_marginEnd="49dp"
                         android:fontFamily="sans-serif-black"
                         android:text="@string/EnterCookTime"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:labelFor="@+id/cookTimeInput"/>
 
                     <EditText
                         android:id="@+id/cookTimeInput"
@@ -259,7 +267,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:autofillHints="1" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -306,7 +315,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/post_recipe_spacing" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/postRecipePictures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -321,7 +330,6 @@
                     android:id="@+id/miniatureLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
@@ -334,21 +342,29 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
                         android:text="@string/UploadMiniature"
-                        android:textSize="12sp" />
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        android:textSize="12sp"
+                        android:maxLines="1"/>
 
                     <ImageView
                         android:id="@+id/miniaturePreview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/miniature_preview" />
 
                 </LinearLayout>
 
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="1dp" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -361,8 +377,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
                         android:text="@string/UploadPictures"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
                         android:textSize="12sp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:maxLines="1"/>
 
                     <TextView
                         android:id="@+id/mealPicturesText"
@@ -373,7 +394,7 @@
 
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
 
             <RelativeLayout
