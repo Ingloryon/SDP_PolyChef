@@ -26,6 +26,7 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.recipe.RecipeStorage;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
+import ch.epfl.polychef.utils.CustomRatingBar;
 import ch.epfl.polychef.utils.Preconditions;
 
 /**
@@ -34,10 +35,11 @@ import ch.epfl.polychef.utils.Preconditions;
 public class RateRecipeFragment extends Fragment {
     private static final String TAG = "RateRecipeFragment";
     private Recipe recipe;
+
+    private CustomRatingBar ratingBar;
+    EditText comment;
     private UserStorage userStorage;
     private RecipeStorage recipeStorage;
-    private Spinner spinner;
-    private EditText comment;
 
     /**
      * Required empty public constructor for Firebase.
@@ -70,15 +72,18 @@ public class RateRecipeFragment extends Fragment {
 
         recipe = (Recipe) Objects.requireNonNull(bundle).getSerializable("RecipeToRate");
 
-        spinner = requireView().findViewById(R.id.RateChoices);
-        comment = requireView().findViewById(R.id.CommentText);
+        ratingBar = new CustomRatingBar(getView().findViewById(R.id.RateChoices), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, true);
+
+        comment = getView().findViewById(R.id.CommentText);
 
         if(recipe.getRating().getAllOpinion().containsKey(userStorage.getPolyChefUser().getKey())) {
             Opinion previousOpinion = recipe.getRating().getAllOpinion().get(userStorage.getPolyChefUser().getKey());
-            spinner.setSelection(Objects.requireNonNull(previousOpinion).getRate());
+            ratingBar.setRate(previousOpinion.getRate());
             if(previousOpinion.getComment() != null && !previousOpinion.getComment().isEmpty()) {
                 comment.setText(previousOpinion.getComment());
             }
+        }else{
+            ratingBar.setRate(5);
         }
 
         String text = requireActivity().getString(R.string.RateText) + " \"" + recipe.getName() + "\" ?";
@@ -92,7 +97,7 @@ public class RateRecipeFragment extends Fragment {
 
     private void checkAndSendOpinion(){
         // The index returned is the same as the nb of stars
-        int starNb = spinner.getSelectedItemPosition();
+        int starNb = (int) ratingBar.getRate();
 
         String commentString = comment.getText().toString().trim();
 
@@ -141,5 +146,14 @@ public class RateRecipeFragment extends Fragment {
         } else {
             throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");
         }
+    }
+
+    public CustomRatingBar getRatingBar(){
+        return ratingBar;
+    }
+
+    public void setRatingBar(CustomRatingBar bar){
+        this.ratingBar = bar;
+        bar.drawBar();
     }
 }
