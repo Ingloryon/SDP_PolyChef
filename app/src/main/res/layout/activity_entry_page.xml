@@ -38,7 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tool_bar"
-        app:srcCompat="@color/black" />
+        app:srcCompat="@color/black"
+        android:contentDescription="@string/auto_login_background" />
 
     <ProgressBar
         android:id="@+id/autoLoginProgress"

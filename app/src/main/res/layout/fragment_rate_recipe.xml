@@ -59,7 +59,9 @@
                 android:id="@+id/CommentText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/add_a_comment" />
+                android:hint="@string/add_a_comment"
+                android:autofillHints="@string/add_a_comment"
+                android:inputType="text" />
 
             <Space
                 android:layout_width="match_parent"

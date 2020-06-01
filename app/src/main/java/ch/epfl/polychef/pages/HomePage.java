@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -11,8 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -41,6 +46,7 @@ public class HomePage extends ConnectedActivity {
     private NavigationView navView;
     private MenuItem currentItem;
     private NavHostFragment hostFragment;
+    private Toolbar toolbar;
 
     public static final String LOG_OUT = "Log out";
     public static final String TAG = "HomePage-TAG";
@@ -53,7 +59,7 @@ public class HomePage extends ConnectedActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Attaching the layout to the toolbar object
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer);
@@ -219,11 +225,32 @@ public class HomePage extends ConnectedActivity {
 
         setupUserInfo(headerView);
 
+        setupDarkModeSwitch(headerView);
+
         setupProfilePicture();
 
         setupProfileNavigation(headerView);
 
         setupNavigation();
+    }
+
+    private void setupDarkModeSwitch(View parentView) {
+        Switch darkModeSwitch = parentView.findViewById(R.id.nightModeSwitch);
+        darkModeSwitch.setChecked(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES);
+        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences sharedPref = getSharedPreferences("darkMode", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            String darkMode;
+            if(isChecked) {
+                darkMode = "true";
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                darkMode = "false";
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            editor.putString("darkMode", darkMode);
+            editor.apply();
+        });
     }
 
     private void setupUserInfo(View parentView) {
@@ -275,6 +302,12 @@ public class HomePage extends ConnectedActivity {
     }
 
     private void setupNavigation(){
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_close_drawer_description);
+        drawer.addDrawerListener(toggle);
+        toggle.setDrawerIndicatorEnabled(true);
+        toggle.syncState();
         navView.setNavigationItemSelectedListener(selectedItem -> {
             changeItem(selectedItem);
             invalidateOptionsMenu();

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
@@ -38,6 +39,7 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -144,6 +146,18 @@ public class HomePageTest {
             Espresso.pressBack();
             wait(100);
         }
+    }
+
+    @Test
+    public synchronized void canChangeDarkLightTheme() throws InterruptedException {
+        onView(withId(R.id.drawer)).perform(DrawerActions.open());
+        wait(100);
+        int previous = AppCompatDelegate.getDefaultNightMode();
+        onView(withId(R.id.nightModeSwitch)).perform(click());
+        assertNotEquals(previous, AppCompatDelegate.getDefaultNightMode());
+        previous = AppCompatDelegate.getDefaultNightMode();
+        onView(withId(R.id.nightModeSwitch)).perform(click());
+        assertNotEquals(previous, AppCompatDelegate.getDefaultNightMode());
     }
 
     public Boolean isTheOnlyOneChecked(int id, List<Integer> options, Menu menu){
