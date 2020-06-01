@@ -1,11 +1,9 @@
 package ch.epfl.polychef.utils;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ch.epfl.polychef.R;
 
