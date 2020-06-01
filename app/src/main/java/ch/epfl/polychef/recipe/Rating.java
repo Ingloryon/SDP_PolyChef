@@ -1,14 +1,18 @@
 package ch.epfl.polychef.recipe;
 
-import android.util.Log;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.polychef.utils.Preconditions;
 
+/**
+ * Class representing a Rating given to an Object.
+ */
 public final class Rating implements Serializable {
     private int ratingSum;
     private Map<String, Opinion> allOpinion;
@@ -46,7 +50,7 @@ public final class Rating implements Serializable {
         if (allOpinion.containsKey(userID)) {
             Opinion oldOpinion = allOpinion.get(userID);
             allOpinion.replace(userID, new Opinion(rate, comment));
-            ratingSum = ratingSum - oldOpinion.getRate() + rate;
+            ratingSum = ratingSum - Objects.requireNonNull(oldOpinion).getRate() + rate;
             return oldOpinion.getRate();
         } else {
             allOpinion.put(userID, new Opinion(rate, comment));
@@ -64,29 +68,43 @@ public final class Rating implements Serializable {
         return allOpinion.size() == 0 ? 0.0 : ((double) ratingSum) / allOpinion.size();
     }
 
-    @Override
-    public String toString() {
-        return String.format(Locale.ENGLISH, "%.2f", ratingAverage()) + "/5 stars by " + allOpinion.size() + " users.\n";
-    }
-
-
+    /**
+     * Gets the sum of all the ratings.
+     * @return the total rating sum
+     */
+    @SuppressWarnings("WeakerAccess")
     public int getRatingSum() {
         return ratingSum;
     }
 
+    /**
+     * Gets the map of all ratings received (user, opinion given).
+     * @return the map of all ratings
+     */
     public Map<String, Opinion> getAllOpinion() {
         return allOpinion;
     }
 
-    public String getUserIdFromOpinion(Opinion opinion){
+    /**
+     * Gets the userId corresponding to a given Opinion.
+     * @param opinion the opinion whose userId we look for
+     * @return the corresponding user
+     */
+    public String getUserIdFromOpinion(@NonNull Opinion opinion){
         if(!allOpinion.containsValue(opinion)){
             return null;
         }
         for(String userId : allOpinion.keySet()){
-            if(allOpinion.get(userId).equals(opinion)){
+            if(Objects.requireNonNull(allOpinion.get(userId)).equals(opinion)){
                 return userId;
             }
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH, "%.2f", ratingAverage()) + "/5 stars by " + allOpinion.size() + " users.\n";
+    }
+
 }

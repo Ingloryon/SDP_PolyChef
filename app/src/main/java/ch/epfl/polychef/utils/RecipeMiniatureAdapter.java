@@ -1,5 +1,6 @@
 package ch.epfl.polychef.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +39,6 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     private List<Recipe> recipeList;
     private RecyclerView recyclerview;
     private int fragmentContainerID;
-    private MiniatureViewHolder currentMinViewHolder = null;
 
     private ImageStorage imageStorage;
     private UserStorage userStorage;
@@ -84,6 +84,14 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     }
 
     /**
+     * Gets the image storage corresponding to the adapter.
+     * @return the image storage
+     */
+    public ImageStorage getImageStorage() {
+        return imageStorage;
+    }
+
+    /**
      * This method create a new MiniatureViewHolder which contains the view which contains the information of the layout of one miniature and make that view listen to user clicks on him.
      *
      * @param parent   not used here but needed since it's an overridden method
@@ -94,7 +102,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
     @Override
     public MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mainContext);
-        View view = inflater.inflate(R.layout.miniature_layout, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.miniature_layout, null);
         view.setOnClickListener(new MiniatureOnClickListener(recyclerview));
         return new MiniatureViewHolder(view);
     }
@@ -114,6 +122,22 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         FavouritesUtils.getInstance().setFavouriteButton(userStorage, holder.favouriteButton, recipe);
         getImageFor(holder, recipe);
     }
+
+    /**
+     * Return the size of the list of the recipes.
+     *
+     * @return the size of the list of the recipes
+     */
+    @Override
+    public int getItemCount() {
+        return recipeList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 
     private void getImageFor(MiniatureViewHolder holder, Recipe recipe) {
         Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
@@ -137,25 +161,6 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         }
     }
 
-    public ImageStorage getImageStorage() {
-        return imageStorage;
-    }
-
-    /**
-     * Return the size of the list of the recipes.
-     *
-     * @return the size of the list of the recipes
-     */
-    @Override
-    public int getItemCount() {
-        return recipeList.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
     /**
      * This is the MiniatureViewHolder that contains the fields of one miniature to be filled when binned to one recipe in the list.
      */
@@ -166,7 +171,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
         CustomRatingBar ratingBar;
         ToggleButton favouriteButton;
 
-        public MiniatureViewHolder(@NonNull View itemView) {
+        MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById(R.id.recipeNameMiniature);
             image = itemView.findViewById(R.id.miniatureRecipeImage);
@@ -182,7 +187,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
         RecyclerView recyclerView;
 
-        public MiniatureOnClickListener(RecyclerView recyclerView) {
+        MiniatureOnClickListener(RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
         }
 
@@ -203,12 +208,12 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
             } else if(mainContext instanceof EntryPage){
 
                 AppCompatActivity activity = (AppCompatActivity) mainContext;
-                FragmentManager fragMana = activity.getSupportFragmentManager();
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
                 FullRecipeFragment recipeFragment = new FullRecipeFragment();
                 recipeFragment.setArguments(bundle);
 
-                fragMana.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().replace(fragmentContainerID, recipeFragment).addToBackStack(null).commit();
             } else {
                 throw new IllegalStateException();
             }

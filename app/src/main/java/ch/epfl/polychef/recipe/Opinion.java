@@ -5,6 +5,10 @@ import androidx.annotation.Nullable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * A class representing an opinion of a recipe (composed of a rate and a comment).
+ */
+@SuppressWarnings("WeakerAccess")
 public class Opinion implements Serializable {
 
     private String comment;
@@ -13,22 +17,40 @@ public class Opinion implements Serializable {
     /**
      * Empty constructor for Firebase.
      */
+    @SuppressWarnings("unused")
     public Opinion() {
     }
 
+    /**
+     * Constructs an opinion with no comment.
+     * @param rate the rate given to the recipe
+     */
     public Opinion(int rate) {
         this(rate, null);
     }
 
+    /**
+     * Constructs an opinion with a rate and a comment.
+     * @param rate the rate given to the recipe
+     * @param comment the comment concerning the recipe
+     */
     public Opinion(int rate, String comment) {
         this.rate = rate;
         this.comment = comment;
     }
 
+    /**
+     * Gets the rate of the Opinion.
+     * @return the rate of the Opinion
+     */
     public int getRate() {
         return rate;
     }
 
+    /**
+     * Gets the comment of the Opinion.
+     * @return the comment of the Opinion
+     */
     public String getComment() {
         return comment;
     }

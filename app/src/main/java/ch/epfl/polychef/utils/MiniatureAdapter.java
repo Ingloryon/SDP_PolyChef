@@ -1,5 +1,6 @@
 package ch.epfl.polychef.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,9 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.users.UserStorage;
 
+/**
+ * The miniature adapter to display the different miniatures.
+ */
 public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.MiniatureViewHolder>{
 
     private static final int RECIPE_TYPE=0;
@@ -35,27 +39,41 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
     private Context mainContext;
     private List<Miniatures> miniaturesList;
     private RecyclerView recyclerview;
-    private int fragmentContainerID;
 
     private ImageStorage imageStorage;
     private UserStorage userStorage;
 
-    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage) {
-        this(mainContext, miniaturesList, recyclerView, fragmentContainerID, storage, null);
-    }
-
-    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, int fragmentContainerID, ImageStorage storage, UserStorage userStorage) {
+    /**
+     * Constructs a miniature adapter with the given arguments.
+     * @param mainContext the main context
+     * @param miniaturesList the list of the Miniatures
+     * @param recyclerView the recycler view where we display
+     * @param storage the image storage
+     * @param userStorage the user storage
+     */
+    public MiniatureAdapter(Context mainContext, List<Miniatures> miniaturesList, RecyclerView recyclerView, ImageStorage storage, UserStorage userStorage) {
         this.mainContext = mainContext;
         this.miniaturesList = miniaturesList;
         this.recyclerview = recyclerView;
-        this.fragmentContainerID = fragmentContainerID;
         this.imageStorage = storage;
         this.userStorage = userStorage;
     }
 
+    /**
+     * Sets a new list of Miniatures to the MiniatureAdapter.
+     * @param miniatures the new list of Miniatures
+     */
     public void changeList(List<Miniatures> miniatures){
         this.miniaturesList = miniatures;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Gets the image storage of the adapter.
+     * @return the image storage
+     */
+    public ImageStorage getImageStorage() {
+        return imageStorage;
     }
 
     @Override
@@ -71,6 +89,37 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
             holder.username.setText(user.getUsername());
             holder.imageView.setImageResource(User.getResourceImageFromUser(user));
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(miniaturesList.get(position).isUser()) {
+            return USER_TYPE;
+        }
+        else {
+            return RECIPE_TYPE;
+        }
+    }
+
+    @SuppressLint("InflateParams")
+    @NonNull
+    @Override
+    public MiniatureAdapter.MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mainContext);
+        View view;
+        if(viewType==RECIPE_TYPE) {
+            view = inflater.inflate(R.layout.miniature_layout, null);
+        }
+        else {
+            view = inflater.inflate(R.layout.user_miniature_layout, null);
+        }
+        view.setOnClickListener(new MiniatureAdapter.MiniatureOnClickListener(recyclerview));
+        return new MiniatureAdapter.MiniatureViewHolder(view);
+    }
+
+    @Override
+    public int getItemCount() {
+        return miniaturesList.size();
     }
 
     private void getImageFor(MiniatureAdapter.MiniatureViewHolder holder, Recipe recipe) {
@@ -95,40 +144,6 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         }
     }
 
-    public ImageStorage getImageStorage() {
-        return imageStorage;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if(miniaturesList.get(position).isUser()) {
-            return USER_TYPE;
-        }
-        else {
-            return RECIPE_TYPE;
-        }
-    }
-
-    @NonNull
-    @Override
-    public MiniatureAdapter.MiniatureViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mainContext);
-        View view;
-        if(viewType==RECIPE_TYPE) {
-            view = inflater.inflate(R.layout.miniature_layout, null);
-        }
-        else {
-            view = inflater.inflate(R.layout.user_miniature_layout, null);
-        }
-        view.setOnClickListener(new MiniatureAdapter.MiniatureOnClickListener(recyclerview));
-        return new MiniatureAdapter.MiniatureViewHolder(view);
-    }
-
-    @Override
-    public int getItemCount() {
-        return miniaturesList.size();
-    }
-
     class MiniatureViewHolder extends RecyclerView.ViewHolder {
 
         TextView recipeTitle;
@@ -139,7 +154,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
         TextView username;
         ImageView imageView;
 
-        public MiniatureViewHolder(@NonNull View itemView) {
+        MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeTitle = itemView.findViewById(R.id.recipeNameMiniature);
             ratingBar = new CustomRatingBar(itemView.findViewById(R.id.miniatureRatingBar), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, false);
@@ -154,7 +169,7 @@ public class MiniatureAdapter extends RecyclerView.Adapter<MiniatureAdapter.Mini
 
         RecyclerView recyclerView;
 
-        public MiniatureOnClickListener(RecyclerView recyclerView) {
+        MiniatureOnClickListener(RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
         }
 

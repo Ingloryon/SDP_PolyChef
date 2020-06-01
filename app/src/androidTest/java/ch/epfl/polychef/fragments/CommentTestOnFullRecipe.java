@@ -50,21 +50,9 @@ import static org.mockito.Mockito.when;
 @LargeTest
 public class CommentTestOnFullRecipe {
 
-    public static RecipeBuilder fakeRecipeBuilder = new RecipeBuilder()
-            .setName("Fake recipe")
-            .addInstruction("Instruction 1")
-            .addIngredient("ingredient", 2, Ingredient.Unit.NONE)
-            .setPersonNumber(1)
-            .setEstimatedCookingTime(1)
-            .setEstimatedPreparationTime(1)
-            .setRecipeDifficulty(Recipe.Difficulty.EASY)
-            .setDate("20/06/01 13:10:00")
-            .setAuthor("author name");
-
     private HashMap<String, User> userResults;
 
     private User mockUser;
-    private List<Recipe> recipeArr = new ArrayList<>();
 
     private User mockUser(String userEmail, String userName){
         return new User(userEmail, userName);
@@ -90,17 +78,18 @@ public class CommentTestOnFullRecipe {
         intentsTestRule.launchActivity(new Intent());
     }
 
-    private class FakeHomePage extends RateRecipeFragmentsHomeTest.FakeFakeHomePage {
+    public class FakeHomePage extends RateRecipeFragmentsHomeTest.FakeFakeHomePage {
+        private List<Recipe> recipeArr = new ArrayList<>();
 
         public RecipeStorage mockRecipeStorage = mock(RecipeStorage.class);
 
         public FakeHomePage() {
-            Recipe testRecipe = fakeRecipeBuilder.build();
+            Recipe testRecipe = returnFreshFakeRecipeBuilder().build();
             recipeArr.add(testRecipe);
-            testRecipe = fakeRecipeBuilder.build();
+            testRecipe = returnFreshFakeRecipeBuilder().build();
             testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
             recipeArr.add(testRecipe);
-            testRecipe = fakeRecipeBuilder.build();
+            testRecipe = returnFreshFakeRecipeBuilder().build();
             testRecipe.getRating().addOpinion("id1", 3, "Ceci est un commentaire de test");
             testRecipe.getRating().addOpinion("id2", 3, "Ceci est un commentaire de test");
             testRecipe.getRating().addOpinion("id3", 3, "Ceci est un commentaire de test");
@@ -167,8 +156,8 @@ public class CommentTestOnFullRecipe {
         userResults.put("id1", mockUser("testEmail", "test"));
         onView(withId(R.id.miniaturesOnlineList)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         OpinionsMiniatureAdapter adapter = (OpinionsMiniatureAdapter) ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter();
-        assertEquals("testEmail", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
-        assertEquals("test", adapter.getMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
+        assertEquals("testEmail", adapter.getOpinionToUserMap().get(adapter.getDisplayedOpinions().get(0)).getEmail());
+        assertEquals("test", adapter.getOpinionToUserMap().get(adapter.getDisplayedOpinions().get(0)).getUsername());
     }
 
     @Test
@@ -196,6 +185,19 @@ public class CommentTestOnFullRecipe {
         onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
         onView(withId(R.id.fullRecipeFragment)).perform(swipeUp());
         assertEquals(6, ((FullRecipeFragment)new FragmentTestUtils().getTestedFragment(intentsTestRule)).getOpinionsRecyclerView().getAdapter().getItemCount());
+    }
+
+    public static RecipeBuilder returnFreshFakeRecipeBuilder(){
+        return new RecipeBuilder()
+                .setName("Fake recipe")
+                .addInstruction("Instruction 1")
+                .addIngredient("ingredient", 2, Ingredient.Unit.NONE)
+                .setPersonNumber(1)
+                .setEstimatedCookingTime(1)
+                .setEstimatedPreparationTime(1)
+                .setRecipeDifficulty(Recipe.Difficulty.EASY)
+                .setDate("20/06/01 13:10:00")
+                .setAuthor("author name");
     }
 
 }

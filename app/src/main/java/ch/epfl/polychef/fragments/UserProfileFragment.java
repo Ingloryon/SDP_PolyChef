@@ -2,7 +2,6 @@ package ch.epfl.polychef.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.GlobalApplication;
 import ch.epfl.polychef.MultipleCallHandler;
 import ch.epfl.polychef.R;
@@ -35,22 +33,22 @@ import ch.epfl.polychef.recipe.Recipe;
 import ch.epfl.polychef.users.User;
 import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 
-
+/**
+ * A simple {@link Fragment} subclass that represents the page of a user profile displayed.
+ */
+@SuppressWarnings("WeakerAccess")
 public class UserProfileFragment extends Fragment {
 
-    private static final String TAG = "UserProfileFragment";
-    private HomePage hostActivity;  //TODO use ConnectedActivity if possible
+    public static final String TAG = "UserProfileFragment";
+    public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
+
+    private HomePage hostActivity;
     private User userToDisplay;
-
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
-
     private RecyclerView userRecyclerView;
-
     private ToggleButton toggleButton;
 
-    public static final int nbOfRecipesLoadedAtATime = 5;
     private boolean isLoading = false;
-
     private int currentIndex = 0;
 
     /**
@@ -63,6 +61,7 @@ public class UserProfileFragment extends Fragment {
      * Public User setter for Firebase.
      * @param user the user to display
      */
+    @SuppressWarnings("unused")
     public UserProfileFragment(User user) {
         this.userToDisplay = user;
     }
@@ -72,10 +71,8 @@ public class UserProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    //TODO add an isLoading variation
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         currentIndex = 0;
 
@@ -136,8 +133,8 @@ public class UserProfileFragment extends Fragment {
             });
         }
 
-        ((TextView) getView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
-        ((TextView) getView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
+        ((TextView) requireView().findViewById(R.id.UserEmailDisplay)).setText(userToDisplay.getEmail());
+        ((TextView) requireView().findViewById(R.id.UsernameDisplay)).setText(userToDisplay.getUsername());
 
         //Display the image of the user
         ImageView image = view.findViewById(R.id.profilePicture);
@@ -167,14 +164,14 @@ public class UserProfileFragment extends Fragment {
     public void getNextRecipes(){
         isLoading = true;
         int nbRecipes = userToDisplay.getRecipes().size();
-        int threshold = Math.min(nbOfRecipesLoadedAtATime + currentIndex, nbRecipes);
+        int threshold = Math.min(NB_OF_RECIPES_LOADED_AT_A_TIME + currentIndex, nbRecipes);
         int waitingFor = threshold - currentIndex;
 
         MultipleCallHandler handler = new MultipleCallHandler<Recipe>(waitingFor, (recipeList) -> {
 
             dynamicRecipeList.addAll(recipeList);
             dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
-            userRecyclerView.getAdapter().notifyDataSetChanged();
+            Objects.requireNonNull(userRecyclerView.getAdapter()).notifyDataSetChanged();
             currentIndex += waitingFor;
             isLoading = false;
         });
@@ -194,23 +191,20 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setupProfilePictureButton(){
-        ImageView profilePict = getView().findViewById(R.id.profilePicture);
-        HomePage context = (HomePage) getContext();
+        ImageView profilePict = requireView().findViewById(R.id.profilePicture);
+        HomePage context = (HomePage) requireContext();
 
-        profilePict.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!hostActivity.isOnline()){
-                    Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
-                }else {
-                    String userID = context.getUserStorage().getPolyChefUser().getKey();
-                    if (userToDisplay.getKey() == userID) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("UserDisplayed", userToDisplay);
+        profilePict.setOnClickListener(view -> {
+            if(!hostActivity.isOnline()){
+                Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+            }else {
+                String userID = context.getUserStorage().getPolyChefUser().getKey();
+                if (userToDisplay.getKey().equals(userID)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("UserDisplayed", userToDisplay);
 
-                        NavController navController = ((HomePage) getActivity()).getNavController();
-                        navController.navigate(R.id.userProfilePictureChoice, bundle);
-                    }
+                    NavController navController = ((HomePage) requireActivity()).getNavController();
+                    navController.navigate(R.id.userProfilePictureChoice, bundle);
                 }
             }
         });
@@ -246,13 +240,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setAchievementToastOnClick(ImageView image, String achievementLabel) {
-
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), achievementLabel , Toast.LENGTH_SHORT).show();
-            }
-        });
+        image.setOnClickListener(view -> Toast.makeText(getActivity(), achievementLabel , Toast.LENGTH_SHORT).show());
     }
 
 }

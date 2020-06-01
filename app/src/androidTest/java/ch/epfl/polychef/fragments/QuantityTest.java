@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.NestedScrollViewHelper;
@@ -171,8 +172,8 @@ public class QuantityTest {
     @Test
     public void exceedQuantityChangeInputToMaxOne(){
         textClear();
-        textType(Integer.toString(FullRecipeFragment.QUANTITY_LIMIT + 1));
-        onView(withId(R.id.quantityinput)).check(matches(withText(Integer.toString(FullRecipeFragment.QUANTITY_LIMIT))));
+        textType(String.format(Locale.ENGLISH,"%d",FullRecipeFragment.QUANTITY_LIMIT + 1));
+        onView(withId(R.id.quantityinput)).check(matches(withText(String.format(Locale.ENGLISH,"%d", FullRecipeFragment.QUANTITY_LIMIT))));
     }
 
     @Test

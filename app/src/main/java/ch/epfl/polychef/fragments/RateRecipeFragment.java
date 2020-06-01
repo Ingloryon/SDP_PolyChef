@@ -16,8 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import java.util.Objects;
 
 import ch.epfl.polychef.CallHandler;
 import ch.epfl.polychef.R;
@@ -34,20 +33,16 @@ import ch.epfl.polychef.utils.Preconditions;
  * A simple {@link Fragment} subclass.
  */
 public class RateRecipeFragment extends Fragment {
-
     private static final String TAG = "RateRecipeFragment";
-    private Button postButton;
     private Recipe recipe;
 
     private CustomRatingBar ratingBar;
     EditText comment;
-
-    private FirebaseDatabase fireDatabase;
     private UserStorage userStorage;
     private RecipeStorage recipeStorage;
 
     /**
-     * Required empty public constructor.
+     * Required empty public constructor for Firebase.
      */
     public RateRecipeFragment() {
     }
@@ -75,7 +70,7 @@ public class RateRecipeFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
 
-        recipe = (Recipe) bundle.getSerializable("RecipeToRate");
+        recipe = (Recipe) Objects.requireNonNull(bundle).getSerializable("RecipeToRate");
 
         ratingBar = new CustomRatingBar(getView().findViewById(R.id.RateChoices), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, true);
 
@@ -91,17 +86,12 @@ public class RateRecipeFragment extends Fragment {
             ratingBar.setRate(5);
         }
 
-        String text = getActivity().getString(R.string.RateText) + " \"" + recipe.getName() + "\" ?";
-        TextView rateText =  getView().findViewById(R.id.RateText);
+        String text = requireActivity().getString(R.string.RateText) + " \"" + recipe.getName() + "\" ?";
+        TextView rateText =  requireView().findViewById(R.id.RateText);
         rateText.setText(text);
 
-        postButton = getView().findViewById(R.id.buttonSendRate);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkAndSendOpinion();
-            }
-        });
+        Button postButton = requireView().findViewById(R.id.buttonSendRate);
+        postButton.setOnClickListener(view1 -> checkAndSendOpinion());
 
     }
 
@@ -141,7 +131,7 @@ public class RateRecipeFragment extends Fragment {
 
         recipeStorage.updateRecipe(recipe);
 
-        getActivity().onBackPressed();
+        requireActivity().onBackPressed();
     }
 
     @Override
@@ -150,10 +140,9 @@ public class RateRecipeFragment extends Fragment {
 
         if(context instanceof HomePage){
             HomePage homePage = (HomePage) context;
-            fireDatabase = homePage.getFireDatabase();
             userStorage = homePage.getUserStorage();
             recipeStorage = homePage.getRecipeStorage();
-            Preconditions.checkArgument(fireDatabase != null && userStorage!=null );
+            Preconditions.checkArgument(userStorage!=null );
         } else {
             throw new IllegalArgumentException("The rate recipe fragment wasn't attached properly!");
         }

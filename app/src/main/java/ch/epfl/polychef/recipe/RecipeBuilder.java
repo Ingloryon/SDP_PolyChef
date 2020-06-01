@@ -12,23 +12,26 @@ import java.util.List;
 import ch.epfl.polychef.utils.Either;
 import ch.epfl.polychef.utils.Preconditions;
 
-
+/**
+ * The builder to construct the object {@link Recipe}.
+ */
 public final class RecipeBuilder {
-
-    private static final String TAG = "RecipeBuilder";
 
     private String date;
     private String name = "";
     private String author = "";
+    private String uuid=null;
     private List<String> recipeInstructions = new ArrayList<>();
     private List<Ingredient> ingredients = new ArrayList<>();
     private int personNumber;
     private int estimatedPreparationTime;
     private int estimatedCookingTime;
     private Recipe.Difficulty recipeDifficulty;
+    private Rating rating;
 
     private Either<String, Integer> miniaturePath = Either.none();
     private ArrayList<String> picturesName = new ArrayList<>();
+    private static final String TAG = "RecipeBuilder";
 
     /**
      * Builds a Recipe.
@@ -45,7 +48,7 @@ public final class RecipeBuilder {
         Preconditions.checkArgument(recipeDifficulty != null, "The recipe difficulty must be set");
         Preconditions.checkArgument(!author.isEmpty(), "The author must be set");
 
-        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date);
+        return new Recipe(name, recipeInstructions, ingredients, personNumber, estimatedPreparationTime, estimatedCookingTime, recipeDifficulty, miniaturePath, picturesName, author, date,uuid,rating);
     }
 
     /**
@@ -64,7 +67,7 @@ public final class RecipeBuilder {
      * Set the date of the Recipe.
      *
      * @param date date of the recipe, must be not null
-     * @return
+     * @return the modified builder
      */
     public RecipeBuilder setDate(@NonNull String date){
         Preconditions.checkArgument(!date.isEmpty(), "The date can't be empty");
@@ -184,6 +187,7 @@ public final class RecipeBuilder {
      * @param miniatureId id the local miniature
      * @return the modified builder
      */
+    @SuppressWarnings("WeakerAccess")
     public RecipeBuilder setMiniatureFromId(@NonNull Integer miniatureId) {
         this.miniaturePath = Either.right(miniatureId);
         return this;
@@ -196,7 +200,7 @@ public final class RecipeBuilder {
      * @return the modified builder
      */
     public RecipeBuilder addPicturePath(@NonNull String pictureName) {
-        Preconditions.checkArgument(pictureName != null, "Picture path should not be null");
+        Preconditions.checkArgument(!pictureName.isEmpty(), "Picture path should not be empty");
         this.picturesName.add(pictureName);
         return this;
     }
@@ -210,6 +214,32 @@ public final class RecipeBuilder {
     public RecipeBuilder setAuthor(@NonNull String author) {
         Preconditions.checkArgument(!author.isEmpty(), "The author must be non empty");
         this.author = author;
+        return this;
+    }
+
+    /**
+     * Set the rating of the recipe.
+     * Must be used only when modifying a recipe
+     *
+     * @param rating the rating of the recipe
+     * @return the modified builder
+     */
+    public RecipeBuilder setRating(@NonNull Rating rating) {
+        this.rating = rating;
+        return this;
+    }
+
+    /**
+     * Set the uuid of the recipe.
+     * Must be used only when modifying a recipe
+     *
+     * @param uuid the uuid of the recipe, must be non empty
+     * @return the modified builder
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public RecipeBuilder setUuid(@NonNull String uuid) {
+        Preconditions.checkArgument(!uuid.isEmpty(), "The uuid must be non empty");
+        this.uuid = uuid;
         return this;
     }
 }

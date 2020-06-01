@@ -15,11 +15,14 @@ import java.io.Serializable;
  * @param <L> type of the left element
  * @param <R> type of the right element
  */
+@SuppressWarnings("WeakerAccess")
 public final class Either<L, R> implements Serializable {
-
     private final L left;
     private final R right;
 
+    /**
+     * Public constructor initializing both right and left to null.
+     */
     public Either() {
         this(null, null);
     }
@@ -32,27 +35,27 @@ public final class Either<L, R> implements Serializable {
     /**
      * Create a new {@code Either} defined left with value {@code val}.
      *
-     * @param val the left value
+     * @param val the left value, must be non null
      * @param <L> type of the left part of the {@code Either}
      * @param <R> type of the right part of the {@code Either}
      * @return the new left defined {@code Either}
      */
-    public static <L, R> Either<L, R> left(@NonNull L val) {
+    public static <L, R> Either<L, R> left(L val) {
         Preconditions.checkArgument(val != null, "Left value cannot be null");
-        return new Either<L, R>(val, null);
+        return new Either<>(val, null);
     }
 
     /**
      * Create a new {@code Either} defined right with value {@code val}.
      *
-     * @param val the right value
+     * @param val the right value, must be non null
      * @param <L> type of the left part of the {@code Either}
      * @param <R> type of the right part of the {@code Either}
      * @return the new right defined {@code Either}
      */
-    public static <L, R> Either<L, R> right(@NonNull R val) {
+    public static <L, R> Either<L, R> right(R val) {
         Preconditions.checkArgument(val != null, "Right value cannot be null");
-        return new Either<L, R>(null, val);
+        return new Either<>(null, val);
     }
 
     /**
@@ -63,7 +66,7 @@ public final class Either<L, R> implements Serializable {
      * @return the new none defined {@code Either}
      */
     public static <L, R> Either<L, R> none() {
-        return new Either<L, R>(null, null);
+        return new Either<>(null, null);
     }
 
     /**
