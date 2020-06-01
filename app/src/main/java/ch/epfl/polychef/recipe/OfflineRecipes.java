@@ -48,10 +48,14 @@ public final class OfflineRecipes {
         return Collections.unmodifiableList(copiedList);
     }
 
+    private RecipeBuilder newBuilder() {
+        return new RecipeBuilder().setAuthor("The Polychef Team");
+    }
+
     /**
      * Below we construct a set of Recipes accessible for everyone, even offline and not connected.
      */
-    private Recipe recipe1 = new RecipeBuilder().setAuthor("The Polychef Team")
+    private Recipe recipe1 = newBuilder()
             .setName("Oven-Baked Salmon")
             .setRecipeDifficulty(Recipe.Difficulty.HARD)
             .setEstimatedCookingTime(15)
@@ -66,7 +70,7 @@ public final class OfflineRecipes {
             .setMiniatureFromId(R.drawable.ovenbakedsalmon)
             .build();
 
-    private Recipe recipe2 = new RecipeBuilder().setAuthor("The Polychef Team")
+    private Recipe recipe2 = newBuilder()
             .setName("Excellent MeatBalls")
             .setRecipeDifficulty(Recipe.Difficulty.INTERMEDIATE)
             .setEstimatedCookingTime(43)
@@ -93,7 +97,7 @@ public final class OfflineRecipes {
             .setMiniatureFromId(R.drawable.meatballs)
             .build();
 
-    private Recipe recipe3 = new RecipeBuilder().setAuthor("The Polychef Team")
+    private Recipe recipe3 = newBuilder()
             .setName("Shrimp Scampi Tetrazzini")
             .setRecipeDifficulty(Recipe.Difficulty.VERY_HARD)
             .setEstimatedCookingTime(20)
@@ -123,7 +127,7 @@ public final class OfflineRecipes {
             .setMiniatureFromId(R.drawable.shrimps)
             .build();
 
-    private Recipe recipe4 = new RecipeBuilder().setAuthor("The Polychef Team")
+    private Recipe recipe4 = newBuilder()
             .setName("Garlic Roasted Potatoes")
             .setRecipeDifficulty(Recipe.Difficulty.EASY)
             .setEstimatedCookingTime(60)
@@ -141,7 +145,7 @@ public final class OfflineRecipes {
             .setMiniatureFromId(R.drawable.potatoes)
             .build();
 
-    private Recipe recipe5 = new RecipeBuilder().setAuthor("The Polychef Team")
+    private Recipe recipe5 = newBuilder()
             .setName("French toast")
             .setRecipeDifficulty(Recipe.Difficulty.VERY_EASY)
             .setEstimatedCookingTime(10)
