@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
@@ -40,13 +41,16 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -97,23 +101,18 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void rateBarCanBeClickedOn() throws InterruptedException {
+    public synchronized void rateBarCanBeClickedOn() throws InterruptedException {
 
         rateCurrentRecipeNStars(1);
         String s0="Your rating is 1 stars.";
         sendRateAndCheckToast(s0);
+        wait(2000);
         onView(withId(R.id.buttonRate)).perform(NestedScrollViewHelper.nestedScrollTo(),click());
 
-        rateCurrentRecipeNStars(2);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         String s1="Your new rating is 2 stars. Your previous rating was 1";
-        rateCurrentRecipeNStars(1);
+        rateCurrentRecipeNStars(2);
         sendRateAndCheckToast(s1);
-
+        wait(2000);
     }
 
     @Test
@@ -216,7 +215,6 @@ public class RateRecipeFragmentsHomeTest {
     private synchronized void sendRateAndCheckToast(String expectedText) throws InterruptedException {
         onView(withId(R.id.buttonSendRate)).perform(scrollTo(), click());
 
-        /* This test is quite flaky on Travis, we comment it for now
         TimeUnit.MILLISECONDS.sleep(100);
 
         onView(withText(expectedText))
@@ -225,8 +223,6 @@ public class RateRecipeFragmentsHomeTest {
                 .check(matches(isDisplayed()));
 
         TimeUnit.SECONDS.sleep(2);
-         */
-
     }
 
     public static class FakeFakeHomePage extends HomePageTest.FakeHomePage {
