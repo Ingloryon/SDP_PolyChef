@@ -127,7 +127,7 @@ public class RateRecipeFragmentsHomeTest {
     public void nonClickableRatingBarIsIndeedUnClickable() throws Throwable {
         // Change the page rating bar by a non clickable one for test purpose
         RateRecipeFragment rateFragment = (RateRecipeFragment) fragUtils.getTestedFragment(intentsTestRuleHome);
-        runOnUiThread(() -> rateFragment.setRatingBar(new CustomRatingBar(rateFragment.getView().findViewById(R.id.RateChoices), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, false));
+        runOnUiThread(() -> rateFragment.setRatingBar(new CustomRatingBar(rateFragment.getView().findViewById(R.id.RateChoices), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, false)));
         ratingBar = rateFragment.getRatingBar();
         runOnUiThread(() -> ratingBar.setRate(0));
         //This should do nothing since the click is disable

@@ -188,8 +188,11 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/ingredients"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/difficulty" />
+                app:layout_constraintTop_toBottomOf="@+id/difficulty">
+
+            </com.synnapps.carouselview.CarouselView>
 
             <TextView
                 android:id="@+id/ingredients"
@@ -328,8 +331,18 @@
                 android:text="@string/VoiceRecognitionSwitch"
                 android:textColor="#272424"
                 android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/authorUsername" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/microphone"
+                app:layout_constraintBottom_toTopOf="@+id/prepTime"
+                app:layout_constraintStart_toEndOf="@+id/voiceRecognitionSwitch" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
