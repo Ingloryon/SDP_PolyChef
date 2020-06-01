@@ -257,11 +257,13 @@ public final class Recipe implements Serializable, Cloneable, Comparable<Recipe>
     }
 
     @Override
+    @Exclude
     public boolean isUser() {
         return false;
     }
 
     @Override
+    @Exclude
     public boolean isRecipe() {
         return true;
     }

@@ -8,17 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +39,6 @@ import ch.epfl.polychef.utils.MiniatureAdapter;
 import ch.epfl.polychef.utils.Preconditions;
 import ch.epfl.polychef.utils.Sort;
 
-import static android.util.TypedValue.COMPLEX_UNIT_PX;
-
 /**
  * Class that represents the fragment displayed for the online Miniatures.
  */
@@ -55,10 +55,11 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String actualQuery;
 
     private SearchView searchView;
-    private ConstraintLayout filters;
+    private LinearLayout filters;
 
     private Map<Filter, Button> filterButtons = new HashMap<>(4);
     private Map<Filter, Boolean> filterStates = new HashMap<>(4);
+    private boolean[] defaultStates = {true, true, false, false};
 
     private List<Miniatures> dynamicRecipeList = new ArrayList<>();
     private List<Miniatures> searchList = new ArrayList<>();
@@ -66,7 +67,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private String currentOldest;
     private String currentNewest;
 
-    private boolean isLoading = false;
+    public boolean isLoading = false;
     private boolean isSearching = false;
 
     private RecipeStorage recipeStorage;
@@ -150,6 +151,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         }
 
         searchView = requireView().findViewById(R.id.searchBar);
+
         filters = requireView().findViewById(R.id.filters);
 
         if(!searchList.isEmpty()){
@@ -157,6 +159,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         }
 
         setupFilters();
+
+        searchView.setOnClickListener(listener -> searchView.setIconified(false));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -197,18 +201,12 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
         refreshButtons();
 
-        float ingredientsFilterSize = getFilterButton(Filter.INGREDIENT).getTextSize();
-
-        getFilterButton(Filter.USER).setTextSize(COMPLEX_UNIT_PX, ingredientsFilterSize);
-        getFilterButton(Filter.RECIPE).setTextSize(COMPLEX_UNIT_PX, ingredientsFilterSize);
-        getFilterButton(Filter.RATE).setTextSize(COMPLEX_UNIT_PX, ingredientsFilterSize);
-
-        setFilterOnClick(Filter.RECIPE);
-        setFilterOnClick(Filter.USER);
-        setFilterOnClick(Filter.INGREDIENT);
+        setToggleOnClick(Filter.RECIPE, Collections.singletonList(Filter.INGREDIENT));
+        setToggleOnClick(Filter.USER, Collections.singletonList(Filter.INGREDIENT));
+        setToggleOnClick(Filter.INGREDIENT, Arrays.asList(Filter.RECIPE, Filter.USER));
 
         getFilterButton(Filter.RATE).setOnClickListener(listener -> {
-            setButton(Filter.RATE, !getFilterState(Filter.RATE));
+            setButton(Filter.RATE, !isEnabled(Filter.RATE));
             sortResults();
             Objects.requireNonNull(onlineRecyclerView.getAdapter()).notifyDataSetChanged();
         });
@@ -221,22 +219,21 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         filterButtons.put(Filter.INGREDIENT, requireView().findViewById(R.id.filter_ingre));
         filterButtons.put(Filter.RATE, requireView().findViewById(R.id.filter_rate));
 
-        if(filterStates.isEmpty()) {
-            for(Filter filter : Filter.values()){
-                filterStates.put(filter, false);
-            }
-        } else {
-            for(Filter filter: Filter.values()){
-                setButton(filter, filterStates.get(filter));
-            }
+        for(Filter filter : Filter.values()){
+            filterStates.putIfAbsent(filter, defaultStates[filter.ordinal()]);
+            setButton(filter, filterStates.get(filter));
         }
     }
 
-    private void setFilterOnClick(Filter filter){
+    private void setToggleOnClick(Filter filter, List<Filter> conflictingFilters){
         getFilterButton(filter).setOnClickListener(listener -> {
             if(!isLoading){
-                resetOthers(filter);
-                setButton(filter, !getFilterState(filter));
+                setButton(filter, !isEnabled(filter));
+                for(Filter conflicting: conflictingFilters){
+                    setButton(conflicting, false);
+                }
+
+                enableDefaults();
                 search();
             }
         });
@@ -245,19 +242,19 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private void search(){
         searchList.clear();
         isLoading = true;
-        if(getFilterState(Filter.INGREDIENT)){
+
+        if(isEnabled(Filter.INGREDIENT)){
             recipeStorage.getSearch().searchRecipeByIngredient(actualQuery, OnlineMiniaturesFragment.this);
-        } else if(getFilterState(Filter.USER)){
-            userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
-        } else if(getFilterState(Filter.RECIPE)){
-            recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
         } else {
-            recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
-            userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+            if(isEnabled(Filter.USER)){
+                userStorage.getSearch().searchForUser(actualQuery, OnlineMiniaturesFragment.this);
+            }
+
+            if(isEnabled(Filter.RECIPE)){
+                recipeStorage.getSearch().searchForRecipe(actualQuery, OnlineMiniaturesFragment.this);
+            }
         }
     }
-
-
 
     @Override
     public void onSuccess(List<Miniatures> data){
@@ -337,9 +334,9 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     }
 
     private void sortResults(){
-        if(getFilterState(Filter.RATE)) {
+        if(isEnabled(Filter.RATE)) {
             Sort.sortByRate(searchList);
-        }else if(getFilterState(Filter.INGREDIENT)){
+        }else if(isEnabled(Filter.INGREDIENT)){
             Sort.sortByIngredientSimilarity(searchList,actualQuery);
         }else {
             Sort.sortBySimilarity(searchList,actualQuery);
@@ -350,32 +347,44 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         return Objects.requireNonNull(filterButtons.get(filter));
     }
 
-    @NonNull private Boolean getFilterState(Filter filter){
+    @NonNull private Boolean isEnabled(Filter filter){
         return Objects.requireNonNull(filterStates.get(filter));
     }
 
     private void setButton(Filter filter, Boolean setEnabled){
         Button filterButton = getFilterButton(filter);
 
-        int nextColor = setEnabled ? R.color.enabled : R.color.black;
+        int nextColor = setEnabled ? R.color.colorPrimary : R.color.disabled;
         int nextFlag = setEnabled ? Paint.UNDERLINE_TEXT_FLAG | Paint.FAKE_BOLD_TEXT_FLAG : 0;
 
-        filterButton.setTextColor(getResources().getColor(nextColor, null));
+        filterButton.setBackgroundColor(getResources().getColor(nextColor, null));
         filterButton.setPaintFlags(nextFlag);
         filterStates.replace(filter, setEnabled);
     }
 
-    private void resetOthers(Filter except){
-        for(Filter filter : Filter.values()){
-            if(filter != except){
-                setButton(filter, false);
+    private void enableDefaults(){
+        if(allFiltersAreDisabled()){
+            setButton(Filter.RECIPE, true);
+            setButton(Filter.USER, true);
+        }
+    }
+
+    private boolean allFiltersAreDisabled(){
+        ArrayList<Filter> filters = new ArrayList<>(Arrays.asList(Filter.values()));
+        filters.remove(Filter.RATE);
+
+        for(Filter filter: filters){
+            if(isEnabled(filter)) {
+                return false;
             }
         }
+
+        return true;
     }
 
     private  void resetFilters(){
         for(Filter filter : Filter.values()){
-            setButton(filter, false);
+            setButton(filter, defaultStates[filter.ordinal()]);
         }
     }
 }

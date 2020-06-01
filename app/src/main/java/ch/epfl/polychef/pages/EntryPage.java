@@ -3,7 +3,9 @@ package ch.epfl.polychef.pages;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,6 +53,33 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.nav_entry_fragment, miniFrag)
                 .commit();
+        
+        setThemeLightDark();
+    }
+
+    private void setThemeLightDark() {
+        SharedPreferences sharedPref = getSharedPreferences("darkMode", Context.MODE_PRIVATE);
+        String darkMode = sharedPref.getString("darkMode", "");
+        if(!darkMode.isEmpty()) {
+            if(darkMode.equals("true")) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        } else if((getUiMode() & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    /**
+     * Get the current UI mode configuration.
+     *
+     * @return the current UI mode configuration
+     */
+    protected int getUiMode() {
+        return getResources().getConfiguration().uiMode;
     }
 
     @Override

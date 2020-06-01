@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.polychef.R;
 import ch.epfl.polychef.image.ProfilePicture;
@@ -56,6 +57,7 @@ public class ProfilePictChoice extends Fragment {
             updatedUser.setProfilePictureId(position);
             hostActivity.setupProfilePicture();
             hostActivity.getUserStorage().updateUserInfo(updatedUser);
+            ProfilePictChoice.this.requireActivity().onBackPressed();
         });
 
         return view;
