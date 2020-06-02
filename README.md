@@ -13,20 +13,21 @@ When you cook, your hands are not always clean enough to check the recipe on you
 
 - The app has been built using Android Studio using compileSdkVersion 29 (minimum minSdkVersion is 24) and java sourceCompatibility 1.8
 
-- Connect using your Google account (when you are not connected you can access only a set of basic recipes): 
+- Connect using your Google account (when you are not connected you can access only a set of basic recipes)
 
-![](images/you-picture.png)
-❮img src="images/you-picture.png" width="100" ❯
+<img src="screenshots/connect.png" width="300">
 
 - Once connected you can see the recipes posted by the community:
-❮img src="images/you-picture.png" width="100" ❯ -> homePage
-❮img src="images/you-picture.png" width="100" ❯ -> fullRecipe
 
-- Search for recipes / users and apply different filters:
+<p float="left">
+  <img src="screenshots/homePage.png" width="300">
+  <img src="screenshots/FullRecipe.png" width="300">
+</p>
 
-❮img src="images/you-picture.png" width="100" ❯ -> search 
-
-- Post your own recipes (and modify them later if needed):
+- Search for recipes / users and apply different filters
 
 
+- Post your own recipes (and modify them later if needed)
+
+<img src="screenshots/PostRecipe.png" width="300">
 
