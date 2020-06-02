@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,7 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
     private RecyclerView onlineRecyclerView;
     private static final int UP = -1;
     private static final int DOWN = 1;
+    private TextView noRecipeView;
 
     private enum Filter {RECIPE, USER, INGREDIENT, RATE}
 
@@ -149,6 +151,8 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
         if(!hostActivity.isOnline()){
             Toast.makeText(hostActivity, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
         }
+
+        noRecipeView = requireView().findViewById(R.id.no_recipe_text);
 
         searchView = requireView().findViewById(R.id.searchBar);
 
@@ -289,11 +293,17 @@ public class OnlineMiniaturesFragment extends Fragment implements CallHandler<Li
 
         Objects.requireNonNull(onlineRecyclerView.getAdapter()).notifyDataSetChanged();
         isLoading = false;
+        if(!dynamicRecipeList.isEmpty()) {
+            noRecipeView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onFailure() {
         isLoading = false;
+        if(dynamicRecipeList.isEmpty()) {
+            noRecipeView.setVisibility(View.VISIBLE);
+        }
         Log.w(TAG, "No Recipe found");
     }
 

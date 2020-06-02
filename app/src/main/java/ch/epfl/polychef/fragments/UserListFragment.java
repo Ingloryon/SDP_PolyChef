@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,16 +40,19 @@ public class UserListFragment extends Fragment {
 
     private final Function<User, List<String>> userListFunction;
     private final int fragmentId;
+    private final int noUserId;
 
+    private TextView noUserView;
 
     /**
      * Constructs a UserListFragment.
      * @param userListFunction the function that maps a user to its corresponding strings
      * @param fragmentId the id of the fragment
      */
-    public UserListFragment(Function<User, List<String>> userListFunction, int fragmentId) {
+    public UserListFragment(Function<User, List<String>> userListFunction, int fragmentId, int noUserId) {
         this.userListFunction = userListFunction;
         this.fragmentId = fragmentId;
+        this.noUserId = noUserId;
     }
 
     /**
@@ -63,6 +67,8 @@ public class UserListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(fragmentId, container, false);
+
+        noUserView = view.findViewById(noUserId);
 
         usersRecyclerView = view.findViewById(R.id.miniatureUserList);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
@@ -97,6 +103,11 @@ public class UserListFragment extends Fragment {
         });
         for(String userUuid: userListFunction.apply(userStorage.getPolyChefUser())) {
             userStorage.getUserByEmail(userUuid, multipleCallHandler);
+        }
+        if(userListFunction.apply(userStorage.getPolyChefUser()).isEmpty()) {
+            noUserView.setVisibility(View.VISIBLE);
+        } else {
+            noUserView.setVisibility(View.GONE);
         }
     }
 

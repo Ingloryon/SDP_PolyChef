@@ -65,6 +65,10 @@
     <string name="username">Username</string>
     <string name="auto_login_background">auto login background</string>
     <string name="miniature_preview">miniature preview</string>
+    <string name="no_favourite">No favourite</string>
+    <string name="no_subscriber">No subscriber</string>
+    <string name="no_subscription">No subscription</string>
+    <string name="no_recipe">No recipe found</string>
     <string-array name="difficulty_array">
         <item>Very easy</item>
         <item>Easy</item>
