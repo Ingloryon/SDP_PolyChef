@@ -141,7 +141,7 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
     private void getImageFor(MiniatureViewHolder holder, Recipe recipe) {
         Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
-        if(miniatureMeta.isNone()) {
+        if(miniatureMeta.isNone() || getImageStorage() == null) {
             holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
