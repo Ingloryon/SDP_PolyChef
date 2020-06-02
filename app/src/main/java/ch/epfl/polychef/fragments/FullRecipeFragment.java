@@ -444,4 +444,8 @@ public class FullRecipeFragment extends Fragment implements CallHandler<byte[]>,
         TextView instructions = view.findViewById(R.id.instruction0);
         instructions.setText(strBuilder.toString());
     }
+
+    public int getIndexOfInstruction(){
+        return indexOfInstruction;
+    }
 }

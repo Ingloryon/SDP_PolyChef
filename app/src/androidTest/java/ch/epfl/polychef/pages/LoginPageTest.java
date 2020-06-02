@@ -58,17 +58,13 @@ public class LoginPageTest {
     }
 
     @Test
-    public void shouldNotBeNull() {
+    public void activityShouldNotBeNull() {
         assertNotNull(activityTestRule.getActivity());
     }
 
     @Test
     public void canClickOnGoogleButton() {
         onView(ViewMatchers.withId(R.id.googleButton)).check(matches(isEnabled()));
-    }
-
-    @Test
-    public void clickOnGoogleButtonRaiseNoError() {
         onView(withId(R.id.googleButton)).perform(click());
     }
 

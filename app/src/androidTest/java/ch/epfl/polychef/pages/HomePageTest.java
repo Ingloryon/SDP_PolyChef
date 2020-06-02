@@ -70,9 +70,10 @@ public class HomePageTest {
     }
 
     @Test
-    public void buttonTextIsLogoutAndCanClick() {
+    public void buttonTextIsLogoutAndClickLogsOut() {
         onView(ViewMatchers.withId(R.id.logButton)).check(matches(withText("Log out")));
         onView(withId(R.id.logButton)).perform(click());
+        onView(withId(R.id.offlineMiniaturesFragment)).check(matches(isDisplayed()));
     }
 
     @Test

@@ -44,11 +44,6 @@ public class RateRecipeFragmentsEntryTest {
             true);
 
     @Test
-    public void createInstanceOfRateRecipeFragmentDoesNotThrowError(){
-        RateRecipeFragment rrf=new RateRecipeFragment();
-    }
-
-    @Test
     public void rateButtonIsDisplayedAndDisplayCorrectText(){
 
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));

@@ -91,7 +91,7 @@ public class ImageHandlerTest {
     }
 
     @Test
-    public void handleActivityReturnGoodThing() {
+    public void handleActivityResultWorks() {
         Uri fakeUri = Uri.parse("test");
         Intent fakeIntent = new Intent().setData(fakeUri);
         assertThat(realImageHandler.handleActivityResult(ImageHandler.REQUEST_IMAGE_FROM_GALLERY, RESULT_OK, fakeIntent), equalTo(fakeUri));

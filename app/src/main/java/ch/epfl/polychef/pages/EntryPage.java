@@ -51,7 +51,7 @@ public class EntryPage extends AppCompatActivity implements CallHandler<User> {
         logButton = findViewById(R.id.logButton);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.nav_entry_fragment, miniFrag)
+                .replace(R.id.nav_entry_fragment, miniFrag)
                 .commit();
         
         setThemeLightDark();

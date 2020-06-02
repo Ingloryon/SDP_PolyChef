@@ -147,7 +147,7 @@ public class UserProfileFragmentTest {
                         .getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
-        wait(20000);
+        wait(2000);
     }
 
     public synchronized void testUserRecipes(int min, int max) throws InterruptedException {

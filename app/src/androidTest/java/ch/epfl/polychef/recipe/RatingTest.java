@@ -31,13 +31,13 @@ public class RatingTest {
         rating.addOpinion("7", 2);
         rating.addOpinion("8", 3);
 
-        assertTrue(rating.ratingAverage() == 2.25);
+        assertEquals(2.25, rating.ratingAverage(), 0.0);
 
         rating.addOpinion("2", 4);
-        assertTrue(rating.ratingAverage() == (4d*2.25d + 4d) / 5d);
+        assertEquals((4d * 2.25d + 4d) / 5d, rating.ratingAverage(), 0.0);
 
         rating.addOpinion("5", 5);
-        assertTrue(rating.ratingAverage() == (2d+2d+3d+4d + 5d)/5d);
+        assertEquals((2d + 2d + 3d + 4d + 5d) / 5d, rating.ratingAverage(), 0.0);
     }
 
 

@@ -41,7 +41,7 @@ public class AutoConnectTest {
             true);
 
     @Test
-    public void testAutoConnect() {
+    public void testAutoConnectWasCalled() {
         assertTrue(wasCalled);
     }
 
