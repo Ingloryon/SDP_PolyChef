@@ -115,7 +115,7 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
     public void onBindViewHolder(@NonNull MiniatureViewHolder holder, int position) {
         Opinion opinion = displayedOpinions.get(position);
         User user = userOp.get(opinion);
-        holder.rate.setRating(opinion.getRate());
+        holder.ratingBar.setRate(opinion.getRate());
         holder.commentText.setText(opinion.getComment());
         if(user != null) {
             holder.commentUsername.setText(user.getUsername());
@@ -131,17 +131,17 @@ public class OpinionsMiniatureAdapter extends RecyclerView.Adapter<OpinionsMinia
 
     class MiniatureViewHolder extends RecyclerView.ViewHolder {
 
-        RatingBar rate;
         ImageView profilePict;
         TextView commentText;
         TextView commentUsername;
+        CustomRatingBar ratingBar;
 
         MiniatureViewHolder(@NonNull View itemView) {
             super(itemView);
-            rate = itemView.findViewById(R.id.ratingCommentBar);
             profilePict = itemView.findViewById(R.id.profilePicture);
             commentText = itemView.findViewById(R.id.commentText);
             commentUsername = itemView.findViewById(R.id.commentUsername);
+            ratingBar = new CustomRatingBar(itemView.findViewById(R.id.ratingCommentBar), R.drawable.spatuladoree, R.drawable.spatuladoreehalf, R.drawable.spatulagray, false);
         }
     }
 

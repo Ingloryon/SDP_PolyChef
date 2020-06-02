@@ -38,7 +38,7 @@
     <string name="searchMessage">Search for a recipe</string>
 
     <string name="RateButton">Rate me !</string>
-    <string name="RateText">How many stars would you give to the recipe </string>
+    <string name="RateText">How many stars would you give to the recipe ?</string>
     <string name="sendRate">Send rate</string>
     <string name="Rate">Rate</string>
     <string name="add_a_comment">(Optional) Add a comment</string>
