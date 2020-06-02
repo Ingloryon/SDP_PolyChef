@@ -21,13 +21,38 @@ When you cook, your hands are not always clean enough to check the recipe on you
 
 <p float="left">
   <img src="screenshots/homePage.png" width="300">
-  <img src="screenshots/FullRecipe.png" width="300">
+  <img src="screenshots/fullRecipe.png" width="300">
 </p>
 
 - Search for recipes / users and apply different filters
 
+<img src="screenshots/search.png" width="300">
 
 - Post your own recipes (and modify them later if needed)
 
-<img src="screenshots/PostRecipe.png" width="300">
+<img src="screenshots/postRecipe.png" width="300">
+
+- Rate and comment the posted recipes
+
+<img src="screenshots/rate.png" width="300">
+
+- Get your personnal user profile and display your achievements
+
+<img src="screenshots/userProfile.png" width="300">
+
+- Subscribe to other Chefs
+
+<img src="screenshots/drawerSubscriptions.png" width="300">
+
+- Use the continuous voice recognition feature to ask PolyChef to read you the instructions when your hands are dirty. To proceed, turn on the voice recognition witch on a recipe, then say out loud "Poly Chef", wait half a second then say of the command you need: "Next", "Reapeat", "Previous". Speak with a clear english accent and "Poly Chef" might be better detected by prononcing more like "Pola Chef".
+
+- Receive notifications when users you subscribe to post a new recipes
+
+- Favorite the best recipes so you can access it offline
+
+<img src="screenshots/favorites.png" width="300">
+
+
+
+
 
