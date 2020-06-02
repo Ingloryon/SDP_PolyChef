@@ -175,7 +175,7 @@ public class RecipeStorageTest {
 
     @Test
     public synchronized void readRecipeFromUuidFailOnCancel() throws InterruptedException {
-            String recipeUuid = recipe1.getRecipeUuid();
+        String recipeUuid = recipe1.getRecipeUuid();
 
         when(databaseRecipeReference.orderByChild("recipeUuid")).thenReturn(query);
         when(query.equalTo(any(String.class))).thenAnswer((call) -> {

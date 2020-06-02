@@ -19,11 +19,10 @@ public class RecipeTest {
         RecipeBuilder rb = new RecipeBuilder();
 
         Recipe recipe = new Recipe();
-        Ingredient ingre = new Ingredient();
 
         Assertions.assertEquals(recipe.getRating(), null);
 
-        // rejects empty names
+        // rejects empty
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.build());
         // setter rejects empty names
         Assertions.assertThrows(IllegalArgumentException.class, () -> rb.setName(""));
@@ -157,7 +156,6 @@ public class RecipeTest {
         assertTrue(newest.compareTo(oldest) < 0);
         assertTrue(oldest.compareTo(newest) > 0);
         assertTrue(newest.compareTo(newest) == 0);
-        assertTrue(oldest.compareTo(oldest) == 0);
     }
 
     @Test
