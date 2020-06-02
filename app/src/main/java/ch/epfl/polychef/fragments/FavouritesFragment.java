@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,8 @@ import ch.epfl.polychef.utils.RecipeMiniatureAdapter;
 public class FavouritesFragment extends Fragment {
     public static final String TAG = "FavouritesFragment";
     public static final int NB_OF_RECIPES_LOADED_AT_A_TIME = 5;
+
+    private TextView noFavouriteView;
 
     private RecyclerView favouriteRecyclerView;
     private List<Recipe> dynamicRecipeList = new ArrayList<>();
@@ -71,6 +74,8 @@ public class FavouritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
+
+        noFavouriteView = view.findViewById(R.id.no_favourite_text);
 
         favouriteRecyclerView = view.findViewById(R.id.miniaturesFavouriteList);
         favouriteRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
@@ -134,6 +139,11 @@ public class FavouritesFragment extends Fragment {
             func.accept(favouritesList.size(), favouritesList);
             indexFavourites = favouritesList.size();
             return true;
+        }
+        if(favouritesList.isEmpty()) {
+            noFavouriteView.setVisibility(View.VISIBLE);
+        } else {
+            noFavouriteView.setVisibility(View.GONE);
         }
         return false;
     }
