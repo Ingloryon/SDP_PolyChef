@@ -131,6 +131,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/no_recipe_user_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_recipe"
+            android:layout_marginTop="25dp"
+            android:visibility="gone"
+            android:textSize="36sp"
+            android:layout_gravity="center"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/UserRecipesList"
             android:layout_width="match_parent"
