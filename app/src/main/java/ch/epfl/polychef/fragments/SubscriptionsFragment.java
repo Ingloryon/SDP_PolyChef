@@ -14,7 +14,7 @@ public class SubscriptionsFragment extends UserListFragment {
      * Create a new {@code SubscriptionsFragment}.
      */
     public SubscriptionsFragment() {
-        super(User::getSubscriptions, R.layout.fragment_subscriptions);
+        super(User::getSubscriptions, R.layout.fragment_subscriptions, R.id.no_subscriptions_text);
     }
 
 }

@@ -48,6 +48,8 @@ public class UserProfileFragment extends Fragment {
     private RecyclerView userRecyclerView;
     private ToggleButton toggleButton;
 
+    private TextView noRecipeView;
+
     private boolean isLoading = false;
     private int currentIndex = 0;
 
@@ -81,6 +83,9 @@ public class UserProfileFragment extends Fragment {
             userToDisplay = (User) bundle.getSerializable("User");
         }
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        noRecipeView = view.findViewById(R.id.no_recipe_user_text);
+
         userRecyclerView = view.findViewById(R.id.UserRecipesList);
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         userRecyclerView.setAdapter(
@@ -167,7 +172,7 @@ public class UserProfileFragment extends Fragment {
         int threshold = Math.min(NB_OF_RECIPES_LOADED_AT_A_TIME + currentIndex, nbRecipes);
         int waitingFor = threshold - currentIndex;
 
-        MultipleCallHandler handler = new MultipleCallHandler<Recipe>(waitingFor, (recipeList) -> {
+        MultipleCallHandler<Recipe> handler = new MultipleCallHandler<Recipe>(waitingFor, (recipeList) -> {
 
             dynamicRecipeList.addAll(recipeList);
             dynamicRecipeList.sort(Recipe::compareTo);  //Sort from newest to oldest
@@ -179,6 +184,11 @@ public class UserProfileFragment extends Fragment {
         for(int i = currentIndex; i < threshold; i++){
             String stringUuid = userToDisplay.getRecipes().get(nbRecipes - i - 1);
             hostActivity.getRecipeStorage().readRecipeFromUuid(stringUuid, handler);
+        }
+        if(userToDisplay.getRecipes().isEmpty()) {
+            noRecipeView.setVisibility(View.VISIBLE);
+        } else {
+            noRecipeView.setVisibility(View.GONE);
         }
     }
 
