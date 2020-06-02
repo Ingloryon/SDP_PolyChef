@@ -50,7 +50,7 @@ When you cook, your hands are not always clean enough to check the recipe on you
 
 - Favorite the best recipes so you can access it offline
 
-<img src="screenshots/favorites.jpg" width="300">
+<img src="screenshots/favorite.jpg" width="300">
 
 
 
