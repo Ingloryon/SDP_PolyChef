@@ -70,7 +70,7 @@ public class User implements Serializable, Miniatures {
      * @param username the username of the user
      * @param rating an existing Rating to give the user
      */
-    public User(String email, String username, Rating rating){
+    public User(String email, String username, @NonNull Rating rating){
         this.email = email;
         this.username = username;
         setProfilePictureId(0);
