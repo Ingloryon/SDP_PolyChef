@@ -69,6 +69,7 @@
     <string name="no_subscriber">No subscriber</string>
     <string name="no_subscription">No subscription</string>
     <string name="no_recipe">No recipe found</string>
+    <string name="person_s">person(s)</string>
     <string-array name="difficulty_array">
         <item>Very easy</item>
         <item>Easy</item>
