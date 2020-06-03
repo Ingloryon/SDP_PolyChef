@@ -1,6 +1,7 @@
 package ch.epfl.polychef.users;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,7 +70,7 @@ public class User implements Serializable, Miniatures {
      * @param username the username of the user
      * @param rating an existing Rating to give the user
      */
-    public User(String email, String username, @NonNull Rating rating){
+    public User(String email, String username, Rating rating){
         this.email = email;
         this.username = username;
         setProfilePictureId(0);
@@ -252,6 +253,10 @@ public class User implements Serializable, Miniatures {
      */
     public Rating getRating(){
         return userRating;
+    }
+
+    private void setRating(Rating rating){
+        userRating = rating;
     }
 
     @Exclude

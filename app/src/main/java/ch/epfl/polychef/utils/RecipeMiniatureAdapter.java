@@ -141,11 +141,14 @@ public class RecipeMiniatureAdapter extends RecyclerView.Adapter<RecipeMiniature
 
     private void getImageFor(MiniatureViewHolder holder, Recipe recipe) {
         Either<String, Integer> miniatureMeta = recipe.getMiniaturePath();
-        if(miniatureMeta.isNone() || getImageStorage() == null) {
+        if(miniatureMeta.isNone()) {
             holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
         } else if(miniatureMeta.isRight()) {
             holder.image.setImageResource(miniatureMeta.getRight());
-        } else {
+        }else if (getImageStorage() == null){
+            holder.image.setImageResource(Recipe.DEFAULT_MINIATURE_PATH);
+        }
+        else {
             getImageStorage().getImage(miniatureMeta.getLeft(), new CallHandler<byte[]>() {
                 @Override
                 public void onSuccess(byte[] data) {

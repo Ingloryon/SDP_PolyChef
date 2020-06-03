@@ -70,10 +70,10 @@ public class HomePageTest {
     }
 
     @Test
-    public void buttonTextIsLogoutAndClickLogsOut() {
+    public void buttonTextIsLogoutAndClickLogsOut() throws InterruptedException {
         onView(ViewMatchers.withId(R.id.logButton)).check(matches(withText("Log out")));
         onView(withId(R.id.logButton)).perform(click());
-        onView(withId(R.id.offlineMiniaturesFragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.logButton)).check(matches(withText("Log in")));
     }
 
     @Test
