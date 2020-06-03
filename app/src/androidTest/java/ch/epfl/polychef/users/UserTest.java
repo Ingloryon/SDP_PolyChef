@@ -263,5 +263,14 @@ public class UserTest {
         assertEquals(4,user.getRating().ratingAverage());
     }
 
+    @Test
+    public void setRatingWorks(){
+        Rating r1 = new Rating();
+        r1.addOpinion("1", 4);
+        User u1 = new User(mockUserEmail,mockUserName);
+        u1.setRating(r1);
+        assertEquals(r1,u1.getRating());
+    }
+
 
 }
