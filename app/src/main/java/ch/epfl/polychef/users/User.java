@@ -256,7 +256,7 @@ public class User implements Serializable, Miniatures {
     }
 
     /**
-     * Set the rating of the user, only used when the database creates a user
+     * Set the rating of the user, only used when the database creates a user.
      * @param rating the rating we want to set
      */
     private void setRating(Rating rating){
