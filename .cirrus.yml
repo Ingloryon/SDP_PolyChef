@@ -9,6 +9,8 @@ connected_check_task:
     GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process
   container:
     image: reactivecircus/android-emulator-24:latest
+    cpu: 4
+    memory: 16G
     kvm: true
   create_device_script:
     echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
