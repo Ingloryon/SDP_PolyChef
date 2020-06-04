@@ -263,7 +263,9 @@ public class PostRecipeFragment extends Fragment {
             }else{
                 hostActivity.getRecipeStorage().addRecipe(postedRecipe);
             }
-            hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid()); //TODO need to check that the recipe was successfully added
+            if(!postingAModifiedRecipe) {
+                hostActivity.getUserStorage().getPolyChefUser().addRecipe(postedRecipe.getRecipeUuid());
+            }
             hostActivity.getUserStorage().updateUserInfo();
 
             return true;

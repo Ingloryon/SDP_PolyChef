@@ -1,6 +1,7 @@
 package ch.epfl.polychef.users;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -252,6 +253,14 @@ public class User implements Serializable, Miniatures {
      */
     public Rating getRating(){
         return userRating;
+    }
+
+    /**
+     * Set the rating of the user, only used when the database creates a user.
+     * @param rating the rating we want to set
+     */
+    public void setRating(Rating rating){
+        userRating = rating;
     }
 
     @Exclude

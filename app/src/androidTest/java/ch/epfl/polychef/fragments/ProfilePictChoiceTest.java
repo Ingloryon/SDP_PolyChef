@@ -30,7 +30,9 @@ import ch.epfl.polychef.utils.CallHandlerChecker;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -39,13 +41,13 @@ import static org.mockito.Mockito.when;
 public class ProfilePictChoiceTest {
 
     private static final int IDX_IMAGE_TO_TEST=2;
-
+    private HomePage activity;
 
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
         @Override
         protected HomePage create(Intent intent) {
-            HomePage activity = new FakeFakeHomePage();
+            activity = new FakeFakeHomePage();
             return activity;
         }
     };
@@ -75,6 +77,8 @@ public class ProfilePictChoiceTest {
         ((FakeFakeHomePage)intentsTestRule.getActivity()).setMockUserProfilePictureId(1);
 
         onView(withIndex(withId(R.id.profile_picture_drawable), IDX_IMAGE_TO_TEST)).perform(click());
+
+        assertThat(activity.getPolychefUser().getProfilePictureId(), is(IDX_IMAGE_TO_TEST));
     }
 
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {

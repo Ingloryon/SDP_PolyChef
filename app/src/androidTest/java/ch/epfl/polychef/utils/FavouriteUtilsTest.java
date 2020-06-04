@@ -214,6 +214,7 @@ public class FavouriteUtilsTest {
             assertThat(FavouritesUtils.getInstance().getOfflineFavourites(), hasItem(recipe2));
             assertThat(FavouritesUtils.getInstance().getOfflineFavourites(), hasSize(1));
         });
+
     }
 
     @Test

@@ -95,17 +95,42 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/authorUsername"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/user_line"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:autoLink="web"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rate_author" />
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/rate_author">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/authorUsername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="14dp"
+                        android:autoLink="web"
+                        android:fontFamily="sans-serif-medium"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/modifyButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/ModifyButton"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/prepTime"
@@ -320,13 +345,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:checked="false"
                 android:text="@string/VoiceRecognitionSwitch"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/authorUsername" />
+                app:layout_constraintTop_toBottomOf="@id/user_line" />
 
             <ImageView
                 android:id="@+id/imageView"
@@ -335,20 +359,11 @@
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/microphone"
                 app:layout_constraintBottom_toTopOf="@+id/prepTime"
-                app:layout_constraintStart_toEndOf="@+id/voiceRecognitionSwitch" />
-            <Button
-                android:id="@+id/modifyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/ModifyButton"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/voiceRecognitionSwitch"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.204"
-                app:layout_constraintStart_toEndOf="@+id/voiceRecognitionSwitch" />
+                app:layout_constraintStart_toEndOf="@+id/voiceRecognitionSwitch" /><![CDATA[
+
             app:layout_constraintTop_toBottomOf="@+id/RatingRow" />
 
+        ]]>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView

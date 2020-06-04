@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class OpinionTest {
 
     @Test
-    public void canCreateSimpleOpinion() {
+    public void canCreateSimpleOpinions() {
         Opinion withoutComment = new Opinion(2);
         Opinion withComment = new Opinion(4, "This is a comment");
         assertThat(withoutComment.getRate(), is(2));

@@ -173,7 +173,7 @@ public class PostingRecipeFragmentTest {
     }
 
     @Test
-    public void zeroPrepTimeDisplaysErrorLogs() {
+    public void noPrepTimeDisplaysErrorLogs() {
         openCreateRecipe();
         writeRecipe("Cake","a", "1","a","10","", "0");
         checkErrorLog("There are errors in the given inputs :\nPreparation Time: should be a positive number.");
@@ -202,6 +202,7 @@ public class PostingRecipeFragmentTest {
         Espresso.closeSoftKeyboard();
         mockInit();
         onView(withId(R.id.postRecipe)).perform(scrollTo(), click());
+        onView(withId(R.id.onlineMiniaturesFragment)).check(matches(isDisplayed()));
     }
 
     @Test

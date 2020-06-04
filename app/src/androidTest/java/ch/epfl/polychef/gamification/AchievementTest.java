@@ -53,20 +53,20 @@ public class AchievementTest {
         Achievement achi = createValidAchievement();
         User user = fakeUser();
 
-        assertEquals(achi.getLevel(user), 0);
+        assertEquals(0,achi.getLevel(user));
 
         user.addRecipe("fakeRecipeId");
-        assertEquals(achi.getLevel(user), 1);
+        assertEquals(1,achi.getLevel(user));
 
         for(int i = 0 ; i < 5 ; ++i){
             user.addRecipe("fakeRecipeId");
         }
-        assertEquals(achi.getLevel(user), 2);
+        assertEquals(2, achi.getLevel(user));
 
         for(int i = 0 ; i < 5 ; ++i){
             user.addRecipe("fakeRecipeId");
         }
-        assertEquals(achi.getLevel(user), 3);
+        assertEquals(3, achi.getLevel(user));
     }
 
     @Test
@@ -83,9 +83,9 @@ public class AchievementTest {
     @Test
     public void gettersReturnCorrectArguments(){
         Achievement achi = createValidAchievement();
-        assertEquals(achi.getName(), "cuistot");
-        assertEquals(achi.getLevelImage(2), "pict2");
-        assertEquals(achi.getLevelLabel(2), "label2");
+        assertEquals("cuistot", achi.getName());
+        assertEquals("pict2", achi.getLevelImage(2));
+        assertEquals("label2", achi.getLevelLabel(2));
     }
 
 

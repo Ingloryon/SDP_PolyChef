@@ -49,7 +49,7 @@ public class FullRecipeHomePageTest {
     }
 
     @Test
-    public void checkCanDirectlyOpenFullRecipe() {
+    public void checkFullRecipeIsDisplayed() {
         onView(withId(R.id.fullRecipeFragment)).check(matches(isDisplayed()));
     }
 }

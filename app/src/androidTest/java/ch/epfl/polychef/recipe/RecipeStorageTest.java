@@ -285,10 +285,4 @@ public class RecipeStorageTest {
         wait(1000);
         fakeCallHandler.assertWasCalled();
     }
-
-    private void prepareNRecipesFor(int start, int end) {
-        when(databaseRecipeReference.orderByKey()).thenReturn(databaseRecipeReference);
-        when(databaseRecipeReference.startAt(""+start)).thenReturn(databaseRecipeReference);
-        when(databaseRecipeReference.endAt(""+end)).thenReturn(query);
-    }
 }

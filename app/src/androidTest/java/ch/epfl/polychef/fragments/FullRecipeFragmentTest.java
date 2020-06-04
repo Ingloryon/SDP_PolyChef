@@ -24,10 +24,13 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -72,7 +75,9 @@ public class FullRecipeFragmentTest {
     public void clickOnSwitch(){
         onView(withId(R.id.miniaturesOfflineList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.voiceRecognitionSwitch)).perform(click());
+        onView(withId(R.id.voiceRecognitionSwitch)).check(matches(isChecked()));
         onView(withId(R.id.voiceRecognitionSwitch)).perform(click());
+        onView(withId(R.id.voiceRecognitionSwitch)).check(matches(isNotChecked()));
     }
 
     @Test
@@ -82,10 +87,12 @@ public class FullRecipeFragmentTest {
         Fragment fragment= fragmentManager.getFragments().get(0);
         FullRecipeFragment fullRecipeFragment = (FullRecipeFragment) fragment;
         fullRecipeFragment.notify("next");
+        assertThat(fullRecipeFragment.getIndexOfInstruction(),is(0));
         fullRecipeFragment.notify("next");
+        assertThat(fullRecipeFragment.getIndexOfInstruction(),is(1));
         fullRecipeFragment.notify("previous");
+        assertThat(fullRecipeFragment.getIndexOfInstruction(),is(0));
         fullRecipeFragment.notify("next");
         fullRecipeFragment.notify("next");
     }
-
 }

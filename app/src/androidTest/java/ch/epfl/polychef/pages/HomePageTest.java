@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.intercepting.SingleActivityFactory;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -41,16 +42,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class HomePageTest {
 
+    private HomePage activity;
     private SingleActivityFactory<HomePage> fakeHomePage = new SingleActivityFactory<HomePage>(
             HomePage.class) {
         @Override
         protected HomePage create(Intent intent) {
-            HomePage activity = new FakeHomePage();
+            activity = new FakeHomePage();
             return activity;
         }
     }; 
@@ -70,7 +73,7 @@ public class HomePageTest {
     }
 
     @Test
-    public void buttonTextIsLogoutAndCanClick() {
+    public void buttonTextIsLogoutAndClickLogsOut() {
         onView(ViewMatchers.withId(R.id.logButton)).check(matches(withText("Log out")));
         onView(withId(R.id.logButton)).perform(click());
     }

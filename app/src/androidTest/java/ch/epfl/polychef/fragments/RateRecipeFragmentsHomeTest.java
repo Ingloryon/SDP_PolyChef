@@ -89,11 +89,6 @@ public class RateRecipeFragmentsHomeTest {
     }
 
     @Test
-    public void createInstanceOfRateRecipeFragmentDoesNotThrowError(){
-        RateRecipeFragment rrf=new RateRecipeFragment();
-    }
-
-    @Test
     public synchronized void rateBarCanBeClickedOn() throws InterruptedException {
 
         rateCurrentRecipeNStars(1);

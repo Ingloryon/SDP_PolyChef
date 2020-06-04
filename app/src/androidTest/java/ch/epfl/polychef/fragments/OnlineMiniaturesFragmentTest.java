@@ -214,8 +214,8 @@ public class OnlineMiniaturesFragmentTest {
     public synchronized void removesDuplicate() throws InterruptedException {
         initActivity();
         fakeRecipeStorage.addRecipe(testRecipeBuilder.setDate(currentYoungerDate).build());
-        fakeRecipeStorage.addRecipe(testRecipeBuilder.setDate(currentYoungerDate).build());
         search("test");
+        assertEquals(2, ((OnlineMiniaturesFragment) fragUtils.getTestedFragment(intentsTestRule)).getRecyclerView().getAdapter().getItemCount());
     }
 
     @Test
